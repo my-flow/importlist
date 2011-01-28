@@ -2,13 +2,14 @@ ImportList
 ==========
 
 Personal finance manager [Moneydance®](http://www.moneydance.com/) includes a feature to import transaction files, such as from Quicken™. Using third-party background applications to download transaction files on a regular basis I felt that Moneydance® lacks an overview of which files still have to be imported, which, in turn, forces the user to constantly check on the file system.
+
 As a result, this extension monitors a given directory and displays all of its transaction files in a sortable list inside the homepage view along with two corresponding buttons to import and to remove each transaction file.
 
 
 Installing the extension
 ------------------------
 Having added the extension file to Moneydance®, open the **Preferences** window and click on the **Home Page** tab. The available items should contain an entry called **ImportList**. Add it to the left or right column of your homepage view.
-In order to change the base directory, choose **File** -> **Import...** and open a file located in your target directory. You **don't** have to actually import the file (unless you want to). The extension monitors the directoy of the transaction file that was imported last.
+In order to change the base directory, choose **File** -> **Import...** and open a file located in your target directory. You **don't** have to actually import the file (unless you want to). The extension monitors the directory of the transaction file that was imported last.
 
 
 Building the extension from scratch

@@ -27,15 +27,31 @@ import com.moneydance.awt.JTextPanel;
  */
 public class Main extends FeatureModule implements HomePageView {
 
-    private final DateFormat  dateFormat  = DateFormat.getDateTimeInstance();
-    private final JScrollPane jScrollPane = new JScrollPane();
-    private File[]            files;
-    private DefaultTableModel defaultTableModel;
+    private final DateFormat        dateFormat  =
+       DateFormat.getDateTimeInstance();
+    private final JScrollPane       jScrollPane = new JScrollPane();
+    private       DirectoryChooser  directoryChooser;
+    private       File[]            files;
+    private       DefaultTableModel defaultTableModel;
 
     public final void init() {
+
+       UserPreferences userPreferences = null;
         if (this.getContext() != null) {
             this.getContext().registerHomePageView(this, this);
+            userPreferences = ((com.moneydance.apps.md.controller.Main)
+                  this.getContext()).getPreferences();
         }
+
+        this.directoryChooser = new DirectoryChooser(userPreferences);
+
+        //see moneydance.com/pipermail/moneydance-dev/2006-September/000075.html
+        try {
+          this.jScrollPane.setBorder(MoneydanceLAF.homePageBorder);
+        } catch (Throwable e) {
+          e.printStackTrace();
+        }
+
         this.refresh();
     }
 
@@ -56,13 +72,6 @@ public class Main extends FeatureModule implements HomePageView {
 
 
     public final void refresh() {
-
-      // see moneydance.com/pipermail/moneydance-dev/2006-September/000075.html
-      try {
-        this.jScrollPane.setBorder(MoneydanceLAF.homePageBorder);
-      } catch (Throwable e) {
-        e.printStackTrace();
-      }
 
       File directory = new File(this.getImportDir());
 
@@ -173,7 +182,8 @@ public class Main extends FeatureModule implements HomePageView {
        File file = this.getFile(rowNumber);
 
        Object[] options = {"Delete File", "Cancel"};
-       int choice = JOptionPane.showOptionDialog(null,
+       int choice = JOptionPane.showOptionDialog(
+             null,
              "Are you sure you want to delete the file \""
                 + file.getName() + "\"?",
              "Warning",
@@ -215,18 +225,7 @@ public class Main extends FeatureModule implements HomePageView {
 
 
     private String getImportDir() {
-
-       String importDir = System.getProperty("user.home");
-
-       if (this.getContext() != null) {
-
-            UserPreferences userPreferences =
-                ((com.moneydance.apps.md.controller.Main)
-                this.getContext()).getPreferences();
-
-            importDir = userPreferences.getSetting("gen.import_dir", importDir);
-       }
-       return importDir;
+       return this.directoryChooser.getDirectory();
     }
 
 

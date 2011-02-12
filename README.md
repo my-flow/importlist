@@ -8,8 +8,9 @@ As a result, this extension monitors a given directory and displays all of its t
 
 Installing the extension
 ------------------------
-Having added the extension file to Moneydance®, open the **Preferences** window and click on the **Home Page** tab. The available items should contain an entry called **ImportList**. Add it to the left or right column of your homepage view.
-In order to change the base directory, choose **File** -> **Import...** and open a file located in your target directory. You **don't** have to actually import the file (unless you want to). The extension monitors the directory of the transaction file that was imported last.
+Having added the extension file to Moneydance®, you will be asked to choose a base directory to monitor. If you do not choose any directory, the extension will assume you want to monitor the directory of the transaction file that was imported last. If you have never imported any transaction file before using the extension, it will monitor the current user's home directory. If you want to change the base directory later, you have to either reinstall the extension or modify the `importlist.import_dir` user preferences variable.
+
+In order to display ImportList in Moneydance®'s homepage view, open the **Preferences** window and click on the **Home Page** tab. The available items should contain an entry called **ImportList**. Add it to the left or right column of your homepage view.
 
 
 Building the extension from scratch

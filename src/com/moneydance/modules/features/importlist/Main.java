@@ -146,7 +146,7 @@ public class Main extends FeatureModule implements HomePageView {
     }
 
 
-    public final void importFile(final int row) {
+    protected final void importFile(final int row) {
 
         File file = this.getFile(row);
 
@@ -177,7 +177,7 @@ public class Main extends FeatureModule implements HomePageView {
     }
 
 
-    public final void deleteFile(final int rowNumber) {
+    protected final void deleteFile(final int rowNumber) {
 
        File file = this.getFile(rowNumber);
 

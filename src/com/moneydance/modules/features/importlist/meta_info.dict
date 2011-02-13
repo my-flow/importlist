@@ -1,7 +1,7 @@
 {
   "vendor" = "Florian J. Breunig"
   "module_build" = "1"
-  "vendor.url" = "http://www.my-flow.com"
+  "vendor.url" = "https://github.com/my-flow/ImportList"
   "module_name" = "ImportList"
   "desc" = "ImportList monitors a directory and displays its files in Moneydance's homepage view. From there, the files can be imported into Moneydance."
 }

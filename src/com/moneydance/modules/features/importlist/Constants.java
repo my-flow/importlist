@@ -21,13 +21,18 @@ public final class Constants {
    public static final String  ID                     =
       "moneydance:fmodule:importlist";
 
+   public static final String  CHOOSE_BASE_DIR_SUFFIX = "chooseimportdir";
+
    public static final String  IMPORT_URI_PREFIX      =
       "moneydance:importprompt:?file=";
 
-   public static final String  IMPORT_DIR_PREFERENCE  = "importlist.import_dir";
+   public static final String  BASE_DIR_PREFERENCE    = "importlist.import_dir";
 
    public static final String  HOME_DIRECTORY         =
       System.getProperty("user.home");
+
+   public static final String[] FILE_EXTENSIONS        =
+      {"qif", "ofx", "qfx", "ofc"};
 
    public static final String  NAME_DESCRIPTOR        = "Name";
 

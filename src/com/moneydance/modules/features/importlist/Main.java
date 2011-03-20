@@ -34,13 +34,30 @@ public class Main extends FeatureModule implements HomePageView {
     private       File[]            files;
     private       DefaultTableModel defaultTableModel;
 
-    public final void init() {
 
-       UserPreferences userPreferences = null;
+    @Override
+   public final void init() {
+
+        UserPreferences userPreferences = null;
+
         if (this.getContext() != null) {
+            // register this module's home page view
             this.getContext().registerHomePageView(this, this);
+
+            // initialize base directory
             userPreferences = ((com.moneydance.apps.md.controller.Main)
-                  this.getContext()).getPreferences();
+               this.getContext()).getPreferences();
+
+            // register this module to be invoked via the application toolbar
+            try {
+               this.getContext().registerFeature(
+                     this,
+                     Constants.CHOOSE_BASE_DIR_SUFFIX,
+                     null,
+                     this.getName());
+            } catch (Exception e) {
+               e.printStackTrace(System.err);
+            }
         }
 
         this.directoryChooser = new DirectoryChooser(userPreferences);
@@ -56,7 +73,8 @@ public class Main extends FeatureModule implements HomePageView {
     }
 
 
-    public final String getName() {
+    @Override
+   public final String getName() {
         return Constants.EXTENSION_NAME;
     }
 
@@ -130,12 +148,11 @@ public class Main extends FeatureModule implements HomePageView {
       jTable.setPreferredScrollableViewportSize(
               new Dimension(Constants.LIST_WIDTH, Constants.LIST_HEIGHT));
 
-      for (int i = 0; i < this.files.length; i++) {
+      for (File file : this.files) {
           this.defaultTableModel.addRow(
               new Object[] {
-                  this.files[i].getName(),
-                  this.dateFormat.format(new Date(
-                        this.files[i].lastModified())),
+                  file.getName(),
+                  this.dateFormat.format(new Date(file.lastModified())),
                   Constants.IMPORT_BUTTON_LABEL,
                   Constants.DELETE_BUTTON_LABEL
           });
@@ -218,9 +235,23 @@ public class Main extends FeatureModule implements HomePageView {
     }
 
 
-    public void invoke(final String uri) {
-        // this extension is event-based and cannot be invoked
-        // explicitly.
+    @Override
+   public final void invoke(final String uri) {
+       String command = uri;
+       int theIdx     = uri.indexOf('?');
+       if (theIdx >= 0) {
+         command = uri.substring(0, theIdx);
+       } else {
+         theIdx = uri.indexOf(':');
+         if (theIdx >= 0) {
+            command = uri.substring(0, theIdx);
+         }
+       }
+
+       if (Constants.CHOOSE_BASE_DIR_SUFFIX.equals(command)) {
+          this.directoryChooser.reset();
+          this.refresh();
+       }
     }
 
 
@@ -243,7 +274,8 @@ public class Main extends FeatureModule implements HomePageView {
        frame.setSize(main.getGUIView(null).getPreferredSize());
 
        frame.addWindowListener(new WindowAdapter() {
-          public void windowClosing(final WindowEvent e) {
+          @Override
+         public void windowClosing(final WindowEvent e) {
               System.exit(0);
           }
        });

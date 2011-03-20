@@ -9,6 +9,15 @@ import java.io.FileFilter;
 public class ListItemFilenameFilter implements FileFilter {
 
    public final boolean accept(final File pathname) {
-      return pathname.isFile() && !pathname.isHidden();
+      if (pathname.isDirectory() || pathname.isHidden()) {
+         return false;
+      }
+
+      for (String fileExtension : Constants.FILE_EXTENSIONS) {
+         if (pathname.getName().matches("(?i).*\\.(" + fileExtension + ")$")) {
+            return true;
+         }
+      }
+      return false;
    }
 }

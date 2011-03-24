@@ -30,8 +30,8 @@ http://jakarta.apache.org/ant/index.html
   </target>   
 
   <target name="importlist" depends="init">
-    <javac target="1.3" srcdir="${src}" debug="${debug}" optimize="${optimize}"
-      classpathref="classpath"  destdir="${build}" source="1.3"
+    <javac target="1.6" srcdir="${src}" debug="${debug}" optimize="${optimize}"
+      classpathref="classpath"  destdir="${build}" source="1.6"
 	  includeantruntime="true"
       includes="com/moneydance/modules/features/importlist/**"/>
 

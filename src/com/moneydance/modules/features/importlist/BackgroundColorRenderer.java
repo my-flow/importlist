@@ -26,7 +26,7 @@ class BackgroundColorRenderer extends DefaultTableCellRenderer {
 
      cell.setForeground(Constants.FOREGROUND_COLOR);
      cell.setBackground(Constants.BACKGROUND_COLOR);
-     if (row % 2 == 0) {
+     if (row % 2 == 1) {
         cell.setBackground(Constants.BACKGROUND_COLOR_ALTERNATIVE);
      }
 

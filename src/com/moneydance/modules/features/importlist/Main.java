@@ -99,6 +99,7 @@ public class Main extends FeatureModule implements HomePageView {
          String label = "There are currently no files to display in "
              + this.getImportDir();
          JComponent jTextPanel = new JTextPanel(label);
+         jTextPanel.setBackground(Constants.BACKGROUND_COLOR);
          this.jScrollPane.setViewportView(jTextPanel);
          this.jScrollPane.setPreferredSize(
              new Dimension(Constants.MESSAGE_WIDTH, Constants.MESSAGE_HEIGHT));
@@ -226,6 +227,8 @@ public class Main extends FeatureModule implements HomePageView {
 
 
     public final JComponent getGUIView(final RootAccount rootAccount) {
+        this.jScrollPane.setBackground(Constants.BACKGROUND_COLOR);
+        this.jScrollPane.getViewport().setBackground(Constants.BACKGROUND_COLOR);
         return this.jScrollPane;
     }
 

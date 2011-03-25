@@ -1,5 +1,6 @@
 package com.moneydance.modules.features.importlist;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -19,6 +20,7 @@ import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.UserPreferences;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.view.HomePageView;
+import com.moneydance.apps.md.view.gui.MoneydanceGUI;
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
 import com.moneydance.awt.JTextPanel;
 
@@ -33,6 +35,7 @@ public class Main extends FeatureModule implements HomePageView {
     private       DirectoryChooser  directoryChooser;
     private       File[]            files;
     private       DefaultTableModel defaultTableModel;
+    private       Color             backgroundColor;
 
 
     @Override
@@ -64,7 +67,7 @@ public class Main extends FeatureModule implements HomePageView {
 
         //see moneydance.com/pipermail/moneydance-dev/2006-September/000075.html
         try {
-          this.jScrollPane.setBorder(MoneydanceLAF.homePageBorder);
+           this.jScrollPane.setBorder(MoneydanceLAF.homePageBorder);
         } catch (Throwable e) {
           e.printStackTrace();
         }
@@ -91,6 +94,16 @@ public class Main extends FeatureModule implements HomePageView {
 
     public final void refresh() {
 
+      //see moneydance.com/forum/YaBB.pl?num=1194898420
+      try {
+          com.moneydance.apps.md.controller.Main main =
+             (com.moneydance.apps.md.controller.Main) this.getContext();
+          MoneydanceGUI moneydanceGUI = (MoneydanceGUI) main.getUI();
+          this.backgroundColor = moneydanceGUI.getColors().homePageBG;
+      } catch (Throwable e) {
+         e.printStackTrace();
+      }
+
       File directory = new File(this.getImportDir());
 
       this.files = directory.listFiles(new ListItemFilenameFilter());
@@ -99,7 +112,7 @@ public class Main extends FeatureModule implements HomePageView {
          String label = "There are currently no files to display in "
              + this.getImportDir();
          JComponent jTextPanel = new JTextPanel(label);
-         jTextPanel.setBackground(Constants.BACKGROUND_COLOR);
+         jTextPanel.setBackground(Constants.TRANSPARENT_COLOR);
          this.jScrollPane.setViewportView(jTextPanel);
          this.jScrollPane.setPreferredSize(
              new Dimension(Constants.MESSAGE_WIDTH, Constants.MESSAGE_HEIGHT));
@@ -122,7 +135,7 @@ public class Main extends FeatureModule implements HomePageView {
       jTable.setShowHorizontalLines(false);
 
       BackgroundColorRenderer backgroundColorRenderer =
-         new BackgroundColorRenderer();
+         new BackgroundColorRenderer(this.backgroundColor);
 
       jTable.getColumn(Constants.NAME_DESCRIPTOR).setCellRenderer(
             backgroundColorRenderer);
@@ -227,8 +240,9 @@ public class Main extends FeatureModule implements HomePageView {
 
 
     public final JComponent getGUIView(final RootAccount rootAccount) {
-        this.jScrollPane.setBackground(Constants.BACKGROUND_COLOR);
-        this.jScrollPane.getViewport().setBackground(Constants.BACKGROUND_COLOR);
+        this.jScrollPane.setBackground(Constants.TRANSPARENT_COLOR);
+        this.jScrollPane.getViewport().setBackground(
+              Constants.TRANSPARENT_COLOR);
         return this.jScrollPane;
     }
 

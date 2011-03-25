@@ -31,7 +31,7 @@ public final class Constants {
    public static final String  HOME_DIRECTORY         =
       System.getProperty("user.home");
 
-   public static final String[] FILE_EXTENSIONS        =
+   public static final String[] FILE_EXTENSIONS       =
       {"qif", "ofx", "qfx", "ofc"};
 
    public static final String  NAME_DESCRIPTOR        = "Name";
@@ -64,8 +64,9 @@ public final class Constants {
 
    public static final Color   FOREGROUND_COLOR       = Color.BLACK;
 
-   public static final Color   BACKGROUND_COLOR       = Color.WHITE;
+   public static final Color   TRANSPARENT_COLOR      =
+      new Color(0, 0, 0, 0);
 
-   public static final Color   BACKGROUND_COLOR_ALTERNATIVE =
+   public static final Color   BACKGROUND_COLOR_ALT   =
       new Color(245, 245, 245);
 }

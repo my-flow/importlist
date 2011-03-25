@@ -1,5 +1,6 @@
 package com.moneydance.modules.features.importlist;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
@@ -12,7 +13,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 class BackgroundColorRenderer extends DefaultTableCellRenderer {
 
   private static final long serialVersionUID = -2724848115953702911L;
+  private final             Color backgroundColor;
 
+
+  public BackgroundColorRenderer(final Color argBackgroundColor) {
+     this.backgroundColor = argBackgroundColor;
+  }
+
+
+  @Override
   public Component getTableCellRendererComponent(
     final JTable table,
     final Object value,
@@ -25,9 +34,9 @@ class BackgroundColorRenderer extends DefaultTableCellRenderer {
            isSelected, hasFocus, row, column);
 
      cell.setForeground(Constants.FOREGROUND_COLOR);
-     cell.setBackground(Constants.BACKGROUND_COLOR);
+     cell.setBackground(this.backgroundColor);
      if (row % 2 == 1) {
-        cell.setBackground(Constants.BACKGROUND_COLOR_ALTERNATIVE);
+        cell.setBackground(Constants.BACKGROUND_COLOR_ALT);
      }
 
      return cell;

@@ -14,10 +14,14 @@ class BackgroundColorRenderer extends DefaultTableCellRenderer {
 
   private static final long serialVersionUID = -2724848115953702911L;
   private final             Color backgroundColor;
+  private final             Color backgroundColorAlt;
 
 
-  public BackgroundColorRenderer(final Color argBackgroundColor) {
-     this.backgroundColor = argBackgroundColor;
+  public BackgroundColorRenderer(
+        final Color argBackgroundColor,
+        final Color argBackgroundColorAlt) {
+     this.backgroundColor    = argBackgroundColor;
+     this.backgroundColorAlt = argBackgroundColorAlt;
   }
 
 
@@ -33,10 +37,9 @@ class BackgroundColorRenderer extends DefaultTableCellRenderer {
      Component cell = super.getTableCellRendererComponent(table, value,
            isSelected, hasFocus, row, column);
 
-     cell.setForeground(Constants.FOREGROUND_COLOR);
      cell.setBackground(this.backgroundColor);
-     if (row % 2 == 1) {
-        cell.setBackground(Constants.BACKGROUND_COLOR_ALT);
+     if (row % 2 != 0) {
+        cell.setBackground(this.backgroundColorAlt);
      }
 
      return cell;

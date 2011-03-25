@@ -1,6 +1,5 @@
 package com.moneydance.modules.features.importlist;
 
-import java.awt.Color;
 
 /**
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
@@ -16,7 +15,7 @@ public final class Constants {
    /**
     * Representation of the event name to react on.
     */
-   public static final String EXTENSION_NAME          = "ImportList";
+   public static final String  EXTENSION_NAME          = "ImportList";
 
    public static final String  ID                     =
       "moneydance:fmodule:importlist";
@@ -26,7 +25,11 @@ public final class Constants {
    public static final String  IMPORT_URI_PREFIX      =
       "moneydance:importprompt:?file=";
 
-   public static final String  BASE_DIR_PREFERENCE    = "importlist.import_dir";
+   public static final String  PREF_BASE_DIR          = "importlist.import_dir";
+
+   public static final String  PREF_BG_COLOR          = "gui.home_bg";
+
+   public static final String  PREF_BG_COLOR_ALT      = "gui.home_alt_bg";
 
    public static final String  HOME_DIRECTORY         =
       System.getProperty("user.home");
@@ -34,17 +37,17 @@ public final class Constants {
    public static final String[] FILE_EXTENSIONS       =
       {"qif", "ofx", "qfx", "ofc"};
 
-   public static final String  NAME_DESCRIPTOR        = "Name";
+   public static final String  DESCRIPTOR_NAME        = "Name";
 
-   public static final String  MODIFIED_DESCRIPTOR    = "Date Modified";
+   public static final String  DESCRIPTOR_MODIFIED    = "Date Modified";
 
-   public static final String  IMPORT_DESCRIPTOR      = "";
+   public static final String  DESCRIPTOR_IMPORT      = "";
 
-   public static final String  IMPORT_BUTTON_LABEL    = "Import";
+   public static final String  LABEL_IMPORT_BUTTON    = "Import";
 
-   public static final String  DELETE_DESCRIPTOR      = "";
+   public static final String  DESCRIPTOR_DELETE      = "";
 
-   public static final String  DELETE_BUTTON_LABEL    = "Delete";
+   public static final String  LABEL_DELETE_BUTTON    = "Delete";
 
    public static final int     BUTTON_WIDTH           = 20;
 
@@ -62,11 +65,7 @@ public final class Constants {
 
    public static final int     MESSAGE_WIDTH          = 400;
 
-   public static final Color   FOREGROUND_COLOR       = Color.BLACK;
+   public static final int     COLOR_VALUE_BG_DEF     = -1;
 
-   public static final Color   TRANSPARENT_COLOR      =
-      new Color(0, 0, 0, 0);
-
-   public static final Color   BACKGROUND_COLOR_ALT   =
-      new Color(245, 245, 245);
+   public static final int     COLOR_VALUE_BG_ALT_DEF = -657931;
 }

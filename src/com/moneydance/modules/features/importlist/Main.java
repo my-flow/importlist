@@ -20,7 +20,6 @@ import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.UserPreferences;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.view.HomePageView;
-import com.moneydance.apps.md.view.gui.MoneydanceGUI;
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
 import com.moneydance.awt.JTextPanel;
 
@@ -29,41 +28,40 @@ import com.moneydance.awt.JTextPanel;
  */
 public class Main extends FeatureModule implements HomePageView {
 
-    private final DateFormat        dateFormat  =
-       DateFormat.getDateTimeInstance();
     private final JScrollPane       jScrollPane = new JScrollPane();
+    private       DateFormat        dateFormat;
     private       DirectoryChooser  directoryChooser;
     private       File[]            files;
     private       DefaultTableModel defaultTableModel;
     private       Color             backgroundColor;
+    private       Color             backgroundColorAlt;
+    private       UserPreferences   userPreferences;
 
 
     @Override
    public final void init() {
-
-        UserPreferences userPreferences = null;
 
         if (this.getContext() != null) {
             // register this module's home page view
             this.getContext().registerHomePageView(this, this);
 
             // initialize base directory
-            userPreferences = ((com.moneydance.apps.md.controller.Main)
+            this.userPreferences = ((com.moneydance.apps.md.controller.Main)
                this.getContext()).getPreferences();
 
             // register this module to be invoked via the application toolbar
             try {
                this.getContext().registerFeature(
-                     this,
-                     Constants.CHOOSE_BASE_DIR_SUFFIX,
-                     null,
-                     this.getName());
+                  this,
+                  Constants.CHOOSE_BASE_DIR_SUFFIX,
+                  null,
+                  this.getName());
             } catch (Exception e) {
                e.printStackTrace(System.err);
             }
         }
 
-        this.directoryChooser = new DirectoryChooser(userPreferences);
+        this.directoryChooser = new DirectoryChooser(this.userPreferences);
 
         //see moneydance.com/pipermail/moneydance-dev/2006-September/000075.html
         try {
@@ -94,15 +92,7 @@ public class Main extends FeatureModule implements HomePageView {
 
     public final void refresh() {
 
-      //see moneydance.com/forum/YaBB.pl?num=1194898420
-      try {
-          com.moneydance.apps.md.controller.Main main =
-             (com.moneydance.apps.md.controller.Main) this.getContext();
-          MoneydanceGUI moneydanceGUI = (MoneydanceGUI) main.getUI();
-          this.backgroundColor = moneydanceGUI.getColors().homePageBG;
-      } catch (Throwable e) {
-         e.printStackTrace();
-      }
+      this.reloadUserPreferences();
 
       File directory = new File(this.getImportDir());
 
@@ -112,7 +102,6 @@ public class Main extends FeatureModule implements HomePageView {
          String label = "There are currently no files to display in "
              + this.getImportDir();
          JComponent jTextPanel = new JTextPanel(label);
-         jTextPanel.setBackground(Constants.TRANSPARENT_COLOR);
          this.jScrollPane.setViewportView(jTextPanel);
          this.jScrollPane.setPreferredSize(
              new Dimension(Constants.MESSAGE_WIDTH, Constants.MESSAGE_HEIGHT));
@@ -122,8 +111,8 @@ public class Main extends FeatureModule implements HomePageView {
       this.defaultTableModel = new ListTableModel(
             new Object[][] {},
             new Object[] {
-                Constants.NAME_DESCRIPTOR,
-                Constants.MODIFIED_DESCRIPTOR,
+                Constants.DESCRIPTOR_NAME,
+                Constants.DESCRIPTOR_MODIFIED,
                 "Import", // use the String only as a reference
                 "Delete"
             }
@@ -135,12 +124,14 @@ public class Main extends FeatureModule implements HomePageView {
       jTable.setShowHorizontalLines(false);
 
       BackgroundColorRenderer backgroundColorRenderer =
-         new BackgroundColorRenderer(this.backgroundColor);
+         new BackgroundColorRenderer(
+               this.backgroundColor,
+               this.backgroundColorAlt);
 
-      jTable.getColumn(Constants.NAME_DESCRIPTOR).setCellRenderer(
+      jTable.getColumn(Constants.DESCRIPTOR_NAME).setCellRenderer(
             backgroundColorRenderer);
 
-      jTable.getColumn(Constants.MODIFIED_DESCRIPTOR).setCellRenderer(
+      jTable.getColumn(Constants.DESCRIPTOR_MODIFIED).setCellRenderer(
             backgroundColorRenderer);
 
       jTable.getColumn("Import").setCellRenderer(new ButtonRenderer());
@@ -148,14 +139,14 @@ public class Main extends FeatureModule implements HomePageView {
               new ButtonImportEditor(this, new JCheckBox()));
       jTable.getColumn("Import").setPreferredWidth(Constants.BUTTON_WIDTH);
       jTable.getColumn("Import").setResizable(Constants.BUTTON_RESIZABLE);
-      jTable.getColumn("Import").setHeaderValue(Constants.IMPORT_DESCRIPTOR);
+      jTable.getColumn("Import").setHeaderValue(Constants.DESCRIPTOR_IMPORT);
 
       jTable.getColumn("Delete").setCellRenderer(new ButtonRenderer());
       jTable.getColumn("Delete").setCellEditor(
               new ButtonDeleteEditor(this, new JCheckBox()));
       jTable.getColumn("Delete").setPreferredWidth(Constants.BUTTON_WIDTH);
       jTable.getColumn("Delete").setResizable(Constants.BUTTON_RESIZABLE);
-      jTable.getColumn("Delete").setHeaderValue(Constants.DELETE_DESCRIPTOR);
+      jTable.getColumn("Delete").setHeaderValue(Constants.DESCRIPTOR_DELETE);
 
       jTable.setAutoCreateRowSorter(Constants.SORT_ROWS);
       jTable.getTableHeader().setReorderingAllowed(Constants.ALLOW_REORDERING);
@@ -167,8 +158,8 @@ public class Main extends FeatureModule implements HomePageView {
               new Object[] {
                   file.getName(),
                   this.dateFormat.format(new Date(file.lastModified())),
-                  Constants.IMPORT_BUTTON_LABEL,
-                  Constants.DELETE_BUTTON_LABEL
+                  Constants.LABEL_IMPORT_BUTTON,
+                  Constants.LABEL_DELETE_BUTTON
           });
       }
 
@@ -240,9 +231,9 @@ public class Main extends FeatureModule implements HomePageView {
 
 
     public final JComponent getGUIView(final RootAccount rootAccount) {
-        this.jScrollPane.setBackground(Constants.TRANSPARENT_COLOR);
-        this.jScrollPane.getViewport().setBackground(
-              Constants.TRANSPARENT_COLOR);
+        this.reloadUserPreferences();
+        this.jScrollPane.setBackground(this.backgroundColor);
+        this.jScrollPane.getViewport().setBackground(this.backgroundColor);
         return this.jScrollPane;
     }
 
@@ -253,7 +244,7 @@ public class Main extends FeatureModule implements HomePageView {
 
 
     @Override
-   public final void invoke(final String uri) {
+    public final void invoke(final String uri) {
        String command = uri;
        int theIdx     = uri.indexOf('?');
        if (theIdx >= 0) {
@@ -268,6 +259,21 @@ public class Main extends FeatureModule implements HomePageView {
        if (Constants.CHOOSE_BASE_DIR_SUFFIX.equals(command)) {
           this.directoryChooser.reset();
           this.refresh();
+       }
+    }
+
+
+    private void reloadUserPreferences() {
+       this.dateFormat = DateFormat.getDateTimeInstance();
+
+       if (this.userPreferences != null) {
+          int backgroundColorValue    = this.userPreferences.getIntSetting(
+                 Constants.PREF_BG_COLOR, Constants.COLOR_VALUE_BG_DEF);
+          this.backgroundColor        = new Color(backgroundColorValue);
+
+          int backgroundColorAltValue = this.userPreferences.getIntSetting(
+                 Constants.PREF_BG_COLOR_ALT, Constants.COLOR_VALUE_BG_ALT_DEF);
+          this.backgroundColorAlt     = new Color(backgroundColorAltValue);
        }
     }
 

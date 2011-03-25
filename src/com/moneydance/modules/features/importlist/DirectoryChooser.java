@@ -28,7 +28,7 @@ public class DirectoryChooser extends JPanel {
    public final void reset() {
       this.baseDirectory = null;
       this.userPreferences.setSetting(
-            Constants.BASE_DIR_PREFERENCE,
+            Constants.PREF_BASE_DIR,
             this.baseDirectory);
    }
 
@@ -37,7 +37,7 @@ public class DirectoryChooser extends JPanel {
 
       if (this.userPreferences != null) {
          this.baseDirectory = this.userPreferences.getSetting(
-               Constants.BASE_DIR_PREFERENCE,
+               Constants.PREF_BASE_DIR,
                this.baseDirectory);
       }
 
@@ -58,7 +58,7 @@ public class DirectoryChooser extends JPanel {
 
       if (this.userPreferences != null) {
          this.userPreferences.setSetting(
-            Constants.BASE_DIR_PREFERENCE,
+            Constants.PREF_BASE_DIR,
             this.baseDirectory);
       }
 
@@ -69,8 +69,7 @@ public class DirectoryChooser extends JPanel {
    private void displayFileChooser() {
 
       JFileChooser chooser = new JFileChooser();
-      chooser.setDialogTitle("Please choose a base directory for ImportList "
-            + "to monitor");
+      chooser.setDialogTitle("Please choose a base directory to monitor");
       chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
       // disable the "All files" option.
       chooser.setAcceptAllFileFilterUsed(false);

@@ -1,5 +1,7 @@
 package com.moneydance.modules.features.importlist;
 
+import java.awt.Color;
+
 
 /**
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
@@ -12,10 +14,8 @@ public final class Constants {
    private Constants() {
    }
 
-   /**
-    * Representation of the event name to react on.
-    */
-   public static final String  EXTENSION_NAME          = "ImportList";
+
+   public static final String  EXTENSION_NAME         = "ImportList";
 
    public static final String  ID                     =
       "moneydance:fmodule:importlist";
@@ -64,6 +64,8 @@ public final class Constants {
    public static final int     MESSAGE_HEIGHT         = 80;
 
    public static final int     MESSAGE_WIDTH          = 400;
+
+   public static final Color   COLOR_FG_DEF           = Color.BLACK;
 
    public static final int     COLOR_VALUE_BG_DEF     = -1;
 

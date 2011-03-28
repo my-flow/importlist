@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.text.DateFormat;
 import java.util.Date;
 
 import javax.swing.JCheckBox;
@@ -14,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import com.moneydance.apps.md.controller.FeatureModule;
@@ -22,46 +22,87 @@ import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
 import com.moneydance.awt.JTextPanel;
+import com.moneydance.modules.features.importlist.io.DirectoryChooser;
+import com.moneydance.modules.features.importlist.io.ListItemFilenameFilter;
+import com.moneydance.modules.features.importlist.swing.BackgroundColorRenderer;
+import com.moneydance.modules.features.importlist.swing.ButtonDeleteEditor;
+import com.moneydance.modules.features.importlist.swing.ButtonImportEditor;
+import com.moneydance.modules.features.importlist.swing.ButtonRenderer;
+import com.moneydance.modules.features.importlist.swing.ListTableModel;
 
 /**
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
  */
 public class Main extends FeatureModule implements HomePageView {
 
-    private final JScrollPane       jScrollPane = new JScrollPane();
-    private       DateFormat        dateFormat;
-    private       DirectoryChooser  directoryChooser;
-    private       File[]            files;
-    private       DefaultTableModel defaultTableModel;
-    private       Color             backgroundColor;
-    private       Color             backgroundColorAlt;
-    private       UserPreferences   userPreferences;
+   private DirectoryChooser  directoryChooser;
+   private File[]            files;
+   private DefaultTableModel defaultTableModel;
+   private JTable            jTable;
+   private JScrollPane       jScrollPane;
 
 
     @Override
    public final void init() {
 
-        if (this.getContext() != null) {
+       UserPreferences userPreferences = null;
+
+       if (this.getContext() != null) {
+
             // register this module's home page view
             this.getContext().registerHomePageView(this, this);
 
-            // initialize base directory
-            this.userPreferences = ((com.moneydance.apps.md.controller.Main)
-               this.getContext()).getPreferences();
-
             // register this module to be invoked via the application toolbar
-            try {
-               this.getContext().registerFeature(
-                  this,
-                  Constants.CHOOSE_BASE_DIR_SUFFIX,
-                  null,
-                  this.getName());
-            } catch (Exception e) {
-               e.printStackTrace(System.err);
-            }
-        }
+            this.getContext().registerFeature(
+               this,
+               Constants.CHOOSE_BASE_DIR_SUFFIX,
+               null,
+               this.getName());
 
-        this.directoryChooser = new DirectoryChooser(this.userPreferences);
+            userPreferences = ((com.moneydance.apps.md.controller.Main)
+                  this.getContext()).getPreferences();
+       }
+
+        // initialize base directory
+        this.directoryChooser = new DirectoryChooser(userPreferences);
+
+        this.defaultTableModel = new ListTableModel(
+              new Object[][] {},
+              new Object[] {
+                  Constants.DESCRIPTOR_NAME,
+                  Constants.DESCRIPTOR_MODIFIED,
+                  "I", // I means Import, use the String only as a reference
+                  "D"  // D means Delete, use the String only as a reference
+              }
+        );
+
+        this.jTable = new JTable();
+        this.jTable.setShowGrid(false);
+        this.jTable.setShowVerticalLines(false);
+        this.jTable.setShowHorizontalLines(false);
+        this.jTable.setModel(this.defaultTableModel);
+
+        this.jTable.getColumn("I").setCellRenderer(new ButtonRenderer());
+        this.jTable.getColumn("I").setCellEditor(
+              new ButtonImportEditor(this, new JCheckBox()));
+        this.jTable.getColumn("I").setPreferredWidth(Constants.BUTTON_WIDTH);
+        this.jTable.getColumn("I").setResizable(Constants.BUTTON_RESIZABLE);
+        this.jTable.getColumn("I").setHeaderValue(Constants.DESCRIPTOR_IMPORT);
+
+        this.jTable.getColumn("D").setCellRenderer(new ButtonRenderer());
+        this.jTable.getColumn("D").setCellEditor(
+              new ButtonDeleteEditor(this, new JCheckBox()));
+        this.jTable.getColumn("D").setPreferredWidth(Constants.BUTTON_WIDTH);
+        this.jTable.getColumn("D").setResizable(Constants.BUTTON_RESIZABLE);
+        this.jTable.getColumn("D").setHeaderValue(Constants.DESCRIPTOR_DELETE);
+
+        this.jTable.setAutoCreateRowSorter(Constants.SORT_ROWS);
+        this.jTable.getTableHeader().setReorderingAllowed(
+              Constants.ALLOW_REORDERING);
+        this.jTable.setPreferredScrollableViewportSize(
+              new Dimension(Constants.LIST_WIDTH, Constants.LIST_HEIGHT));
+
+        this.jScrollPane = new JScrollPane();
 
         //see moneydance.com/pipermail/moneydance-dev/2006-September/000075.html
         try {
@@ -75,7 +116,7 @@ public class Main extends FeatureModule implements HomePageView {
 
 
     @Override
-   public final String getName() {
+    public final String getName() {
         return Constants.EXTENSION_NAME;
     }
 
@@ -92,85 +133,61 @@ public class Main extends FeatureModule implements HomePageView {
 
     public final void refresh() {
 
-      this.reloadUserPreferences();
+      this.jScrollPane.invalidate();
+
+      Preferences preferences = new Preferences(this.getContext());
 
       File directory = new File(this.getImportDir());
-
       this.files = directory.listFiles(new ListItemFilenameFilter());
 
       if (this.files == null || this.files.length == 0) {
-         String label = "There are currently no files to display in "
+         String label = "There are currently no files to import in "
              + this.getImportDir();
          JComponent jTextPanel = new JTextPanel(label);
+         jTextPanel.setBackground(preferences.getBackgroundColor());
          this.jScrollPane.setViewportView(jTextPanel);
          this.jScrollPane.setPreferredSize(
              new Dimension(Constants.MESSAGE_WIDTH, Constants.MESSAGE_HEIGHT));
          return;
       }
 
-      this.defaultTableModel = new ListTableModel(
-            new Object[][] {},
-            new Object[] {
-                Constants.DESCRIPTOR_NAME,
-                Constants.DESCRIPTOR_MODIFIED,
-                "Import", // use the String only as a reference
-                "Delete"
-            }
-      );
-
-      JTable jTable = new JTable(this.defaultTableModel);
-      jTable.setShowGrid(false);
-      jTable.setShowVerticalLines(false);
-      jTable.setShowHorizontalLines(false);
-
-      BackgroundColorRenderer backgroundColorRenderer =
+      DefaultTableCellRenderer defaultTableCellRenderer =
          new BackgroundColorRenderer(
-               this.backgroundColor,
-               this.backgroundColorAlt);
+               preferences.getForegroundColor(),
+               preferences.getBackgroundColor(),
+               preferences.getBackgroundColorAlt());
 
-      jTable.getColumn(Constants.DESCRIPTOR_NAME).setCellRenderer(
-            backgroundColorRenderer);
+      this.jTable.getColumn(Constants.DESCRIPTOR_NAME).setCellRenderer(
+            defaultTableCellRenderer);
+      this.jTable.getColumn(Constants.DESCRIPTOR_MODIFIED).setCellRenderer(
+            defaultTableCellRenderer);
 
-      jTable.getColumn(Constants.DESCRIPTOR_MODIFIED).setCellRenderer(
-            backgroundColorRenderer);
-
-      jTable.getColumn("Import").setCellRenderer(new ButtonRenderer());
-      jTable.getColumn("Import").setCellEditor(
-              new ButtonImportEditor(this, new JCheckBox()));
-      jTable.getColumn("Import").setPreferredWidth(Constants.BUTTON_WIDTH);
-      jTable.getColumn("Import").setResizable(Constants.BUTTON_RESIZABLE);
-      jTable.getColumn("Import").setHeaderValue(Constants.DESCRIPTOR_IMPORT);
-
-      jTable.getColumn("Delete").setCellRenderer(new ButtonRenderer());
-      jTable.getColumn("Delete").setCellEditor(
-              new ButtonDeleteEditor(this, new JCheckBox()));
-      jTable.getColumn("Delete").setPreferredWidth(Constants.BUTTON_WIDTH);
-      jTable.getColumn("Delete").setResizable(Constants.BUTTON_RESIZABLE);
-      jTable.getColumn("Delete").setHeaderValue(Constants.DESCRIPTOR_DELETE);
-
-      jTable.setAutoCreateRowSorter(Constants.SORT_ROWS);
-      jTable.getTableHeader().setReorderingAllowed(Constants.ALLOW_REORDERING);
-      jTable.setPreferredScrollableViewportSize(
-              new Dimension(Constants.LIST_WIDTH, Constants.LIST_HEIGHT));
-
+      this.defaultTableModel.setRowCount(0);
       for (File file : this.files) {
+
+          Date date = new Date(file.lastModified());
+          String dateString = preferences.getDateFormatter().format(date)
+                            + (char) Character.DIRECTIONALITY_WHITESPACE
+                            + preferences.getTimeFormatter().format(date);
+
           this.defaultTableModel.addRow(
               new Object[] {
                   file.getName(),
-                  this.dateFormat.format(new Date(file.lastModified())),
+                  dateString,
                   Constants.LABEL_IMPORT_BUTTON,
                   Constants.LABEL_DELETE_BUTTON
-          });
+              }
+          );
       }
 
-      this.jScrollPane.setViewportView(jTable);
+      this.jScrollPane.setViewportView(this.jTable);
       this.jScrollPane.validate();
     }
 
 
-    protected final void importFile(final int row) {
+    public final void importFile(final int row) {
 
-        File file = this.getFile(row);
+        File file = this.files[row];
 
         if (!file.canRead()) {
              String errorMessage = "Could not read file \""
@@ -182,8 +199,6 @@ public class Main extends FeatureModule implements HomePageView {
                  "Error",
                  JOptionPane.ERROR_MESSAGE);
              System.err.println(errorMessage);
-
-             this.refresh();
              return;
         }
 
@@ -191,17 +206,16 @@ public class Main extends FeatureModule implements HomePageView {
             return;
         }
 
-        String callUri = Constants.IMPORT_URI_PREFIX
-            + file.getAbsolutePath();
+        String callUri = Constants.IMPORT_URI_PREFIX + file.getAbsolutePath();
 
         // Import the file identified by the file parameter
         this.getContext().showURL(callUri);
     }
 
 
-    protected final void deleteFile(final int rowNumber) {
+    public final void deleteFile(final int rowNumber) {
 
-       File file = this.getFile(rowNumber);
+       File file = this.files[rowNumber];
 
        Object[] options = {"Delete File", "Cancel"};
        int choice = JOptionPane.showOptionDialog(
@@ -231,9 +245,10 @@ public class Main extends FeatureModule implements HomePageView {
 
 
     public final JComponent getGUIView(final RootAccount rootAccount) {
-        this.reloadUserPreferences();
-        this.jScrollPane.setBackground(this.backgroundColor);
-        this.jScrollPane.getViewport().setBackground(this.backgroundColor);
+        Preferences preferences = new Preferences(this.getContext());
+        Color backgroundColor   = preferences.getBackgroundColor();
+        this.jScrollPane.setBackground(backgroundColor);
+        this.jScrollPane.getViewport().setBackground(backgroundColor);
         return this.jScrollPane;
     }
 
@@ -263,28 +278,8 @@ public class Main extends FeatureModule implements HomePageView {
     }
 
 
-    private void reloadUserPreferences() {
-       this.dateFormat = DateFormat.getDateTimeInstance();
-
-       if (this.userPreferences != null) {
-          int backgroundColorValue    = this.userPreferences.getIntSetting(
-                 Constants.PREF_BG_COLOR, Constants.COLOR_VALUE_BG_DEF);
-          this.backgroundColor        = new Color(backgroundColorValue);
-
-          int backgroundColorAltValue = this.userPreferences.getIntSetting(
-                 Constants.PREF_BG_COLOR_ALT, Constants.COLOR_VALUE_BG_ALT_DEF);
-          this.backgroundColorAlt     = new Color(backgroundColorAltValue);
-       }
-    }
-
-
     private String getImportDir() {
        return this.directoryChooser.getDirectory();
-    }
-
-
-    private File getFile(final int row) {
-        return this.files[row];
     }
 
 

@@ -1,7 +1,9 @@
-package com.moneydance.modules.features.importlist;
+package com.moneydance.modules.features.importlist.io;
 
 import java.io.File;
 import java.io.FileFilter;
+
+import com.moneydance.modules.features.importlist.Constants;
 
 /**
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com

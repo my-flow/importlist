@@ -1,10 +1,11 @@
-package com.moneydance.modules.features.importlist;
+package com.moneydance.modules.features.importlist.io;
 import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import com.moneydance.apps.md.controller.UserPreferences;
+import com.moneydance.modules.features.importlist.Constants;
 
 
 /**

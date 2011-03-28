@@ -1,4 +1,4 @@
-package com.moneydance.modules.features.importlist;
+package com.moneydance.modules.features.importlist.swing;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -16,6 +16,7 @@ public class ListTableModel extends DefaultTableModel {
     }
 
 
+    @Override
     public final boolean isCellEditable(final int row, final int column) {
         return column >= 2;
     }

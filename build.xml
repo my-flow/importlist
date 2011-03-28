@@ -4,7 +4,6 @@ http://jakarta.apache.org/ant/index.html
 -->
 
 <project name="importlist" default="all" basedir=".">
-  <property name="version"                    value="1.0"/>
   <property name="src"                        value="src"/>
   <property name="build"                      value="bin"/>
   <property name="privkeyfile"                value="${src}/priv_key"/>
@@ -36,9 +35,10 @@ http://jakarta.apache.org/ant/index.html
       includes="com/moneydance/modules/features/importlist/**"/>
 
     <jar destfile="${dist}/importlist.mxt">
-      <fileset dir="${src}" includes="
-             com/moneydance/modules/features/importlist/meta_info.dict"/>
-      <fileset dir="${build}" includes="com/moneydance/modules/features/importlist/**"/>
+      <fileset dir="${src}"
+      	includes="com/moneydance/modules/features/importlist/meta_info.dict"/>
+      <fileset dir="${build}" 
+      	includes="com/moneydance/modules/features/importlist/**"/>
     </jar>
 
     <java newenvironment="true" 

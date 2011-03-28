@@ -1,4 +1,4 @@
-package com.moneydance.modules.features.importlist;
+package com.moneydance.modules.features.importlist.swing;
 
 import java.awt.Component;
 
@@ -10,11 +10,11 @@ import javax.swing.table.TableCellRenderer;
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
  *
  */
-class ButtonRenderer extends JButton implements TableCellRenderer {
+public class ButtonRenderer extends JButton implements TableCellRenderer {
 
   private static final long serialVersionUID = -2724848115953702911L;
 
-  public Component getTableCellRendererComponent(
+  public final Component getTableCellRendererComponent(
     final JTable table,
     final Object value,
     final boolean isSelected,

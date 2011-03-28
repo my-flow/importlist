@@ -15,22 +15,18 @@ import com.moneydance.modules.features.importlist.Constants;
 public class DirectoryChooser extends JPanel {
 
    private static final long serialVersionUID = -8581693236906919725L;
-
-   private final UserPreferences userPreferences;
-
-   private String baseDirectory;
+   private        final UserPreferences userPreferences;
+   private              String          baseDirectory;
 
 
-   public DirectoryChooser(final UserPreferences paramUserPreferences) {
-      this.userPreferences = paramUserPreferences;
+   public DirectoryChooser(final UserPreferences argUserPreferences) {
+      this.userPreferences = argUserPreferences;
    }
 
 
    public final void reset() {
-      this.baseDirectory = null;
-      this.userPreferences.setSetting(
-            Constants.PREF_BASE_DIR,
-            this.baseDirectory);
+      this.displayFileChooser();
+      this.saveDirectoryInPreferences();
    }
 
 
@@ -46,22 +42,7 @@ public class DirectoryChooser extends JPanel {
          this.displayFileChooser();
       }
 
-      if (this.baseDirectory == null && this.userPreferences != null) {
-
-         this.baseDirectory = this.userPreferences.getSetting(
-               UserPreferences.IMPORT_DIR,
-               this.baseDirectory);
-      }
-
-      if (this.baseDirectory == null) {
-         this.baseDirectory = Constants.HOME_DIRECTORY;
-      }
-
-      if (this.userPreferences != null) {
-         this.userPreferences.setSetting(
-            Constants.PREF_BASE_DIR,
-            this.baseDirectory);
-      }
+      this.saveDirectoryInPreferences();
 
       return this.baseDirectory;
    }
@@ -77,11 +58,33 @@ public class DirectoryChooser extends JPanel {
 
       chooser.setCurrentDirectory(new File(Constants.HOME_DIRECTORY));
       if (this.baseDirectory != null) {
-         chooser.setCurrentDirectory(new File(this.baseDirectory));
+         File parentDirectory = new File(this.baseDirectory).getParentFile();
+         chooser.setCurrentDirectory(parentDirectory);
       }
 
       if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
          this.baseDirectory = chooser.getSelectedFile().getAbsolutePath();
+      }
+   }
+
+
+
+   private void saveDirectoryInPreferences() {
+      if (this.baseDirectory == null && this.userPreferences != null) {
+
+         this.baseDirectory = this.userPreferences.getSetting(
+               UserPreferences.IMPORT_DIR,
+               this.baseDirectory);
+      }
+
+      if (this.baseDirectory == null) {
+         this.baseDirectory = Constants.HOME_DIRECTORY;
+      }
+
+      if (this.userPreferences != null) {
+         this.userPreferences.setSetting(
+            Constants.PREF_BASE_DIR,
+            this.baseDirectory);
       }
    }
 }

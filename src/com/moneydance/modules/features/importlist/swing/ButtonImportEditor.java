@@ -15,14 +15,16 @@ import com.moneydance.modules.features.importlist.Main;
  */
 public class ButtonImportEditor extends DefaultCellEditor {
 
-  private static final long    serialVersionUID = 6773713824539296048L;
-  private final        Main    main;
-  private              String  label;
+  private static final long   serialVersionUID = 6773713824539296048L;
+  private final        Main   main;
+  private              String label;
 
-  public ButtonImportEditor(final Main paraMain, final JCheckBox checkBox) {
-    super(checkBox);
-    this.main = paraMain;
+
+  public ButtonImportEditor(final Main argMain) {
+     super(new JCheckBox());
+     this.main = argMain;
   }
+
 
   @Override
   public final Component getTableCellEditorComponent(
@@ -32,7 +34,7 @@ public class ButtonImportEditor extends DefaultCellEditor {
      final int row,
      final int column) {
 
-     this.main.importFile(row);
+     this.main.importFile(jTable.convertRowIndexToModel(row));
 
      this.label = "";
      if (value != null) {

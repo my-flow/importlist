@@ -7,7 +7,7 @@ import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.controller.UserPreferences;
 import com.moneydance.apps.md.view.gui.MoneydanceGUI;
 
-class Preferences {
+public class Preferences {
 
    private final DateFormat   dateFormatter;
    private final DateFormat   timeFormatter;
@@ -53,22 +53,22 @@ class Preferences {
    }
 
 
-   public DateFormat getDateFormatter() {
+   public final DateFormat getDateFormatter() {
       return this.dateFormatter;
    }
 
 
-   public DateFormat getTimeFormatter() {
+   public final DateFormat getTimeFormatter() {
       return this.timeFormatter;
    }
 
 
-   public Color getForegroundColor() {
+   public final Color getForegroundColor() {
       return this.foregroundColor;
    }
 
 
-   public Color getBackgroundColor() {
+   public final Color getBackgroundColor() {
       return this.backgroundColor;
    }
 

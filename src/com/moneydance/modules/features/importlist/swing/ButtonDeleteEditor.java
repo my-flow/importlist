@@ -20,9 +20,9 @@ public class ButtonDeleteEditor extends DefaultCellEditor {
   private              String  label;
 
 
-  public ButtonDeleteEditor(final Main paraMain, final JCheckBox checkBox) {
-    super(checkBox);
-    this.main = paraMain;
+  public ButtonDeleteEditor(final Main argMain) {
+     super(new JCheckBox());
+     this.main = argMain;
   }
 
 
@@ -34,12 +34,18 @@ public class ButtonDeleteEditor extends DefaultCellEditor {
      final int row,
      final int column) {
 
-     this.main.deleteFile(row);
+     this.main.deleteFile(jTable.convertRowIndexToModel(row));
 
      this.label = "";
      if (value != null) {
          this.label = value.toString();
      }
      return new JButton(this.label);
+  }
+
+
+  @Override
+  public final Object getCellEditorValue() {
+    return this.label;
   }
 }

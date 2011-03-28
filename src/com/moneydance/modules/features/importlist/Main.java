@@ -167,7 +167,7 @@ public class Main extends FeatureModule implements HomePageView {
 
           Date date = new Date(file.lastModified());
           String dateString = preferences.getDateFormatter().format(date)
-                            + (char) Character.DIRECTIONALITY_WHITESPACE
+                            + " "
                             + preferences.getTimeFormatter().format(date);
 
           this.defaultTableModel.addRow(

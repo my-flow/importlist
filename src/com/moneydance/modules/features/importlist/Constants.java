@@ -15,7 +15,7 @@ public final class Constants {
    }
 
 
-   public static final String  EXTENSION_NAME         = "ImportList";
+   public static final String  EXTENSION_NAME         = "Import List";
 
    public static final String  ID                     =
       "moneydance:fmodule:importlist";

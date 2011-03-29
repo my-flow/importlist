@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-  ImportListFeatureModuleTest.class,
+  MainTest.class,
   PreferencesTest.class
 })
 public class TestSuite {

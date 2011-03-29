@@ -7,42 +7,42 @@ import org.junit.Test;
 
 import com.moneydance.modules.features.importlist.Main;
 
-public class ImportListFeatureModuleTest {
+public class MainTest {
 
-   private Main featureModule;
+   private Main main;
 
    @Before
    public final void setUp() throws Exception {
-      this.featureModule = new Main();
-      this.featureModule.init();
+      this.main = new Main();
+      this.main.init();
    }
 
 
    @Test
    public final void testGetName() {
       assertNotNull("extension name must not be null",
-            this.featureModule.getName());
+            this.main.getName());
    }
 
 
    @Test
    public final void testInvokeString() {
-      this.featureModule.invoke(null);
-      this.featureModule.invoke("");
-      this.featureModule.invoke(":");
-      this.featureModule.invoke("?");
+      this.main.invoke(null);
+      this.main.invoke("");
+      this.main.invoke(":");
+      this.main.invoke("?");
    }
 
 
    @Test
    public final void testImportFile() {
-      this.featureModule.importFile(0);
+      this.main.importFile(0);
    }
 
 
    @Test
    public final void testDeleteFile() {
-      this.featureModule.deleteFile(0);
+      this.main.deleteFile(0);
    }
 
 }

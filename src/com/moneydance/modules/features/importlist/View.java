@@ -26,7 +26,7 @@ import com.moneydance.modules.features.importlist.swing.ListTableModel;
  */
 public class View implements HomePageView {
 
-    private final Main featureModule;
+    private final Main main;
     private final DefaultTableModel       defaultTableModel;
     private final JTable                  jTable;
     private final JScrollPane             jScrollPane;
@@ -34,7 +34,7 @@ public class View implements HomePageView {
 
     public View(final Main argMain) {
 
-       this.featureModule = argMain;
+       this.main = argMain;
 
        this.defaultTableModel = new ListTableModel(
              new Object[][] {},
@@ -54,14 +54,14 @@ public class View implements HomePageView {
 
        this.jTable.getColumn("I").setCellRenderer(new ButtonRenderer());
        this.jTable.getColumn("I").setCellEditor(
-             new ButtonImportEditor(this.featureModule));
+             new ButtonImportEditor(this.main));
        this.jTable.getColumn("I").setPreferredWidth(Constants.BUTTON_WIDTH);
        this.jTable.getColumn("I").setResizable(Constants.BUTTON_RESIZABLE);
        this.jTable.getColumn("I").setHeaderValue(Constants.DESCRIPTOR_IMPORT);
 
        this.jTable.getColumn("D").setCellRenderer(new ButtonRenderer());
        this.jTable.getColumn("D").setCellEditor(
-             new ButtonDeleteEditor(this.featureModule));
+             new ButtonDeleteEditor(this.main));
        this.jTable.getColumn("D").setPreferredWidth(Constants.BUTTON_WIDTH);
        this.jTable.getColumn("D").setResizable(Constants.BUTTON_RESIZABLE);
        this.jTable.getColumn("D").setHeaderValue(Constants.DESCRIPTOR_DELETE);
@@ -92,12 +92,12 @@ public class View implements HomePageView {
 
       this.jScrollPane.invalidate();
 
-      Preferences preferences = this.featureModule.getPreferences();
-      File[] files            = this.featureModule.getFiles();
+      Preferences preferences = this.main.getPreferences();
+      File[] files            = this.main.getFiles();
 
       if (files == null || files.length == 0) {
          String label = "There are currently no files to import in "
-             + this.featureModule.getImportDir();
+             + this.main.getImportDir();
          JComponent jTextPanel = new JTextPanel(label);
          jTextPanel.setBackground(preferences.getBackgroundColor());
          this.jScrollPane.setViewportView(jTextPanel);
@@ -141,7 +141,7 @@ public class View implements HomePageView {
 
 
     public final JComponent getGUIView(final RootAccount rootAccount) {
-        Preferences preferences = this.featureModule.getPreferences();
+        Preferences preferences = this.main.getPreferences();
         Color backgroundColor   = preferences.getBackgroundColor();
         this.jScrollPane.setBackground(backgroundColor);
         this.jScrollPane.getViewport().setBackground(backgroundColor);
@@ -149,12 +149,18 @@ public class View implements HomePageView {
     }
 
 
-    public final void setActive(final boolean active) {
-        this.jScrollPane.setVisible(active);
+    public final void reset() {
+       this.jScrollPane.invalidate();
     }
 
 
-    public final void reset() {
-       this.jScrollPane.invalidate();
+    public final void setActive(final boolean active) {
+       this.jScrollPane.setVisible(active);
+    }
+
+
+    @Override
+    public final String toString() {
+       return this.main.getName();
     }
 }

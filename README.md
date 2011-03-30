@@ -20,7 +20,7 @@ Building the extension from scratch
 -----------------------------------
 
 ### Requirements
-*	Java Development Kit, version 1.6
+*	Java SE Development Kit, version 6
 *	Apache Ant™, tested with version 1.8.2
 *	Moneydance®, tested with version 2010r3
 

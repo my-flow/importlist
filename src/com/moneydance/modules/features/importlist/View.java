@@ -3,6 +3,7 @@ package com.moneydance.modules.features.importlist;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
+import java.text.DateFormat;
 import java.util.Date;
 
 import javax.swing.JComponent;
@@ -90,17 +91,19 @@ public class View implements HomePageView {
 
     public final void refresh() {
 
-      this.jScrollPane.invalidate();
-
       Preferences preferences = this.main.getPreferences();
+      Color backgroundColor   = preferences.getBackgroundColor();
+      this.jScrollPane.setBackground(backgroundColor);
+
       File[] files            = this.main.getFiles();
 
       if (files == null || files.length == 0) {
          String label = "There are currently no files to import in "
              + this.main.getImportDir();
          JComponent jTextPanel = new JTextPanel(label);
-         jTextPanel.setBackground(preferences.getBackgroundColor());
+         jTextPanel.setBackground(backgroundColor);
          this.jScrollPane.setViewportView(jTextPanel);
+         this.jScrollPane.getViewport().setBackground(backgroundColor);
          this.jScrollPane.setPreferredSize(
              new Dimension(Constants.MESSAGE_WIDTH, Constants.MESSAGE_HEIGHT));
          return;
@@ -117,13 +120,16 @@ public class View implements HomePageView {
       this.jTable.getColumn(Constants.DESCRIPTOR_MODIFIED).setCellRenderer(
             defaultTableCellRenderer);
 
+      DateFormat dateFormatter = preferences.getDateFormatter();
+      DateFormat timeFormatter = preferences.getTimeFormatter();
+
       this.defaultTableModel.setRowCount(0);
       for (File file : files) {
 
-          Date date = new Date(file.lastModified());
-          String dateString = preferences.getDateFormatter().format(date)
-                            + " "
-                            + preferences.getTimeFormatter().format(date);
+         Date date = new Date(file.lastModified());
+         String dateString = dateFormatter.format(date)
+                             + " "
+                             + timeFormatter.format(date);
 
           this.defaultTableModel.addRow(
               new Object[] {
@@ -136,15 +142,11 @@ public class View implements HomePageView {
       }
 
       this.jScrollPane.setViewportView(this.jTable);
-      this.jScrollPane.validate();
+      this.jScrollPane.getViewport().setBackground(backgroundColor);
     }
 
 
     public final JComponent getGUIView(final RootAccount rootAccount) {
-        Preferences preferences = this.main.getPreferences();
-        Color backgroundColor   = preferences.getBackgroundColor();
-        this.jScrollPane.setBackground(backgroundColor);
-        this.jScrollPane.getViewport().setBackground(backgroundColor);
         return this.jScrollPane;
     }
 

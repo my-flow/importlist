@@ -8,7 +8,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
- *
  */
 public class BackgroundColorRenderer extends DefaultTableCellRenderer {
 
@@ -37,15 +36,15 @@ public class BackgroundColorRenderer extends DefaultTableCellRenderer {
     final int row,
     final int column) {
 
-     Component cell = super.getTableCellRendererComponent(table, value,
+     Component component = super.getTableCellRendererComponent(table, value,
            isSelected, hasFocus, row, column);
 
-     cell.setForeground(this.foregroundColor);
-     cell.setBackground(this.backgroundColor);
+     component.setForeground(this.foregroundColor);
+     component.setBackground(this.backgroundColor);
      if (row % 2 != 0) {
-        cell.setBackground(this.backgroundColorAlt);
+        component.setBackground(this.backgroundColorAlt);
      }
 
-     return cell;
+     return component;
   }
 }

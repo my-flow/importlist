@@ -5,15 +5,25 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-public final class Start {
+/**
+ * This class is used to run the extension as a stand-alone application from
+ * the console or from an IDE. It allows for fast feedback during the
+ * development process.
+ *
+ * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ */
+public final class ConsoleRunner {
 
    /**
     * Private constructor prevents this class from being instantiated.
     */
-   private Start() {
+   private ConsoleRunner() {
    }
 
 
+   /**
+    * @param args command line arguments are not used
+    */
    public static void main(final String[] args) {
 
       JFrame jFrame = new JFrame();

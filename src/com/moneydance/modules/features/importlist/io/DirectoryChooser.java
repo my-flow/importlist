@@ -9,8 +9,10 @@ import com.moneydance.modules.features.importlist.Constants;
 
 
 /**
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * Choose the base directory to be monitored and save the setting in the user's
+ * preferences (if there are any).
  *
+ * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
  */
 public class DirectoryChooser extends JPanel {
 
@@ -19,6 +21,10 @@ public class DirectoryChooser extends JPanel {
    private              String          baseDirectory;
 
 
+   /**
+    * @param argUserPreferences user preferences if the extension runs in
+    * Moneydance's application context, otherwise null.
+    */
    public DirectoryChooser(final UserPreferences argUserPreferences) {
       this.userPreferences = argUserPreferences;
    }
@@ -50,20 +56,20 @@ public class DirectoryChooser extends JPanel {
 
    private void displayFileChooser() {
 
-      JFileChooser chooser = new JFileChooser();
-      chooser.setDialogTitle("Please choose a base directory to monitor");
-      chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+      JFileChooser fileChooser = new JFileChooser();
+      fileChooser.setDialogTitle("Please choose a base directory to monitor");
+      fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
       // disable the "All files" option.
-      chooser.setAcceptAllFileFilterUsed(false);
+      fileChooser.setAcceptAllFileFilterUsed(false);
 
-      chooser.setCurrentDirectory(new File(Constants.HOME_DIRECTORY));
+      fileChooser.setCurrentDirectory(new File(Constants.HOME_DIRECTORY));
       if (this.baseDirectory != null) {
          File parentDirectory = new File(this.baseDirectory).getParentFile();
-         chooser.setCurrentDirectory(parentDirectory);
+         fileChooser.setCurrentDirectory(parentDirectory);
       }
 
-      if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-         this.baseDirectory = chooser.getSelectedFile().getAbsolutePath();
+      if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+         this.baseDirectory = fileChooser.getSelectedFile().getAbsolutePath();
       }
    }
 

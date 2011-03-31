@@ -3,6 +3,9 @@ package com.moneydance.modules.features.importlist.test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+/**
+ * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   MainTest.class,

@@ -23,14 +23,16 @@ import com.moneydance.modules.features.importlist.swing.ButtonRenderer;
 import com.moneydance.modules.features.importlist.swing.ListTableModel;
 
 /**
+ * User interface that is displayed on the home page.
+ *
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
  */
 public class View implements HomePageView {
 
     private final Main main;
     private final DefaultTableModel       defaultTableModel;
-    private final JTable                  jTable;
-    private final JScrollPane             jScrollPane;
+    private final JTable                  table;
+    private final JScrollPane             scrollPane;
 
 
     public View(final Main argMain) {
@@ -38,46 +40,45 @@ public class View implements HomePageView {
        this.main = argMain;
 
        this.defaultTableModel = new ListTableModel(
-             new Object[][] {},
              new Object[] {
                  Constants.DESCRIPTOR_NAME,
                  Constants.DESCRIPTOR_MODIFIED,
                  "I", // I means Import, use the String only as a reference
                  "D"  // D means Delete, use the String only as a reference
-             }
+             },
+             0
        );
 
-       this.jTable = new JTable();
-       this.jTable.setShowGrid(false);
-       this.jTable.setShowVerticalLines(false);
-       this.jTable.setShowHorizontalLines(false);
-       this.jTable.setModel(this.defaultTableModel);
+       this.table = new JTable(this.defaultTableModel);
+       this.table.setShowGrid(false);
+       this.table.setShowVerticalLines(false);
+       this.table.setShowHorizontalLines(false);
 
-       this.jTable.getColumn("I").setCellRenderer(new ButtonRenderer());
-       this.jTable.getColumn("I").setCellEditor(
+       this.table.getColumn("I").setCellRenderer(new ButtonRenderer());
+       this.table.getColumn("I").setCellEditor(
              new ButtonImportEditor(this.main));
-       this.jTable.getColumn("I").setPreferredWidth(Constants.BUTTON_WIDTH);
-       this.jTable.getColumn("I").setResizable(Constants.BUTTON_RESIZABLE);
-       this.jTable.getColumn("I").setHeaderValue(Constants.DESCRIPTOR_IMPORT);
+       this.table.getColumn("I").setPreferredWidth(Constants.BUTTON_WIDTH);
+       this.table.getColumn("I").setResizable(Constants.BUTTON_RESIZABLE);
+       this.table.getColumn("I").setHeaderValue(Constants.DESCRIPTOR_IMPORT);
 
-       this.jTable.getColumn("D").setCellRenderer(new ButtonRenderer());
-       this.jTable.getColumn("D").setCellEditor(
+       this.table.getColumn("D").setCellRenderer(new ButtonRenderer());
+       this.table.getColumn("D").setCellEditor(
              new ButtonDeleteEditor(this.main));
-       this.jTable.getColumn("D").setPreferredWidth(Constants.BUTTON_WIDTH);
-       this.jTable.getColumn("D").setResizable(Constants.BUTTON_RESIZABLE);
-       this.jTable.getColumn("D").setHeaderValue(Constants.DESCRIPTOR_DELETE);
+       this.table.getColumn("D").setPreferredWidth(Constants.BUTTON_WIDTH);
+       this.table.getColumn("D").setResizable(Constants.BUTTON_RESIZABLE);
+       this.table.getColumn("D").setHeaderValue(Constants.DESCRIPTOR_DELETE);
 
-       this.jTable.setAutoCreateRowSorter(Constants.SORT_ROWS);
-       this.jTable.getTableHeader().setReorderingAllowed(
+       this.table.setAutoCreateRowSorter(Constants.SORT_ROWS);
+       this.table.getTableHeader().setReorderingAllowed(
              Constants.ALLOW_REORDERING);
-       this.jTable.setPreferredScrollableViewportSize(
+       this.table.setPreferredScrollableViewportSize(
              new Dimension(Constants.LIST_WIDTH, Constants.LIST_HEIGHT));
 
-       this.jScrollPane = new JScrollPane();
+       this.scrollPane = new JScrollPane();
 
        //see moneydance.com/pipermail/moneydance-dev/2006-September/000075.html
        try {
-          this.jScrollPane.setBorder(MoneydanceLAF.homePageBorder);
+          this.scrollPane.setBorder(MoneydanceLAF.homePageBorder);
        } catch (Throwable e) {
          e.printStackTrace();
        }
@@ -93,7 +94,7 @@ public class View implements HomePageView {
 
       Preferences preferences = this.main.getPreferences();
       Color backgroundColor   = preferences.getBackgroundColor();
-      this.jScrollPane.setBackground(backgroundColor);
+      this.scrollPane.setBackground(backgroundColor);
 
       File[] files            = this.main.getFiles();
 
@@ -102,9 +103,9 @@ public class View implements HomePageView {
              + this.main.getImportDir();
          JComponent jTextPanel = new JTextPanel(label);
          jTextPanel.setBackground(backgroundColor);
-         this.jScrollPane.setViewportView(jTextPanel);
-         this.jScrollPane.getViewport().setBackground(backgroundColor);
-         this.jScrollPane.setPreferredSize(
+         this.scrollPane.setViewportView(jTextPanel);
+         this.scrollPane.getViewport().setBackground(backgroundColor);
+         this.scrollPane.setPreferredSize(
              new Dimension(Constants.MESSAGE_WIDTH, Constants.MESSAGE_HEIGHT));
          return;
       }
@@ -115,9 +116,9 @@ public class View implements HomePageView {
                preferences.getBackgroundColor(),
                preferences.getBackgroundColorAlt());
 
-      this.jTable.getColumn(Constants.DESCRIPTOR_NAME).setCellRenderer(
+      this.table.getColumn(Constants.DESCRIPTOR_NAME).setCellRenderer(
             defaultTableCellRenderer);
-      this.jTable.getColumn(Constants.DESCRIPTOR_MODIFIED).setCellRenderer(
+      this.table.getColumn(Constants.DESCRIPTOR_MODIFIED).setCellRenderer(
             defaultTableCellRenderer);
 
       DateFormat dateFormatter = preferences.getDateFormatter();
@@ -141,23 +142,23 @@ public class View implements HomePageView {
           );
       }
 
-      this.jScrollPane.setViewportView(this.jTable);
-      this.jScrollPane.getViewport().setBackground(backgroundColor);
+      this.scrollPane.setViewportView(this.table);
+      this.scrollPane.getViewport().setBackground(backgroundColor);
     }
 
 
     public final JComponent getGUIView(final RootAccount rootAccount) {
-        return this.jScrollPane;
+        return this.scrollPane;
     }
 
 
     public final void reset() {
-       this.jScrollPane.invalidate();
+       this.scrollPane.invalidate();
     }
 
 
     public final void setActive(final boolean active) {
-       this.jScrollPane.setVisible(active);
+       this.scrollPane.setVisible(active);
     }
 
 

@@ -6,6 +6,9 @@ import java.io.FileFilter;
 import com.moneydance.modules.features.importlist.Constants;
 
 /**
+ * Filter out files that cannot be imported, i.e. accept only predefined
+ * file extensions when checking the file name.
+ *
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
  */
 public class ListItemFilenameFilter implements FileFilter {
@@ -16,7 +19,9 @@ public class ListItemFilenameFilter implements FileFilter {
       }
 
       for (String fileExtension : Constants.FILE_EXTENSIONS) {
-         if (pathname.getName().matches("(?i).*\\.(" + fileExtension + ")$")) {
+         // case-insensitive regular expression
+         String regularExpression = "(?i).*\\.(" + fileExtension + ")$";
+         if (pathname.getName().matches(regularExpression)) {
             return true;
          }
       }

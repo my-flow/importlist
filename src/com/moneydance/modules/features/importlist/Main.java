@@ -1,5 +1,7 @@
 package com.moneydance.modules.features.importlist;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JOptionPane;
@@ -9,6 +11,9 @@ import com.moneydance.apps.md.controller.UserPreferences;
 import com.moneydance.modules.features.importlist.io.DirectoryChooser;
 import com.moneydance.modules.features.importlist.io.ListItemFilenameFilter;
 
+/**
+ * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ */
 public class Main extends FeatureModule {
 
    private DirectoryChooser   directoryChooser;
@@ -76,90 +81,133 @@ public class Main extends FeatureModule {
    }
 
 
-   public final void importFile(final int rowNumber) {
-
-       if (this.files == null) {
-          return;
-       }
-
-       File file = this.files[rowNumber];
-
-       if (!file.canRead()) {
-            String errorMessage = "Could not read file \""
-               + file.getAbsolutePath() + "\"";
-
-            JOptionPane.showMessageDialog(
-                null,
-                errorMessage,
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-            System.err.println(errorMessage);
-            return;
-       }
-
-       if (this.getContext() == null) {
-           return;
-       }
-
-       String callUri = Constants.IMPORT_URI_PREFIX + file.getAbsolutePath();
-
-       // Import the file identified by the file parameter
-       this.getContext().showURL(callUri);
+   public final ActionListener getImportActionListener(final int rowNumber) {
+      return this.new ImportActionListener(rowNumber);
    }
 
 
-   public final void deleteFile(final int rowNumber) {
-
-      if (this.files == null) {
-         return;
-      }
-
-      File file = this.files[rowNumber];
-
-      Object[] options = {"Delete File", "Cancel"};
-      int choice = JOptionPane.showOptionDialog(
-            null,
-            "Are you sure you want to delete the file \""
-               + file.getName() + "\"?",
-            "Warning",
-            JOptionPane.DEFAULT_OPTION,
-            JOptionPane.WARNING_MESSAGE,
-            null,
-            options,
-            options[0]);
-
-      if (choice == 0 && !file.delete()) {
-           String errorMessage = "Could not delete file \""
-              + file.getAbsolutePath() + "\"";
-
-           JOptionPane.showMessageDialog(
-               null,
-               errorMessage,
-               "Error",
-               JOptionPane.ERROR_MESSAGE);
-           System.err.println(errorMessage);
-       }
-       this.view.refresh();
+   public final ActionListener getDeleteActionListener(final int rowNumber) {
+      return this.new DeleteActionListener(rowNumber);
    }
 
 
-   protected final File[] getFiles() {
+   final File[] getFiles() {
       File directory = new File(this.getImportDir());
       this.files = directory.listFiles(new ListItemFilenameFilter());
       return this.files;
    }
 
-   protected final View getView() {
+
+   final View getView() {
       return this.view;
    }
 
 
-   protected final String getImportDir() {
+   final String getImportDir() {
       return this.directoryChooser.getDirectory();
    }
 
 
-   protected final Preferences getPreferences() {
+   final Preferences getPreferences() {
       return new Preferences(this.getContext());
+   }
+
+
+   /**
+    * Command pattern: Return an action that imports a file identified by its
+    * position in the list.
+    */
+   private class ImportActionListener implements ActionListener {
+
+      private final int rowNumber;
+
+
+      public ImportActionListener(final int argRowNumber) {
+         this.rowNumber = argRowNumber;
+      }
+
+
+      @Override
+      public void actionPerformed(final ActionEvent actionEvent) {
+
+         if (Main.this.files == null) {
+            return;
+         }
+
+         File file = Main.this.files[this.rowNumber];
+
+         if (!file.canRead()) {
+              String errorMessage = "Could not read file \""
+                 + file.getAbsolutePath() + "\"";
+
+              JOptionPane.showMessageDialog(
+                  null,
+                  errorMessage,
+                  "Error",
+                  JOptionPane.ERROR_MESSAGE);
+              System.err.println(errorMessage);
+              return;
+         }
+
+         if (Main.this.getContext() == null) {
+             return;
+         }
+
+         String callUri = Constants.IMPORT_URI_PREFIX + file.getAbsolutePath();
+
+         // Import the file identified by the file parameter
+         Main.this.getContext().showURL(callUri);
+     }
+   }
+
+
+   /**
+    * Command pattern: Return an action that deletes a file identified by its
+    * position in the list.
+    */
+   private class DeleteActionListener implements ActionListener {
+
+      private final int rowNumber;
+
+
+      public DeleteActionListener(final int argRowNumber) {
+         this.rowNumber = argRowNumber;
+      }
+
+
+      @Override
+      public void actionPerformed(final ActionEvent actionEvent) {
+
+         if (Main.this.files == null) {
+            return;
+         }
+
+         File file = Main.this.files[this.rowNumber];
+
+         Object[] options = {"Delete File", "Cancel"};
+         int choice = JOptionPane.showOptionDialog(
+               null,
+               "Are you sure you want to delete the file \""
+                  + file.getName() + "\"?",
+               "Warning",
+               JOptionPane.DEFAULT_OPTION,
+               JOptionPane.WARNING_MESSAGE,
+               null,
+               options,
+               options[0]);
+
+         if (choice == 0 && !file.delete()) {
+              String errorMessage = "Could not delete file \""
+                 + file.getAbsolutePath() + "\"";
+
+              JOptionPane.showMessageDialog(
+                  null,
+                  errorMessage,
+                  "Error",
+                  JOptionPane.ERROR_MESSAGE);
+              System.err.println(errorMessage);
+          }
+          Main.this.view.refresh();
+      }
    }
 }

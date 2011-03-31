@@ -7,9 +7,13 @@ import org.junit.Test;
 
 import com.moneydance.modules.features.importlist.Main;
 
+/**
+ * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ */
 public class MainTest {
 
    private Main main;
+
 
    @Before
    public final void setUp() throws Exception {
@@ -36,13 +40,13 @@ public class MainTest {
 
    @Test
    public final void testImportFile() {
-      this.main.importFile(0);
+      this.main.getImportActionListener(0);
    }
 
 
    @Test
-   public final void testDeleteFile() {
-      this.main.deleteFile(0);
+   public final void getDeleteActionListener() {
+      this.main.getDeleteActionListener(0);
    }
 
 }

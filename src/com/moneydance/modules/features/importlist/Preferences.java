@@ -7,6 +7,9 @@ import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.controller.UserPreferences;
 import com.moneydance.apps.md.view.gui.MoneydanceGUI;
 
+/**
+ * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ */
 public class Preferences {
 
    private final DateFormat   dateFormatter;

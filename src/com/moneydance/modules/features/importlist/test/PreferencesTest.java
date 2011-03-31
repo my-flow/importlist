@@ -7,14 +7,19 @@ import org.junit.Test;
 
 import com.moneydance.modules.features.importlist.Preferences;
 
+/**
+ * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ */
 public class PreferencesTest {
 
    private Preferences preferences;
+
 
    @Before
    public final void setUp() throws Exception {
       this.preferences = new Preferences(null);
    }
+
 
    @Test
    public final void testGetDateFormatter() {
@@ -22,11 +27,13 @@ public class PreferencesTest {
             this.preferences.getDateFormatter());
    }
 
+
    @Test
    public final void testGetTimeFormatter() {
       assertNotNull("time formatter must not be null",
             this.preferences.getTimeFormatter());
    }
+
 
    @Test
    public final void testGetForegroundColor() {
@@ -34,16 +41,17 @@ public class PreferencesTest {
             this.preferences.getForegroundColor());
    }
 
+
    @Test
    public final void testGetBackgroundColor() {
       assertNotNull("background color must not be null",
             this.preferences.getBackgroundColor());
    }
 
+
    @Test
    public final void testGetBackgroundColorAlt() {
       assertNotNull("alternating background color must not be null",
             this.preferences.getBackgroundColorAlt());
    }
-
 }

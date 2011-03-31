@@ -1,6 +1,7 @@
 package com.moneydance.modules.features.importlist.swing;
 
 import java.awt.Component;
+import java.awt.event.ActionListener;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -11,13 +12,12 @@ import com.moneydance.modules.features.importlist.Main;
 
 /**
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
- *
  */
 public class ButtonDeleteEditor extends DefaultCellEditor {
 
-  private static final long    serialVersionUID = 6773713824539296048L;
-  private final        Main    main;
-  private              String  label;
+  private static final long   serialVersionUID = 6773713824539296048L;
+  private final        Main   main;
+  private              String label;
 
 
   public ButtonDeleteEditor(final Main argMain) {
@@ -28,19 +28,22 @@ public class ButtonDeleteEditor extends DefaultCellEditor {
 
   @Override
   public final Component getTableCellEditorComponent(
-     final JTable jTable,
+     final JTable table,
      final Object value,
      final boolean isSelected,
      final int row,
      final int column) {
 
-     this.main.deleteFile(jTable.convertRowIndexToModel(row));
-
-     this.label = "";
      if (value != null) {
          this.label = value.toString();
      }
-     return new JButton(this.label);
+
+     JButton button = new JButton(this.label);
+     ActionListener actionListener = this.main.getDeleteActionListener(
+           table.convertRowIndexToModel(row));
+     button.addActionListener(actionListener);
+
+     return button;
   }
 
 

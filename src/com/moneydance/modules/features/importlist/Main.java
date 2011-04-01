@@ -1,9 +1,15 @@
 package com.moneydance.modules.features.importlist;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import com.moneydance.apps.md.controller.FeatureModule;
@@ -53,6 +59,22 @@ public class Main extends FeatureModule {
    @Override
    public final String getName() {
        return Constants.EXTENSION_NAME;
+   }
+
+
+   @Override
+   public final Image getIconImage() {
+       try {
+           ClassLoader cl          = getClass().getClassLoader();
+           InputStream inputStream = cl.getResourceAsStream(Constants.ICON);
+           Image image = ImageIO.read(inputStream);
+           return image;
+       } catch (IOException e) {
+           e.printStackTrace(System.err);
+       } catch (IllegalArgumentException e) {
+           e.printStackTrace(System.err);
+       }
+       return null;
    }
 
 
@@ -184,26 +206,32 @@ public class Main extends FeatureModule {
 
          File file = Main.this.files[this.rowNumber];
 
+         Icon icon = null;
+         String message = "Are you sure you want to "
+             + "delete the file \"" + file.getName() + "\"?";
+         if (Main.this.getIconImage() != null) {
+             icon = new ImageIcon(Main.this.getIconImage());
+         }
          Object[] options = {"Delete File", "Cancel"};
+
          int choice = JOptionPane.showOptionDialog(
                null,
-               "Are you sure you want to delete the file \""
-                  + file.getName() + "\"?",
-               "Warning",
+               message,
+               "", // no title
                JOptionPane.DEFAULT_OPTION,
                JOptionPane.WARNING_MESSAGE,
-               null,
+               icon,
                options,
-               options[0]);
+               options[1]);
 
          if (choice == 0 && !file.delete()) {
-              String errorMessage = "Could not delete file \""
-                 + file.getAbsolutePath() + "\"";
+              String errorMessage = "The file \"" + file.getName()
+                  + "\" could not be deleted.";
 
               JOptionPane.showMessageDialog(
                   null,
                   errorMessage,
-                  "Error",
+                  "", // no title
                   JOptionPane.ERROR_MESSAGE);
               System.err.println(errorMessage);
           }

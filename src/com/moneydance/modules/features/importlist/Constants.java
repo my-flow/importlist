@@ -20,6 +20,9 @@ public final class Constants {
    public static final String  ID                     =
       "moneydance:fmodule:importlist";
 
+   public static final String  ICON                   =
+      "/com/moneydance/modules/features/importlist/icon.png";
+
    public static final String  CHOOSE_BASE_DIR_SUFFIX = "chooseimportdir";
 
    public static final String  IMPORT_URI_PREFIX      =

@@ -27,6 +27,20 @@ public class Main extends FeatureModule {
    private View               view;
 
 
+   /**
+    * Standard constructor must be available in the Moneydance context.
+    */
+   public Main() {
+      super();
+   }
+
+
+   public Main(final String baseDirectory) {
+      this.init();
+      this.directoryChooser = new DirectoryChooser(baseDirectory);
+   }
+
+
    @Override
    public final void init() {
 

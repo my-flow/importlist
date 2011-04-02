@@ -22,6 +22,16 @@ public class DirectoryChooser extends JPanel {
 
 
    /**
+    * @param argBaseDirectory set the base directory when executed as a stand-
+    * alone application
+    */
+   public DirectoryChooser(final String argBaseDirectory) {
+      this.baseDirectory   = argBaseDirectory;
+      this.userPreferences = null;
+   }
+
+
+   /**
     * @param argUserPreferences user preferences if the extension runs in
     * Moneydance's application context, otherwise null.
     */

@@ -1,8 +1,6 @@
 package com.moneydance.modules.features.importlist;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 /**
@@ -22,24 +20,30 @@ public final class ConsoleRunner {
 
 
    /**
-    * @param args command line arguments are not used
+    * @param args command The first parameter specifies the base directory
     */
    public static void main(final String[] args) {
+      String baseDirectory = null;
+      if (args != null && args.length > 0) {
+         baseDirectory = args[0];
+      }
 
-      JFrame jFrame = new JFrame();
-      Main main = new Main();
-      main.init();
-      main.getView().refresh();
+      Main main = new Main(baseDirectory);
+      View view = main.getView();
+      view.refresh();
 
-      jFrame.setContentPane(main.getView().getGUIView(null));
-      jFrame.setSize(main.getView().getGUIView(null).getPreferredSize());
+      JFrame frame = new JFrame();
+      frame.setTitle(Constants.EXTENSION_NAME);
+      frame.setIconImage(main.getIconImage());
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-      jFrame.addWindowListener(new WindowAdapter() {
-        @Override
-        public void windowClosing(final WindowEvent e) {
-             System.exit(0);
-         }
-      });
-      jFrame.setVisible(true);
+      JComponent guiView = view.getGUIView(null);
+      frame.setContentPane(guiView);
+      frame.setSize(guiView.getPreferredSize());
+      frame.setLocation(
+         (frame.getToolkit().getScreenSize().width  - frame.getWidth())  / 2,
+         (frame.getToolkit().getScreenSize().height - frame.getHeight()) / 2);
+
+      frame.setVisible(true);
   }
 }

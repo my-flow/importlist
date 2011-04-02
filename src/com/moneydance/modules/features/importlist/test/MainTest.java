@@ -17,8 +17,7 @@ public class MainTest {
 
    @Before
    public final void setUp() throws Exception {
-      this.main = new Main();
-      this.main.init();
+      this.main = new Main(null);
    }
 
 

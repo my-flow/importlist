@@ -64,17 +64,22 @@ public class Main extends FeatureModule {
 
    @Override
    public final Image getIconImage() {
+       Image image             = null;
+       ClassLoader cl          = this.getClass().getClassLoader();
+       InputStream inputStream = cl.getResourceAsStream(Constants.ICON);
+       File imageFile          = new File("src" + Constants.ICON);
        try {
-           ClassLoader cl          = getClass().getClassLoader();
-           InputStream inputStream = cl.getResourceAsStream(Constants.ICON);
-           Image image = ImageIO.read(inputStream);
-           return image;
+           if (inputStream != null) {
+              image = ImageIO.read(inputStream);
+           } else {
+              image = ImageIO.read(imageFile);
+           }
        } catch (IOException e) {
            e.printStackTrace(System.err);
        } catch (IllegalArgumentException e) {
            e.printStackTrace(System.err);
        }
-       return null;
+       return image;
    }
 
 

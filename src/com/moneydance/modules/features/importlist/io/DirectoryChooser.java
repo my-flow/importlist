@@ -1,5 +1,6 @@
 package com.moneydance.modules.features.importlist.io;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -26,8 +27,15 @@ public class DirectoryChooser extends JPanel {
     * alone application
     */
    public DirectoryChooser(final String argBaseDirectory) {
-      this.baseDirectory   = argBaseDirectory;
       this.userPreferences = null;
+      this.baseDirectory   = argBaseDirectory;
+      if (this.baseDirectory != null) {
+         try {
+            this.baseDirectory = new File(argBaseDirectory).getCanonicalPath();
+         } catch (IOException e) {
+            e.printStackTrace(System.err);
+         }
+      }
    }
 
 
@@ -66,20 +74,27 @@ public class DirectoryChooser extends JPanel {
 
    private void displayFileChooser() {
 
-      JFileChooser fileChooser = new JFileChooser();
-      fileChooser.setDialogTitle("Please choose a base directory to monitor");
-      fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+      JFileChooser chooser = new JFileChooser();
+      chooser.setDialogTitle("Please choose a base directory to monitor");
+      chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
       // disable the "All files" option.
-      fileChooser.setAcceptAllFileFilterUsed(false);
+      chooser.setAcceptAllFileFilterUsed(false);
 
-      fileChooser.setCurrentDirectory(new File(Constants.HOME_DIRECTORY));
+      chooser.setCurrentDirectory(new File(Constants.HOME_DIRECTORY));
       if (this.baseDirectory != null) {
          File parentDirectory = new File(this.baseDirectory).getParentFile();
-         fileChooser.setCurrentDirectory(parentDirectory);
+         chooser.setCurrentDirectory(parentDirectory);
       }
 
-      if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-         this.baseDirectory = fileChooser.getSelectedFile().getAbsolutePath();
+      if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+         return;
+      }
+
+      try {
+         this.baseDirectory = chooser.getSelectedFile().getCanonicalPath();
+      } catch (IOException e) {
+         e.printStackTrace(System.err);
+         this.baseDirectory = chooser.getSelectedFile().getAbsolutePath();
       }
    }
 

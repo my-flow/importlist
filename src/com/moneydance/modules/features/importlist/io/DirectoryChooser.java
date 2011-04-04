@@ -3,7 +3,8 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
-import javax.swing.JPanel;
+
+import org.apache.commons.io.FileUtils;
 
 import com.moneydance.apps.md.controller.UserPreferences;
 import com.moneydance.modules.features.importlist.Constants;
@@ -15,7 +16,7 @@ import com.moneydance.modules.features.importlist.Constants;
  *
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
  */
-public class DirectoryChooser extends JPanel {
+public class DirectoryChooser {
 
    private static final long serialVersionUID = -8581693236906919725L;
    private        final UserPreferences userPreferences;
@@ -80,7 +81,7 @@ public class DirectoryChooser extends JPanel {
       // disable the "All files" option.
       chooser.setAcceptAllFileFilterUsed(false);
 
-      chooser.setCurrentDirectory(new File(Constants.HOME_DIRECTORY));
+      chooser.setCurrentDirectory(FileUtils.getUserDirectory());
       if (this.baseDirectory != null) {
          File parentDirectory = new File(this.baseDirectory).getParentFile();
          chooser.setCurrentDirectory(parentDirectory);
@@ -109,7 +110,7 @@ public class DirectoryChooser extends JPanel {
       }
 
       if (this.baseDirectory == null) {
-         this.baseDirectory = Constants.HOME_DIRECTORY;
+         this.baseDirectory = FileUtils.getUserDirectoryPath();
       }
 
       if (this.userPreferences != null) {

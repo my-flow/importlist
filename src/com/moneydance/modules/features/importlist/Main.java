@@ -6,16 +6,20 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOCase;
+import org.apache.commons.io.filefilter.SuffixFileFilter;
+
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.UserPreferences;
 import com.moneydance.modules.features.importlist.io.DirectoryChooser;
-import com.moneydance.modules.features.importlist.io.ListItemFilenameFilter;
 
 /**
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
@@ -133,8 +137,18 @@ public class Main extends FeatureModule {
 
 
    final File[] getFiles() {
-      File directory = new File(this.getImportDir());
-      this.files = directory.listFiles(new ListItemFilenameFilter());
+      this.files = null;
+      try {
+         File importDir = new File(this.getImportDir());
+         Collection<File> collection = FileUtils.listFiles(
+               importDir,
+               new SuffixFileFilter(Constants.FILE_EXTENSIONS,
+                                    IOCase.INSENSITIVE),
+               null); // ignore subdirectories
+         this.files = collection.toArray(new File[0]);
+      } catch (IllegalArgumentException e) {
+         e.printStackTrace(System.err);
+      }
       return this.files;
    }
 

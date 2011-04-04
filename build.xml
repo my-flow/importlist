@@ -14,14 +14,20 @@ http://jakarta.apache.org/ant/index.html
   <property name="optimize"    value="on"/>
 
   <path id="compile.classpath">
+	    <pathelement path="lib/moneydance.jar"/>
+	    <pathelement path="lib/junit-4.8.2.jar"/>
+	    <pathelement path="lib/commons-io-2.0.1.jar"/>
+  </path>
+
+  <path id="manifest.classpath">
     <pathelement path="lib/moneydance.jar"/>
-    <pathelement path="lib/junit-4.8.2.jar"/>
   </path>
 
   <path id="sign.classpath">
     <pathelement path="lib/moneydance.jar"/>
     <pathelement path="lib/extadmin.jar"/>
   </path>
+
 
   <target name="init">
     <delete dir="${build}"/>
@@ -30,21 +36,32 @@ http://jakarta.apache.org/ant/index.html
     <mkdir  dir="${dist}"/>
   </target>   
 
+
   <target name="importlist" depends="init">
     <javac source="1.6"
            target="1.6"
            srcdir="${src}"
+           destdir="${build}"
            debug="${debug}"
            optimize="${optimize}"
            classpathref="compile.classpath"
-           destdir="${build}"
            includeantruntime="true"
            includes="com/moneydance/modules/features/importlist/**"/>
 
     <manifestclasspath property="jar.classpath"
                        jarfile="${dist}/importlist.mxt">
-      <classpath refid="compile.classpath"/>
+      <classpath refid="manifest.classpath"/>
     </manifestclasspath>
+
+    <jar jarfile="${build}/external-libs.jar">
+        <zipgroupfileset dir="lib">
+            <include name="commons-io-2.0.1.jar"/>
+        </zipgroupfileset>
+    </jar>
+
+    <!-- wait for one second to avoid getting warnings about the
+         files having modification dates in the future -->
+    <sleep seconds="1"/>
 
     <jar destfile="${dist}/importlist.mxt">
       <fileset dir="${src}"
@@ -53,6 +70,7 @@ http://jakarta.apache.org/ant/index.html
         includes="com/moneydance/modules/features/importlist/icon.png"/>
       <fileset dir="${build}" 
         includes="com/moneydance/modules/features/importlist/**"/>
+
       <manifest>
         <attribute name="Main-Class"
             value="com.moneydance.modules.features.importlist.ConsoleRunner"/>
@@ -61,6 +79,10 @@ http://jakarta.apache.org/ant/index.html
         <attribute name="Built-By"
             value="${user.name}" />
       </manifest>
+
+      <zipfileset src="${build}/external-libs.jar">
+        <exclude name="*"/>
+      </zipfileset>
     </jar>
 
     <java classpathref="sign.classpath"
@@ -74,6 +96,7 @@ http://jakarta.apache.org/ant/index.html
     <move file="s-importlist.mxt" tofile="${dist}/importlist.mxt"/>
   </target>
 
+
   <target name="genkeys">
     <java classpathref="compile.classpath"
     	  classname="com.moneydance.admin.KeyAdmin">
@@ -83,6 +106,8 @@ http://jakarta.apache.org/ant/index.html
     </java>
   </target>
 
+
   <target name="all" depends="importlist"/>
+
 
 </project>

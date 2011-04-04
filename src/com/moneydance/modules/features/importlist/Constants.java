@@ -34,9 +34,6 @@ public final class Constants {
 
    public static final String  PREF_BG_COLOR_ALT      = "gui.home_alt_bg";
 
-   public static final String  HOME_DIRECTORY         =
-      System.getProperty("user.home");
-
    public static final String[] FILE_EXTENSIONS       =
       {"qif", "ofx", "qfx", "ofc"};
 

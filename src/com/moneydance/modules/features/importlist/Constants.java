@@ -25,17 +25,21 @@ public final class Constants {
 
    public static final String  CHOOSE_BASE_DIR_SUFFIX = "chooseimportdir";
 
+   public static final String  RELOAD_CONTEXT_SUFFIX  = "reloadcontext";
+
    public static final String  IMPORT_URI_PREFIX      =
       "moneydance:importprompt:?file=";
+
+   public static final int     INTERVAL               = 10000;
+
+   public static final String[] FILE_EXTENSIONS       =
+   {"qif", "ofx", "qfx", "ofc"};
 
    public static final String  PREF_BASE_DIR          = "importlist.import_dir";
 
    public static final String  PREF_BG_COLOR          = "gui.home_bg";
 
    public static final String  PREF_BG_COLOR_ALT      = "gui.home_alt_bg";
-
-   public static final String[] FILE_EXTENSIONS       =
-      {"qif", "ofx", "qfx", "ofc"};
 
    public static final String  DESCRIPTOR_NAME        = "Name";
 

@@ -8,21 +8,21 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
 
-import com.moneydance.modules.features.importlist.Main;
+import com.moneydance.modules.features.importlist.io.FileAdministration;
 
 /**
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
  */
 public class ButtonDeleteEditor extends DefaultCellEditor {
 
-  private static final long   serialVersionUID = 6773713824539296048L;
-  private final        Main   main;
-  private              String label;
+  private static final long serialVersionUID = 6773713824539296048L;
+  private final        FileAdministration   fileAdministration;
+  private              String               label;
 
 
-  public ButtonDeleteEditor(final Main argMain) {
+  public ButtonDeleteEditor(final FileAdministration argFileAdministration) {
      super(new JCheckBox());
-     this.main = argMain;
+     this.fileAdministration = argFileAdministration;
   }
 
 
@@ -39,7 +39,8 @@ public class ButtonDeleteEditor extends DefaultCellEditor {
      }
 
      JButton button = new JButton(this.label);
-     ActionListener actionListener = this.main.getDeleteActionListener(
+     ActionListener actionListener =
+        this.fileAdministration.getDeleteActionListener(
            table.convertRowIndexToModel(row));
      button.addActionListener(actionListener);
 

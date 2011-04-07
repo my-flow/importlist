@@ -8,21 +8,21 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
 
-import com.moneydance.modules.features.importlist.Main;
+import com.moneydance.modules.features.importlist.io.FileAdministration;
 
 /**
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
  */
 public class ButtonImportEditor extends DefaultCellEditor {
 
-  private static final long   serialVersionUID = 6773713824539296048L;
-  private final        Main   main;
-  private              String label;
+  private static final long serialVersionUID = 6773713824539296048L;
+  private final        FileAdministration   fileAdministration;
+  private              String               label;
 
 
-  public ButtonImportEditor(final Main argMain) {
+  public ButtonImportEditor(final FileAdministration argFileAdministration) {
      super(new JCheckBox());
-     this.main = argMain;
+     this.fileAdministration = argFileAdministration;
   }
 
 
@@ -39,7 +39,8 @@ public class ButtonImportEditor extends DefaultCellEditor {
      }
 
      JButton button = new JButton(this.label);
-     ActionListener actionListener = this.main.getImportActionListener(
+     ActionListener actionListener =
+        this.fileAdministration.getImportActionListener(
            table.convertRowIndexToModel(row));
      button.addActionListener(actionListener);
 

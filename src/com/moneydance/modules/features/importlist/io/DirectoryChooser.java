@@ -19,9 +19,13 @@ import com.moneydance.modules.features.importlist.Constants;
 public class DirectoryChooser {
 
    private static final long serialVersionUID = -8581693236906919725L;
-   private        final UserPreferences userPreferences;
+   private              UserPreferences userPreferences;
    private              String          baseDirectory;
 
+
+   public DirectoryChooser() {
+      super();
+   }
 
    /**
     * @param argBaseDirectory set the base directory when executed as a stand-

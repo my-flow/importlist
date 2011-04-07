@@ -1,34 +1,24 @@
 package com.moneydance.modules.features.importlist;
 
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOCase;
-import org.apache.commons.io.filefilter.SuffixFileFilter;
 
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.UserPreferences;
-import com.moneydance.modules.features.importlist.io.DirectoryChooser;
+import com.moneydance.apps.md.view.HomePageView;
+import com.moneydance.modules.features.importlist.io.FileAdministration;
 
 /**
  * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
  */
 public class Main extends FeatureModule {
 
-   private DirectoryChooser   directoryChooser;
-   private File[]             files;
-   private View               view;
+   private FileAdministration fileAdministration;
+   private HomePageView       homePageView;
 
 
    /**
@@ -40,8 +30,9 @@ public class Main extends FeatureModule {
 
 
    public Main(final String baseDirectory) {
+      super();
+      this.fileAdministration = new FileAdministration(this, baseDirectory);
       this.init();
-      this.directoryChooser = new DirectoryChooser(baseDirectory);
    }
 
 
@@ -59,18 +50,24 @@ public class Main extends FeatureModule {
               this.getName());
 
            userPreferences = ((com.moneydance.apps.md.controller.Main)
-                 this.getContext()).getPreferences();
+              this.getContext()).getPreferences();
+
+           this.fileAdministration = new FileAdministration(
+                   this,
+                   userPreferences);
       }
 
-       // initialize base directory
-       this.directoryChooser = new DirectoryChooser(userPreferences);
+      if (this.fileAdministration == null) {
+         this.fileAdministration = new FileAdministration(this);
+      }
 
-       this.view             = new View(this);
+      this.homePageView = new View(this.fileAdministration);
+      this.fileAdministration.setHomePageView(this.homePageView);
 
-       if (this.getContext() != null) {
-          // register this module's home page view
-          this.getContext().registerHomePageView(this, this.view);
-       }
+      if (this.getContext() != null) {
+         // register this module's home page view
+         this.getContext().registerHomePageView(this, this.homePageView);
+      }
    }
 
 
@@ -120,155 +117,22 @@ public class Main extends FeatureModule {
       }
 
       if (Constants.CHOOSE_BASE_DIR_SUFFIX.equals(command)) {
-         this.directoryChooser.reset();
-         this.view.refresh();
+         this.fileAdministration.reset();
+      }
+
+      if (Constants.RELOAD_CONTEXT_SUFFIX.equals(command)) {
+          this.fileAdministration.setContext(this.getContext());
       }
    }
 
 
-   public final ActionListener getImportActionListener(final int rowNumber) {
-      return this.new ImportActionListener(rowNumber);
+   @Override
+   public final void cleanup() {
+      this.fileAdministration.stopMonitor();
    }
 
 
-   public final ActionListener getDeleteActionListener(final int rowNumber) {
-      return this.new DeleteActionListener(rowNumber);
-   }
-
-
-   final File[] getFiles() {
-      this.files = null;
-      try {
-         File importDir = new File(this.getImportDir());
-         Collection<File> collection = FileUtils.listFiles(
-               importDir,
-               new SuffixFileFilter(Constants.FILE_EXTENSIONS,
-                                    IOCase.INSENSITIVE),
-               null); // ignore subdirectories
-         this.files = collection.toArray(new File[0]);
-      } catch (IllegalArgumentException e) {
-         e.printStackTrace(System.err);
-      }
-      return this.files;
-   }
-
-
-   final View getView() {
-      return this.view;
-   }
-
-
-   final String getImportDir() {
-      return this.directoryChooser.getDirectory();
-   }
-
-
-   final Preferences getPreferences() {
-      return new Preferences(this.getContext());
-   }
-
-
-   /**
-    * Command pattern: Return an action that imports a file identified by its
-    * position in the list.
-    */
-   private class ImportActionListener implements ActionListener {
-
-      private final int rowNumber;
-
-
-      public ImportActionListener(final int argRowNumber) {
-         this.rowNumber = argRowNumber;
-      }
-
-
-      @Override
-      public void actionPerformed(final ActionEvent actionEvent) {
-
-         if (Main.this.files == null) {
-            return;
-         }
-
-         File file = Main.this.files[this.rowNumber];
-
-         if (!file.canRead()) {
-              String errorMessage = "Could not read file \""
-                 + file.getAbsolutePath() + "\"";
-
-              JOptionPane.showMessageDialog(
-                  null,
-                  errorMessage,
-                  "Error",
-                  JOptionPane.ERROR_MESSAGE);
-              System.err.println(errorMessage);
-              return;
-         }
-
-         if (Main.this.getContext() == null) {
-             return;
-         }
-
-         String callUri = Constants.IMPORT_URI_PREFIX + file.getAbsolutePath();
-
-         // Import the file identified by the file parameter
-         Main.this.getContext().showURL(callUri);
-     }
-   }
-
-
-   /**
-    * Command pattern: Return an action that deletes a file identified by its
-    * position in the list.
-    */
-   private class DeleteActionListener implements ActionListener {
-
-      private final int rowNumber;
-
-
-      public DeleteActionListener(final int argRowNumber) {
-         this.rowNumber = argRowNumber;
-      }
-
-
-      @Override
-      public void actionPerformed(final ActionEvent actionEvent) {
-
-         if (Main.this.files == null) {
-            return;
-         }
-
-         File file = Main.this.files[this.rowNumber];
-
-         Icon icon = null;
-         String message = "Are you sure you want to "
-             + "delete the file \"" + file.getName() + "\"?";
-         if (Main.this.getIconImage() != null) {
-             icon = new ImageIcon(Main.this.getIconImage());
-         }
-         Object[] options = {"Delete File", "Cancel"};
-
-         int choice = JOptionPane.showOptionDialog(
-               null,
-               message,
-               "", // no title
-               JOptionPane.DEFAULT_OPTION,
-               JOptionPane.WARNING_MESSAGE,
-               icon,
-               options,
-               options[1]);
-
-         if (choice == 0 && !file.delete()) {
-              String errorMessage = "The file \"" + file.getName()
-                  + "\" could not be deleted.";
-
-              JOptionPane.showMessageDialog(
-                  null,
-                  errorMessage,
-                  "", // no title
-                  JOptionPane.ERROR_MESSAGE);
-              System.err.println(errorMessage);
-          }
-          Main.this.view.refresh();
-      }
+   public final HomePageView getHomePageView() {
+      return this.homePageView;
    }
 }

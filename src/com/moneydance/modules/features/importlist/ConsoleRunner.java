@@ -3,6 +3,8 @@ package com.moneydance.modules.features.importlist;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import com.moneydance.apps.md.view.HomePageView;
+
 /**
  * This class is used to run the extension as a stand-alone application from
  * the console or from an IDE. It allows for fast feedback during the
@@ -29,21 +31,19 @@ public final class ConsoleRunner {
       }
 
       Main main = new Main(baseDirectory);
-      View view = main.getView();
-      view.refresh();
+      HomePageView homePageView = main.getHomePageView();
+      homePageView.refresh();
 
       JFrame frame = new JFrame();
       frame.setTitle(Constants.EXTENSION_NAME);
-      frame.setIconImage(main.getIconImage());
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-      JComponent guiView = view.getGUIView(null);
+      JComponent guiView = homePageView.getGUIView(null);
       frame.setContentPane(guiView);
       frame.setSize(guiView.getPreferredSize());
       frame.setLocation(
          (frame.getToolkit().getScreenSize().width  - frame.getWidth())  / 2,
          (frame.getToolkit().getScreenSize().height - frame.getHeight()) / 2);
-
       frame.setVisible(true);
   }
 }

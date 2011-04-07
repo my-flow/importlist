@@ -16,7 +16,8 @@ http://jakarta.apache.org/ant/index.html
   <path id="compile.classpath">
 	    <pathelement path="lib/moneydance.jar"/>
 	    <pathelement path="lib/junit-4.8.2.jar"/>
-	    <pathelement path="lib/commons-io-2.0.1.jar"/>
+        <pathelement path="lib/commons-io-2.0.1.jar"/>
+        <pathelement path="lib/commons-lang-2.6.jar"/>
   </path>
 
   <path id="manifest.classpath">
@@ -56,6 +57,7 @@ http://jakarta.apache.org/ant/index.html
     <jar jarfile="${build}/external-libs.jar">
         <zipgroupfileset dir="lib">
             <include name="commons-io-2.0.1.jar"/>
+            <include name="commons-lang-2.6.jar"/>
         </zipgroupfileset>
     </jar>
 

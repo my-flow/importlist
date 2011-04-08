@@ -100,7 +100,7 @@ http://jakarta.apache.org/ant/index.html
 
 
   <target name="genkeys">
-    <java classpathref="compile.classpath"
+    <java classpathref="sign.classpath"
     	  classname="com.moneydance.admin.KeyAdmin">
       <arg value="genkey"/>
       <arg value="${privkeyfile}"/>

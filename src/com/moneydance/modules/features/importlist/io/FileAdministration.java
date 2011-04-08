@@ -25,6 +25,9 @@ import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.modules.features.importlist.Constants;
 import com.moneydance.modules.features.importlist.Preferences;
 
+/**
+ * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ */
 public class FileAdministration {
 
    private final FeatureModule      featureModule;
@@ -71,22 +74,13 @@ public class FileAdministration {
       }
 
       this.fileFilter = new SuffixFileFilter(
-            Constants.FILE_EXTENSIONS, IOCase.INSENSITIVE);
+            Constants.FILE_EXTENSIONS,
+            IOCase.INSENSITIVE);
 
       this.listener = new TransactionFileListener(this);
-      this.observer  = new FileAlterationObserver(
-            this.getImportDir(),
-            this.fileFilter,
-            IOCase.SENSITIVE);
-      this.observer.addListener(this.listener);
-
       this.monitor = new FileAlterationMonitor(Constants.INTERVAL);
-      this.monitor.addObserver(this.observer);
-      try {
-         this.monitor.start();
-      } catch (Exception e) {
-         e.printStackTrace(System.err);
-      }
+      this.setFileMonitorToCurrentImportDir();
+      this.startMonitor();
 
       this.dirty = true;
    }
@@ -99,15 +93,8 @@ public class FileAdministration {
 
    public final void reset() {
       this.directoryChooser.reset();
-
       this.monitor.removeObserver(this.observer);
-      this.observer  = new FileAlterationObserver(
-            this.getImportDir(),
-            this.fileFilter,
-            IOCase.SENSITIVE);
-      this.observer.addListener(this.listener);
-      this.monitor.addObserver(this.observer);
-
+      this.setFileMonitorToCurrentImportDir();
       this.setDirty(true);
    }
 
@@ -152,8 +139,12 @@ public class FileAdministration {
    }
 
 
-   public final void setHomePageView(final HomePageView argHomePageView) {
-      this.homePageView = argHomePageView;
+   public final void startMonitor() {
+      try {
+         this.monitor.start();
+      } catch (Exception e) {
+         e.printStackTrace(System.err);
+      }
    }
 
 
@@ -166,6 +157,11 @@ public class FileAdministration {
    }
 
 
+   public final void setHomePageView(final HomePageView argHomePageView) {
+      this.homePageView = argHomePageView;
+   }
+
+
    public final ActionListener getImportActionListener(final int rowNumber) {
       return this.new ImportActionListener(rowNumber);
    }
@@ -175,6 +171,15 @@ public class FileAdministration {
       return this.new DeleteActionListener(rowNumber);
    }
 
+
+   private void setFileMonitorToCurrentImportDir() {
+      this.observer  = new FileAlterationObserver(
+            this.getImportDir(),
+            this.fileFilter,
+            IOCase.SENSITIVE);
+      this.observer.addListener(this.listener);
+      this.monitor.addObserver(this.observer);
+   }
 
    /**
     * Command pattern: Return an action that imports a file identified by its
@@ -249,9 +254,9 @@ public class FileAdministration {
 
          String message = "Are you sure you want to "
              + "delete the file \"" + file.getName() + "\"?";
-         Icon icon = null;
-         if (FileAdministration.this.featureModule.getIconImage() != null) {
-             Image image = FileAdministration.this.featureModule.getIconImage();
+         Icon icon   = null;
+         Image image = FileAdministration.this.featureModule.getIconImage();
+         if (image != null) {
              icon = new ImageIcon(image);
          }
          Object[] options = {"Delete File", "Cancel"};

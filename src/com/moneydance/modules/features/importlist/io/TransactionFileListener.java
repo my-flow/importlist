@@ -5,7 +5,7 @@ import java.io.File;
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 
 /**
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * @author Florian J. Breunig, http://www.my-flow.com
  */
 public class TransactionFileListener extends FileAlterationListenerAdaptor {
 

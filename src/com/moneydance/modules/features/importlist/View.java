@@ -2,6 +2,7 @@ package com.moneydance.modules.features.importlist;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -28,14 +29,15 @@ import com.moneydance.modules.features.importlist.swing.ListTableModel;
 /**
  * User interface that is displayed on the home page.
  *
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * @author Florian J. Breunig, http://www.my-flow.com
  */
-public class View implements HomePageView {
+public class View implements HomePageView, Runnable {
 
     private final FileAdministration fileAdministration;
     private final DefaultTableModel  defaultTableModel;
     private final JTable             table;
     private final JScrollPane        scrollPane;
+    private       boolean            running;
 
 
     public View(final FileAdministration argFileAdministration) {
@@ -51,7 +53,7 @@ public class View implements HomePageView {
                  "I", // I means Import, use the String only as a reference
                  "D"  // D means Delete, use the String only as a reference
              },
-             0
+             0 // rowCount
        );
 
        this.table = new JTable(this.defaultTableModel);
@@ -83,19 +85,12 @@ public class View implements HomePageView {
              new Dimension(Constants.LIST_WIDTH, Constants.LIST_HEIGHT));
 
        this.scrollPane = new JScrollPane();
-
        //see moneydance.com/pipermail/moneydance-dev/2006-September/000075.html
        try {
           this.scrollPane.setBorder(MoneydanceLAF.homePageBorder);
        } catch (Throwable e) {
          e.printStackTrace();
        }
-    }
-
-
-    @Override
-    public final String getID() {
-       return Constants.ID;
     }
 
 
@@ -108,70 +103,81 @@ public class View implements HomePageView {
               preferences.getBackgroundColor(),
               preferences.getBackgroundColorAlt());
 
+       if (this.fileAdministration.isDirty() && this.scrollPane.isVisible()) {
+          this.fileAdministration.setDirty(false);
+          this.stop();
+          try {
+              if (SwingUtilities.isEventDispatchThread()) {
+                  this.run();
+              } else {
+                  SwingUtilities.invokeAndWait(this);
+              }
+          } catch (InterruptedException e) {
+            e.printStackTrace(System.err);
+          } catch (InvocationTargetException e) {
+            e.printStackTrace(System.err);
+          }
+       }
+
        this.table.getColumn(Constants.DESCRIPTOR_NAME).setCellRenderer(
-           defaultTableCellRenderer);
+               defaultTableCellRenderer);
        this.table.getColumn(Constants.DESCRIPTOR_MODIFIED).setCellRenderer(
            defaultTableCellRenderer);
        this.scrollPane.setBackground(preferences.getBackgroundColor());
        this.scrollPane.getViewport().setBackground(
            preferences.getBackgroundColor());
+    }
 
-       if (this.fileAdministration.isDirty() && this.scrollPane.isVisible()) {
-          this.fileAdministration.setDirty(false);
 
-          SwingUtilities.invokeLater(
-             new Runnable() {
-                public void run() {
-                   View.this.refreshSynchronized();
+    public final void run() {
+       this.running = true;
+
+       final Preferences preferences = this.fileAdministration.getPreferences();
+
+       DateFormat dateFormatter = preferences.getDateFormatter();
+       DateFormat timeFormatter = preferences.getTimeFormatter();
+
+       this.defaultTableModel.setRowCount(0);
+
+       for (File file : this.fileAdministration.getFiles()) {
+          if (!this.running) {
+             return;
+          }
+
+          final Date date  = new Date(file.lastModified());
+          final String dateString = dateFormatter.format(date)
+                                    + " "
+                                    + timeFormatter.format(date);
+
+          this.defaultTableModel.addRow(
+                new Object[] {
+                      file.getName(),
+                      dateString,
+                      Constants.LABEL_IMPORT_BUTTON,
+                      Constants.LABEL_DELETE_BUTTON
                 }
-             }
           );
+       }
+
+       if (this.defaultTableModel.getRowCount() == 0) {
+          String label = "There are currently no files to import in "
+              + this.fileAdministration.getImportDir();
+          JComponent textPanel = new JTextPanel(label);
+          textPanel.setBackground(preferences.getBackgroundColor());
+          this.scrollPane.setViewportView(textPanel);
+          this.scrollPane.setPreferredSize(new Dimension(
+                  Constants.MESSAGE_WIDTH, Constants.MESSAGE_HEIGHT));
+
+       } else {
+           this.scrollPane.setViewportView(this.table);
+           this.scrollPane.setPreferredSize(new Dimension(
+                  Constants.LIST_WIDTH, Constants.LIST_HEIGHT));
        }
     }
 
 
-    private void refreshSynchronized() {
-
-      Preferences preferences = this.fileAdministration.getPreferences();
-      File[] files = this.fileAdministration.getFiles();
-
-      if (files == null || files.length == 0) {
-
-         String label = "There are currently no files to import in "
-             + this.fileAdministration.getImportDir();
-         JComponent jTextPanel = new JTextPanel(label);
-         jTextPanel.setBackground(preferences.getBackgroundColor());
-         this.scrollPane.setViewportView(jTextPanel);
-         this.scrollPane.setPreferredSize(
-             new Dimension(Constants.MESSAGE_WIDTH, Constants.MESSAGE_HEIGHT));
-
-      } else {
-
-         DateFormat dateFormatter = preferences.getDateFormatter();
-         DateFormat timeFormatter = preferences.getTimeFormatter();
-
-         this.defaultTableModel.setRowCount(0);
-         for (File file : files) {
-
-            Date date = new Date(file.lastModified());
-            String dateString = dateFormatter.format(date)
-                                + " "
-                                + timeFormatter.format(date);
-
-            this.defaultTableModel.addRow(
-                  new Object[] {
-                        file.getName(),
-                        dateString,
-                        Constants.LABEL_IMPORT_BUTTON,
-                        Constants.LABEL_DELETE_BUTTON
-                  }
-            );
-         }
-         this.scrollPane.setViewportView(this.table);
-      }
-
-      this.scrollPane.getViewport().setBackground(
-          preferences.getBackgroundColor());
+    private void stop() {
+        this.running = false;
     }
 
 
@@ -183,7 +189,7 @@ public class View implements HomePageView {
 
     @Override
     public final void reset() {
-       this.scrollPane.setVisible(false);
+        this.stop();
     }
 
 
@@ -191,6 +197,12 @@ public class View implements HomePageView {
     public final void setActive(final boolean active) {
        this.scrollPane.setVisible(active);
        this.refresh();
+    }
+
+
+    @Override
+    public final String getID() {
+       return Constants.ID;
     }
 
 

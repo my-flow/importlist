@@ -10,7 +10,7 @@ import com.moneydance.apps.md.view.HomePageView;
  * the console or from an IDE. It allows for fast feedback during the
  * development process.
  *
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * @author Florian J. Breunig, http://www.my-flow.com
  */
 public final class ConsoleRunner {
 
@@ -22,7 +22,10 @@ public final class ConsoleRunner {
 
 
    /**
-    * @param args command The first parameter specifies the base directory
+    * This method is called directly from the console.
+    * The first parameter may specify the base directory, but may as well
+    * be omitted.
+    * @param args First element specifies the base directory
     */
    public static void main(final String[] args) {
       String baseDirectory = null;

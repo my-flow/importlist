@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.moneydance.modules.features.importlist.Preferences;
 
 /**
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * @author Florian J. Breunig, http://www.my-flow.com
  */
 public class PreferencesTest {
 

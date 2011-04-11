@@ -8,7 +8,7 @@ import com.moneydance.apps.md.controller.UserPreferences;
 import com.moneydance.apps.md.view.gui.MoneydanceGUI;
 
 /**
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * @author Florian J. Breunig, http://www.my-flow.com
  */
 public class Preferences {
 

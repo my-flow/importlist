@@ -3,7 +3,7 @@ package com.moneydance.modules.features.importlist.swing;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * @author Florian J. Breunig, http://www.my-flow.com
  */
 public class ListTableModel extends DefaultTableModel {
 

@@ -13,7 +13,7 @@ import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.modules.features.importlist.io.FileAdministration;
 
 /**
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * @author Florian J. Breunig, http://www.my-flow.com
  */
 public class Main extends FeatureModule {
 
@@ -39,8 +39,6 @@ public class Main extends FeatureModule {
    @Override
    public final void init() {
 
-      UserPreferences userPreferences = null;
-
       if (this.getContext() != null) {
            // register this module to be invoked via the application toolbar
            this.getContext().registerFeature(
@@ -49,7 +47,8 @@ public class Main extends FeatureModule {
               null,
               this.getName());
 
-           userPreferences = ((com.moneydance.apps.md.controller.Main)
+           UserPreferences userPreferences =
+               ((com.moneydance.apps.md.controller.Main)
               this.getContext()).getPreferences();
 
            this.fileAdministration = new FileAdministration(

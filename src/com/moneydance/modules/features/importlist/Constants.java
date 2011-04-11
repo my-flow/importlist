@@ -4,7 +4,7 @@ import java.awt.Color;
 
 
 /**
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * @author Florian J. Breunig, http://www.my-flow.com
  */
 public final class Constants {
 

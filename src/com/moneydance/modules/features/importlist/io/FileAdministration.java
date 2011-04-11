@@ -4,7 +4,9 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -26,7 +28,7 @@ import com.moneydance.modules.features.importlist.Constants;
 import com.moneydance.modules.features.importlist.Preferences;
 
 /**
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * @author Florian J. Breunig, http://www.my-flow.com
  */
 public class FileAdministration {
 
@@ -37,7 +39,7 @@ public class FileAdministration {
    private FileAlterationObserver   observer;
    private TransactionFileListener  listener;
    private FileAlterationMonitor    monitor;
-   private File[]                   files;
+   private List<File>               files;
    private boolean                  dirty;
    private HomePageView             homePageView;
 
@@ -68,21 +70,20 @@ public class FileAdministration {
 
 
    private void init() {
+       if (this.directoryChooser == null) {
+           this.directoryChooser = new DirectoryChooser();
+       }
 
-      if (this.directoryChooser == null) {
-         this.directoryChooser = new DirectoryChooser();
-      }
+       this.fileFilter = new SuffixFileFilter(
+               Constants.FILE_EXTENSIONS,
+               IOCase.INSENSITIVE);
 
-      this.fileFilter = new SuffixFileFilter(
-            Constants.FILE_EXTENSIONS,
-            IOCase.INSENSITIVE);
+       this.listener = new TransactionFileListener(this);
+       this.monitor  = new FileAlterationMonitor(Constants.INTERVAL);
+       this.setFileMonitorToCurrentImportDir();
+       this.startMonitor();
 
-      this.listener = new TransactionFileListener(this);
-      this.monitor = new FileAlterationMonitor(Constants.INTERVAL);
-      this.setFileMonitorToCurrentImportDir();
-      this.startMonitor();
-
-      this.dirty = true;
+       this.dirty = true;
    }
 
 
@@ -99,19 +100,21 @@ public class FileAdministration {
    }
 
 
-   public final File[] getFiles() {
-      this.files = null;
-      try {
-         File importDir = new File(this.getImportDir());
-         Collection<File> collection = FileUtils.listFiles(
-            importDir,
-            this.fileFilter,
-            null); // ignore subdirectories
-         this.files = collection.toArray(new File[0]);
-      } catch (IllegalArgumentException e) {
-         e.printStackTrace(System.err);
-      }
-      return this.files;
+   public final List<File> getFiles() {
+       // initialize with empty list
+       this.files = new ArrayList<File>();
+       try {
+           File importDir = new File(this.getImportDir());
+           Collection<File> collection = FileUtils.listFiles(
+                   importDir,
+                   this.fileFilter,
+                   null); // ignore subdirectories
+           // use array list implementation for array
+           this.files = new ArrayList<File>(collection);
+       } catch (IllegalArgumentException e) {
+           e.printStackTrace(System.err);
+       }
+       return this.files;
    }
 
 
@@ -120,6 +123,10 @@ public class FileAdministration {
    }
 
 
+   /**
+    * Refresh preferences from context.
+    * @return New preferences object
+    */
    public final Preferences getPreferences() {
       this.featureModule.invoke(Constants.RELOAD_CONTEXT_SUFFIX);
       return new Preferences(this.context);
@@ -139,6 +146,9 @@ public class FileAdministration {
    }
 
 
+   /**
+    * Start monitoring the current import directory.
+    */
    public final void startMonitor() {
       try {
          this.monitor.start();
@@ -148,6 +158,9 @@ public class FileAdministration {
    }
 
 
+   /**
+    * Stop monitoring the current import directory.
+    */
    public final void stopMonitor() {
       try {
          this.monitor.stop();
@@ -181,6 +194,7 @@ public class FileAdministration {
       this.monitor.addObserver(this.observer);
    }
 
+
    /**
     * Command pattern: Return an action that imports a file identified by its
     * position in the list.
@@ -198,14 +212,11 @@ public class FileAdministration {
       @Override
       public void actionPerformed(final ActionEvent actionEvent) {
 
-         if (FileAdministration.this.files == null) {
-            return;
-         }
-
-         File file = FileAdministration.this.files[this.rowNumber];
+         final File file =
+             FileAdministration.this.getFiles().get(this.rowNumber);
 
          if (!file.canRead()) {
-              String errorMessage = "Could not read file \""
+              final String errorMessage = "Could not read file \""
                  + file.getAbsolutePath() + "\"";
 
               JOptionPane.showMessageDialog(
@@ -246,20 +257,17 @@ public class FileAdministration {
       @Override
       public void actionPerformed(final ActionEvent actionEvent) {
 
-         if (FileAdministration.this.files == null) {
-            return;
-         }
+         final File file =
+             FileAdministration.this.getFiles().get(this.rowNumber);
 
-         File file = FileAdministration.this.files[this.rowNumber];
-
-         String message = "Are you sure you want to "
+         final String message = "Are you sure you want to "
              + "delete the file \"" + file.getName() + "\"?";
          Icon icon   = null;
          Image image = FileAdministration.this.featureModule.getIconImage();
          if (image != null) {
              icon = new ImageIcon(image);
          }
-         Object[] options = {"Delete File", "Cancel"};
+         final Object[] options = {"Delete File", "Cancel"};
 
          int choice = JOptionPane.showOptionDialog(
                null,

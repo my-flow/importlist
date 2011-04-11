@@ -10,6 +10,7 @@
 
 # project specific
 bin
+docs/api
 dist
 src/priv_key
 src/pub_key

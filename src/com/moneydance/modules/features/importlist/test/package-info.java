@@ -1,4 +1,4 @@
 /**
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * @author Florian J. Breunig, http://www.my-flow.com
  */
 package com.moneydance.modules.features.importlist.test;

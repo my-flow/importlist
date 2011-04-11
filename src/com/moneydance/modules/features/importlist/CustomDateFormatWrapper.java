@@ -12,7 +12,7 @@ import com.moneydance.util.CustomDateFormat;
  * java.text.DateFormat interface. Thus this wrapper forwards the interface
  * methods to the corresponding custom implementations.
  *
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * @author Florian J. Breunig, http://www.my-flow.com
  */
 class CustomDateFormatWrapper extends DateFormat {
 

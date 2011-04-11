@@ -11,7 +11,7 @@ import javax.swing.JTable;
 import com.moneydance.modules.features.importlist.io.FileAdministration;
 
 /**
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * @author Florian J. Breunig, http://www.my-flow.com
  */
 public class ButtonDeleteEditor extends DefaultCellEditor {
 

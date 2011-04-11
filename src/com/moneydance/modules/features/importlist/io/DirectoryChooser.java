@@ -14,7 +14,7 @@ import com.moneydance.modules.features.importlist.Constants;
  * Choose the base directory to be monitored and save the setting in the user's
  * preferences (if there are any).
  *
- * @author Florian J. Breunig, Florian.J.Breunig@my-flow.com
+ * @author Florian J. Breunig, http://www.my-flow.com
  */
 public class DirectoryChooser {
 

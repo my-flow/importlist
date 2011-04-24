@@ -6,121 +6,93 @@ import javax.swing.JFileChooser;
 
 import org.apache.commons.io.FileUtils;
 
-import com.moneydance.apps.md.controller.UserPreferences;
-import com.moneydance.modules.features.importlist.Constants;
+import com.moneydance.modules.features.importlist.Preferences;
 
 
 /**
- * Choose the base directory to be monitored and save the setting in the user's
- * preferences (if there are any).
+ * This class provides the functionality to choose, access and reset the
+ * extension's base directory. The base directory is the directory in the file
+ * system to be monitored. Choosing/resetting the base directory is reflected
+ * in the user's preferences (if there are any).
  *
- * @author Florian J. Breunig, http://www.my-flow.com
+ * @author <a href="mailto:&#102;&#108;&#111;&#114;&#105;&#97;&#110;&#46;&#106;
+ *&#46;&#98;&#114;&#101;&#117;&#110;&#105;&#103;&#64;&#109;&#121;&#45;&#102;
+ *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
 public class DirectoryChooser {
 
-   private static final long serialVersionUID = -8581693236906919725L;
-   private              UserPreferences userPreferences;
-   private              String          baseDirectory;
+    private static final long serialVersionUID = -8581693236906919725L;
+    private String baseDirectory;
 
+    /**
+     * @param argBaseDirectory set the base directory when executed as a stand-
+     * alone application
+     */
+    DirectoryChooser(final String argBaseDirectory) {
+        this.baseDirectory   = argBaseDirectory;
+        if (argBaseDirectory != null) {
+            try {
+                File baseDirectoryFile = new File(argBaseDirectory);
+                this.baseDirectory     = baseDirectoryFile.getCanonicalPath();
+            } catch (IOException e) {
+                e.printStackTrace(System.err);
+            }
+        }
+    }
 
-   public DirectoryChooser() {
-      super();
-   }
+    final void reset() {
+        this.displayFileChooser();
+        this.saveDirectoryInPreferences();
+    }
 
-   /**
-    * @param argBaseDirectory set the base directory when executed as a stand-
-    * alone application
-    */
-   public DirectoryChooser(final String argBaseDirectory) {
-      this.userPreferences = null;
-      this.baseDirectory   = argBaseDirectory;
-      if (this.baseDirectory != null) {
-         try {
-            this.baseDirectory = new File(argBaseDirectory).getCanonicalPath();
-         } catch (IOException e) {
+    final String getDirectory() {
+        if (this.baseDirectory == null) {
+            this.baseDirectory = Preferences.getInstance().getBaseDirectory();
+        }
+
+        if (this.baseDirectory == null) {
+            this.displayFileChooser();
+        }
+
+        this.saveDirectoryInPreferences();
+
+        return this.baseDirectory;
+    }
+
+    private void displayFileChooser() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Please choose a base directory to monitor");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        // disable the "All files" option.
+        chooser.setAcceptAllFileFilterUsed(false);
+
+        chooser.setCurrentDirectory(FileUtils.getUserDirectory());
+        if (this.baseDirectory != null) {
+            File parentDirectory = new File(this.baseDirectory).getParentFile();
+            chooser.setCurrentDirectory(parentDirectory);
+        }
+
+        if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        try {
+            this.baseDirectory = chooser.getSelectedFile().getCanonicalPath();
+        } catch (IOException e) {
             e.printStackTrace(System.err);
-         }
-      }
-   }
+            this.baseDirectory = chooser.getSelectedFile().getAbsolutePath();
+        }
+    }
 
+    private void saveDirectoryInPreferences() {
+        if (this.baseDirectory == null) {
+            this.baseDirectory = Preferences.getInstance().getImportDirectory();
+        }
 
-   /**
-    * @param argUserPreferences user preferences if the extension runs in
-    * Moneydance's application context, otherwise null.
-    */
-   public DirectoryChooser(final UserPreferences argUserPreferences) {
-      this.userPreferences = argUserPreferences;
-   }
+        if (this.baseDirectory == null) {
+            this.baseDirectory = FileUtils.getUserDirectoryPath();
+        }
 
-
-   public final void reset() {
-      this.displayFileChooser();
-      this.saveDirectoryInPreferences();
-   }
-
-
-   public final String getDirectory() {
-
-      if (this.userPreferences != null) {
-         this.baseDirectory = this.userPreferences.getSetting(
-               Constants.PREF_BASE_DIR,
-               this.baseDirectory);
-      }
-
-      if (this.baseDirectory == null) {
-         this.displayFileChooser();
-      }
-
-      this.saveDirectoryInPreferences();
-
-      return this.baseDirectory;
-   }
-
-
-   private void displayFileChooser() {
-
-      JFileChooser chooser = new JFileChooser();
-      chooser.setDialogTitle("Please choose a base directory to monitor");
-      chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-      // disable the "All files" option.
-      chooser.setAcceptAllFileFilterUsed(false);
-
-      chooser.setCurrentDirectory(FileUtils.getUserDirectory());
-      if (this.baseDirectory != null) {
-         File parentDirectory = new File(this.baseDirectory).getParentFile();
-         chooser.setCurrentDirectory(parentDirectory);
-      }
-
-      if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
-         return;
-      }
-
-      try {
-         this.baseDirectory = chooser.getSelectedFile().getCanonicalPath();
-      } catch (IOException e) {
-         e.printStackTrace(System.err);
-         this.baseDirectory = chooser.getSelectedFile().getAbsolutePath();
-      }
-   }
-
-
-
-   private void saveDirectoryInPreferences() {
-      if (this.baseDirectory == null && this.userPreferences != null) {
-
-         this.baseDirectory = this.userPreferences.getSetting(
-               UserPreferences.IMPORT_DIR,
-               this.baseDirectory);
-      }
-
-      if (this.baseDirectory == null) {
-         this.baseDirectory = FileUtils.getUserDirectoryPath();
-      }
-
-      if (this.userPreferences != null) {
-         this.userPreferences.setSetting(
-            Constants.PREF_BASE_DIR,
-            this.baseDirectory);
-      }
-   }
+        Preferences.getInstance().setBaseDirectory(this.baseDirectory);
+    }
 }

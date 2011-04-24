@@ -113,13 +113,15 @@ http://jakarta.apache.org/ant/index.html
     <javadoc packagenames="com.moneydance.modules.features.importlist.*"
              classpathref="compile.classpath"
              sourcepath="${src}"
-             excludepackagenames="com.moneydance.apps.md.*"
-             defaultexcludes="yes"
+             excludepackagenames=""
+             defaultexcludes="true"
              destdir="docs/api"
              author="true"
              version="true"
              use="true"
-             windowtitle="Import List">
+             windowtitle="Import List"
+             linksource="true"
+             verbose="no">
       <doctitle><![CDATA[<h1>Import List</h1>]]></doctitle>
       <link href="http://download.oracle.com/javase/6/docs/api/"/>
       <link href="http://moneydance.com/dev/apidoc/"/>

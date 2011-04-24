@@ -22,275 +22,222 @@ import org.apache.commons.lang.Validate;
 
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
-import com.moneydance.apps.md.controller.UserPreferences;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.modules.features.importlist.Constants;
-import com.moneydance.modules.features.importlist.Preferences;
 
 /**
- * @author Florian J. Breunig, http://www.my-flow.com
+ * This core class coordinates and delegates operations on the file system.
+ *
+ * @author <a href="mailto:&#102;&#108;&#111;&#114;&#105;&#97;&#110;&#46;&#106;
+ *&#46;&#98;&#114;&#101;&#117;&#110;&#105;&#103;&#64;&#109;&#121;&#45;&#102;
+ *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
 public class FileAdministration {
 
-   private final FeatureModule      featureModule;
-   private FeatureModuleContext     context;
-   private DirectoryChooser         directoryChooser;
-   private IOFileFilter             fileFilter;
-   private FileAlterationObserver   observer;
-   private TransactionFileListener  listener;
-   private FileAlterationMonitor    monitor;
-   private List<File>               files;
-   private boolean                  dirty;
-   private HomePageView             homePageView;
+    private final FeatureModule             featureModule;
+    private FeatureModuleContext            context;
+    private final DirectoryChooser          directoryChooser;
+    private final IOFileFilter              fileFilter;
+    private FileAlterationObserver          observer;
+    private final TransactionFileListener   listener;
+    private final FileAlterationMonitor     monitor;
+    private final List<File>                files;
+    private boolean                         dirty;
+    private HomePageView                    homePageView;
 
+    public FileAdministration(final FeatureModule argFeatureModule,
+            final String baseDirectory) {
+        Validate.notNull(argFeatureModule, "argFeatureModule can't be null");
+        this.featureModule    = argFeatureModule;
+        this.directoryChooser = new DirectoryChooser(baseDirectory);
+        this.fileFilter       = new SuffixFileFilter(
+                Constants.FILE_EXTENSIONS,
+                IOCase.INSENSITIVE);
 
-   public FileAdministration(final FeatureModule argFeatureModule) {
-      Validate.notNull(argFeatureModule, "argFeatureModule can't be null");
-      this.featureModule = argFeatureModule;
-      this.init();
-   }
+        this.listener = new TransactionFileListener(this);
+        this.monitor  = new FileAlterationMonitor(Constants.MONITOR_INTERVAL);
+        this.setFileMonitorToCurrentImportDir();
+        this.startMonitor();
 
+        this.files = new ArrayList<File>();
 
-   public FileAdministration(final FeatureModule argFeatureModule,
-           final String baseDirectory) {
-      Validate.notNull(argFeatureModule, "argFeatureModule can't be null");
-      this.featureModule    = argFeatureModule;
-      this.directoryChooser = new DirectoryChooser(baseDirectory);
-      this.init();
-   }
+        this.dirty = true;
+    }
 
+    public final void setContext(final FeatureModuleContext argContext) {
+        this.context = argContext;
+    }
 
-   public FileAdministration(final FeatureModule argFeatureModule,
-           final UserPreferences userPreferences) {
-      Validate.notNull(argFeatureModule, "argFeatureModule can't be null");
-      this.featureModule    = argFeatureModule;
-      this.directoryChooser = new DirectoryChooser(userPreferences);
-      this.init();
-   }
+    public final void reset() {
+        this.directoryChooser.reset();
+        this.monitor.removeObserver(this.observer);
+        this.setFileMonitorToCurrentImportDir();
+        this.setDirty(true);
+    }
 
+    public final List<File> getFiles() {
+        return this.files;
+    }
 
-   private void init() {
-       if (this.directoryChooser == null) {
-           this.directoryChooser = new DirectoryChooser();
-       }
+    public final void reloadFiles() {
+        this.files.clear();
+        try {
+            File importDir = new File(this.getImportDir());
+            Collection<File> collection = FileUtils.listFiles(
+                    importDir,
+                    this.fileFilter,
+                    null); // ignore subdirectories
+            this.files.addAll(collection);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace(System.err);
+        }
+    }
 
-       this.fileFilter = new SuffixFileFilter(
-               Constants.FILE_EXTENSIONS,
-               IOCase.INSENSITIVE);
+    public final String getImportDir() {
+        return this.directoryChooser.getDirectory();
+    }
 
-       this.listener = new TransactionFileListener(this);
-       this.monitor  = new FileAlterationMonitor(Constants.INTERVAL);
-       this.setFileMonitorToCurrentImportDir();
-       this.startMonitor();
+    public final void setDirty(final boolean argDirty) {
+        this.dirty = argDirty;
+        if (argDirty && this.homePageView != null) {
+            this.reloadFiles();
+            this.homePageView.refresh();
+        }
+    }
 
-       this.dirty = true;
-   }
+    public final boolean isDirty() {
+        return this.dirty;
+    }
 
+    /**
+     * Start monitoring the current import directory.
+     */
+    public final void startMonitor() {
+        try {
+            this.monitor.start();
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
+    }
 
-   public final void setContext(final FeatureModuleContext argContext) {
-       this.context = argContext;
-   }
+    /**
+     * Stop monitoring the current import directory.
+     */
+    public final void stopMonitor() {
+        try {
+            this.monitor.stop();
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
+    }
 
+    public final void setHomePageView(final HomePageView argHomePageView) {
+        this.homePageView = argHomePageView;
+    }
 
-   public final void reset() {
-      this.directoryChooser.reset();
-      this.monitor.removeObserver(this.observer);
-      this.setFileMonitorToCurrentImportDir();
-      this.setDirty(true);
-   }
+    public final ActionListener getImportActionListener(final int rowNumber) {
+        return this.new ImportActionListener(rowNumber);
+    }
 
+    public final ActionListener getDeleteActionListener(final int rowNumber) {
+        return this.new DeleteActionListener(rowNumber);
+    }
 
-   public final List<File> getFiles() {
-       // initialize with empty list
-       this.files = new ArrayList<File>();
-       try {
-           File importDir = new File(this.getImportDir());
-           Collection<File> collection = FileUtils.listFiles(
-                   importDir,
-                   this.fileFilter,
-                   null); // ignore subdirectories
-           // use array list implementation for array
-           this.files = new ArrayList<File>(collection);
-       } catch (IllegalArgumentException e) {
-           e.printStackTrace(System.err);
-       }
-       return this.files;
-   }
+    private void setFileMonitorToCurrentImportDir() {
+        this.observer  = new FileAlterationObserver(
+                this.getImportDir(),
+                this.fileFilter,
+                IOCase.SENSITIVE);
+        this.observer.addListener(this.listener);
+        this.monitor.addObserver(this.observer);
+    }
 
+    /**
+     * Command pattern: Return an action that imports a file identified by its
+     * position in the list.
+     */
+    private final class ImportActionListener implements ActionListener {
 
-   public final String getImportDir() {
-      return this.directoryChooser.getDirectory();
-   }
+        private final int rowNumber;
 
+        private ImportActionListener(final int argRowNumber) {
+            this.rowNumber = argRowNumber;
+        }
 
-   /**
-    * Refresh preferences from context.
-    * @return New preferences object
-    */
-   public final Preferences getPreferences() {
-      this.featureModule.invoke(Constants.RELOAD_CONTEXT_SUFFIX);
-      return new Preferences(this.context);
-   }
+        @Override
+        public void actionPerformed(final ActionEvent actionEvent) {
+            File file = FileAdministration.this.getFiles().get(this.rowNumber);
 
+            if (!file.canRead()) {
+                final String errorMessage = "The file \"" + file.getName()
+                + "\" could not be read.";
+                System.err.println(errorMessage);
+                JOptionPane.showMessageDialog(
+                        null,
+                        errorMessage,
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-   public final void setDirty(final boolean argDirty) {
-      this.dirty = argDirty;
-      if (argDirty && this.homePageView != null) {
-         this.homePageView.refresh();
-      }
-   }
+            if (FileAdministration.this.context == null) {
+                return;
+            }
 
+            String callUri = Constants.IMPORT_URI_PREFIX
+            + file.getAbsolutePath();
 
-   public final boolean isDirty() {
-      return this.dirty;
-   }
+            // Import the file identified by the file parameter
+            FileAdministration.this.context.showURL(callUri);
+        }
+    }
 
+    /**
+     * Command pattern: Return an action that deletes a file identified by its
+     * position in the list.
+     */
+    private final class DeleteActionListener implements ActionListener {
 
-   /**
-    * Start monitoring the current import directory.
-    */
-   public final void startMonitor() {
-      try {
-         this.monitor.start();
-      } catch (Exception e) {
-         e.printStackTrace(System.err);
-      }
-   }
+        private final int rowNumber;
 
+        private DeleteActionListener(final int argRowNumber) {
+            this.rowNumber = argRowNumber;
+        }
 
-   /**
-    * Stop monitoring the current import directory.
-    */
-   public final void stopMonitor() {
-      try {
-         this.monitor.stop();
-      } catch (Exception e) {
-         e.printStackTrace(System.err);
-      }
-   }
+        @Override
+        public void actionPerformed(final ActionEvent actionEvent) {
+            File file = FileAdministration.this.getFiles().get(this.rowNumber);
 
+            final String message = "Are you sure you want to "
+                + "delete the file \"" + file.getName() + "\"?";
+            Icon icon   = null;
+            Image image = FileAdministration.this.featureModule.getIconImage();
+            if (image != null) {
+                icon = new ImageIcon(image);
+            }
+            Object[] options = {"Delete File", "Cancel"};
 
-   public final void setHomePageView(final HomePageView argHomePageView) {
-      this.homePageView = argHomePageView;
-   }
+            int choice = JOptionPane.showOptionDialog(
+                    null,
+                    message,
+                    "", // no title
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.WARNING_MESSAGE,
+                    icon,
+                    options,
+                    options[1]);
 
-
-   public final ActionListener getImportActionListener(final int rowNumber) {
-      return this.new ImportActionListener(rowNumber);
-   }
-
-
-   public final ActionListener getDeleteActionListener(final int rowNumber) {
-      return this.new DeleteActionListener(rowNumber);
-   }
-
-
-   private void setFileMonitorToCurrentImportDir() {
-      this.observer  = new FileAlterationObserver(
-            this.getImportDir(),
-            this.fileFilter,
-            IOCase.SENSITIVE);
-      this.observer.addListener(this.listener);
-      this.monitor.addObserver(this.observer);
-   }
-
-
-   /**
-    * Command pattern: Return an action that imports a file identified by its
-    * position in the list.
-    */
-   private class ImportActionListener implements ActionListener {
-
-      private final int rowNumber;
-
-
-      public ImportActionListener(final int argRowNumber) {
-         this.rowNumber = argRowNumber;
-      }
-
-
-      @Override
-      public void actionPerformed(final ActionEvent actionEvent) {
-
-         final File file =
-             FileAdministration.this.getFiles().get(this.rowNumber);
-
-         if (!file.canRead()) {
-              final String errorMessage = "Could not read file \""
-                 + file.getAbsolutePath() + "\"";
-
-              JOptionPane.showMessageDialog(
-                  null,
-                  errorMessage,
-                  "Error",
-                  JOptionPane.ERROR_MESSAGE);
-              System.err.println(errorMessage);
-              return;
-         }
-
-         if (FileAdministration.this.context == null) {
-             return;
-         }
-
-         String callUri = Constants.IMPORT_URI_PREFIX + file.getAbsolutePath();
-
-         // Import the file identified by the file parameter
-         FileAdministration.this.context.showURL(callUri);
-      }
-   }
-
-
-   /**
-    * Command pattern: Return an action that deletes a file identified by its
-    * position in the list.
-    */
-   private class DeleteActionListener implements ActionListener {
-
-      private final int rowNumber;
-
-
-      public DeleteActionListener(final int argRowNumber) {
-         this.rowNumber = argRowNumber;
-      }
-
-
-      @Override
-      public void actionPerformed(final ActionEvent actionEvent) {
-
-         final File file =
-             FileAdministration.this.getFiles().get(this.rowNumber);
-
-         final String message = "Are you sure you want to "
-             + "delete the file \"" + file.getName() + "\"?";
-         Icon icon   = null;
-         Image image = FileAdministration.this.featureModule.getIconImage();
-         if (image != null) {
-             icon = new ImageIcon(image);
-         }
-         final Object[] options = {"Delete File", "Cancel"};
-
-         int choice = JOptionPane.showOptionDialog(
-               null,
-               message,
-               "", // no title
-               JOptionPane.DEFAULT_OPTION,
-               JOptionPane.WARNING_MESSAGE,
-               icon,
-               options,
-               options[1]);
-
-         if (choice == 0 && !file.delete()) {
-              String errorMessage = "The file \"" + file.getName()
-                  + "\" could not be deleted.";
-
-              JOptionPane.showMessageDialog(
-                  null,
-                  errorMessage,
-                  "", // no title
-                  JOptionPane.ERROR_MESSAGE);
-              System.err.println(errorMessage);
-         }
-         FileAdministration.this.setDirty(true);
-      }
-   }
+            if (choice == 0 && !file.delete()) {
+                final String errorMessage = "The file \"" + file.getName()
+                + "\" could not be deleted.";
+                System.err.println(errorMessage);
+                JOptionPane.showMessageDialog(
+                        null,
+                        errorMessage,
+                        "", // no title
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            FileAdministration.this.setDirty(true);
+        }
+    }
 }

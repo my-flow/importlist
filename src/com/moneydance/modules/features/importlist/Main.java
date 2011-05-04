@@ -20,7 +20,7 @@ import com.moneydance.modules.features.importlist.view.View;
  *&#46;&#98;&#114;&#101;&#117;&#110;&#105;&#103;&#64;&#109;&#121;&#45;&#102;
  *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
-public class Main extends FeatureModule {
+class Main extends FeatureModule {
 
     private String             baseDirectory;
     private FileAdministration fileAdministration;

@@ -13,7 +13,8 @@ Instructions
 1.	`git clone git@github.com:my-flow/importlist.git` creates a copy of the repository.
 2.	`ant genkeys` generates a passphrase-protected key pair.
 3.	`ant importlist` compiles and signs the extension.
-4.	`dist/importlist.mxt` is the resulting extension file.
+4.	`dist/importlist.mxt` is the resulting extension file that can be added to Moneydance®.
+5.	`java -cp lib/moneydance.jar -jar dist/importlist.mxt ~/Downloads/` runs the extension in stand-alone mode from the console.
 
 Further Assistance
 ------------------

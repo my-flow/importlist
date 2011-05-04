@@ -116,16 +116,22 @@ http://jakarta.apache.org/ant/index.html
              excludepackagenames=""
              defaultexcludes="true"
              destdir="docs/api"
+    	     access="package"
              author="true"
              version="true"
              use="true"
-             windowtitle="Import List"
+             windowtitle="Import List for Moneydance"
              linksource="true"
              verbose="no">
-      <doctitle><![CDATA[<h1>Import List</h1>]]></doctitle>
+      <doctitle><![CDATA[<h1>Import List for Moneydance</h1>]]></doctitle>
       <link href="http://download.oracle.com/javase/6/docs/api/"/>
       <link href="http://moneydance.com/dev/apidoc/"/>
       <link href="http://commons.apache.org/io/apidocs/"/>
+      <footer><![CDATA[
+      	<a href="https://github.com/my-flow/importlist">
+      	 Import List on GitHub
+        </a>
+      ]]></footer>
     </javadoc>
   </target>
 

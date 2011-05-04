@@ -132,7 +132,9 @@ public class View implements HomePageView, Runnable {
         this.table.setRowSorter(rowSorter);
 
         this.table.setPreferredScrollableViewportSize(
-                new Dimension(Constants.LIST_WIDTH, Constants.LIST_HEIGHT));
+                new Dimension(
+                        Constants.PREFERRED_TABLE_WIDTH,
+                        Constants.PREFERRED_TABLE_HEIGHT));
 
         this.scrollPane = new JScrollPane();
         //see moneydance.com/pipermail/moneydance-dev/2006-September/000075.html
@@ -191,12 +193,16 @@ public class View implements HomePageView, Runnable {
             textPanel.setHorizontalAlignment(SwingConstants.CENTER);
             textPanel.setBackground(preferences.getBackgroundColor());
             this.scrollPane.setViewportView(textPanel);
-            this.scrollPane.setPreferredSize(new Dimension(
-                    Constants.MESSAGE_WIDTH, Constants.MESSAGE_HEIGHT));
+            this.scrollPane.setPreferredSize(
+                    new Dimension(
+                            Constants.PREFERRED_EMPTY_MESSAGE_WIDTH,
+                            Constants.PREFERRED_EMPTY_MESSAGE_HEIGHT));
         } else {
             this.scrollPane.setViewportView(this.table);
-            this.scrollPane.setPreferredSize(new Dimension(
-                    Constants.LIST_WIDTH, Constants.LIST_HEIGHT));
+            this.scrollPane.setPreferredSize(
+                    new Dimension(
+                            Constants.PREFERRED_TABLE_WIDTH,
+                            Constants.PREFERRED_TABLE_HEIGHT));
         }
     }
 

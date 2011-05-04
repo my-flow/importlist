@@ -14,14 +14,13 @@ import com.moneydance.apps.md.view.HomePageView;
  *&#46;&#98;&#114;&#101;&#117;&#110;&#105;&#103;&#64;&#109;&#121;&#45;&#102;
  *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
-public final class ConsoleRunner {
+final class ConsoleRunner {
 
     /**
      * Private constructor prevents this class from being instantiated.
      */
     private ConsoleRunner() {
     }
-
 
     /**
      * This method is called directly from the console.

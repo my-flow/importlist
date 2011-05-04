@@ -16,7 +16,7 @@ import com.moneydance.modules.features.importlist.io.FileAdministration;
  *&#46;&#98;&#114;&#101;&#117;&#110;&#105;&#103;&#64;&#109;&#121;&#45;&#102;
  *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
-public class ColumnFactory {
+class ColumnFactory {
 
     private final HeaderRenderer    headerRenderer;
     private final LabelRenderer     labelRenderer;

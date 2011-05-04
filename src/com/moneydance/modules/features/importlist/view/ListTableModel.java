@@ -26,7 +26,7 @@ import com.moneydance.util.CustomDateFormat;
  *&#46;&#98;&#114;&#101;&#117;&#110;&#105;&#103;&#64;&#109;&#121;&#45;&#102;
  *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
-public class ListTableModel extends AbstractTableModel {
+class ListTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 3552703741263935211L;
     private final List<File>             files;

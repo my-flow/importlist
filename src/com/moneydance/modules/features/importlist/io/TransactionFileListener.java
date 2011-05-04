@@ -15,14 +15,14 @@ import org.apache.commons.lang.Validate;
  *&#46;&#98;&#114;&#101;&#117;&#110;&#105;&#103;&#64;&#109;&#121;&#45;&#102;
  *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
-public class TransactionFileListener extends FileAlterationListenerAdaptor {
+class TransactionFileListener extends FileAlterationListenerAdaptor {
 
     private final FileAdministration fileAdministration;
     private boolean dirty;
 
     TransactionFileListener(final FileAdministration argFileAdministration) {
         Validate.notNull(argFileAdministration,
-        "argFileAdministration can't be null");
+                "argFileAdministration can't be null");
         this.fileAdministration = argFileAdministration;
     }
 

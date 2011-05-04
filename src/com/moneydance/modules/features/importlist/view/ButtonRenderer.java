@@ -14,7 +14,7 @@ import com.moneydance.apps.md.view.gui.MoneydanceLAF;
  *&#46;&#98;&#114;&#101;&#117;&#110;&#105;&#103;&#64;&#109;&#121;&#45;&#102;
  *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
-public class ButtonRenderer implements TableCellRenderer {
+class ButtonRenderer implements TableCellRenderer {
 
     private static final long serialVersionUID = -5002244293774549298L;
 
@@ -24,6 +24,7 @@ public class ButtonRenderer implements TableCellRenderer {
     ButtonRenderer() {
     }
 
+    @Override
     public final Component getTableCellRendererComponent(
             final JTable table,
             final Object value,
@@ -47,7 +48,7 @@ public class ButtonRenderer implements TableCellRenderer {
         ColorSchemeHelper.applyColorScheme(button, row);
         //see moneydance.com/pipermail/moneydance-dev/2006-September/000075.html
         try {
-            button.setBorder(MoneydanceLAF.homePageBorder);
+            button.setBorder(MoneydanceLAF.ovalBorder);
         } catch (Throwable e) {
             e.printStackTrace(System.err);
         }

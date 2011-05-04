@@ -13,7 +13,7 @@ import javax.swing.table.TableCellRenderer;
  *&#46;&#98;&#114;&#101;&#117;&#110;&#105;&#103;&#64;&#109;&#121;&#45;&#102;
  *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
-public class HeaderRenderer implements TableCellRenderer {
+class HeaderRenderer implements TableCellRenderer {
 
     private static final long serialVersionUID = 3121884943197710031L;
     private final TableCellRenderer defaultHeaderTableCellRenderer;

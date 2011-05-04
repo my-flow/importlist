@@ -24,7 +24,7 @@ import com.moneydance.util.StreamTable;
  * It serves as a facade abstracting Moneydance's
  * <code>UserPreferences</code> (received from the
  * <code>FeatureModuleContext</code>) and the hard-wired
- * default values used in stand-alone mode from the rest of the extension.
+ * default values used in stand-alone mode.
  *
  * @author <a href="mailto:&#102;&#108;&#111;&#114;&#105;&#97;&#110;&#46;&#106;
  *&#46;&#98;&#114;&#101;&#117;&#110;&#105;&#103;&#64;&#109;&#121;&#45;&#102;
@@ -40,6 +40,11 @@ public final class Preferences {
     private StreamTable         columnOrder;
     private UserPreferences     userPreferences;
 
+    /**
+     * The constructor must be called exactly once before using the only
+     * instance of this class.
+     * @param argFeatureModule The feature module to receive the context from.
+     */
     Preferences(final FeatureModule argFeatureModule) {
         Validate.isTrue(instance == null, "You can instantiate Preferences "
                 + "only once");

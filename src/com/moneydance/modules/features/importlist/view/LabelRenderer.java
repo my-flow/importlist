@@ -11,7 +11,7 @@ import javax.swing.table.TableCellRenderer;
  *&#46;&#98;&#114;&#101;&#117;&#110;&#105;&#103;&#64;&#109;&#121;&#45;&#102;
  *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
-public class LabelRenderer implements TableCellRenderer {
+class LabelRenderer implements TableCellRenderer {
 
     private static final long serialVersionUID = 7553393304980261323L;
 

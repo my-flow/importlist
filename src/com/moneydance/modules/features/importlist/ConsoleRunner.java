@@ -35,6 +35,7 @@ final class ConsoleRunner {
         }
 
         Main main = new Main(baseDirectory);
+        main.init();
         HomePageView homePageView = main.getHomePageView();
         homePageView.refresh();
 

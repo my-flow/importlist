@@ -23,7 +23,7 @@ class LabelRenderer implements TableCellRenderer {
             final int row,
             final int column) {
         JLabel label = new JLabel();
-        label.setOpaque(true);
+        label.setOpaque(false);
         ColorSchemeHelper.applyColorScheme(label, row);
         if (value != null) {
             label.setText(value.toString());

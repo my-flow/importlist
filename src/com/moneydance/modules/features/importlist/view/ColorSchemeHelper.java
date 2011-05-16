@@ -3,6 +3,8 @@ package com.moneydance.modules.features.importlist.view;
 import java.awt.Color;
 import java.awt.Component;
 
+import javax.swing.JComponent;
+
 /**
  * This helper class applies a given color scheme to a <code>Component</code>.
  * It is used by different <code>TableCellRenderer</code>s to guarantee a
@@ -15,9 +17,9 @@ import java.awt.Component;
 final class ColorSchemeHelper {
 
     private static final long serialVersionUID = -2724848115953702911L;
-    private static Color foregroundColor;
-    private static Color backgroundColor;
-    private static Color backgroundColorAlt;
+    private static Color foreground;
+    private static Color background;
+    private static Color backgroundAlt;
 
     /**
      * Private constructor prevents this class from being instantiated.
@@ -28,25 +30,26 @@ final class ColorSchemeHelper {
     static void applyColorScheme(
             final Component component,
             final int row) {
-        component.setForeground(foregroundColor);
-        component.setBackground(backgroundColorAlt);
-        if (row % 2 != 0) {
-            component.setBackground(backgroundColor);
+        component.setForeground(foreground);
+        component.setBackground(background);
+        if (row % 2 == 0) {
+            if (component instanceof JComponent) {
+                JComponent jComponent = (JComponent) component;
+                jComponent.setOpaque(true);
+            }
+            component.setBackground(backgroundAlt);
         }
     }
 
-    static void setForegroundColor(
-            final Color argForegroundColor) {
-        foregroundColor = argForegroundColor;
+    static void setForeground(final Color argForeground) {
+        foreground = argForeground;
     }
 
-    static void setBackgroundColor(
-            final Color argBackgroundColor) {
-        backgroundColor = argBackgroundColor;
+    static void setBackground(final Color argBackground) {
+        background = argBackground;
     }
 
-    static void setBackgroundColorAlt(
-            final Color argBackgroundColorAlt) {
-        backgroundColorAlt = argBackgroundColorAlt;
+    static void setBackgroundAlt(final Color argBackgroundAlt) {
+        backgroundAlt = argBackgroundAlt;
     }
 }

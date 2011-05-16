@@ -60,15 +60,15 @@ class ColumnFactory {
         return this.deleteEditor;
     }
 
-    final void setForegroundColor(final Color argForegroundColor) {
-        ColorSchemeHelper.setForegroundColor(argForegroundColor);
+    final void setForeground(final Color foreground) {
+        ColorSchemeHelper.setForeground(foreground);
     }
 
-    final void setBackgroundColor(final Color argBackgroundColor) {
-        ColorSchemeHelper.setBackgroundColor(argBackgroundColor);
+    final void setBackground(final Color background) {
+        ColorSchemeHelper.setBackground(background);
     }
 
-    final void setBackgroundColorAlt(final Color argBackgroundColorAlt) {
-        ColorSchemeHelper.setBackgroundColorAlt(argBackgroundColorAlt);
+    final void setBackgroundAlt(final Color backgroundAlt) {
+        ColorSchemeHelper.setBackgroundAlt(backgroundAlt);
     }
 }

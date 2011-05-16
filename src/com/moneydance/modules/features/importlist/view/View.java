@@ -3,10 +3,8 @@ package com.moneydance.modules.features.importlist.view;
 import java.awt.Dimension;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-import javax.swing.DefaultRowSorter;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -24,7 +22,6 @@ import org.apache.commons.lang.Validate;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
-import com.moneydance.modules.features.importlist.AlphanumComparator;
 import com.moneydance.modules.features.importlist.Constants;
 import com.moneydance.modules.features.importlist.Preferences;
 import com.moneydance.modules.features.importlist.io.FileAdministration;
@@ -54,6 +51,7 @@ public class View implements HomePageView, Runnable {
                 this.fileAdministration.getFiles());
 
         this.table = new JTable(this.listTableModel);
+        this.table.setOpaque(false);
         this.table.setShowGrid(false);
         this.table.setShowVerticalLines(false);
         this.table.setShowHorizontalLines(false);
@@ -111,24 +109,19 @@ public class View implements HomePageView, Runnable {
         deleteCol.setPreferredWidth(prefs.getColumnWidths(deleteColNo));
 
         // resizing the columns
-        TableListener tableListener =
-            new TableListener(this.table);
+        TableListener tableListener = new TableListener(this.table);
         columnModel.addColumnModelListener(tableListener);
 
         // reordering the columns
         tableHeader.setReorderingAllowed(Constants.ALLOW_REORDERING);
 
         // sorting the columns
-        DefaultRowSorter<TableModel, Integer> rowSorter =
+        RowSorter<TableModel> rowSorter =
             new FileTableRowSorter(this.listTableModel);
         List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
         sortKeys.add(Preferences.getInstance().getSortKey());
         rowSorter.setSortKeys(sortKeys);
-
         rowSorter.addRowSorterListener(tableListener);
-
-        Comparator<String> comparator = new AlphanumComparator();
-        rowSorter.setComparator(nameColNo, comparator);
         this.table.setRowSorter(rowSorter);
 
         this.table.setPreferredScrollableViewportSize(
@@ -136,7 +129,7 @@ public class View implements HomePageView, Runnable {
                         Constants.PREFERRED_TABLE_WIDTH,
                         Constants.PREFERRED_TABLE_HEIGHT));
 
-        this.scrollPane = new JScrollPane();
+        this.scrollPane = new JCustomScrollPane();
         //see moneydance.com/pipermail/moneydance-dev/2006-September/000075.html
         try {
             this.scrollPane.setBorder(MoneydanceLAF.homePageBorder);
@@ -151,25 +144,25 @@ public class View implements HomePageView, Runnable {
         Preferences prefs = Preferences.getInstance();
         this.listTableModel.setDateFormatter(prefs.getDateFormatter());
         this.listTableModel.setTimeFormatter(prefs.getTimeFormatter());
-        this.columnFactory.setForegroundColor(prefs.getForegroundColor());
-        this.columnFactory.setBackgroundColor(prefs.getBackgroundColor());
-        this.columnFactory.setBackgroundColorAlt(prefs.getBackgroundColorAlt());
+        this.columnFactory.setForeground(prefs.getForeground());
+        this.columnFactory.setBackground(prefs.getBackground());
+        this.columnFactory.setBackgroundAlt(prefs.getBackgroundAlt());
+        this.table.setBackground(prefs.getBackground());
         this.table.setRowHeight(prefs.getBodyRowHeight());
         this.table.getTableHeader().setFont(prefs.getHeaderFont());
         this.table.getTableHeader().setSize(
                 this.table.getTableHeader().getWidth(),
                 prefs.getHeaderRowHeight());
-        this.scrollPane.setBackground(prefs.getBackgroundColor());
-        this.scrollPane.getViewport().setBackground(prefs.getBackgroundColor());
+        this.scrollPane.setBackground(prefs.getBackground());
 
         if (this.fileAdministration.isDirty() && this.scrollPane.isVisible()) {
-            this.fileAdministration.setDirty(false);
             try {
                 if (SwingUtilities.isEventDispatchThread()) {
                     this.run();
                 } else {
                     SwingUtilities.invokeAndWait(this);
                 }
+                this.fileAdministration.setDirty(false);
             } catch (InterruptedException e) {
                 e.printStackTrace(System.err);
             } catch (InvocationTargetException e) {
@@ -189,10 +182,10 @@ public class View implements HomePageView, Runnable {
                 + "to import<br>in " + this.fileAdministration.getImportDir()
                 + "</em><center></html>";
             Preferences preferences = Preferences.getInstance();
-            JLabel textPanel = new JLabel(message);
-            textPanel.setHorizontalAlignment(SwingConstants.CENTER);
-            textPanel.setBackground(preferences.getBackgroundColor());
-            this.scrollPane.setViewportView(textPanel);
+            JLabel label = new JLabel(message);
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+            label.setBackground(preferences.getBackground());
+            this.scrollPane.setViewportView(label);
             this.scrollPane.setPreferredSize(
                     new Dimension(
                             Constants.PREFERRED_EMPTY_MESSAGE_WIDTH,

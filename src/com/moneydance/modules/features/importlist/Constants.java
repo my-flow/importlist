@@ -138,28 +138,34 @@ public final class Constants {
     = "Delete";
 
     /**
+     * Indentation prefix for table header and values.
+     */
+    public static final String  INDENTATION_PREFIX
+    = " ";
+
+    /**
      * Header of the "name" column.
      */
     public static final String  HEADER_VALUE_NAME
-    = "Name";
+    = INDENTATION_PREFIX + "Name";
 
     /**
      * Header of the "modified" column.
      */
     public static final String  HEADER_VALUE_MODIFIED
-    = "Date Modified";
+    = INDENTATION_PREFIX + "Date Modified";
 
     /**
      * Header of the "import" column.
      */
     public static final String  HEADER_VALUE_IMPORT
-    = "";
+    = INDENTATION_PREFIX + "";
 
     /**
      * Header of the "delete" column.
      */
     public static final String  HEADER_VALUE_DELETE
-    = "";
+    = INDENTATION_PREFIX + "";
 
     /**
      * Label of the "import" button.
@@ -226,7 +232,7 @@ public final class Constants {
      * font size.
      */
     public static final double  FACTOR_ROW_HEIGHT
-    = 1.4;
+    = 1.7;
 
     /**
      * Identifier of the <code>UIManager</code>s font to be used for the table

@@ -1,6 +1,6 @@
 {
   "vendor" = "Florian J. Breunig"
-  "module_build" = "3"
+  "module_build" = "4"
   "vendor.url" = "http://my-flow.github.com/importlist/"
   "module_name" = "Import List"
   "desc" = "Import List monitors a directory and displays its transaction files in Moneydance's homepage view. From there, the files can be imported into Moneydance. This plugin requires Java 6 to function, see the Moneydance About window to determine what version of Java you are using."

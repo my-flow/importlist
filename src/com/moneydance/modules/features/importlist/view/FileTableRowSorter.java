@@ -1,11 +1,13 @@
 package com.moneydance.modules.features.importlist.view;
 
+import java.util.Comparator;
+
 import javax.swing.DefaultRowSorter;
 import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.lang.Validate;
 
+import com.moneydance.modules.features.importlist.AlphanumComparator;
 import com.moneydance.modules.features.importlist.Constants;
 
 /**
@@ -16,19 +18,20 @@ import com.moneydance.modules.features.importlist.Constants;
  *&#46;&#98;&#114;&#101;&#117;&#110;&#105;&#103;&#64;&#109;&#121;&#45;&#102;
  *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
-class FileTableRowSorter extends TableRowSorter<TableModel> {
+class FileTableRowSorter extends DefaultRowSorter<TableModel, Integer> {
 
     private final ListTableModel listTableModel;
+    private final Comparator<?> comparator;
 
     /**
      * @param argListTableModel The table model that is to be sorted
      */
     FileTableRowSorter(final ListTableModel argListTableModel) {
-        super(argListTableModel);
+        super();
         Validate.notNull(argListTableModel, "argListTableModel can't be null");
         this.listTableModel = argListTableModel;
+        this.comparator     = new AlphanumComparator();
         this.setModelWrapper(new FileModelWrapper());
-
     }
 
     @Override
@@ -36,6 +39,11 @@ class FileTableRowSorter extends TableRowSorter<TableModel> {
         String columnName = this.listTableModel.getColumnName(column);
         return Constants.DESC_NAME.equals(columnName)
         || Constants.DESC_MODIFIED.equals(columnName);
+    }
+
+    @Override
+    public Comparator<?> getComparator(final int column) {
+        return this.comparator;
     }
 
     private class FileModelWrapper
@@ -64,8 +72,10 @@ class FileTableRowSorter extends TableRowSorter<TableModel> {
         @Override
         public final Object getValueAt(final int row, final int column) {
             ListTableModel model = FileTableRowSorter.this.listTableModel;
-            if (column == 1) {
-                return model.getFileAt(row).lastModified();
+            String columnName    = model.getColumnName(column);
+
+            if (Constants.DESC_MODIFIED.equals(columnName)) {
+                return model.getFileAt(row).lastModified() + "";
             } else {
                 return model.getValueAt(row, column);
             }

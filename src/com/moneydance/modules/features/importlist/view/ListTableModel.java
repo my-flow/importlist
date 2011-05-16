@@ -46,14 +46,15 @@ class ListTableModel extends AbstractTableModel {
 
         if (Constants.DESC_NAME.equals(columnName)) {
             File file = this.getFileAt(row);
-            return file.getName();
+            return Constants.INDENTATION_PREFIX + file.getName();
         }
 
         if (Constants.DESC_MODIFIED.equals(columnName)) {
             if (this.fileDateStringCache.get(row) == null) {
                 File file             = this.getFileAt(row);
                 Date fileDate         = new Date(file.lastModified());
-                String fileDateString = this.dateFormatter.format(fileDate)
+                String fileDateString = Constants.INDENTATION_PREFIX
+                + this.dateFormatter.format(fileDate)
                 + " " + this.timeFormatter.format(fileDate);
 
                 this.fileDateStringCache.put(row, fileDateString);

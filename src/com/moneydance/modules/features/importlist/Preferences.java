@@ -185,25 +185,25 @@ public final class Preferences {
         return DateFormat.getTimeInstance();
     }
 
-    public Color getForegroundColor() {
-        int foregroundColorValue = this.userPreferences.getIntSetting(
+    public Color getForeground() {
+        int foregroundValue = this.userPreferences.getIntSetting(
                 Constants.PREF_FG_COLOR,
                 Constants.COLOR_VALUE_FG_DEF);
-        return new Color(foregroundColorValue);
+        return new Color(foregroundValue);
     }
 
-    public Color getBackgroundColor() {
-        int backgroundColorValue = this.userPreferences.getIntSetting(
+    public Color getBackground() {
+        int backgroundValue = this.userPreferences.getIntSetting(
                 Constants.PREF_BG_COLOR,
                 Constants.COLOR_VALUE_BG_DEF);
-        return new Color(backgroundColorValue);
+        return new Color(backgroundValue);
     }
 
-    public Color getBackgroundColorAlt() {
-        int backgroundColorAltValue = this.userPreferences.getIntSetting(
+    public Color getBackgroundAlt() {
+        int backgroundAltValue = this.userPreferences.getIntSetting(
                 Constants.PREF_BG_COLOR_ALT,
                 Constants.COLOR_VALUE_BG_ALT_DEF);
-        return new Color(backgroundColorAltValue);
+        return new Color(backgroundAltValue);
     }
 
     public Font getHeaderFont() {

@@ -149,10 +149,6 @@ public class View implements HomePageView, Runnable {
         this.columnFactory.setBackgroundAlt(prefs.getBackgroundAlt());
         this.table.setBackground(prefs.getBackground());
         this.table.setRowHeight(prefs.getBodyRowHeight());
-        this.table.getTableHeader().setFont(prefs.getHeaderFont());
-        this.table.getTableHeader().setSize(
-                this.table.getTableHeader().getWidth(),
-                prefs.getHeaderRowHeight());
         this.scrollPane.setBackground(prefs.getBackground());
 
         if (this.fileAdministration.isDirty() && this.scrollPane.isVisible()) {

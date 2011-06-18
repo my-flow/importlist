@@ -20,7 +20,13 @@ final class Constants {
     }
 
     /**
-     * The name of the resource in the JAR file to read the properties from.
+     * The resource that contains the configuration of log4j.
+     */
+    static final String LOG4J_PROPERTIES_RESOURCE
+    = "com/moneydance/modules/features/importlist/log4j.properties";
+
+    /**
+     * The resource in the JAR file to read the properties from.
      */
     static final String PROPERTIES_RESOURCE
     = "com/moneydance/modules/features/importlist/importlist.properties";
@@ -38,7 +44,7 @@ final class Constants {
     = "moneydance:fmodule:importlist";
 
     /**
-     * The icon image that represents this extension.
+     * The resource of the icon image that represents this extension.
      */
     static final String  ICON_RESOURCE
     = "com/moneydance/modules/features/importlist/icon.png";

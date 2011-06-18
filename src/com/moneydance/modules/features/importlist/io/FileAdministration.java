@@ -21,6 +21,7 @@ import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
@@ -35,6 +36,11 @@ import com.moneydance.modules.features.importlist.util.Preferences;
  *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
 public class FileAdministration {
+
+    /**
+     * Static initialization of class-dependent logger.
+     */
+    private static Logger log = Logger.getLogger(FileAdministration.class);
 
     private final Preferences               prefs;
     private final FeatureModule             featureModule;
@@ -55,10 +61,10 @@ public class FileAdministration {
         this.featureModule    = argFeatureModule;
         this.directoryChooser = new DirectoryChooser(baseDirectory);
         this.fileFilter       = new AndFileFilter(
+                CanReadFileFilter.CAN_READ,
                 new SuffixFileFilter(
                         this.prefs.getFileExtensions(),
-                        IOCase.INSENSITIVE),
-                        CanReadFileFilter.CAN_READ
+                        IOCase.INSENSITIVE)
         );
 
         this.listener = new TransactionFileListener(this);
@@ -77,6 +83,7 @@ public class FileAdministration {
     }
 
     public final void reset() {
+        log.info("Resetting base directory.");
         this.directoryChooser.reset();
         this.monitor.removeObserver(this.observer);
         this.setFileMonitorToCurrentImportDir();
@@ -97,7 +104,7 @@ public class FileAdministration {
                     null); // ignore subdirectories
             this.files.addAll(collection);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace(System.err);
+            log.warn(e.getMessage(), e);
         }
     }
 
@@ -121,10 +128,11 @@ public class FileAdministration {
      * Start monitoring the current import directory.
      */
     public final void startMonitor() {
+        log.debug("Starting the directory monitor.");
         try {
             this.monitor.start();
         } catch (Exception e) {
-            e.printStackTrace(System.err);
+            log.warn(e.getMessage(), e);
         }
     }
 
@@ -132,10 +140,11 @@ public class FileAdministration {
      * Stop monitoring the current import directory.
      */
     public final void stopMonitor() {
+        log.debug("Stopping the directory monitor.");
         try {
             this.monitor.stop();
         } catch (Exception e) {
-            e.printStackTrace(System.err);
+            log.warn(e.getMessage(), e);
         }
     }
 
@@ -175,12 +184,13 @@ public class FileAdministration {
         @Override
         public void actionPerformed(final ActionEvent actionEvent) {
             File file = FileAdministration.this.getFiles().get(this.rowNumber);
+            log.info("Importing file " + file.getAbsoluteFile());
 
             if (!file.canRead()) {
                 final String errorMessage =
                     FileAdministration.this.prefs.getErrorMessageCannotReadFile(
                             file);
-                System.err.println(errorMessage);
+                log.warn(errorMessage);
                 JOptionPane.showMessageDialog(
                         null, // no parent component
                         errorMessage,
@@ -190,6 +200,8 @@ public class FileAdministration {
             }
 
             if (FileAdministration.this.context == null) {
+                log.warn("Could not import file " + file
+                        + " since context is not set.");
                 return;
             }
 
@@ -240,17 +252,26 @@ public class FileAdministration {
                     options,
                     options[1]);
 
-            if (choice == 0 && !file.delete()) {
-                final String errorMessage =
-                    FileAdministration.this.prefs.getErrorMessageDeleteFile(
-                            file);
-                System.err.println(errorMessage);
-                JOptionPane.showMessageDialog(
-                        null, // no parent component
-                        errorMessage,
-                        null, // no title
-                        JOptionPane.ERROR_MESSAGE);
+            if (choice == 0) {
+                log.info("Deleting file " + file.getAbsoluteFile());
+
+                if (file.delete()) {
+                    log.info("Deleted file " + file.getAbsoluteFile());
+                } else {
+                    final String errorMessage =
+                        FileAdministration.this.prefs.getErrorMessageDeleteFile(
+                                file);
+                    log.warn(errorMessage);
+                    JOptionPane.showMessageDialog(
+                            null, // no parent component
+                            errorMessage,
+                            null, // no title
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                log.info("Canceled deleting file " + file.getAbsoluteFile());
             }
+
             FileAdministration.this.setDirty(true);
         }
     }

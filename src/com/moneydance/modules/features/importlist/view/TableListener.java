@@ -11,6 +11,8 @@ import javax.swing.event.RowSorterListener;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 
+import org.apache.log4j.Logger;
+
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 /**
@@ -24,6 +26,11 @@ import com.moneydance.modules.features.importlist.util.Preferences;
  */
 class TableListener implements TableColumnModelListener, RowSorterListener {
 
+    /**
+     * Static initialization of class-dependent logger.
+     */
+    private static Logger log = Logger.getLogger(TableListener.class);
+
     private final Preferences prefs;
     private final JTable table;
     private int lastFrom;
@@ -36,6 +43,7 @@ class TableListener implements TableColumnModelListener, RowSorterListener {
 
     @Override
     public final void columnMarginChanged(final ChangeEvent e) {
+        log.info("Margin of a column changed.");
         this.saveColumnWidths();
     }
 
@@ -45,6 +53,7 @@ class TableListener implements TableColumnModelListener, RowSorterListener {
                 && e.getToIndex() == this.lastTo) {
             return;
         }
+        log.info("Order of columns changed.");
         this.lastFrom = e.getFromIndex();
         this.lastTo   = e.getToIndex();
 
@@ -55,6 +64,7 @@ class TableListener implements TableColumnModelListener, RowSorterListener {
 
     @Override
     public final void sorterChanged(final RowSorterEvent e) {
+        log.info("Sort order of a column changed.");
         this.saveSortKey();
     }
 

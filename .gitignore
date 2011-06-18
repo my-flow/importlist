@@ -12,5 +12,6 @@
 bin
 docs/api
 dist
+logs
 src/priv_key
 src/pub_key

@@ -2,6 +2,8 @@ package com.moneydance.modules.features.importlist;
 
 import java.awt.Image;
 
+import org.apache.log4j.Logger;
+
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.modules.features.importlist.io.FileAdministration;
@@ -18,21 +20,32 @@ import com.moneydance.modules.features.importlist.view.View;
  */
 public class Main extends FeatureModule {
 
+    /**
+     * Static initialization of class-dependent logger.
+     */
+    private static Logger log = Logger.getLogger(Main.class);
+
     private String             baseDirectory;
     private FileAdministration fileAdministration;
     private HomePageView       homePageView;
     private final Preferences  prefs;
+
+    static {
+        Preferences.loadLoggerConfiguration();
+    }
 
     /**
      * Standard constructor must be available in the Moneydance context.
      */
     public Main() {
         super();
+        log.info("Initializing extension in Moneydance's application context.");
         this.prefs = new Preferences(this);
     }
 
     public Main(final String argBaseDirectory) {
         super();
+        log.info("Initializing extension in stand-alone mode.");
         this.baseDirectory = argBaseDirectory;
         this.prefs = new Preferences(this);
     }
@@ -46,9 +59,11 @@ public class Main extends FeatureModule {
         this.fileAdministration.setHomePageView(this.homePageView);
 
         if (this.getContext() != null) {
-            // register this module's home page view
+            log.debug("Registering homepage view");
+            // register this module's homepage view
             this.getContext().registerHomePageView(this, this.homePageView);
 
+            log.debug("Registering toolbar feature");
             // register this module to be invoked via the application toolbar
             this.getContext().registerFeature(
                     this,
@@ -75,6 +90,7 @@ public class Main extends FeatureModule {
         }
 
         if (this.prefs.getReloadContextSuffix().equals(uri)) {
+            log.info("Reloading context from underlying framework.");
             if (this.fileAdministration != null) {
                 this.fileAdministration.setContext(this.getContext());
             }
@@ -84,6 +100,7 @@ public class Main extends FeatureModule {
 
     @Override
     public final void unload() {
+        log.info("Unloading extension.");
         this.cleanup();
         this.homePageView.setActive(false);
         this.prefs.setAllWritablePreferencesToNull();

@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import com.moneydance.modules.features.importlist.util.Preferences;
 
@@ -20,6 +21,11 @@ import com.moneydance.modules.features.importlist.util.Preferences;
  *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
 class DirectoryChooser {
+
+    /**
+     * Static initialization of class-dependent logger.
+     */
+    private static Logger log = Logger.getLogger(DirectoryChooser.class);
 
     private static final long serialVersionUID = -8581693236906919725L;
     private final Preferences prefs;
@@ -37,7 +43,7 @@ class DirectoryChooser {
                 File baseDirectoryFile = new File(argBaseDirectory);
                 this.baseDirectory     = baseDirectoryFile.getCanonicalPath();
             } catch (IOException e) {
-                e.printStackTrace(System.err);
+                log.warn(e.getMessage(), e);
             }
         }
     }
@@ -81,7 +87,7 @@ class DirectoryChooser {
         try {
             this.baseDirectory = chooser.getSelectedFile().getCanonicalPath();
         } catch (IOException e) {
-            e.printStackTrace(System.err);
+            log.warn(e.getMessage(), e);
             this.baseDirectory = chooser.getSelectedFile().getAbsolutePath();
         }
     }

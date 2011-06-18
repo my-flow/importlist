@@ -19,6 +19,7 @@ http://jakarta.apache.org/ant/index.html
         <pathelement path="lib/commons-io-2.0.1.jar"/>
         <pathelement path="lib/commons-lang-2.6.jar"/>
         <pathelement path="lib/commons-configuration-1.6.jar"/>
+        <pathelement path="lib/log4j-1.2.16.jar"/>
   </path>
 
   <path id="manifest.classpath">
@@ -62,6 +63,7 @@ http://jakarta.apache.org/ant/index.html
             <include name="commons-configuration-1.6.jar"/>
             <include name="commons-logging-1.1.1.jar"/>
             <include name="commons-collections-3.2.1.jar"/>
+            <include name="log4j-1.2.16.jar"/>
         </zipgroupfileset>
     </jar>
 
@@ -71,13 +73,15 @@ http://jakarta.apache.org/ant/index.html
 
     <jar destfile="${dist}/importlist.mxt">
       <fileset dir="${src}"
-        includes="com/moneydance/modules/features/importlist/meta_info.dict"/>
+         includes="com/moneydance/modules/features/importlist/log4j.properties"/>
       <fileset dir="${src}"
-        includes="com/moneydance/modules/features/importlist/importlist.properties"/>
+         includes="com/moneydance/modules/features/importlist/importlist.properties"/>
       <fileset dir="${src}"
-        includes="com/moneydance/modules/features/importlist/icon.png"/>
-      <fileset dir="${build}" 
-        includes="com/moneydance/modules/features/importlist/**"/>
+         includes="com/moneydance/modules/features/importlist/icon.png"/>
+      <fileset dir="${src}"
+         includes="com/moneydance/modules/features/importlist/meta_info.dict"/>
+      <fileset dir="${build}"
+         includes="com/moneydance/modules/features/importlist/**"/>
 
       <manifest>
         <attribute name="Main-Class"
@@ -133,6 +137,7 @@ http://jakarta.apache.org/ant/index.html
       <link href="http://download.oracle.com/javase/6/docs/api/"/>
       <link href="http://moneydance.com/dev/apidoc/"/>
       <link href="http://commons.apache.org/io/apidocs/"/>
+      <link href="http://logging.apache.org/log4j/1.2/apidocs/"/>
       <footer><![CDATA[
       	<a href="https://github.com/my-flow/importlist">
       	 Import List on GitHub

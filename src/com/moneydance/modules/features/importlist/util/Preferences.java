@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.Hashtable;
+import java.util.Properties;
 
 import javax.imageio.ImageIO;
 import javax.swing.RowSorter;
@@ -19,6 +20,8 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import com.moneydance.apps.md.controller.Common;
 import com.moneydance.apps.md.controller.FeatureModule;
@@ -39,6 +42,11 @@ import com.moneydance.util.StreamTable;
  *&#108;&#111;&#119;&#46;&#99;&#111;&#109;">Florian J. Breunig</a>
  */
 public final class Preferences {
+
+    /**
+     * Static initialization of class-dependent logger.
+     */
+    private static Logger log = Logger.getLogger(Preferences.class);
 
     private static Preferences  instance;
     private final FeatureModule featureModule;
@@ -62,17 +70,15 @@ public final class Preferences {
 
         AbstractFileConfiguration abstractFileConfiguration =
             new PropertiesConfiguration();
-        ClassLoader cl          = this.getClass().getClassLoader();
-        InputStream inputStream = cl.getResourceAsStream(
-                Constants.PROPERTIES_RESOURCE);
+
         try {
-            Validate.notNull(inputStream, "Resource "
-                    + Constants.PROPERTIES_RESOURCE + " was not found");
+            InputStream inputStream =
+                getInputStreamFromResource(Constants.PROPERTIES_RESOURCE);
             abstractFileConfiguration.load(inputStream);
-        }  catch (IllegalArgumentException e) {
-            e.printStackTrace(System.err);
+        } catch (IllegalArgumentException e) {
+            log.warn(e.getMessage(), e);
         } catch (ConfigurationException e) {
-            e.printStackTrace(System.err);
+            log.warn(e.getMessage(), e);
         }
         this.config = abstractFileConfiguration;
 
@@ -118,6 +124,20 @@ public final class Preferences {
         }
     }
 
+    public static void loadLoggerConfiguration() {
+        Properties properties   = new Properties();
+        try {
+            InputStream inputStream = Preferences.getInputStreamFromResource(
+                    Constants.LOG4J_PROPERTIES_RESOURCE);
+            properties.load(inputStream);
+        }  catch (IllegalArgumentException e) {
+            e.printStackTrace(System.err);
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        }
+        PropertyConfigurator.configure(properties);
+    }
+
     public void setAllWritablePreferencesToNull() {
         this.setBaseDirectory(null);
         this.userPreferences.setSetting(
@@ -151,17 +171,14 @@ public final class Preferences {
 
     public Image getIconImage() {
         Image image             = null;
-        ClassLoader cl          = this.getClass().getClassLoader();
-        InputStream inputStream = cl.getResourceAsStream(
-                this.getIconResource());
         try {
-            Validate.notNull(inputStream, "Resource " + this.getIconResource()
-                    + " was not found");
+            InputStream inputStream =
+                getInputStreamFromResource(this.getIconResource());
             image = ImageIO.read(inputStream);
-        }  catch (IllegalArgumentException e) {
-            e.printStackTrace(System.err);
+        } catch (IllegalArgumentException e) {
+            log.warn(e.getMessage(), e);
         } catch (IOException e) {
-            e.printStackTrace(System.err);
+            log.warn(e.getMessage(), e);
         }
         return image;
     }
@@ -415,8 +432,8 @@ public final class Preferences {
     public String getHeaderValueName() {
         final String headerValueName =
             this.config.getString(
-                "header_value_name",
-                Constants.HEADER_VALUE_NAME);
+                    "header_value_name",
+                    Constants.HEADER_VALUE_NAME);
         return this.getIndentationPrefix() + headerValueName;
     }
 
@@ -426,8 +443,8 @@ public final class Preferences {
     public String getHeaderValueModified() {
         final String headerValueModified =
             this.config.getString(
-                "header_value_modified",
-                Constants.HEADER_VALUE_MODIFIED);
+                    "header_value_modified",
+                    Constants.HEADER_VALUE_MODIFIED);
         return this.getIndentationPrefix() + headerValueModified;
     }
 
@@ -437,8 +454,8 @@ public final class Preferences {
     public String getHeaderValueImport() {
         final String headerValueImport =
             this.config.getString(
-                "header_value_import",
-                Constants.HEADER_VALUE_IMPORT);
+                    "header_value_import",
+                    Constants.HEADER_VALUE_IMPORT);
         return this.getIndentationPrefix() + headerValueImport;
     }
 
@@ -448,8 +465,8 @@ public final class Preferences {
     public String getHeaderValueDelete() {
         final String headerValueDelete =
             this.config.getString(
-                "header_value_delete",
-                Constants.HEADER_VALUE_DELETE);
+                    "header_value_delete",
+                    Constants.HEADER_VALUE_DELETE);
         return this.getIndentationPrefix() + headerValueDelete;
     }
 
@@ -608,5 +625,14 @@ public final class Preferences {
             trimmedFilename = trimmedFilename + "É";
         }
         return trimmedFilename;
+    }
+
+    private static InputStream getInputStreamFromResource(
+            final String resource) {
+        ClassLoader cl          = Preferences.class.getClassLoader();
+        InputStream inputStream = cl.getResourceAsStream(resource);
+        Validate.notNull(inputStream,
+                "Resource " + resource + " was not found.");
+        return inputStream;
     }
 }

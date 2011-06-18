@@ -5,6 +5,7 @@ import java.io.File;
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 /**
  * This <code>FileAlterationListener</code> implementation is notified about
@@ -17,6 +18,11 @@ import org.apache.commons.lang.Validate;
  */
 class TransactionFileListener extends FileAlterationListenerAdaptor {
 
+    /**
+     * Static initialization of class-dependent logger.
+     */
+    private static Logger log = Logger.getLogger(TransactionFileListener.class);
+
     private final FileAdministration fileAdministration;
     private boolean dirty;
 
@@ -28,6 +34,7 @@ class TransactionFileListener extends FileAlterationListenerAdaptor {
 
     @Override
     public final void onStart(final FileAlterationObserver observer) {
+        log.debug("Checking the base directory for changes");
         this.dirty = false;
     }
 
@@ -49,6 +56,7 @@ class TransactionFileListener extends FileAlterationListenerAdaptor {
     @Override
     public final void onStop(final FileAlterationObserver observer) {
         if (this.dirty) {
+            log.info("Base directory contains changes.");
             this.fileAdministration.setDirty(true);
         }
     }

@@ -18,6 +18,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.view.HomePageView;
@@ -34,7 +35,12 @@ import com.moneydance.modules.features.importlist.util.Preferences;
  */
 public class View implements HomePageView, Runnable {
 
-    private final       Preferences           prefs;
+    /**
+     * Static initialization of class-dependent logger.
+     */
+    private static Logger log = Logger.getLogger(View.class);
+
+    private final Preferences           prefs;
     private final FileAdministration    fileAdministration;
     private final ListTableModel        listTableModel;
     private final JTable                table;
@@ -142,7 +148,7 @@ public class View implements HomePageView, Runnable {
         try {
             this.scrollPane.setBorder(MoneydanceLAF.homePageBorder);
         } catch (Throwable e) {
-            e.printStackTrace(System.err);
+            log.warn(e.getMessage(), e);
         }
     }
 
@@ -168,9 +174,9 @@ public class View implements HomePageView, Runnable {
                 }
                 this.fileAdministration.setDirty(false);
             } catch (InterruptedException e) {
-                e.printStackTrace(System.err);
+                log.warn(e.getMessage(), e);
             } catch (InvocationTargetException e) {
-                e.printStackTrace(System.err);
+                log.warn(e.getMessage(), e);
             }
         }
     }

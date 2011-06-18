@@ -9,7 +9,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
-import com.moneydance.modules.features.importlist.Preferences;
+import com.moneydance.modules.features.importlist.util.Preferences;
 
 /**
  * This decorator class sets header-specific attributes to a
@@ -23,10 +23,12 @@ class HeaderRenderer implements TableCellRenderer {
 
     private static final long serialVersionUID = 3121884943197710031L;
     private final TableCellRenderer defaultHeaderTableCellRenderer;
+    private final Preferences       prefs;
 
     HeaderRenderer(
             final TableCellRenderer argDefaultHeaderTableCellRenderer) {
         this.defaultHeaderTableCellRenderer = argDefaultHeaderTableCellRenderer;
+        this.prefs                          = Preferences.getInstance();
     }
 
     @Override
@@ -52,11 +54,10 @@ class HeaderRenderer implements TableCellRenderer {
             jLabel.setHorizontalAlignment(SwingConstants.LEFT);
         }
 
-        Preferences prefs = Preferences.getInstance();
-        component.setFont(prefs.getHeaderFont());
+        component.setFont(this.prefs.getHeaderFont());
         component.setSize(
                 component.getWidth(),
-                prefs.getHeaderRowHeight());
+                this.prefs.getHeaderRowHeight());
 
         return component;
     }

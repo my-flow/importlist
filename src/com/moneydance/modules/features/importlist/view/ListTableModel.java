@@ -11,8 +11,7 @@ import javax.swing.table.AbstractTableModel;
 
 import org.apache.commons.lang.Validate;
 
-import com.moneydance.modules.features.importlist.Constants;
-import com.moneydance.modules.features.importlist.Preferences;
+import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.util.CustomDateFormat;
 
 /**
@@ -29,6 +28,7 @@ import com.moneydance.util.CustomDateFormat;
 class ListTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 3552703741263935211L;
+    private final transient Preferences  prefs;
     private final List<File>             files;
     private final Map<Integer, String>   fileDateStringCache;
     private CustomDateFormat             dateFormatter;
@@ -36,6 +36,7 @@ class ListTableModel extends AbstractTableModel {
 
     ListTableModel(final List<File> argFiles) {
         Validate.notNull(argFiles, "argFiles can't be null");
+        this.prefs               = Preferences.getInstance();
         this.files               = argFiles;
         this.fileDateStringCache = new Hashtable<Integer, String>();
     }
@@ -44,16 +45,16 @@ class ListTableModel extends AbstractTableModel {
     public final String getValueAt(final int row, final int column) {
         String columnName = this.getColumnName(column);
 
-        if (Constants.DESC_NAME.equals(columnName)) {
+        if (this.prefs.getDescName().equals(columnName)) {
             File file = this.getFileAt(row);
-            return Constants.INDENTATION_PREFIX + file.getName();
+            return this.prefs.getIndentationPrefix() + file.getName();
         }
 
-        if (Constants.DESC_MODIFIED.equals(columnName)) {
+        if (this.prefs.getDescModified().equals(columnName)) {
             if (this.fileDateStringCache.get(row) == null) {
                 File file             = this.getFileAt(row);
                 Date fileDate         = new Date(file.lastModified());
-                String fileDateString = Constants.INDENTATION_PREFIX
+                String fileDateString = this.prefs.getIndentationPrefix()
                 + this.dateFormatter.format(fileDate)
                 + " " + this.timeFormatter.format(fileDate);
 
@@ -62,12 +63,12 @@ class ListTableModel extends AbstractTableModel {
             return this.fileDateStringCache.get(row);
         }
 
-        if (Constants.DESC_IMPORT.equals(columnName)) {
-            return Constants.LABEL_IMPORT_BUTTON;
+        if (this.prefs.getDescImport().equals(columnName)) {
+            return this.prefs.getLabelImportButton();
         }
 
-        if (Constants.DESC_DELETE.equals(columnName)) {
-            return Constants.LABEL_DELETE_BUTTON;
+        if (this.prefs.getDescDelete().equals(columnName)) {
+            return this.prefs.getLabelDeleteButton();
         }
 
         return null;
@@ -90,18 +91,18 @@ class ListTableModel extends AbstractTableModel {
     @Override
     public final boolean isCellEditable(final int row, final int column) {
         String columnName = this.getColumnName(column);
-        return Constants.DESC_IMPORT.equals(columnName)
-        || Constants.DESC_DELETE.equals(columnName);
+        return this.prefs.getDescImport().equals(columnName)
+        || this.prefs.getDescDelete().equals(columnName);
     }
 
     @Override
     public final int getColumnCount() {
-        return Preferences.getInstance().getColumnCount();
+        return this.prefs.getColumnCount();
     }
 
     @Override
     public final String getColumnName(final int column) {
-        return Preferences.getInstance().getColumnName(column);
+        return this.prefs.getColumnName(column);
     }
 
     @Override

@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
+import org.apache.commons.io.filefilter.AndFileFilter;
+import org.apache.commons.io.filefilter.CanReadFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
@@ -23,7 +25,7 @@ import org.apache.commons.lang.Validate;
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.view.HomePageView;
-import com.moneydance.modules.features.importlist.Constants;
+import com.moneydance.modules.features.importlist.util.Preferences;
 
 /**
  * This core class coordinates and delegates operations on the file system.
@@ -34,6 +36,7 @@ import com.moneydance.modules.features.importlist.Constants;
  */
 public class FileAdministration {
 
+    private final Preferences               prefs;
     private final FeatureModule             featureModule;
     private FeatureModuleContext            context;
     private final DirectoryChooser          directoryChooser;
@@ -48,14 +51,19 @@ public class FileAdministration {
     public FileAdministration(final FeatureModule argFeatureModule,
             final String baseDirectory) {
         Validate.notNull(argFeatureModule, "argFeatureModule can't be null");
+        this.prefs            = Preferences.getInstance();
         this.featureModule    = argFeatureModule;
         this.directoryChooser = new DirectoryChooser(baseDirectory);
-        this.fileFilter       = new SuffixFileFilter(
-                Constants.FILE_EXTENSIONS,
-                IOCase.INSENSITIVE);
+        this.fileFilter       = new AndFileFilter(
+                new SuffixFileFilter(
+                        this.prefs.getFileExtensions(),
+                        IOCase.INSENSITIVE),
+                        CanReadFileFilter.CAN_READ
+        );
 
         this.listener = new TransactionFileListener(this);
-        this.monitor  = new FileAlterationMonitor(Constants.MONITOR_INTERVAL);
+        this.monitor  = new FileAlterationMonitor(
+                this.prefs.getMonitorIntervall());
         this.setFileMonitorToCurrentImportDir();
         this.startMonitor();
 
@@ -169,13 +177,14 @@ public class FileAdministration {
             File file = FileAdministration.this.getFiles().get(this.rowNumber);
 
             if (!file.canRead()) {
-                final String errorMessage = "The file \"" + file.getName()
-                + "\" could not be read.";
+                final String errorMessage =
+                    FileAdministration.this.prefs.getErrorMessageCannotReadFile(
+                            file);
                 System.err.println(errorMessage);
                 JOptionPane.showMessageDialog(
-                        null,
+                        null, // no parent component
                         errorMessage,
-                        "Error",
+                        null, // no title
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -184,7 +193,7 @@ public class FileAdministration {
                 return;
             }
 
-            String callUri = Constants.IMPORT_URI_PREFIX
+            String callUri = FileAdministration.this.prefs.getImportUriPrefix()
             + file.getAbsolutePath();
 
             // Import the file identified by the file parameter
@@ -208,19 +217,23 @@ public class FileAdministration {
         public void actionPerformed(final ActionEvent actionEvent) {
             File file = FileAdministration.this.getFiles().get(this.rowNumber);
 
-            final String message = "Are you sure you want to "
-                + "delete the file \"" + file.getName() + "\"?";
+            final String confirmationMessage =
+                FileAdministration.this.prefs.getConfirmationMessageDeleteFile(
+                        file);
             Icon icon   = null;
             Image image = FileAdministration.this.featureModule.getIconImage();
             if (image != null) {
                 icon = new ImageIcon(image);
             }
-            Object[] options = {"Delete File", "Cancel"};
+            Object[] options = {
+                    FileAdministration.this.prefs.getOptionDeleteFile(),
+                    FileAdministration.this.prefs.getOptionCancel()
+            };
 
             int choice = JOptionPane.showOptionDialog(
-                    null,
-                    message,
-                    "", // no title
+                    null, // no parent component
+                    confirmationMessage,
+                    null, // no title
                     JOptionPane.DEFAULT_OPTION,
                     JOptionPane.WARNING_MESSAGE,
                     icon,
@@ -228,13 +241,14 @@ public class FileAdministration {
                     options[1]);
 
             if (choice == 0 && !file.delete()) {
-                final String errorMessage = "The file \"" + file.getName()
-                + "\" could not be deleted.";
+                final String errorMessage =
+                    FileAdministration.this.prefs.getErrorMessageDeleteFile(
+                            file);
                 System.err.println(errorMessage);
                 JOptionPane.showMessageDialog(
-                        null,
+                        null, // no parent component
                         errorMessage,
-                        "", // no title
+                        null, // no title
                         JOptionPane.ERROR_MESSAGE);
             }
             FileAdministration.this.setDirty(true);

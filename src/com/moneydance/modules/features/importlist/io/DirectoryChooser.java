@@ -6,7 +6,7 @@ import javax.swing.JFileChooser;
 
 import org.apache.commons.io.FileUtils;
 
-import com.moneydance.modules.features.importlist.Preferences;
+import com.moneydance.modules.features.importlist.util.Preferences;
 
 
 /**
@@ -22,6 +22,7 @@ import com.moneydance.modules.features.importlist.Preferences;
 class DirectoryChooser {
 
     private static final long serialVersionUID = -8581693236906919725L;
+    private final Preferences prefs;
     private String baseDirectory;
 
     /**
@@ -29,7 +30,8 @@ class DirectoryChooser {
      * alone application
      */
     DirectoryChooser(final String argBaseDirectory) {
-        this.baseDirectory   = argBaseDirectory;
+        this.prefs          = Preferences.getInstance();
+        this.baseDirectory  = argBaseDirectory;
         if (argBaseDirectory != null) {
             try {
                 File baseDirectoryFile = new File(argBaseDirectory);
@@ -47,7 +49,7 @@ class DirectoryChooser {
 
     final String getDirectory() {
         if (this.baseDirectory == null) {
-            this.baseDirectory = Preferences.getInstance().getBaseDirectory();
+            this.baseDirectory = this.prefs.getBaseDirectory();
         }
 
         if (this.baseDirectory == null) {
@@ -86,13 +88,13 @@ class DirectoryChooser {
 
     private void saveDirectoryInPreferences() {
         if (this.baseDirectory == null) {
-            this.baseDirectory = Preferences.getInstance().getImportDirectory();
+            this.baseDirectory = this.prefs.getImportDirectory();
         }
 
         if (this.baseDirectory == null) {
             this.baseDirectory = FileUtils.getUserDirectoryPath();
         }
 
-        Preferences.getInstance().setBaseDirectory(this.baseDirectory);
+        this.prefs.setBaseDirectory(this.baseDirectory);
     }
 }

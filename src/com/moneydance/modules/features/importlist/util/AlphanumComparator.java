@@ -22,7 +22,7 @@
  *
  */
 
-package com.moneydance.modules.features.importlist;
+package com.moneydance.modules.features.importlist.util;
 import java.io.Serializable;
 import java.util.Comparator;
 

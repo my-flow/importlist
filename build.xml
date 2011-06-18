@@ -18,6 +18,7 @@ http://jakarta.apache.org/ant/index.html
 	    <pathelement path="lib/junit-4.8.2.jar"/>
         <pathelement path="lib/commons-io-2.0.1.jar"/>
         <pathelement path="lib/commons-lang-2.6.jar"/>
+        <pathelement path="lib/commons-configuration-1.6.jar"/>
   </path>
 
   <path id="manifest.classpath">
@@ -58,6 +59,9 @@ http://jakarta.apache.org/ant/index.html
         <zipgroupfileset dir="lib">
             <include name="commons-io-2.0.1.jar"/>
             <include name="commons-lang-2.6.jar"/>
+            <include name="commons-configuration-1.6.jar"/>
+            <include name="commons-logging-1.1.1.jar"/>
+            <include name="commons-collections-3.2.1.jar"/>
         </zipgroupfileset>
     </jar>
 
@@ -68,6 +72,8 @@ http://jakarta.apache.org/ant/index.html
     <jar destfile="${dist}/importlist.mxt">
       <fileset dir="${src}"
         includes="com/moneydance/modules/features/importlist/meta_info.dict"/>
+      <fileset dir="${src}"
+        includes="com/moneydance/modules/features/importlist/importlist.properties"/>
       <fileset dir="${src}"
         includes="com/moneydance/modules/features/importlist/icon.png"/>
       <fileset dir="${build}" 
@@ -116,7 +122,7 @@ http://jakarta.apache.org/ant/index.html
              excludepackagenames=""
              defaultexcludes="true"
              destdir="docs/api"
-    	     access="package"
+             access="protected"
              author="true"
              version="true"
              use="true"

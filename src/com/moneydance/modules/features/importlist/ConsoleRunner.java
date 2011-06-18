@@ -4,6 +4,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import com.moneydance.apps.md.view.HomePageView;
+import com.moneydance.modules.features.importlist.util.Preferences;
 
 /**
  * This class is used to run the extension as a stand-alone application from
@@ -39,8 +40,9 @@ final class ConsoleRunner {
         HomePageView homePageView = main.getHomePageView();
         homePageView.refresh();
 
+        Preferences prefs = Preferences.getInstance();
         JFrame frame = new JFrame();
-        frame.setTitle(Constants.EXTENSION_NAME);
+        frame.setTitle(prefs.getExtensionName());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JComponent guiView = homePageView.getGUIView(null);

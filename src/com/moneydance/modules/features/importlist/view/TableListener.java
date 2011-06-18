@@ -11,7 +11,7 @@ import javax.swing.event.RowSorterListener;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 
-import com.moneydance.modules.features.importlist.Preferences;
+import com.moneydance.modules.features.importlist.util.Preferences;
 
 /**
  * This <code>EventListener</code> is notified upon rearrangement, resorting,
@@ -24,11 +24,13 @@ import com.moneydance.modules.features.importlist.Preferences;
  */
 class TableListener implements TableColumnModelListener, RowSorterListener {
 
+    private final Preferences prefs;
     private final JTable table;
     private int lastFrom;
     private int lastTo;
 
     public TableListener(final JTable argTable) {
+        this.prefs = Preferences.getInstance();
         this.table = argTable;
     }
 
@@ -62,14 +64,14 @@ class TableListener implements TableColumnModelListener, RowSorterListener {
             String columnName = this.table.getColumnName(column);
             hashtable.put(column + "", columnName);
         }
-        Preferences.getInstance().setColumnNames(hashtable);
+        this.prefs.setColumnNames(hashtable);
     }
 
     private void saveColumnWidths() {
         for (int column = 0; column < this.table.getColumnCount(); column++) {
             String columnName = this.table.getColumnName(column);
             int columnWidth   = this.table.getColumn(columnName).getWidth();
-            Preferences.getInstance().setColumnWidths(column, columnWidth);
+            this.prefs.setColumnWidths(column, columnWidth);
         }
     }
 
@@ -85,7 +87,7 @@ class TableListener implements TableColumnModelListener, RowSorterListener {
             new RowSorter.SortKey(
                     adjustedColumn,
                     originalSortKey.getSortOrder());
-        Preferences.getInstance().setSortKey(adjustedSortKey);
+        this.prefs.setSortKey(adjustedSortKey);
     }
 
     @Override

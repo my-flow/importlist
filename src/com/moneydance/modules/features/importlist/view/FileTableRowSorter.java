@@ -7,8 +7,8 @@ import javax.swing.table.TableModel;
 
 import org.apache.commons.lang.Validate;
 
-import com.moneydance.modules.features.importlist.AlphanumComparator;
-import com.moneydance.modules.features.importlist.Constants;
+import com.moneydance.modules.features.importlist.util.AlphanumComparator;
+import com.moneydance.modules.features.importlist.util.Preferences;
 
 /**
  * An implementation of <code>RowSorter</code> that provides sorting for a
@@ -21,7 +21,8 @@ import com.moneydance.modules.features.importlist.Constants;
 class FileTableRowSorter extends DefaultRowSorter<TableModel, Integer> {
 
     private final ListTableModel listTableModel;
-    private final Comparator<?> comparator;
+    private final Comparator<?>  comparator;
+    private final Preferences    prefs;
 
     /**
      * @param argListTableModel The table model that is to be sorted
@@ -31,14 +32,15 @@ class FileTableRowSorter extends DefaultRowSorter<TableModel, Integer> {
         Validate.notNull(argListTableModel, "argListTableModel can't be null");
         this.listTableModel = argListTableModel;
         this.comparator     = new AlphanumComparator();
+        this.prefs          = Preferences.getInstance();
         this.setModelWrapper(new FileModelWrapper());
     }
 
     @Override
     public final boolean isSortable(final int column) {
         String columnName = this.listTableModel.getColumnName(column);
-        return Constants.DESC_NAME.equals(columnName)
-        || Constants.DESC_MODIFIED.equals(columnName);
+        return this.prefs.getDescName().equals(columnName)
+        || this.prefs.getDescModified().equals(columnName);
     }
 
     @Override
@@ -74,7 +76,8 @@ class FileTableRowSorter extends DefaultRowSorter<TableModel, Integer> {
             ListTableModel model = FileTableRowSorter.this.listTableModel;
             String columnName    = model.getColumnName(column);
 
-            if (Constants.DESC_MODIFIED.equals(columnName)) {
+            if (FileTableRowSorter.this.prefs.getDescModified().equals(
+                    columnName)) {
                 return model.getFileAt(row).lastModified() + "";
             } else {
                 return model.getValueAt(row, column);

@@ -53,6 +53,7 @@ public final class Preferences {
     private final FeatureModule featureModule;
     private final StreamTable   columnOrderDefault;
     private final StreamTable   sortOrderDefault;
+    private Image               image;
     private final StreamTable   columnWidths;
     private StreamTable         columnOrder;
     private UserPreferences     userPreferences;
@@ -126,7 +127,7 @@ public final class Preferences {
     }
 
     public static void loadLoggerConfiguration() {
-        Properties properties   = new Properties();
+        Properties properties = new Properties();
         try {
             InputStream inputStream = Preferences.getInputStreamFromResource(
                     Constants.LOG4J_PROPERTIES_RESOURCE);
@@ -171,17 +172,21 @@ public final class Preferences {
     }
 
     public Image getIconImage() {
-        Image image             = null;
+        if (this.image != null) {
+            return this.image;
+        }
         try {
+            log.debug("Loading icon " + this.getIconResource()
+                    + " from resource.");
             InputStream inputStream =
                 getInputStreamFromResource(this.getIconResource());
-            image = ImageIO.read(inputStream);
+            this.image = ImageIO.read(inputStream);
         } catch (IllegalArgumentException e) {
             log.warn(e.getMessage(), e);
         } catch (IOException e) {
             log.warn(e.getMessage(), e);
         }
-        return image;
+        return this.image;
     }
 
     public void setColumnWidths(

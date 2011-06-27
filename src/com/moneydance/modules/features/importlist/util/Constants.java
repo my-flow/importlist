@@ -284,28 +284,37 @@ final class Constants {
     = -657931;
 
     /**
+     * The filename in the confirmation message is split in several lines. This
+     * value defines the maximum length of each line.
+     */
+    static final int     MESSAGE_FILENAME_LINE_MAX_LENGTH
+    = 32;
+
+    /**
      * Error message to be displayed if a file cannot be read.
      */
     static final String  ERROR_MESSAGE_CANNOT_READ_FILE
-    = "File \"(0)\" could not be read.";
+    = "<html><b>File \"(0)\" could not be read.</b></html>";
 
     /**
      * Confirmation message to be displayed before a file will be deleted.
      */
     static final String  CONFIRMATION_MESSAGE_DELETE_FILE
-    = "Are you sure you want to delete the file \"(0)\"?";
+    = "<html><b>Are you sure you want to delete<br>\"(0)\"?</b><br><br>"
+        + "This item will be deleted immediately. You can't<br>"
+        + "undo this action.</html>";
 
     /**
      * Error message to be displayed if a file cannot be deleted.
      */
     static final String  ERROR_MESSAGE_DELETE_FILE
-    = "File \"(0)\" could not be deleted.";
+    = "<html><b>File \"(0)\" could not be deleted.</b></html>";
 
     /**
      * Delete button in confirmation message.
      */
     static final String  OPTION_DELETE_FILE
-    = "Delete File";
+    = "Delete";
 
     /**
      * Cancel button in confirmation message.

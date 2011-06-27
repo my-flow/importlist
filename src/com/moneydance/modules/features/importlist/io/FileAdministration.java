@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
@@ -187,13 +188,14 @@ public class FileAdministration {
             log.info("Importing file " + file.getAbsoluteFile());
 
             if (!file.canRead()) {
+                log.warn("Could not read file " + file.getAbsoluteFile());
                 final String errorMessage =
                     FileAdministration.this.prefs.getErrorMessageCannotReadFile(
                             file);
-                log.warn(errorMessage);
+                Object errorLabel = new JLabel(errorMessage);
                 JOptionPane.showMessageDialog(
                         null, // no parent component
-                        errorMessage,
+                        errorLabel,
                         null, // no title
                         JOptionPane.ERROR_MESSAGE);
                 return;
@@ -232,6 +234,7 @@ public class FileAdministration {
             final String confirmationMessage =
                 FileAdministration.this.prefs.getConfirmationMessageDeleteFile(
                         file);
+            Object confirmationLabel = new JLabel(confirmationMessage);
             Icon icon   = null;
             Image image = FileAdministration.this.featureModule.getIconImage();
             if (image != null) {
@@ -244,7 +247,7 @@ public class FileAdministration {
 
             int choice = JOptionPane.showOptionDialog(
                     null, // no parent component
-                    confirmationMessage,
+                    confirmationLabel,
                     null, // no title
                     JOptionPane.DEFAULT_OPTION,
                     JOptionPane.WARNING_MESSAGE,
@@ -258,10 +261,10 @@ public class FileAdministration {
                 if (file.delete()) {
                     log.info("Deleted file " + file.getAbsoluteFile());
                 } else {
+                    log.warn("Could not delete file " + file.getAbsoluteFile());
                     final String errorMessage =
                         FileAdministration.this.prefs.getErrorMessageDeleteFile(
                                 file);
-                    log.warn(errorMessage);
                     JOptionPane.showMessageDialog(
                             null, // no parent component
                             errorMessage,

@@ -19,6 +19,7 @@ import org.apache.commons.configuration.AbstractFileConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -554,6 +555,17 @@ public final class Preferences {
     }
 
     /**
+     * The filename in the confirmation message is split in several lines. This
+     * value defines the maximum length of each line.
+     * @return The maximum length of each line.
+     */
+    public int getMessageFilenameLineMaxLength() {
+        return this.config.getInt(
+                "message_filename_line_max_length",
+                Constants.MESSAGE_FILENAME_LINE_MAX_LENGTH);
+    }
+
+    /**
      * @param file The file that cannot be read.
      * @return Error message to be displayed if a file cannot be read.
      */
@@ -561,7 +573,7 @@ public final class Preferences {
         String rawMessage = this.config.getString(
                 "error_message_cannot_read_file",
                 Constants.ERROR_MESSAGE_CANNOT_READ_FILE);
-        return rawMessage.replaceAll("\\(0\\)", this.getTrimmedFilename(file));
+        return rawMessage.replaceAll("\\(0\\)", this.getMarkupFilename(file));
     }
 
     /**
@@ -573,7 +585,7 @@ public final class Preferences {
         String rawMessage = this.config.getString(
                 "confirmation_message_delete_file",
                 Constants.CONFIRMATION_MESSAGE_DELETE_FILE);
-        return rawMessage.replaceAll("\\(0\\)", this.getTrimmedFilename(file));
+        return rawMessage.replaceAll("\\(0\\)", this.getMarkupFilename(file));
     }
 
     /**
@@ -584,7 +596,7 @@ public final class Preferences {
         String rawMessage = this.config.getString(
                 "error_message_delete_file",
                 Constants.ERROR_MESSAGE_DELETE_FILE);
-        return rawMessage.replaceAll("\\(0\\)", this.getTrimmedFilename(file));
+        return rawMessage.replaceAll("\\(0\\)", this.getMarkupFilename(file));
     }
 
     /**
@@ -617,14 +629,19 @@ public final class Preferences {
         return rawMessage.replaceAll("\\(0\\)", importDir);
     }
 
-    private String getTrimmedFilename(final File file) {
+    private String getMarkupFilename(final File file) {
+        int length = this.getMessageFilenameLineMaxLength();
+
         String filename = file.getName();
-        int length = Math.min(filename.length(), this.getMaxFilenameLength());
-        String trimmedFilename = filename.substring(0, length).trim();
-        if (length < filename.length()) {
-            trimmedFilename = trimmedFilename + "É";
+        int numberOfLines = filename.length() / length + 1;
+        String[] substrings = new String[numberOfLines];
+
+        for (int i = 0; i < numberOfLines; i++) {
+            int start =  i      * length;
+            int end   = (i + 1) * length;
+            substrings[i] = StringUtils.substring(filename, start, end);
         }
-        return trimmedFilename;
+        return StringUtils.join(substrings, "<br>");
     }
 
     private static InputStream getInputStreamFromResource(

@@ -127,6 +127,13 @@ public final class Preferences {
     }
 
     public static void loadLoggerConfiguration() {
+        boolean rootIsConfigured =
+            Logger.getRootLogger().getAllAppenders().hasMoreElements();
+        if (rootIsConfigured) {
+            // do not overwrite any existing configurations
+            return;
+        }
+
         Properties properties = new Properties();
         try {
             InputStream inputStream = Preferences.getInputStreamFromResource(

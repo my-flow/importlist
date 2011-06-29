@@ -155,6 +155,10 @@ public class View implements HomePageView, Runnable {
 
     @Override
     public final void refresh() {
+        if (!this.scrollPane.isVisible()) {
+            return;
+        }
+
         this.prefs.reload();
         this.listTableModel.setDateFormatter(this.prefs.getDateFormatter());
         this.listTableModel.setTimeFormatter(this.prefs.getTimeFormatter());
@@ -165,7 +169,7 @@ public class View implements HomePageView, Runnable {
         this.table.setRowHeight(this.prefs.getBodyRowHeight());
         this.scrollPane.setBackground(this.prefs.getBackground());
 
-        if (this.fileAdministration.isDirty() && this.scrollPane.isVisible()) {
+        if (this.fileAdministration.isDirty()) {
             try {
                 if (SwingUtilities.isEventDispatchThread()) {
                     this.run();

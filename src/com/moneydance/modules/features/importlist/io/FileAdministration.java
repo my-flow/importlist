@@ -265,9 +265,10 @@ public class FileAdministration {
                     final String errorMessage =
                         FileAdministration.this.prefs.getErrorMessageDeleteFile(
                                 file);
+                    Object errorLabel = new JLabel(errorMessage);
                     JOptionPane.showMessageDialog(
                             null, // no parent component
-                            errorMessage,
+                            errorLabel,
                             null, // no title
                             JOptionPane.ERROR_MESSAGE);
                 }

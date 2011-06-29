@@ -585,7 +585,7 @@ public final class Preferences {
         String rawMessage = this.config.getString(
                 "error_message_cannot_read_file",
                 Constants.ERROR_MESSAGE_CANNOT_READ_FILE);
-        return rawMessage.replaceAll("\\(0\\)", this.getMarkupFilename(file));
+        return rawMessage.replace("(0)", this.getMarkupFilename(file));
     }
 
     /**
@@ -597,7 +597,7 @@ public final class Preferences {
         String rawMessage = this.config.getString(
                 "confirmation_message_delete_file",
                 Constants.CONFIRMATION_MESSAGE_DELETE_FILE);
-        return rawMessage.replaceAll("\\(0\\)", this.getMarkupFilename(file));
+        return rawMessage.replace("(0)", this.getMarkupFilename(file));
     }
 
     /**
@@ -608,7 +608,7 @@ public final class Preferences {
         String rawMessage = this.config.getString(
                 "error_message_delete_file",
                 Constants.ERROR_MESSAGE_DELETE_FILE);
-        return rawMessage.replaceAll("\\(0\\)", this.getMarkupFilename(file));
+        return rawMessage.replace("(0)", this.getMarkupFilename(file));
     }
 
     /**
@@ -638,7 +638,7 @@ public final class Preferences {
         String rawMessage = this.config.getString(
                 "empty_message",
                 Constants.EMPTY_MESSAGE);
-        return rawMessage.replaceAll("\\(0\\)", importDir);
+        return rawMessage.replace("(0)", importDir);
     }
 
     private String getMarkupFilename(final File file) {

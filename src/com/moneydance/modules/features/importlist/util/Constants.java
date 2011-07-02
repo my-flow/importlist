@@ -224,19 +224,19 @@ final class Constants {
      * Preferred width of the file table.
      */
     static final int     PREFERRED_TABLE_WIDTH
-    = 500;
+    = 300;
 
     /**
      * Preferred height of the file table.
      */
     static final int     PREFERRED_TABLE_HEIGHT
-    = 150;
+    = 160;
 
     /**
      * Preferred width of the message box when no displayable file is found.
      */
     static final int     PREFERRED_EMPTY_MESSAGE_WIDTH
-    = 400;
+    = 300;
 
     /**
      * Preferred height of the message box when no displayable file is found.
@@ -282,6 +282,12 @@ final class Constants {
      */
     static final int     COLOR_VALUE_BG_ALT_DEF
     = -657931;
+
+    /**
+     * The title of the dialog that is displayed to choose the base directory.
+     */
+    static final String  DIRECTORY_CHOOSER_TITLE
+    = "Please choose a base directory to monitor!";
 
     /**
      * The filename in the confirmation message is split in several lines. This

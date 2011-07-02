@@ -567,6 +567,16 @@ public final class Preferences {
     }
 
     /**
+     * @return The title of the dialog that is displayed to choose the base
+     * directory.
+     */
+    public String getDirectoryChooserTitle() {
+        return this.config.getString(
+                "directory_chooser_title",
+                Constants.DIRECTORY_CHOOSER_TITLE);
+    }
+
+    /**
      * The filename in the confirmation message is split in several lines. This
      * value defines the maximum length of each line.
      * @return The maximum length of each line.

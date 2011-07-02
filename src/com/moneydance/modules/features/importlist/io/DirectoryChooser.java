@@ -69,7 +69,7 @@ class DirectoryChooser {
 
     private void displayFileChooser() {
         JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Please choose a base directory to monitor");
+        chooser.setDialogTitle(this.prefs.getDirectoryChooserTitle());
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         // disable the "All files" option.
         chooser.setAcceptAllFileFilterUsed(false);

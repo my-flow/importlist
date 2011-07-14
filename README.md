@@ -6,7 +6,7 @@ Import List is an open-source extension for [Moneydance®](http://www.moneydance
 Build Prerequisites
 -------------------
 *	Java Development Kit, version 6
-*	Apache Ant™, tested with version 1.8.2
+*	[Apache Ant™](http://ant.apache.org), version 1.7 or newer
 
 Building the extension
 ----------------------
@@ -29,3 +29,8 @@ After the build process has succeeded, the resulting extension file `dist/import
 Further Assistance
 ------------------
 Consult the [Import List API](http://my-flow.github.com/importlist/docs/api/index.html) and/or the [Core API](http://www.moneydance.com/dev/apidoc/index.html).
+
+License
+-------
+Copyright 2011 [Florian J. Breunig](http://www.my-flow.com).
+Import List is released under the [GNU General Public License, Version 3.0](http://www.gnu.org/licenses/gpl.html).

@@ -83,7 +83,16 @@ http://jakarta.apache.org/ant/index.html
          files having modification dates in the future -->
     <sleep seconds="1"/>
 
+    <!-- run the timestamp task -->
+    <tstamp>
+      <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss"/>
+    </tstamp>
+
+
     <jar destfile="${dist}/importlist.mxt">
+      <fileset dir="" includes="NOTICE"/>
+      <fileset dir="" includes="COPYING"/>
+      <fileset dir="" includes="LICENSE"/>
       <fileset dir="${src}"
          includes="com/moneydance/modules/features/importlist/log4j.properties"/>
       <fileset dir="${src}"
@@ -102,10 +111,13 @@ http://jakarta.apache.org/ant/index.html
             value="${jar.classpath}"/>
         <attribute name="Built-By"
             value="${user.name}" />
+        <attribute name="Built-Date"
+            value="${TODAY}"/>
       </manifest>
 
       <zipfileset src="${build}/external-libs.jar">
         <exclude name="*"/>
+        <exclude name="META-INF/**/*"/>
       </zipfileset>
     </jar>
 

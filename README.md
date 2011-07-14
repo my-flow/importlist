@@ -11,8 +11,12 @@ Build Prerequisites
 Building the extension
 ----------------------
 1.	`git clone git@github.com:my-flow/importlist.git` creates a copy of the repository.
-2.	`ant genkeys` generates a passphrase-protected key pair.
-3.	`ant importlist` compiles and signs the extension.
+2.	`ant importlist` compiles the extension (and signs it if an applicable key pair is found).
+
+Signing the extension
+---------------------
+1.	`ant genkeys` generates a passphrase-protected key pair.
+2.	`ant sign` signs the extension.
 
 Running the extension
 ---------------------

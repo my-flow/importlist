@@ -26,20 +26,20 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
 
-import com.moneydance.modules.features.importlist.io.FileAdministration;
+import com.moneydance.modules.features.importlist.io.FileAdmin;
 
 class ImportEditor extends DefaultCellEditor {
 
     private static final long serialVersionUID = 4286061728240721119L;
-    private final FileAdministration    fileAdministration;
-    private final ButtonRenderer        buttonRenderer;
+    private final FileAdmin         fileAdmin;
+    private final ButtonRenderer    buttonRenderer;
     private String label;
 
-    ImportEditor(final FileAdministration argFileAdministration,
+    ImportEditor(final FileAdmin argFileAdmin,
             final ButtonRenderer argButtonRenderer) {
         super(new JCheckBox());
-        this.fileAdministration = argFileAdministration;
-        this.buttonRenderer     = argButtonRenderer;
+        this.fileAdmin      = argFileAdmin;
+        this.buttonRenderer = argButtonRenderer;
     }
 
     @Override
@@ -61,7 +61,7 @@ class ImportEditor extends DefaultCellEditor {
         AbstractButton button = this.buttonRenderer.getTableCellRendererButton(
                 table, value, isSelected, isSelected, row, column);
         ActionListener actionListener =
-            this.fileAdministration.getImportActionListener(
+            this.fileAdmin.getImportActionListener(
                     table.convertRowIndexToModel(row));
         button.addActionListener(actionListener);
 

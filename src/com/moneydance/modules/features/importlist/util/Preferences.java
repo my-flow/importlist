@@ -42,7 +42,6 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import com.moneydance.apps.md.controller.Common;
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.controller.UserPreferences;
@@ -124,20 +123,13 @@ public final class Preferences {
      * Reload context from feature module.
      */
     public void reload() {
-        this.featureModule.invoke(Constants.RELOAD_CONTEXT_SUFFIX);
+        this.featureModule.invoke(this.getReloadContextSuffix());
         instance.initialized = true;
     }
 
     public void setContext(final FeatureModuleContext context) {
-        if (context != null) {
-            this.userPreferences = ((com.moneydance.apps.md.controller.Main)
-                    context).getPreferences();
-        }
-
-        if (this.userPreferences == null) {
-            File file = Common.getPreferencesFile();
-            this.userPreferences = new UserPreferences(file);
-        }
+        this.userPreferences = ((com.moneydance.apps.md.controller.Main)
+                context).getPreferences();
     }
 
     public static void loadLoggerConfiguration() {
@@ -367,6 +359,16 @@ public final class Preferences {
         return this.config.getString(
                 "reload_context_suffix",
                 Constants.RELOAD_CONTEXT_SUFFIX);
+    }
+
+    /**
+     * @return The suffix of the application event that deletes a given file
+     * from the file system.
+     */
+    public String getDeleteFileSuffix() {
+        return this.config.getString(
+                "delete_file_suffix",
+                Constants.DELETE_FILE_SUFFIX);
     }
 
     /**
@@ -602,17 +604,6 @@ public final class Preferences {
     }
 
     /**
-     * @param file The file that cannot be read.
-     * @return Error message to be displayed if a file cannot be read.
-     */
-    public String getErrorMessageCannotReadFile(final File file) {
-        String rawMessage = this.config.getString(
-                "error_message_cannot_read_file",
-                Constants.ERROR_MESSAGE_CANNOT_READ_FILE);
-        return rawMessage.replace("(0)", this.getMarkupFilename(file));
-    }
-
-    /**
      * @param file The file that is to be deleted.
      * @return Confirmation message to be displayed before a file will be
      *  deleted.
@@ -654,15 +645,15 @@ public final class Preferences {
     };
 
     /**
-     * @param importDir The base directory which does not contain any files to
-     * display.
+     * @param baseDirectory The base directory which does not contain any files
+     * to display.
      * @return Message to display if the list of files is empty.
      */
-    public String getEmptyMessage(final String importDir) {
+    public String getEmptyMessage(final File baseDirectory) {
         String rawMessage = this.config.getString(
                 "empty_message",
                 Constants.EMPTY_MESSAGE);
-        return rawMessage.replace("(0)", importDir);
+        return rawMessage.replace("(0)", baseDirectory.getAbsolutePath());
     }
 
     private String getMarkupFilename(final File file) {

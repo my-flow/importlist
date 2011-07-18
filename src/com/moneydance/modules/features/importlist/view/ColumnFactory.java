@@ -25,7 +25,7 @@ import javax.swing.table.TableCellRenderer;
 
 import org.apache.commons.lang.Validate;
 
-import com.moneydance.modules.features.importlist.io.FileAdministration;
+import com.moneydance.modules.features.importlist.io.FileAdmin;
 
 /**
  * This factory provides unified access to the required renderer classes.
@@ -38,19 +38,18 @@ class ColumnFactory {
     private final ImportEditor      importEditor;
     private final DeleteEditor      deleteEditor;
 
-    ColumnFactory(final FileAdministration argFileAdministration,
+    ColumnFactory(final FileAdmin argFileAdmin,
             final TableCellRenderer argDefaultHeaderTableCellRenderer) {
-        Validate.notNull(argFileAdministration,
-        "argFileAdministration can't be null");
+        Validate.notNull(argFileAdmin, "argFileAdmin can't be null");
         this.headerRenderer = new HeaderRenderer(
                 argDefaultHeaderTableCellRenderer);
         this.labelRenderer  = new LabelRenderer();
         this.buttonRenderer = new ButtonRenderer();
         this.importEditor   = new ImportEditor(
-                argFileAdministration,
+                argFileAdmin,
                 this.buttonRenderer);
         this.deleteEditor   = new DeleteEditor(
-                argFileAdministration,
+                argFileAdmin,
                 this.buttonRenderer);
     }
 

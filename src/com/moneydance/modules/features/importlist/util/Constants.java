@@ -78,10 +78,17 @@ final class Constants {
     = "reloadcontext";
 
     /**
+     * The suffix of the application event that deletes a given file from the
+     * file system.
+     */
+    static final String  DELETE_FILE_SUFFIX
+    = "deletefile";
+
+    /**
      * The prefix of the application event that imports a given file.
      */
     static final String  IMPORT_URI_PREFIX
-    = "moneydance:importprompt:?file=";
+    = "moneydance:importprompt?file=";
 
     /**
      * The amount of milliseconds to wait between two runs of the file scanner.
@@ -309,12 +316,6 @@ final class Constants {
      */
     static final int     MESSAGE_FILENAME_LINE_MAX_LENGTH
     = 32;
-
-    /**
-     * Error message to be displayed if a file cannot be read.
-     */
-    static final String  ERROR_MESSAGE_CANNOT_READ_FILE
-    = "<html><b>File \"(0)\" could not be read.</b></html>";
 
     /**
      * Confirmation message to be displayed before a file will be deleted.

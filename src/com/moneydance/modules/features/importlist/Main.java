@@ -19,12 +19,14 @@
 package com.moneydance.modules.features.importlist;
 
 import java.awt.Image;
+import java.io.File;
 
 import org.apache.log4j.Logger;
 
 import com.moneydance.apps.md.controller.FeatureModule;
+import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.apps.md.view.HomePageView;
-import com.moneydance.modules.features.importlist.io.FileAdministration;
+import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.view.View;
 
@@ -34,19 +36,19 @@ import com.moneydance.modules.features.importlist.view.View;
  */
 public class Main extends FeatureModule {
 
+    static {
+        Preferences.loadLoggerConfiguration();
+    }
+
     /**
      * Static initialization of class-dependent logger.
      */
     private static Logger log = Logger.getLogger(Main.class);
 
     private String             baseDirectory;
-    private FileAdministration fileAdministration;
+    private FileAdmin          fileAdmin;
     private HomePageView       homePageView;
     private final Preferences  prefs;
-
-    static {
-        Preferences.loadLoggerConfiguration();
-    }
 
     /**
      * Standard constructor must be available in the Moneydance context.
@@ -66,25 +68,25 @@ public class Main extends FeatureModule {
 
     @Override
     public final void init() {
-        this.fileAdministration = new FileAdministration(
+        StubContextFactory stubContextFactory =
+            new StubContextFactory(this, this.getContext());
+        stubContextFactory.setup();
+
+        this.fileAdmin = new FileAdmin(this, this.baseDirectory);
+        this.homePageView = new View(this.fileAdmin);
+        this.fileAdmin.setHomePageView(this.homePageView);
+
+        log.debug("Registering homepage view");
+        // register this module's homepage view
+        this.getContext().registerHomePageView(this, this.homePageView);
+
+        log.debug("Registering toolbar feature");
+        // register this module to be invoked via the application toolbar
+        this.getContext().registerFeature(
                 this,
-                this.baseDirectory);
-        this.homePageView       = new View(this.fileAdministration);
-        this.fileAdministration.setHomePageView(this.homePageView);
-
-        if (this.getContext() != null) {
-            log.debug("Registering homepage view");
-            // register this module's homepage view
-            this.getContext().registerHomePageView(this, this.homePageView);
-
-            log.debug("Registering toolbar feature");
-            // register this module to be invoked via the application toolbar
-            this.getContext().registerFeature(
-                    this,
-                    this.prefs.getChooseBaseDirSuffix(),
-                    null,
-                    this.getName());
-        }
+                this.prefs.getChooseBaseDirSuffix(),
+                null,
+                this.getName());
     }
 
     @Override
@@ -99,30 +101,48 @@ public class Main extends FeatureModule {
 
     @Override
     public final void invoke(final String uri) {
-        if (this.prefs.getChooseBaseDirSuffix().equals(uri)) {
-            this.fileAdministration.reset();
+        String command = uri;
+        String parameters = "";
+        int theIdx = uri.indexOf('?');
+        if (theIdx >= 0) {
+            command = uri.substring(0, theIdx);
+            parameters = uri.substring(theIdx + 1);
+        } else {
+            theIdx = uri.indexOf(':');
+            if (theIdx >= 0) {
+                command = uri.substring(0, theIdx);
+            }
         }
 
-        if (this.prefs.getReloadContextSuffix().equals(uri)) {
+        if (this.prefs.getChooseBaseDirSuffix().equals(command)) {
+            this.fileAdmin.reset();
+        }
+
+        if (this.prefs.getReloadContextSuffix().equals(command)) {
             log.info("Reloading context from underlying framework.");
-            if (this.fileAdministration != null) {
-                this.fileAdministration.setContext(this.getContext());
+            if (this.fileAdmin != null) {
+                this.fileAdmin.setContext(this.getContext());
             }
             this.prefs.setContext(this.getContext());
+        }
+
+        if (this.prefs.getDeleteFileSuffix().equals(command)) {
+            File deleteFile = new File(parameters);
+            this.fileAdmin.deleteFile(deleteFile);
         }
     }
 
     @Override
     public final void unload() {
         log.info("Unloading extension.");
-        this.cleanup();
         this.homePageView.setActive(false);
+        this.cleanup();
         this.prefs.setAllWritablePreferencesToNull();
     }
 
     @Override
     public final void cleanup() {
-        this.fileAdministration.stopMonitor();
+        this.fileAdmin.stopMonitor();
     }
 
     public final HomePageView getHomePageView() {

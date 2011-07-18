@@ -41,7 +41,7 @@ import org.apache.log4j.Logger;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
-import com.moneydance.modules.features.importlist.io.FileAdministration;
+import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 /**
@@ -54,23 +54,21 @@ public class View implements HomePageView, Runnable {
      */
     private static Logger log = Logger.getLogger(View.class);
 
-    private final Preferences           prefs;
-    private final FileAdministration    fileAdministration;
-    private final ListTableModel        listTableModel;
-    private final JTable                table;
-    private final ColumnFactory         columnFactory;
-    private final JScrollPane           scrollPane;
+    private final Preferences       prefs;
+    private final FileAdmin         fileAdmin;
+    private final ListTableModel    listTableModel;
+    private final JTable            table;
+    private final ColumnFactory     columnFactory;
+    private final JScrollPane       scrollPane;
 
 
-    public View(final FileAdministration argFileAdministration) {
-        Validate.notNull(argFileAdministration,
-        "argFileAdministration can't be null");
-        this.fileAdministration = argFileAdministration;
+    public View(final FileAdmin argFileAdmin) {
+        Validate.notNull(argFileAdmin, "argFileAdmin can't be null");
+        this.fileAdmin = argFileAdmin;
 
         this.prefs = Preferences.getInstance();
 
-        this.listTableModel = new ListTableModel(
-                this.fileAdministration.getFiles());
+        this.listTableModel = new ListTableModel(this.fileAdmin.getFiles());
 
         this.table = new JTable(this.listTableModel);
         this.table.setOpaque(false);
@@ -86,7 +84,7 @@ public class View implements HomePageView, Runnable {
         TableColumnModel columnModel = this.table.getColumnModel();
 
         this.columnFactory = new ColumnFactory(
-                this.fileAdministration,
+                this.fileAdmin,
                 tableHeader.getDefaultRenderer());
 
         TableColumn nameCol = this.table.getColumn(this.prefs.getDescName());
@@ -183,14 +181,14 @@ public class View implements HomePageView, Runnable {
         this.table.setRowHeight(this.prefs.getBodyRowHeight());
         this.scrollPane.setBackground(this.prefs.getBackground());
 
-        if (this.fileAdministration.isDirty()) {
+        if (this.fileAdmin.isDirty()) {
             try {
                 if (SwingUtilities.isEventDispatchThread()) {
                     this.run();
                 } else {
                     SwingUtilities.invokeAndWait(this);
                 }
-                this.fileAdministration.setDirty(false);
+                this.fileAdmin.setDirty(false);
             } catch (InterruptedException e) {
                 log.warn(e.getMessage(), e);
             } catch (InvocationTargetException e) {
@@ -202,12 +200,12 @@ public class View implements HomePageView, Runnable {
 
     @Override
     public final void run() {
-        this.fileAdministration.reloadFiles();
+        this.fileAdmin.reloadFiles();
         this.listTableModel.fireTableDataChanged();
 
         if (this.listTableModel.getRowCount() == 0) {
             String message = this.prefs.getEmptyMessage(
-                    this.fileAdministration.getImportDir());
+                    this.fileAdmin.getBaseDirectory());
             JLabel label = new JLabel(message);
             label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setBackground(this.prefs.getBackground());

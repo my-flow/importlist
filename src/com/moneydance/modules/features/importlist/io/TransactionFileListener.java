@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
 /**
  * This <code>FileAlterationListener</code> implementation is notified about
  * relevant modifications in the file system. It propagates these modifications
- * to the <code>FileAdministration</code>.
+ * to the <code>FileAdmin</code>.
  */
 class TransactionFileListener extends FileAlterationListenerAdaptor {
 
@@ -37,13 +37,12 @@ class TransactionFileListener extends FileAlterationListenerAdaptor {
      */
     private static Logger log = Logger.getLogger(TransactionFileListener.class);
 
-    private final FileAdministration fileAdministration;
+    private final FileAdmin fileAdmin;
     private boolean dirty;
 
-    TransactionFileListener(final FileAdministration argFileAdministration) {
-        Validate.notNull(argFileAdministration,
-                "argFileAdministration can't be null");
-        this.fileAdministration = argFileAdministration;
+    TransactionFileListener(final FileAdmin argFileAdmin) {
+        Validate.notNull(argFileAdmin, "argFileAdmin can't be null");
+        this.fileAdmin = argFileAdmin;
     }
 
     @Override
@@ -70,8 +69,7 @@ class TransactionFileListener extends FileAlterationListenerAdaptor {
     @Override
     public final void onStop(final FileAlterationObserver observer) {
         if (this.dirty) {
-            log.info("Base directory contains changes.");
-            this.fileAdministration.setDirty(true);
+            this.fileAdmin.setDirty(true);
         }
     }
 }

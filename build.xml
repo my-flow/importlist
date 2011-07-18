@@ -61,7 +61,8 @@ http://jakarta.apache.org/ant/index.html
            optimize="${optimize}"
            classpathref="compile.classpath"
            includeantruntime="true"
-           includes="com/moneydance/modules/features/importlist/**"/>
+           includes="com/moneydance/modules/features/importlist/**,
+                     com/moneydance/apps/md/controller/**"/>
 
     <manifestclasspath property="jar.classpath"
                        jarfile="${dist}/importlist.mxt">
@@ -94,15 +95,13 @@ http://jakarta.apache.org/ant/index.html
       <fileset dir="" includes="COPYING"/>
       <fileset dir="" includes="LICENSE"/>
       <fileset dir="${src}"
-         includes="com/moneydance/modules/features/importlist/log4j.properties"/>
-      <fileset dir="${src}"
-         includes="com/moneydance/modules/features/importlist/importlist.properties"/>
-      <fileset dir="${src}"
-         includes="com/moneydance/modules/features/importlist/icon.png"/>
-      <fileset dir="${src}"
-         includes="com/moneydance/modules/features/importlist/meta_info.dict"/>
+         includes="com/moneydance/modules/features/importlist/log4j.properties
+                   com/moneydance/modules/features/importlist/importlist.properties
+                   com/moneydance/modules/features/importlist/icon.png
+                   com/moneydance/modules/features/importlist/meta_info.dict"/>
       <fileset dir="${build}"
-         includes="com/moneydance/modules/features/importlist/**"/>
+         includes="com/moneydance/modules/features/importlist/**
+                   com/moneydance/apps/md/controller/**"/>
 
       <manifest>
         <attribute name="Main-Class"

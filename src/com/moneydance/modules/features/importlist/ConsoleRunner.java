@@ -45,8 +45,19 @@ final class ConsoleRunner {
      */
     public static void main(final String[] args) {
         String baseDirectory = null;
-        if (args != null && args.length > 0) {
-            baseDirectory = args[0];
+
+        for (int i = 0; args != null && i < args.length; i++) {
+            String arg = args[i].trim();
+            if (arg.equals("-d")) {
+                System.err.println("debugging...");
+                com.moneydance.apps.md.controller.Main.DEBUG = true;
+                continue;
+            }
+            if (arg.startsWith("-basedirectory=")) {
+                baseDirectory = arg.substring("-basedirectory=".length());
+                continue;
+            }
+            System.err.println("ignoring argument: " + arg);
         }
 
         Main main = new Main(baseDirectory);

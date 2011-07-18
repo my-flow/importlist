@@ -29,14 +29,17 @@ Running the extension
 After the build process has succeeded, the resulting extension file 
 `dist/importlist.mxt` can be added to Moneydance®. However, it can also run in 
 stand-alone mode, which allows for easy testing with fast feedback:
+
 * `java -jar dist/importlist.mxt` runs the extension in stand-alone mode.
 
 System properties:
+
 * `java -Dlog4j.configuration=file:///$HOME/log4j.properties -jar 
 dist/importlist.mxt` runs the extension using an [Apache log4j™]
 (http://logging.apache.org/log4j/) configuration file.
 
 Arguments:
+
 * `java -jar dist/importlist.mxt -d` runs the extension in Moneydance®'s debug 
 mode.
 * `java -jar dist/importlist.mxt -basedirectory=$HOME/Downloads/` runs the 

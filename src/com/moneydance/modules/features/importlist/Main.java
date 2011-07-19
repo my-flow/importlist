@@ -76,12 +76,12 @@ public class Main extends FeatureModule {
         this.homePageView = new View(this.fileAdmin);
         this.fileAdmin.setHomePageView(this.homePageView);
 
-        log.debug("Registering homepage view");
         // register this module's homepage view
+        log.debug("Registering homepage view");
         this.getContext().registerHomePageView(this, this.homePageView);
 
-        log.debug("Registering toolbar feature");
         // register this module to be invoked via the application toolbar
+        log.debug("Registering toolbar feature");
         this.getContext().registerFeature(
                 this,
                 this.prefs.getChooseBaseDirSuffix(),

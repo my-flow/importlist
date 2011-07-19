@@ -48,10 +48,10 @@ extension using a predefined base directory.
 Further Assistance
 ------------------
 * [Import List API](http://my-flow.github.com/importlist/docs/api/index.html) 
-* [Core API](http://www.moneydance.com/dev/apidoc/index.html).
+* [Core API](http://www.moneydance.com/dev/apidoc/index.html)
 
 License
 -------
 Copyright 2011 [Florian J. Breunig](http://www.my-flow.com). Import List is 
-released under the [GNU General Public License, Version 3.0]
+released under the [GNU General Public License]
 (http://www.gnu.org/licenses/gpl.html).

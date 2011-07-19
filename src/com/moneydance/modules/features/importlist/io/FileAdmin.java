@@ -86,7 +86,6 @@ public class FileAdmin {
         this.monitor  = new FileAlterationMonitor(
                 this.prefs.getMonitorIntervall());
         this.setFileMonitorToCurrentImportDir();
-        this.startMonitor();
 
         this.files = new ArrayList<File>();
 
@@ -212,7 +211,10 @@ public class FileAdmin {
     }
 
     public final void setHomePageView(final HomePageView argHomePageView) {
+        Validate.notNull(argHomePageView, "argHomePageView can't be null");
         this.homePageView = argHomePageView;
+        this.homePageView.refresh();
+        this.startMonitor();
     }
 
     public final ActionListener getImportActionListener(final int rowNumber) {

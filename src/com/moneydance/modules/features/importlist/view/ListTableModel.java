@@ -21,9 +21,7 @@ package com.moneydance.modules.features.importlist.view;
 import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -44,7 +42,6 @@ class ListTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 3552703741263935211L;
     private final transient Preferences  prefs;
     private final List<File>             files;
-    private final Map<Integer, String>   fileDateStringCache;
     private CustomDateFormat             dateFormatter;
     private DateFormat                   timeFormatter;
 
@@ -52,7 +49,6 @@ class ListTableModel extends AbstractTableModel {
         Validate.notNull(argFiles, "argFiles can't be null");
         this.prefs               = Preferences.getInstance();
         this.files               = argFiles;
-        this.fileDateStringCache = new Hashtable<Integer, String>();
     }
 
     @Override
@@ -61,20 +57,21 @@ class ListTableModel extends AbstractTableModel {
 
         if (this.prefs.getDescName().equals(columnName)) {
             File file = this.getFileAt(row);
+            if (file == null) {
+                return null;
+            }
             return this.prefs.getIndentationPrefix() + file.getName();
         }
 
         if (this.prefs.getDescModified().equals(columnName)) {
-            if (this.fileDateStringCache.get(row) == null) {
-                File file             = this.getFileAt(row);
-                Date fileDate         = new Date(file.lastModified());
-                String fileDateString = this.prefs.getIndentationPrefix()
-                + this.dateFormatter.format(fileDate)
-                + " " + this.timeFormatter.format(fileDate);
-
-                this.fileDateStringCache.put(row, fileDateString);
+            File file = this.getFileAt(row);
+            if (file == null) {
+                return null;
             }
-            return this.fileDateStringCache.get(row);
+            Date fileDate   = new Date(file.lastModified());
+            return this.prefs.getIndentationPrefix()
+            + this.dateFormatter.format(fileDate)
+            + " " + this.timeFormatter.format(fileDate);
         }
 
         if (this.prefs.getDescImport().equals(columnName)) {
@@ -86,13 +83,6 @@ class ListTableModel extends AbstractTableModel {
         }
 
         return null;
-    }
-
-
-    @Override
-    public final void fireTableDataChanged() {
-        super.fireTableDataChanged();
-        this.fileDateStringCache.clear();
     }
 
     /**
@@ -128,25 +118,20 @@ class ListTableModel extends AbstractTableModel {
     }
 
     final File getFileAt(final int row) {
+        if (this.files == null || row >= this.files.size()) {
+            return null;
+        }
         return this.files.get(row);
     }
 
     final void setDateFormatter(
             final CustomDateFormat argDateFormatter) {
         Validate.notNull(argDateFormatter, "argDateFormatter can't be null");
-        if (this.dateFormatter != null
-                && !argDateFormatter.equals(this.dateFormatter)) {
-            this.fileDateStringCache.clear();
-        }
         this.dateFormatter = argDateFormatter;
     }
 
     final void setTimeFormatter(final DateFormat argTimeFormatter) {
         Validate.notNull(argTimeFormatter, "argTimeFormatter can't be null");
-        if (this.timeFormatter != null
-                && !argTimeFormatter.equals(this.timeFormatter)) {
-            this.fileDateStringCache.clear();
-        }
         this.timeFormatter = argTimeFormatter;
     }
 }

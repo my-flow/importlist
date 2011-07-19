@@ -57,6 +57,7 @@ public class View implements HomePageView, Runnable {
     private final Preferences       prefs;
     private final FileAdmin         fileAdmin;
     private final ListTableModel    listTableModel;
+    private final JLabel            emptyLabel;
     private final JTable            table;
     private final ColumnFactory     columnFactory;
     private final JScrollPane       scrollPane;
@@ -67,6 +68,9 @@ public class View implements HomePageView, Runnable {
         this.fileAdmin = argFileAdmin;
 
         this.prefs = Preferences.getInstance();
+
+        this.emptyLabel = new JLabel();
+        this.emptyLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         this.listTableModel = new ListTableModel(this.fileAdmin.getFiles());
 
@@ -177,6 +181,8 @@ public class View implements HomePageView, Runnable {
         this.columnFactory.setForeground(this.prefs.getForeground());
         this.columnFactory.setBackground(this.prefs.getBackground());
         this.columnFactory.setBackgroundAlt(this.prefs.getBackgroundAlt());
+        this.emptyLabel.setBackground(this.prefs.getBackground());
+        this.emptyLabel.setFont(this.prefs.getBodyFont());
         this.table.setBackground(this.prefs.getBackground());
         this.table.setRowHeight(this.prefs.getBodyRowHeight());
         this.scrollPane.setBackground(this.prefs.getBackground());
@@ -204,12 +210,10 @@ public class View implements HomePageView, Runnable {
         this.listTableModel.fireTableDataChanged();
 
         if (this.listTableModel.getRowCount() == 0) {
-            String message = this.prefs.getEmptyMessage(
+            String emptyMessage = this.prefs.getEmptyMessage(
                     this.fileAdmin.getBaseDirectory());
-            JLabel label = new JLabel(message);
-            label.setHorizontalAlignment(SwingConstants.CENTER);
-            label.setBackground(this.prefs.getBackground());
-            this.scrollPane.setViewportView(label);
+            this.emptyLabel.setText(emptyMessage);
+            this.scrollPane.setViewportView(this.emptyLabel);
             this.scrollPane.setPreferredSize(
                     new Dimension(
                             this.prefs.getPreferredEmptyMessageWidth(),

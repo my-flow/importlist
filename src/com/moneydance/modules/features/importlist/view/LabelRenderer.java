@@ -27,7 +27,13 @@ import javax.swing.table.TableCellRenderer;
 class LabelRenderer implements TableCellRenderer {
 
     private static final long serialVersionUID = 7553393304980261323L;
+    private final ColorSchemeHelper colorSchemeHelper;
 
+    LabelRenderer(final ColorSchemeHelper argColorSchemeHelper) {
+        this.colorSchemeHelper = argColorSchemeHelper;
+    }
+
+    @Override
     public final Component getTableCellRendererComponent(
             final JTable table,
             final Object value,
@@ -37,7 +43,7 @@ class LabelRenderer implements TableCellRenderer {
             final int column) {
         JLabel label = new JLabel();
         label.setOpaque(false);
-        ColorSchemeHelper.applyColorScheme(label, row);
+        this.colorSchemeHelper.applyColorScheme(label, row);
         if (value != null) {
             label.setText(value.toString());
         }

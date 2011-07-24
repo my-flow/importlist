@@ -31,11 +31,10 @@ import javax.swing.table.TableCellRenderer;
 class ButtonRenderer implements TableCellRenderer {
 
     private static final long serialVersionUID = -5002244293774549298L;
+    private final ColorSchemeHelper colorSchemeHelper;
 
-    /**
-     * Standard constructor to restrict visibility.
-     */
-    ButtonRenderer() {
+    ButtonRenderer(final ColorSchemeHelper argColorSchemeHelper) {
+        this.colorSchemeHelper = argColorSchemeHelper;
     }
 
     @Override
@@ -59,7 +58,7 @@ class ButtonRenderer implements TableCellRenderer {
             final int column) {
         JButton button = new JButton();
         button.setOpaque(false);
-        ColorSchemeHelper.applyColorScheme(button, row);
+        this.colorSchemeHelper.applyColorScheme(button, row);
         Border border = BorderFactory.createEtchedBorder(
                 EtchedBorder.LOWERED,
                 button.getBackground().brighter(),

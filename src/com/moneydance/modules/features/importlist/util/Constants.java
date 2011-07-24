@@ -105,7 +105,29 @@ final class Constants {
     /**
      * Maximum length of a filename displayed in an error message.
      */
-    static final int MAX_FILENAME_LENGTH = 20;
+    static final int MAX_FILENAME_LENGTH
+    = 20;
+
+    /**
+     * Length of the version substring extracted from user settings,
+     * e.g. 2007r5.
+     */
+    static final int LENGTH_OF_VERSION_DIGITS
+    = 4;
+
+    /**
+     * Version of Moneydance that uses an opaque background for its homepage
+     * views.
+     */
+    static final int VERSION_WITH_OPAQUE_HOMEPAGE_VIEW
+    = 2011;
+
+    /**
+     * Identifier of the preference that stores the current version of
+     * Moneydance.
+     */
+    static final String  PREF_CURRENT_VERSION
+    = "current_version";
 
     /**
      * Identifier of the preference that stores the current base directory.

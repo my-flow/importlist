@@ -166,6 +166,30 @@ public final class Preferences {
                 (StreamTable) null);
     }
 
+    public int getVersion() {
+        String fullString = this.userPreferences.getSetting(
+                Constants.PREF_CURRENT_VERSION,
+                null);
+        if (fullString == null) {
+            return 0;
+        }
+        int endIndex = Math.min(
+                Constants.LENGTH_OF_VERSION_DIGITS,
+                fullString.length());
+        String substring = fullString.substring(0, endIndex);
+        return Integer.parseInt(substring);
+    }
+
+    /**
+     * @return The version of Moneydance that uses an opaque background for its
+     * homepage views.
+     */
+    public int getVersionWithOpaqueHomepageView() {
+        return this.config.getInt(
+                "version_with_opaque_homepage_view",
+                Constants.VERSION_WITH_OPAQUE_HOMEPAGE_VIEW);
+    }
+
     public String getBaseDirectory() {
         return this.userPreferences.getSetting(
                 Constants.PREF_BASE_DIR,

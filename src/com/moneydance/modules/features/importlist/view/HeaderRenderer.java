@@ -38,9 +38,12 @@ class HeaderRenderer implements TableCellRenderer {
     private static final long serialVersionUID = 3121884943197710031L;
     private final TableCellRenderer defaultHeaderTableCellRenderer;
     private final Preferences       prefs;
+    private final ColorSchemeHelper colorSchemeHelper;
 
     HeaderRenderer(
+            final ColorSchemeHelper argColorSchemeHelper,
             final TableCellRenderer argDefaultHeaderTableCellRenderer) {
+        this.colorSchemeHelper              = argColorSchemeHelper;
         this.defaultHeaderTableCellRenderer = argDefaultHeaderTableCellRenderer;
         this.prefs                          = Preferences.getInstance();
     }
@@ -56,7 +59,7 @@ class HeaderRenderer implements TableCellRenderer {
         Component component =
             this.defaultHeaderTableCellRenderer.getTableCellRendererComponent(
                     table, value, hasFocus, hasFocus, row, column);
-        ColorSchemeHelper.applyColorScheme(component, row);
+        this.colorSchemeHelper.applyColorScheme(component, row);
 
         if (component instanceof JComponent) {
             JComponent jComponent = (JComponent) component;

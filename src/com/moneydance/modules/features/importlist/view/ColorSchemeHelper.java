@@ -21,49 +21,17 @@ package com.moneydance.modules.features.importlist.view;
 import java.awt.Color;
 import java.awt.Component;
 
-import javax.swing.JComponent;
-
 /**
- * This helper class applies a given color scheme to a <code>Component</code>.
- * It is used by different <code>TableCellRenderer</code>s to guarantee a
- * consistent style in a table.
+ * This template class defines the abstract methods required to apply a color
+ * scheme to the components of the GUI framework.
  */
-final class ColorSchemeHelper {
+interface ColorSchemeHelper {
 
-    private static final long serialVersionUID = -2724848115953702911L;
-    private static Color foreground;
-    private static Color background;
-    private static Color backgroundAlt;
+    void applyColorScheme(final Component component, final int row);
 
-    /**
-     * Private constructor prevents this class from being instantiated.
-     */
-    private ColorSchemeHelper() {
-    }
+    void setForeground(final Color argForeground);
 
-    static void applyColorScheme(
-            final Component component,
-            final int row) {
-        component.setForeground(foreground);
-        component.setBackground(background);
-        if (row % 2 == 0) {
-            if (component instanceof JComponent) {
-                JComponent jComponent = (JComponent) component;
-                jComponent.setOpaque(true);
-            }
-            component.setBackground(backgroundAlt);
-        }
-    }
+    void setBackground(final Color argBackground);
 
-    static void setForeground(final Color argForeground) {
-        foreground = argForeground;
-    }
-
-    static void setBackground(final Color argBackground) {
-        background = argBackground;
-    }
-
-    static void setBackgroundAlt(final Color argBackgroundAlt) {
-        backgroundAlt = argBackgroundAlt;
-    }
+    void setBackgroundAlt(final Color argBackgroundAlt);
 }

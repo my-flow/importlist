@@ -285,7 +285,7 @@ final class Constants {
      * Preferred height of the message box when no displayable file is found.
      */
     static final int     PREFERRED_EMPTY_MESSAGE_HEIGHT
-    = 80;
+    = 90;
 
     /**
      * Determines the height of a table row by multiplying this value with the

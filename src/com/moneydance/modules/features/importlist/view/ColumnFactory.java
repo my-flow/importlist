@@ -53,7 +53,8 @@ class ColumnFactory {
         } else {
             this.colorSchemeHelper = new DefaultColorSchemeHelper();
         }
-        this.headerRenderer     = new HeaderRenderer(this.colorSchemeHelper,
+        this.headerRenderer     = new HeaderRenderer(
+                this.colorSchemeHelper,
                 argDefaultHeaderTableCellRenderer);
         this.labelRenderer      = new LabelRenderer(this.colorSchemeHelper);
         this.buttonRenderer     = new ButtonRenderer(this.colorSchemeHelper);

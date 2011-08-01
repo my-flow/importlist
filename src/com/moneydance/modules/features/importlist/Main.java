@@ -19,7 +19,6 @@
 package com.moneydance.modules.features.importlist;
 
 import java.awt.Image;
-import java.io.File;
 
 import org.apache.log4j.Logger;
 
@@ -72,7 +71,7 @@ public class Main extends FeatureModule {
             new StubContextFactory(this, this.getContext());
         stubContextFactory.setup();
 
-        this.fileAdmin = new FileAdmin(this, this.baseDirectory);
+        this.fileAdmin = new FileAdmin(this.baseDirectory);
         this.homePageView = new View(this.fileAdmin);
         this.fileAdmin.setHomePageView(this.homePageView);
 
@@ -101,34 +100,16 @@ public class Main extends FeatureModule {
 
     @Override
     public final void invoke(final String uri) {
-        String command = uri;
-        String parameters = "";
-        int theIdx = uri.indexOf('?');
-        if (theIdx >= 0) {
-            command = uri.substring(0, theIdx);
-            parameters = uri.substring(theIdx + 1);
-        } else {
-            theIdx = uri.indexOf(':');
-            if (theIdx >= 0) {
-                command = uri.substring(0, theIdx);
-            }
-        }
-
-        if (this.prefs.getChooseBaseDirSuffix().equals(command)) {
+        if (this.prefs.getChooseBaseDirSuffix().equals(uri)) {
             this.fileAdmin.reset();
         }
 
-        if (this.prefs.getReloadContextSuffix().equals(command)) {
+        if (this.prefs.getReloadContextSuffix().equals(uri)) {
             log.info("Reloading context from underlying framework.");
             if (this.fileAdmin != null) {
                 this.fileAdmin.setContext(this.getContext());
             }
             this.prefs.setContext(this.getContext());
-        }
-
-        if (this.prefs.getDeleteFileSuffix().equals(command)) {
-            File deleteFile = new File(parameters);
-            this.fileAdmin.deleteFile(deleteFile);
         }
     }
 

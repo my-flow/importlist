@@ -56,7 +56,7 @@ public class View implements HomePageView, Runnable {
 
     private final Preferences       prefs;
     private final FileAdmin         fileAdmin;
-    private final ListTableModel    listTableModel;
+    private final FileTableModel    fileTableModel;
     private final JLabel            emptyLabel;
     private final JTable            table;
     private final ColumnFactory     columnFactory;
@@ -72,9 +72,9 @@ public class View implements HomePageView, Runnable {
         this.emptyLabel = new JLabel();
         this.emptyLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        this.listTableModel = new ListTableModel(this.fileAdmin.getFiles());
+        this.fileTableModel = new FileTableModel(this.fileAdmin.getFiles());
 
-        this.table = new JTable(this.listTableModel);
+        this.table = new JTable(this.fileTableModel);
         this.table.setOpaque(false);
         this.table.setShowGrid(false);
         this.table.setShowVerticalLines(false);
@@ -147,7 +147,7 @@ public class View implements HomePageView, Runnable {
 
         // sorting the columns
         RowSorter<TableModel> rowSorter =
-            new FileTableRowSorter(this.listTableModel);
+            new FileTableRowSorter(this.fileTableModel);
         List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
         sortKeys.add(this.prefs.getSortKey());
         rowSorter.setSortKeys(sortKeys);
@@ -176,8 +176,8 @@ public class View implements HomePageView, Runnable {
         }
 
         this.prefs.reload();
-        this.listTableModel.setDateFormatter(this.prefs.getDateFormatter());
-        this.listTableModel.setTimeFormatter(this.prefs.getTimeFormatter());
+        this.fileTableModel.setDateFormatter(this.prefs.getDateFormatter());
+        this.fileTableModel.setTimeFormatter(this.prefs.getTimeFormatter());
         this.columnFactory.setForeground(this.prefs.getForeground());
         this.columnFactory.setBackground(this.prefs.getBackground());
         this.columnFactory.setBackgroundAlt(this.prefs.getBackgroundAlt());
@@ -207,11 +207,11 @@ public class View implements HomePageView, Runnable {
     @Override
     public final void run() {
         this.fileAdmin.reloadFiles();
-        this.listTableModel.fireTableDataChanged();
+        this.fileTableModel.fireTableDataChanged();
 
-        if (this.listTableModel.getRowCount() == 0) {
+        if (this.fileTableModel.getRowCount() == 0) {
             String emptyMessage = this.prefs.getEmptyMessage(
-                    this.fileAdmin.getBaseDirectory());
+                    this.fileAdmin.getBaseDirectory().getAbsolutePath());
             this.emptyLabel.setText(emptyMessage);
             this.scrollPane.setViewportView(this.emptyLabel);
             this.scrollPane.setPreferredSize(

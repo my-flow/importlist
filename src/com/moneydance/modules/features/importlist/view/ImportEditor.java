@@ -19,6 +19,7 @@
 package com.moneydance.modules.features.importlist.view;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.AbstractButton;
@@ -60,11 +61,19 @@ class ImportEditor extends DefaultCellEditor {
 
         AbstractButton button = this.buttonRenderer.getTableCellRendererButton(
                 table, value, isSelected, isSelected, row, column);
-        ActionListener actionListener =
-            this.fileAdmin.getImportActionListener(
-                    table.convertRowIndexToModel(row));
+        ActionListener actionListener = this.getImportActionListener(
+                table.convertRowIndexToModel(row));
         button.addActionListener(actionListener);
 
         return button;
     }
+
+    private ActionListener getImportActionListener(final int rowNumber) {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent actionEvent) {
+                ImportEditor.this.fileAdmin.importRow(rowNumber);
+            }
+        };
+    };
 }

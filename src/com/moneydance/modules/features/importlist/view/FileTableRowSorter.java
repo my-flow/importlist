@@ -34,17 +34,17 @@ import com.moneydance.modules.features.importlist.util.Preferences;
  */
 class FileTableRowSorter extends DefaultRowSorter<TableModel, Integer> {
 
-    private final ListTableModel listTableModel;
+    private final FileTableModel fileTableModel;
     private final Comparator<?>  comparator;
     private final Preferences    prefs;
 
     /**
      * @param argListTableModel The table model that is to be sorted
      */
-    FileTableRowSorter(final ListTableModel argListTableModel) {
+    FileTableRowSorter(final FileTableModel argListTableModel) {
         super();
         Validate.notNull(argListTableModel, "argListTableModel can't be null");
-        this.listTableModel = argListTableModel;
+        this.fileTableModel = argListTableModel;
         this.comparator     = new AlphanumComparator();
         this.prefs          = Preferences.getInstance();
         this.setModelWrapper(new FileModelWrapper());
@@ -52,7 +52,7 @@ class FileTableRowSorter extends DefaultRowSorter<TableModel, Integer> {
 
     @Override
     public final boolean isSortable(final int column) {
-        String columnName = this.listTableModel.getColumnName(column);
+        String columnName = this.fileTableModel.getColumnName(column);
         return this.prefs.getDescName().equals(columnName)
         || this.prefs.getDescModified().equals(columnName);
     }
@@ -67,7 +67,7 @@ class FileTableRowSorter extends DefaultRowSorter<TableModel, Integer> {
 
         @Override
         public final int getColumnCount() {
-            return FileTableRowSorter.this.listTableModel.getColumnCount();
+            return FileTableRowSorter.this.fileTableModel.getColumnCount();
         }
 
         @Override
@@ -77,25 +77,25 @@ class FileTableRowSorter extends DefaultRowSorter<TableModel, Integer> {
 
         @Override
         public final TableModel getModel() {
-            return FileTableRowSorter.this.listTableModel;
+            return FileTableRowSorter.this.fileTableModel;
         }
 
         @Override
         public final int getRowCount() {
-            return FileTableRowSorter.this.listTableModel.getRowCount();
+            return FileTableRowSorter.this.fileTableModel.getRowCount();
         }
 
         @Override
         public final Object getValueAt(final int row, final int column) {
-            ListTableModel model = FileTableRowSorter.this.listTableModel;
+            FileTableModel model = FileTableRowSorter.this.fileTableModel;
             String columnName    = model.getColumnName(column);
 
+            Object value = model.getValueAt(row, column);
             if (FileTableRowSorter.this.prefs.getDescModified().equals(
                     columnName)) {
                 return model.getFileAt(row).lastModified() + "";
-            } else {
-                return model.getValueAt(row, column);
             }
+            return value;
         }
     }
 }

@@ -19,8 +19,6 @@
 package com.moneydance.modules.features.importlist.io;
 
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,7 +40,6 @@ import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
-import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.modules.features.importlist.util.Preferences;
@@ -58,7 +55,6 @@ public class FileAdmin {
     private static Logger log = Logger.getLogger(FileAdmin.class);
 
     private final Preferences               prefs;
-    private final FeatureModule             featureModule;
     private FeatureModuleContext            context;
     private final DirectoryChooser          directoryChooser;
     private final AbstractFileFilter        fileFilter;
@@ -69,11 +65,8 @@ public class FileAdmin {
     private boolean                         dirty;
     private HomePageView                    homePageView;
 
-    public FileAdmin(final FeatureModule argFeatureModule,
-            final String baseDirectory) {
-        Validate.notNull(argFeatureModule, "argFeatureModule can't be null");
+    public FileAdmin(final String baseDirectory) {
         this.prefs            = Preferences.getInstance();
-        this.featureModule    = argFeatureModule;
         this.directoryChooser = new DirectoryChooser(baseDirectory);
         this.fileFilter       = new AndFileFilter(
                 CanReadFileFilter.CAN_READ,
@@ -101,54 +94,6 @@ public class FileAdmin {
         this.directoryChooser.reset();
         this.monitor.removeObserver(this.observer);
         this.setFileMonitorToCurrentImportDir();
-        this.setDirty(true);
-    }
-
-    public final void deleteFile(final File file) {
-        final String confirmationMessage =
-            this.prefs.getConfirmationMessageDeleteFile(file);
-        Object confirmationLabel = new JLabel(confirmationMessage);
-        Icon icon   = null;
-        Image image = this.featureModule.getIconImage();
-        if (image != null) {
-            icon = new ImageIcon(image);
-        }
-        Object[] options = {
-                this.prefs.getOptionDeleteFile(),
-                this.prefs.getOptionCancel()
-        };
-
-        int choice = JOptionPane.showOptionDialog(
-                null, // no parent component
-                confirmationLabel,
-                null, // no title
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.WARNING_MESSAGE,
-                icon,
-                options,
-                options[1]);
-
-        if (choice == 0) {
-            log.info("Deleting file " + file.getAbsoluteFile());
-
-            if (file.delete()) {
-                log.info("Deleted file " + file.getAbsoluteFile());
-            } else {
-                log.warn("Could not delete file "
-                        + file.getAbsoluteFile());
-                final String errorMessage =
-                    this.prefs.getErrorMessageDeleteFile(file);
-                Object errorLabel = new JLabel(errorMessage);
-                JOptionPane.showMessageDialog(
-                        null, // no parent component
-                        errorLabel,
-                        null, // no title
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            log.info("Canceled deleting file " + file.getAbsoluteFile());
-        }
-
         this.setDirty(true);
     }
 
@@ -217,39 +162,66 @@ public class FileAdmin {
         this.startMonitor();
     }
 
-    public final ActionListener getImportActionListener(final int rowNumber) {
+    public final void importRow(final int rowNumber) {
+        File file = this.files.get(rowNumber);
+        log.info("Importing file " + file.getAbsoluteFile());
 
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent actionEvent) {
-                File file = FileAdmin.this.files.get(rowNumber);
-                log.info("Importing file " + file.getAbsoluteFile());
+        String callUri = this.prefs.getImportUriPrefix()
+        + file.getAbsolutePath();
 
-                String callUri = FileAdmin.this.prefs.getImportUriPrefix()
-                + file.getAbsolutePath();
-
-                // Import the file identified by the file parameter
-                FileAdmin.this.context.showURL(callUri);
-            }
-        };
+        // Import the file identified by the file parameter
+        this.context.showURL(callUri);
     }
 
-    public final ActionListener getDeleteActionListener(final int rowNumber) {
+    public final void deleteRow(final int rowNumber) {
+        File file = this.files.get(rowNumber);
+        log.info("Deleting file " + file.getAbsoluteFile());
 
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent actionEvent) {
-                File file = FileAdmin.this.files.get(rowNumber);
-                log.info("Deleting file " + file.getAbsoluteFile());
-
-                String callUri = FileAdmin.this.prefs.getId() + ":"
-                + FileAdmin.this.prefs.getDeleteFileSuffix() + "?"
-                + file.getAbsolutePath();
-
-                // Delete the file identified by the file parameter
-                FileAdmin.this.context.showURL(callUri);
-            }
+        final String confirmationMessage =
+            this.prefs.getConfirmationMessageDeleteFile(file.getName());
+        Object confirmationLabel = new JLabel(confirmationMessage);
+        Icon icon   = null;
+        Image image = this.prefs.getIconImage();
+        if (image != null) {
+            icon = new ImageIcon(image);
+        }
+        Object[] options = {
+                this.prefs.getOptionDeleteFile(),
+                this.prefs.getOptionCancel()
         };
+
+        int choice = JOptionPane.showOptionDialog(
+                null, // no parent component
+                confirmationLabel,
+                null, // no title
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                icon,
+                options,
+                options[1]);
+
+        if (choice == 0) {
+            log.info("Deleting file " + file.getAbsoluteFile());
+
+            if (file.delete()) {
+                log.info("Deleted file " + file.getAbsoluteFile());
+            } else {
+                log.warn("Could not delete file "
+                        + file.getAbsoluteFile());
+                final String errorMessage =
+                    this.prefs.getErrorMessageDeleteFile(file.getName());
+                Object errorLabel = new JLabel(errorMessage);
+                JOptionPane.showMessageDialog(
+                        null, // no parent component
+                        errorLabel,
+                        null, // no title
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            log.info("Canceled deleting file " + file.getAbsoluteFile());
+        }
+
+        this.setDirty(true);
     };
 
     private void setFileMonitorToCurrentImportDir() {

@@ -21,7 +21,6 @@ package com.moneydance.modules.features.importlist.util;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -386,16 +385,6 @@ public final class Preferences {
     }
 
     /**
-     * @return The suffix of the application event that deletes a given file
-     * from the file system.
-     */
-    public String getDeleteFileSuffix() {
-        return this.config.getString(
-                "delete_file_suffix",
-                Constants.DELETE_FILE_SUFFIX);
-    }
-
-    /**
      * @return The prefix of the application event that imports a given file.
      */
     public String getImportUriPrefix() {
@@ -628,26 +617,26 @@ public final class Preferences {
     }
 
     /**
-     * @param file The file that is to be deleted.
+     * @param filename The name of the file that is to be deleted.
      * @return Confirmation message to be displayed before a file will be
      *  deleted.
      */
-    public String getConfirmationMessageDeleteFile(final File file) {
+    public String getConfirmationMessageDeleteFile(final String filename) {
         String rawMessage = this.config.getString(
                 "confirmation_message_delete_file",
                 Constants.CONFIRMATION_MESSAGE_DELETE_FILE);
-        return rawMessage.replace("(0)", this.getMarkupFilename(file));
+        return rawMessage.replace("(0)", this.getMarkupFilename(filename));
     }
 
     /**
-     * @param file The file that cannot be deleted.
+     * @param filename The name of the file that cannot be deleted.
      * @return Error message to be displayed if a file cannot be deleted.
      */
-    public String getErrorMessageDeleteFile(final File file) {
+    public String getErrorMessageDeleteFile(final String filename) {
         String rawMessage = this.config.getString(
                 "error_message_delete_file",
                 Constants.ERROR_MESSAGE_DELETE_FILE);
-        return rawMessage.replace("(0)", this.getMarkupFilename(file));
+        return rawMessage.replace("(0)", this.getMarkupFilename(filename));
     }
 
     /**
@@ -673,17 +662,16 @@ public final class Preferences {
      * to display.
      * @return Message to display if the list of files is empty.
      */
-    public String getEmptyMessage(final File baseDirectory) {
+    public String getEmptyMessage(final String baseDirectory) {
         String rawMessage = this.config.getString(
                 "empty_message",
                 Constants.EMPTY_MESSAGE);
-        return rawMessage.replace("(0)", baseDirectory.getAbsolutePath());
+        return rawMessage.replace("(0)", baseDirectory);
     }
 
-    private String getMarkupFilename(final File file) {
+    private String getMarkupFilename(final String filename) {
         int length = this.getMessageFilenameLineMaxLength();
 
-        String filename = file.getName();
         int numberOfLines = filename.length() / length + 1;
         String[] substrings = new String[numberOfLines];
 

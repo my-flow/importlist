@@ -37,7 +37,7 @@ import com.moneydance.util.CustomDateFormat;
  * file and the date of its last modification, the last two columns represent
  * the action buttons to import and delete the file, respectively.
  */
-class ListTableModel extends AbstractTableModel {
+class FileTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 3552703741263935211L;
     private final transient Preferences  prefs;
@@ -45,10 +45,10 @@ class ListTableModel extends AbstractTableModel {
     private CustomDateFormat             dateFormatter;
     private DateFormat                   timeFormatter;
 
-    ListTableModel(final List<File> argFiles) {
+    FileTableModel(final List<File> argFiles) {
         Validate.notNull(argFiles, "argFiles can't be null");
-        this.prefs               = Preferences.getInstance();
-        this.files               = argFiles;
+        this.prefs = Preferences.getInstance();
+        this.files = argFiles;
     }
 
     @Override
@@ -124,8 +124,7 @@ class ListTableModel extends AbstractTableModel {
         return this.files.get(row);
     }
 
-    final void setDateFormatter(
-            final CustomDateFormat argDateFormatter) {
+    final void setDateFormatter(final CustomDateFormat argDateFormatter) {
         Validate.notNull(argDateFormatter, "argDateFormatter can't be null");
         this.dateFormatter = argDateFormatter;
     }

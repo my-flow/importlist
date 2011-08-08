@@ -387,10 +387,20 @@ public final class Preferences {
     /**
      * @return The prefix of the application event that imports a given file.
      */
-    public String getImportUriPrefix() {
+    public String getTransactionFileImportUriPrefix() {
         return this.config.getString(
-                "import_uri_prefix",
-                Constants.IMPORT_URI_PREFIX);
+                "transaction_file_import_uri_prefix",
+                Constants.TRANSACTION_FILE_IMPORT_URI_PREFIX);
+    }
+
+    /**
+     * @return The prefix of the application event that imports a given CSV file
+     * using the text file importer plugin.
+     */
+    public String getTextFileImportUriPrefix() {
+        return this.config.getString(
+                "text_file_import_uri_prefix",
+                Constants.TEXT_FILE_IMPORT_URI_PREFIX);
     }
 
     /**
@@ -404,14 +414,31 @@ public final class Preferences {
     }
 
     /**
-     * @return Valid file extensions that can be imported (case-insensitive).
+     * @return Valid extensions of transaction files that can be imported
+     * (case-insensitive).
      */
-    public String[] getFileExtensions() {
-        String[] fileExtensions = this.config.getStringArray("file_extensions");
-        if (fileExtensions == null || fileExtensions.length == 0) {
-            fileExtensions = Constants.FILE_EXTENSIONS;
+    public String[] getTransactionFileExtensions() {
+        String[] transactionFileExtensions =
+            this.config.getStringArray("transaction_file_extensions");
+        if (transactionFileExtensions == null
+                || transactionFileExtensions.length == 0) {
+            transactionFileExtensions = Constants.TRANSACTION_FILE_EXTENSIONS;
         }
-        return fileExtensions;
+        return transactionFileExtensions;
+    }
+
+    /**
+     * @return Valid extensions of text files that can be imported
+     * (case-insensitive).
+     */
+    public String[] getTextFileExtensions() {
+        String[] textFileExtensions =
+            this.config.getStringArray("text_file_extensions");
+        if (textFileExtensions == null
+                || textFileExtensions.length == 0) {
+            textFileExtensions = Constants.TEXT_FILE_EXTENSIONS;
+        }
+        return textFileExtensions;
     }
 
     /**

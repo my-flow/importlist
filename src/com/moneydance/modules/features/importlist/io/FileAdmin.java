@@ -34,6 +34,7 @@ import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.AbstractFileFilter;
 import org.apache.commons.io.filefilter.AndFileFilter;
 import org.apache.commons.io.filefilter.CanReadFileFilter;
+import org.apache.commons.io.filefilter.OrFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
@@ -57,7 +58,9 @@ public class FileAdmin {
     private final Preferences               prefs;
     private FeatureModuleContext            context;
     private final DirectoryChooser          directoryChooser;
-    private final AbstractFileFilter        fileFilter;
+    private final AbstractFileFilter        transactionFileFilter;
+    private final AbstractFileFilter        textFileFilter;
+    private final AbstractFileFilter        readableFileFilter;
     private FileAlterationObserver          observer;
     private final TransactionFileListener   listener;
     private final FileAlterationMonitor     monitor;
@@ -68,11 +71,17 @@ public class FileAdmin {
     public FileAdmin(final String baseDirectory) {
         this.prefs            = Preferences.getInstance();
         this.directoryChooser = new DirectoryChooser(baseDirectory);
-        this.fileFilter       = new AndFileFilter(
+        this.transactionFileFilter = new SuffixFileFilter(
+                this.prefs.getTransactionFileExtensions(),
+                IOCase.INSENSITIVE);
+        this.textFileFilter = new SuffixFileFilter(
+                this.prefs.getTextFileExtensions(),
+                IOCase.INSENSITIVE);
+        this.readableFileFilter = new AndFileFilter(
                 CanReadFileFilter.CAN_READ,
-                new SuffixFileFilter(
-                        this.prefs.getFileExtensions(),
-                        IOCase.INSENSITIVE)
+                new OrFileFilter(
+                        this.transactionFileFilter,
+                        this.textFileFilter)
         );
 
         this.listener = new TransactionFileListener(this);
@@ -106,7 +115,7 @@ public class FileAdmin {
         try {
             Collection<File> collection = FileUtils.listFiles(
                     this.getBaseDirectory(),
-                    this.fileFilter,
+                    this.readableFileFilter,
                     null); // ignore subdirectories
             this.files.addAll(collection);
         } catch (IllegalArgumentException e) {
@@ -166,8 +175,13 @@ public class FileAdmin {
         File file = this.files.get(rowNumber);
         log.info("Importing file " + file.getAbsoluteFile());
 
-        String callUri = this.prefs.getImportUriPrefix()
+        String callUri = this.prefs.getTransactionFileImportUriPrefix()
         + file.getAbsolutePath();
+
+        if (this.textFileFilter.accept(file)) {
+            callUri = this.prefs.getTextFileImportUriPrefix()
+            + file.getAbsolutePath();
+        }
 
         // Import the file identified by the file parameter
         this.context.showURL(callUri);
@@ -227,7 +241,7 @@ public class FileAdmin {
     private void setFileMonitorToCurrentImportDir() {
         this.observer  = new FileAlterationObserver(
                 this.getBaseDirectory(),
-                this.fileFilter,
+                this.readableFileFilter,
                 IOCase.SENSITIVE);
         this.observer.addListener(this.listener);
         this.monitor.addObserver(this.observer);

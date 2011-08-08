@@ -30,8 +30,7 @@ import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.view.View;
 
 /**
- * The main class of the extension, instantiated by Moneydance's class
- * loader.
+ * The main class of the extension, instantiated by Moneydance's class loader.
  */
 public class Main extends FeatureModule {
 
@@ -58,13 +57,6 @@ public class Main extends FeatureModule {
         this.prefs = new Preferences(this);
     }
 
-    public Main(final String argBaseDirectory) {
-        super();
-        log.info("Initializing extension in stand-alone mode.");
-        this.baseDirectory = argBaseDirectory;
-        this.prefs = new Preferences(this);
-    }
-
     @Override
     public final void init() {
         StubContextFactory stubContextFactory =
@@ -84,7 +76,7 @@ public class Main extends FeatureModule {
         this.getContext().registerFeature(
                 this,
                 this.prefs.getChooseBaseDirSuffix(),
-                null,
+                null, // buttonImage
                 this.getName());
     }
 
@@ -126,7 +118,11 @@ public class Main extends FeatureModule {
         this.fileAdmin.stopMonitor();
     }
 
-    public final HomePageView getHomePageView() {
+    final void setBaseDirectory(final String argBaseDirectory) {
+        this.baseDirectory = argBaseDirectory;
+    }
+
+    final HomePageView getHomePageView() {
         return this.homePageView;
     }
 }

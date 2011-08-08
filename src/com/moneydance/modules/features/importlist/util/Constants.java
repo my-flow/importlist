@@ -87,8 +87,15 @@ final class Constants {
     /**
      * The prefix of the application event that imports a given file.
      */
-    static final String  IMPORT_URI_PREFIX
+    static final String  TRANSACTION_FILE_IMPORT_URI_PREFIX
     = "moneydance:importprompt?file=";
+
+    /**
+     * The prefix of the application event that imports a given CSV file using
+     * the text file importer plugin.
+     */
+    public static final String TEXT_FILE_IMPORT_URI_PREFIX
+    = "moneydance:fmodule:txtimport:?file=";
 
     /**
      * The amount of milliseconds to wait between two runs of the file scanner.
@@ -97,10 +104,18 @@ final class Constants {
     = 10000;
 
     /**
-     * Valid file extensions that can be imported (case-insensitive).
+     * Valid extensions of transaction files that can be imported
+     * (case-insensitive).
      */
-    static final String[] FILE_EXTENSIONS
+    static final String[] TRANSACTION_FILE_EXTENSIONS
     = {"qif", "ofx", "qfx", "ofc"};
+
+    /**
+     * @return Valid extensions of text files that can be imported
+     * (case-insensitive).
+     */
+    static final String[] TEXT_FILE_EXTENSIONS
+    = {"csv"};
 
     /**
      * Maximum length of a filename displayed in an error message.
@@ -330,7 +345,7 @@ final class Constants {
      * The title of the dialog that is displayed to choose the base directory.
      */
     static final String  DIRECTORY_CHOOSER_TITLE
-    = "Please choose a base directory to monitor!";
+    = "Please choose a base directory for Import List!";
 
     /**
      * The filename in the confirmation message is split in several lines. This

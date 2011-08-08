@@ -17,6 +17,6 @@
  */
 
 /**
- * Contains the preferences for this extension.
+ * Contains the preferences and other helper classes for this extension.
  */
 package com.moneydance.modules.features.importlist.util;

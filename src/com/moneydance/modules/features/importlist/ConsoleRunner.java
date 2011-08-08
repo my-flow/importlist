@@ -57,7 +57,8 @@ final class ConsoleRunner {
             System.err.println("ignoring argument: " + arg);
         }
 
-        Main main = new Main(baseDirectory);
+        Main main = new Main();
+        main.setBaseDirectory(baseDirectory);
         main.init();
 
         JFrame frame = new JFrame(main.getDisplayName());

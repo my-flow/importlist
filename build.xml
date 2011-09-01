@@ -94,11 +94,10 @@ http://jakarta.apache.org/ant/index.html
       <fileset dir="" includes="NOTICE"/>
       <fileset dir="" includes="COPYING"/>
       <fileset dir="" includes="LICENSE"/>
-      <fileset dir="${src}"
-         includes="com/moneydance/modules/features/importlist/log4j.properties
-                   com/moneydance/modules/features/importlist/importlist.properties
-                   com/moneydance/modules/features/importlist/icon.png
-                   com/moneydance/modules/features/importlist/meta_info.dict"/>
+      <fileset dir="${src}" includes="
+    com/moneydance/modules/features/importlist/meta_info.dict
+    com/moneydance/modules/features/importlist/resources/icon.png
+    com/moneydance/modules/features/importlist/resources/*.properties"/>
       <fileset dir="${build}"
          includes="com/moneydance/modules/features/importlist/**
                    com/moneydance/apps/md/controller/**"/>

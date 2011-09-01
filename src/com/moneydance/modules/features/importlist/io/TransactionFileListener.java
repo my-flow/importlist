@@ -19,57 +19,67 @@
 package com.moneydance.modules.features.importlist.io;
 
 import java.io.File;
+import java.util.Observable;
 
-import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
+import org.apache.commons.io.monitor.FileAlterationListener;
 import org.apache.commons.io.monitor.FileAlterationObserver;
-import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 /**
  * This <code>FileAlterationListener</code> implementation is notified about
  * relevant modifications in the file system. It propagates these modifications
- * to the <code>FileAdmin</code>.
+ * to its <code>Observer</code>s.
  */
-class TransactionFileListener extends FileAlterationListenerAdaptor {
+final class TransactionFileListener
+extends Observable implements FileAlterationListener {
 
     /**
      * Static initialization of class-dependent logger.
      */
-    private static Logger log = Logger.getLogger(TransactionFileListener.class);
+    private static final Logger LOG =
+        Logger.getLogger(TransactionFileListener.class);
 
-    private final FileAdmin fileAdmin;
-    private boolean dirty;
-
-    TransactionFileListener(final FileAdmin argFileAdmin) {
-        Validate.notNull(argFileAdmin, "argFileAdmin can't be null");
-        this.fileAdmin = argFileAdmin;
+    @Override
+    public void onStart(final FileAlterationObserver observer) {
+        LOG.debug("Checking the base directory for changes.");
+        this.clearChanged();
     }
 
     @Override
-    public final void onStart(final FileAlterationObserver observer) {
-        log.debug("Checking the base directory for changes");
-        this.dirty = false;
+    public void onFileCreate(final File file) {
+        this.setChanged();
     }
 
     @Override
-    public final void onFileCreate(final File file) {
-        this.dirty = true;
+    public void onFileChange(final File file) {
+        this.setChanged();
     }
 
     @Override
-    public final void onFileChange(final File file) {
-        this.dirty = true;
+    public void onFileDelete(final File file) {
+        this.setChanged();
     }
 
     @Override
-    public final void onFileDelete(final File file) {
-        this.dirty = true;
-    }
-
-    @Override
-    public final void onStop(final FileAlterationObserver observer) {
-        if (this.dirty) {
-            this.fileAdmin.setDirty(true);
+    public void onStop(final FileAlterationObserver observer) {
+        if (this.hasChanged()) {
+            LOG.info("Base directory has changes.");
+            this.notifyObservers();
         }
+    }
+
+    @Override
+    public void onDirectoryChange(final File directory) {
+        // ignore changed directories
+    }
+
+    @Override
+    public void onDirectoryCreate(final File directory) {
+        // ignore created directories
+    }
+
+    @Override
+    public void onDirectoryDelete(final File directory) {
+        // ignore deleted directories
     }
 }

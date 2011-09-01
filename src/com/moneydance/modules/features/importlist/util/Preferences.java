@@ -20,14 +20,12 @@ package com.moneydance.modules.features.importlist.util;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Image;
-import java.io.IOException;
+import java.awt.Toolkit;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.Hashtable;
-import java.util.Properties;
+import java.util.ResourceBundle;
 
-import javax.imageio.ImageIO;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.UIManager;
@@ -36,10 +34,8 @@ import org.apache.commons.configuration.AbstractFileConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
@@ -59,71 +55,70 @@ public final class Preferences {
     /**
      * Static initialization of class-dependent logger.
      */
-    private static Logger log = Logger.getLogger(Preferences.class);
+    private static final Logger LOG = Logger.getLogger(Preferences.class);
 
-    private static Preferences  instance;
-    private final FeatureModule featureModule;
-    private final StreamTable   columnOrderDefault;
-    private final StreamTable   sortOrderDefault;
-    private Image               image;
-    private final StreamTable   columnWidths;
-    private StreamTable         columnOrder;
-    private UserPreferences     userPreferences;
-    private final Configuration config;
-    private boolean             initialized;
+    /**
+     * The resource in the JAR file to read the properties from.
+     */
+    private static final String PROPERTIES_RESOURCE
+    = "com/moneydance/modules/features/importlist/resources/"
+        + "importlist.properties";
+
+    private         FeatureModule   featureModule;
+    private final   StreamTable     columnOrderDefault;
+    private final   StreamTable     sortOrderDefault;
+    private final   StreamTable     columnWidths;
+    private         StreamTable     columnOrder;
+    private         UserPreferences userPreferences;
+    private final   Configuration   config;
+    private         ResourceBundle  localizable;
 
     /**
      * The constructor must be called exactly once before using the only
      * instance of this class.
-     * @param argFeatureModule The feature module to receive the context from.
      */
-    public Preferences(final FeatureModule argFeatureModule) {
-        Validate.isTrue(instance == null,
-        "You can instantiate Preferences only once");
-        Validate.notNull(argFeatureModule, "argFeatureModule can't be null");
-
+    Preferences() {
         AbstractFileConfiguration abstractFileConfiguration =
             new PropertiesConfiguration();
 
         try {
-            InputStream inputStream =
-                getInputStreamFromResource(Constants.PROPERTIES_RESOURCE);
+            InputStream inputStream = Helper.getInputStreamFromResource(
+                    PROPERTIES_RESOURCE);
             abstractFileConfiguration.load(inputStream);
         } catch (IllegalArgumentException e) {
-            log.warn(e.getMessage(), e);
+            LOG.warn(e.getMessage(), e);
         } catch (ConfigurationException e) {
-            log.warn(e.getMessage(), e);
+            LOG.warn(e.getMessage(), e);
         }
-        this.config = abstractFileConfiguration;
+        this.config             = abstractFileConfiguration;
 
-        this.featureModule      = argFeatureModule;
         this.columnWidths       = new StreamTable();
         this.columnOrderDefault = new StreamTable();
-        this.columnOrderDefault.put("0", Constants.DESC_NAME);
-        this.columnOrderDefault.put("1", Constants.DESC_MODIFIED);
-        this.columnOrderDefault.put("2", Constants.DESC_IMPORT);
-        this.columnOrderDefault.put("3", Constants.DESC_DELETE);
+        this.columnOrderDefault.put("0", this.getDescName());
+        this.columnOrderDefault.put("1", this.getDescModified());
+        this.columnOrderDefault.put("2", this.getDescImport());
+        this.columnOrderDefault.put("3", this.getDescDelete());
         this.sortOrderDefault   = new StreamTable();
         this.sortOrderDefault.put("0", SortOrder.ASCENDING.toString());
-
-        instance = this;
     }
 
-    public static Preferences getInstance() {
-        Validate.notNull(instance, "You must instantiate Preferences "
-                + "first before you can access it");
-        if (!instance.initialized) {
-            instance.reload();
-        }
-        return instance;
+    /**
+     * @param argFeatureModule The feature module to receive the context from.
+     */
+    public void setFeatureModule(final FeatureModule argFeatureModule) {
+        this.featureModule = argFeatureModule;
     }
 
     /**
      * Reload context from feature module.
      */
     public void reload() {
+        Validate.notNull(this.featureModule, "You must set a feature module "
+                + "first before you can reload the context");
         this.featureModule.invoke(this.getReloadContextSuffix());
-        instance.initialized = true;
+        this.localizable = ResourceBundle.getBundle(
+                this.getLocalizableResource(),
+                this.getUserPreferences().getLocale());
     }
 
     public void setContext(final FeatureModuleContext context) {
@@ -131,49 +126,33 @@ public final class Preferences {
                 context).getPreferences();
     }
 
-    public static void loadLoggerConfiguration() {
-        boolean rootIsConfigured =
-            Logger.getRootLogger().getAllAppenders().hasMoreElements();
-        if (rootIsConfigured) {
-            // do not overwrite any existing configurations
-            return;
+    private UserPreferences getUserPreferences() {
+        if (this.userPreferences == null) {
+            this.reload();
         }
-
-        Properties properties = new Properties();
-        try {
-            InputStream inputStream = Preferences.getInputStreamFromResource(
-                    Constants.LOG4J_PROPERTIES_RESOURCE);
-            properties.load(inputStream);
-        }  catch (IllegalArgumentException e) {
-            e.printStackTrace(System.err);
-        } catch (IOException e) {
-            e.printStackTrace(System.err);
-        }
-        PropertyConfigurator.configure(properties);
+        return this.userPreferences;
     }
 
     public void setAllWritablePreferencesToNull() {
         this.setBaseDirectory(null);
-        this.userPreferences.setSetting(
-                Constants.PREF_COLUMN_WIDTHS,
+        this.getUserPreferences().setSetting(
+                "importlist.column_widths",
                 (StreamTable) null);
-        this.userPreferences.setSetting(
-                Constants.PREF_COLUMN_ORDER,
-                (StreamTable) null);
-        this.userPreferences.setSetting(
-                Constants.PREF_SORT_ORDER,
+        this.setColumnNames(
+                (Hashtable<String, String>) null);
+        this.getUserPreferences().setSetting(
+                "importlist.sort_order",
                 (StreamTable) null);
     }
 
     public int getVersion() {
-        String fullString = this.userPreferences.getSetting(
-                Constants.PREF_CURRENT_VERSION,
-                null);
+        String fullString = this.getUserPreferences().getSetting(
+                "current_version");
         if (fullString == null) {
             return 0;
         }
         int endIndex = Math.min(
-                Constants.LENGTH_OF_VERSION_DIGITS,
+                this.config.getInt("length_of_version_digits"),
                 fullString.length());
         String substring = fullString.substring(0, endIndex);
         return Integer.parseInt(substring);
@@ -184,184 +163,132 @@ public final class Preferences {
      * homepage views.
      */
     public int getVersionWithOpaqueHomepageView() {
-        return this.config.getInt(
-                "version_with_opaque_homepage_view",
-                Constants.VERSION_WITH_OPAQUE_HOMEPAGE_VIEW);
+        return this.config.getInt("version_with_opaque_homepage_view");
     }
 
     public String getBaseDirectory() {
-        return this.userPreferences.getSetting(
-                Constants.PREF_BASE_DIR,
-                null);
+        return this.getUserPreferences().getSetting("importlist.import_dir");
     }
 
     public void setBaseDirectory(final String baseDirectory) {
-        this.userPreferences.setSetting(
-                Constants.PREF_BASE_DIR,
+        this.getUserPreferences().setSetting(
+                "importlist.import_dir",
                 baseDirectory);
     }
 
     public String getImportDirectory() {
-        return this.userPreferences.getSetting(
-                UserPreferences.IMPORT_DIR,
-                null);
-    }
-
-    public Image getIconImage() {
-        if (this.image != null) {
-            return this.image;
-        }
-        try {
-            log.debug("Loading icon " + this.getIconResource()
-                    + " from resource.");
-            InputStream inputStream =
-                getInputStreamFromResource(this.getIconResource());
-            this.image = ImageIO.read(inputStream);
-        } catch (IllegalArgumentException e) {
-            log.warn(e.getMessage(), e);
-        } catch (IOException e) {
-            log.warn(e.getMessage(), e);
-        }
-        return this.image;
+        return this.getUserPreferences().getSetting(UserPreferences.IMPORT_DIR);
     }
 
     public void setColumnWidths(
             final int column,
             final int columnWidth) {
-        this.columnWidths.put(column + "", columnWidth);
-        this.userPreferences.setSetting(
-                Constants.PREF_COLUMN_WIDTHS,
+        this.columnWidths.put(Integer.toString(column), columnWidth);
+        this.getUserPreferences().setSetting(
+                "importlist.column_widths",
                 this.columnWidths);
     }
 
     public int getColumnWidths(final int column) {
-        StreamTable streamTable = this.userPreferences.getTableSetting(
-                Constants.PREF_COLUMN_WIDTHS,
+        StreamTable streamTable = this.getUserPreferences().getTableSetting(
+                "importlist.column_widths",
                 this.columnWidths);
-        return streamTable.getInt(column + "", Constants.BUTTON_WIDTH);
+        return streamTable.getInt(
+                Integer.toString(column),
+                this.config.getInt("column_width"));
     }
 
     public void setColumnNames(final Hashtable<String, String> hashtable) {
-        StreamTable streamTable = new StreamTable();
-        streamTable.merge(hashtable);
-        this.userPreferences.setSetting(
-                Constants.PREF_COLUMN_ORDER,
+        StreamTable streamTable = null;
+        if (hashtable != null) {
+            streamTable = new StreamTable();
+            streamTable.merge(hashtable);
+        }
+        this.getUserPreferences().setSetting(
+                "importlist.column_order",
                 streamTable);
     }
 
     public String getColumnName(final int column) {
-        StreamTable streamTable = this.userPreferences.getTableSetting(
-                Constants.PREF_COLUMN_ORDER,
-                this.columnOrderDefault);
         if (this.columnOrder == null) {
-            this.columnOrder = streamTable;
+            this.columnOrder = this.getUserPreferences().getTableSetting(
+                    "importlist.column_order",
+                    this.columnOrderDefault);
         }
-        return this.columnOrder.getStr(column + "", null);
+        return this.columnOrder.getStr(Integer.toString(column), null);
     }
 
     public void setSortKey(final RowSorter.SortKey sortKey) {
         StreamTable streamTable = new StreamTable();
         streamTable.put(sortKey.getColumn(), sortKey.getSortOrder().toString());
-        this.userPreferences.setSetting(
-                Constants.PREF_SORT_ORDER,
+        this.getUserPreferences().setSetting(
+                "importlist.sort_order",
                 streamTable);
     }
 
     public RowSorter.SortKey getSortKey() {
-        StreamTable streamTable = this.userPreferences.getTableSetting(
-                Constants.PREF_SORT_ORDER,
+        StreamTable streamTable = this.getUserPreferences().getTableSetting(
+                "importlist.sort_order",
                 null);
         if (streamTable == null || streamTable.keySet().isEmpty()) {
             streamTable = this.sortOrderDefault;
         }
         Object key        = streamTable.keys().nextElement();
-        int column        = Integer.parseInt(key + "");
+        int column        = Integer.parseInt(key.toString());
         String sortOrder  = streamTable.getStr(key, null);
         return new RowSorter.SortKey(column, SortOrder.valueOf(sortOrder));
     }
 
     public int getColumnCount() {
-        StreamTable streamTable = this.userPreferences.getTableSetting(
-                Constants.PREF_COLUMN_ORDER,
-                this.columnOrderDefault);
         if (this.columnOrder == null) {
-            this.columnOrder = streamTable;
+            this.columnOrder = this.getUserPreferences().getTableSetting(
+                    "importlist.column_order",
+                    this.columnOrderDefault);
         }
         return this.columnOrder.size();
     }
 
     public CustomDateFormat getDateFormatter() {
-        return this.userPreferences.getShortDateFormatter();
+        return this.getUserPreferences().getShortDateFormatter();
     }
 
     public DateFormat getTimeFormatter() {
         return DateFormat.getTimeInstance();
     }
 
-    public Color getForeground() {
-        int foregroundValue = this.userPreferences.getIntSetting(
-                Constants.PREF_FG_COLOR,
-                Constants.COLOR_VALUE_FG_DEF);
-        return new Color(foregroundValue);
-    }
-
-    public Color getBackground() {
-        int backgroundValue = this.userPreferences.getIntSetting(
-                Constants.PREF_BG_COLOR,
-                Constants.COLOR_VALUE_BG_DEF);
-        return new Color(backgroundValue);
-    }
-
-    public Color getBackgroundAlt() {
-        int backgroundAltValue = this.userPreferences.getIntSetting(
-                Constants.PREF_BG_COLOR_ALT,
-                Constants.COLOR_VALUE_BG_ALT_DEF);
-        return new Color(backgroundAltValue);
-    }
-
-    public Font getHeaderFont() {
-        return UIManager.getFont(Constants.HEADER_KEY_FONT);
-    }
-
-    public Font getBodyFont() {
-        return UIManager.getFont(Constants.BODY_KEY_FONT);
-    }
-
-    public int getHeaderRowHeight() {
-        return (int)
-        (Constants.FACTOR_ROW_HEIGHT * this.getHeaderFont().getSize());
-    }
-
-    public int getBodyRowHeight() {
-        return (int)
-        (Constants.FACTOR_ROW_HEIGHT * this.getBodyFont().getSize());
-    }
-
     /**
      * @return The descriptive name of this extension.
      */
     public String getExtensionName() {
-        return this.config.getString(
-                "extension_name",
-                Constants.EXTENSION_NAME);
+        return this.config.getString("extension_name");
     }
 
     /**
      * @return The ID string for this extension.
      */
-    public String getId() {
-        return this.config.getString(
-                "id",
-                Constants.ID);
+    public String getExtensionIdentifier() {
+        return this.config.getString("extension_identifier");
     }
 
     /**
      * @return The icon image that represents this extension.
      */
     public String getIconResource() {
-        return this.config.getString(
-                "icon_resource",
-                Constants.ICON_RESOURCE);
+        return this.config.getString("icon_resource");
+    }
+
+    /**
+     * @return The resource that contains the configuration of log4j.
+     */
+    public String getLog4jPropertiesResource() {
+        return this.config.getString("log4j_properties_resource");
+    }
+
+    /**
+     * @return The resource in the JAR file to read the language strings from.
+     */
+    public String getLocalizableResource() {
+        return this.config.getString("localizable_resource");
     }
 
     /**
@@ -369,9 +296,7 @@ public final class Preferences {
      * base directory.
      */
     public String getChooseBaseDirSuffix() {
-        return this.config.getString(
-                "choose_base_dir_suffix",
-                Constants.CHOOSE_BASE_DIR_SUFFIX);
+        return this.config.getString("choose_base_dir_suffix");
     }
 
     /**
@@ -379,18 +304,14 @@ public final class Preferences {
      * which this extension is running.
      */
     public String getReloadContextSuffix() {
-        return this.config.getString(
-                "reload_context_suffix",
-                Constants.RELOAD_CONTEXT_SUFFIX);
+        return this.config.getString("reload_context_suffix");
     }
 
     /**
      * @return The prefix of the application event that imports a given file.
      */
     public String getTransactionFileImportUriPrefix() {
-        return this.config.getString(
-                "transaction_file_import_uri_prefix",
-                Constants.TRANSACTION_FILE_IMPORT_URI_PREFIX);
+        return this.config.getString("transaction_file_import_uri_prefix");
     }
 
     /**
@@ -398,9 +319,7 @@ public final class Preferences {
      * using the text file importer plugin.
      */
     public String getTextFileImportUriPrefix() {
-        return this.config.getString(
-                "text_file_import_uri_prefix",
-                Constants.TEXT_FILE_IMPORT_URI_PREFIX);
+        return this.config.getString("text_file_import_uri_prefix");
     }
 
     /**
@@ -408,9 +327,7 @@ public final class Preferences {
      * scanner.
      */
     public int getMonitorIntervall() {
-        return this.config.getInt(
-                "monitor_intervall",
-                Constants.MONITOR_INTERVAL);
+        return this.config.getInt("monitor_intervall");
     }
 
     /**
@@ -420,10 +337,6 @@ public final class Preferences {
     public String[] getTransactionFileExtensions() {
         String[] transactionFileExtensions =
             this.config.getStringArray("transaction_file_extensions");
-        if (transactionFileExtensions == null
-                || transactionFileExtensions.length == 0) {
-            transactionFileExtensions = Constants.TRANSACTION_FILE_EXTENSIONS;
-        }
         return transactionFileExtensions;
     }
 
@@ -434,10 +347,6 @@ public final class Preferences {
     public String[] getTextFileExtensions() {
         String[] textFileExtensions =
             this.config.getStringArray("text_file_extensions");
-        if (textFileExtensions == null
-                || textFileExtensions.length == 0) {
-            textFileExtensions = Constants.TEXT_FILE_EXTENSIONS;
-        }
         return textFileExtensions;
     }
 
@@ -445,54 +354,42 @@ public final class Preferences {
      * @return Maximum length of a filename displayed in an error message.
      */
     public int getMaxFilenameLength() {
-        return this.config.getInt(
-                "max_filename_length",
-                Constants.MAX_FILENAME_LENGTH);
+        return this.config.getInt("max_filename_length");
     }
 
     /**
      * @return Unique descriptor of the "name" column.
      */
     public String getDescName() {
-        return this.config.getString(
-                "desc_name",
-                Constants.DESC_NAME);
+        return this.config.getString("desc_name");
     }
 
     /**
      * @return Unique descriptor of the "modified" column.
      */
     public String getDescModified() {
-        return this.config.getString(
-                "desc_modified",
-                Constants.DESC_MODIFIED);
+        return this.config.getString("desc_modified");
     }
 
     /**
      * @return Unique descriptor of the "import" column.
      */
     public String getDescImport() {
-        return this.config.getString(
-                "desc_import",
-                Constants.DESC_IMPORT);
+        return this.config.getString("desc_import");
     }
 
     /**
      * @return Unique descriptor of the "delete" column.
      */
     public String getDescDelete() {
-        return this.config.getString(
-                "desc_delete",
-                Constants.DESC_DELETE);
+        return this.config.getString("desc_delete");
     }
 
     /**
      * @return Indentation prefix for table header and values.
      */
     public String getIndentationPrefix() {
-        return this.config.getString(
-                "indentation_prefix",
-                Constants.INDENTATION_PREFIX);
+        return this.config.getString("indentation_prefix");
     }
 
     /**
@@ -500,9 +397,7 @@ public final class Preferences {
      */
     public String getHeaderValueName() {
         final String headerValueName =
-            this.config.getString(
-                    "header_value_name",
-                    Constants.HEADER_VALUE_NAME);
+            this.localizable.getString("header_value_name");
         return this.getIndentationPrefix() + headerValueName;
     }
 
@@ -511,9 +406,7 @@ public final class Preferences {
      */
     public String getHeaderValueModified() {
         final String headerValueModified =
-            this.config.getString(
-                    "header_value_modified",
-                    Constants.HEADER_VALUE_MODIFIED);
+            this.localizable.getString("header_value_modified");
         return this.getIndentationPrefix() + headerValueModified;
     }
 
@@ -522,9 +415,7 @@ public final class Preferences {
      */
     public String getHeaderValueImport() {
         final String headerValueImport =
-            this.config.getString(
-                    "header_value_import",
-                    Constants.HEADER_VALUE_IMPORT);
+            this.localizable.getString("header_value_import");
         return this.getIndentationPrefix() + headerValueImport;
     }
 
@@ -533,9 +424,7 @@ public final class Preferences {
      */
     public String getHeaderValueDelete() {
         final String headerValueDelete =
-            this.config.getString(
-                    "header_value_delete",
-                    Constants.HEADER_VALUE_DELETE);
+            this.localizable.getString("header_value_delete");
         return this.getIndentationPrefix() + headerValueDelete;
     }
 
@@ -543,63 +432,91 @@ public final class Preferences {
      * @return Label of the "import" button.
      */
     public String getLabelImportButton() {
-        return this.config.getString(
-                "label_import_button",
-                Constants.LABEL_IMPORT_BUTTON);
+        return this.localizable.getString("label_import_button");
     }
 
     /**
      * @return Label of the "delete" button.
      */
     public String getLabelDeleteButton() {
-        return this.config.getString(
-                "label_delete_button",
-                Constants.LABEL_DELETE_BUTTON);
+        return this.localizable.getString("label_delete_button");
     }
 
     /**
      * @return Determines if the button columns can have different widths.
      */
-    public boolean getButtonResizable() {
-        return this.config.getBoolean(
-                "button_resizable",
-                Constants.BUTTON_RESIZABLE);
+    public boolean isButtonResizable() {
+        return this.config.getBoolean("button_resizable");
     }
 
     /**
      * @return Minimum width of all columns.
      */
     public int getMinColumnWidth() {
-        return this.config.getInt(
-                "min_column_width",
-                Constants.MIN_COLUMN_WIDTH);
+        return this.config.getInt("min_column_width");
     }
 
     /**
      * @return Determines if reordering of the columns is allowed.
      */
-    public boolean getAllowReordering() {
-        return this.config.getBoolean(
-                "allow_reordering",
-                Constants.ALLOW_REORDERING);
+    public boolean isReorderingAllowed() {
+        return this.config.getBoolean("reordering_allowed");
     }
 
     /**
+     * @return Minimum width of the file table.
+     */
+    public int getMinimumTableWidth() {
+        return this.config.getInt("minimum_table_width");
+    }
+
+    /**
+     * @return Minimum height of the file table.
+     */
+    public int getMinimumTableHeight() {
+        return this.config.getInt("minimum_table_height");
+    }
+
+    /**
+     * @return Constant offset to determine the preferred table height.
+     */
+    public int getTableHeightOffset() {
+        return this.config.getInt("table_height_offset");
+    }
+
+    /**
+     * @param rowCount The number of rows to display inside the table.
      * @return Preferred width of the file table.
      */
-    public int getPreferredTableWidth() {
-        return this.config.getInt(
-                "preferred_table_width",
-                Constants.PREFERRED_TABLE_WIDTH);
+    public int getPreferredTableWidth(final int rowCount) {
+        return this.getMinimumTableWidth();
     }
 
     /**
+     * @param rowCount The number of rows to display inside the table.
      * @return Preferred height of the file table.
      */
-    public int getPreferredTableHeight() {
-        return this.config.getInt(
-                "preferred_table_height",
-                Constants.PREFERRED_TABLE_HEIGHT);
+    public int getPreferredTableHeight(final int rowCount) {
+        int fit = this.getTableHeightOffset() + this.getHeaderRowHeight()
+        + rowCount * this.getBodyRowHeight();
+        int min = Math.min(this.getMaximumTableHeight(), fit);
+        return Math.max(this.getMinColumnWidth(), min);
+    }
+
+    /**
+     * @return Maximum width of the file table.
+     */
+    public int getMaximumTableWidth() {
+        return
+        (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() / (2 + 1);
+    }
+
+    /**
+     * @return Maximum height of the file table.
+     */
+    public int getMaximumTableHeight() {
+        return
+        (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / (2 + 1);
     }
 
     /**
@@ -607,9 +524,7 @@ public final class Preferences {
      * found.
      */
     public int getPreferredEmptyMessageWidth() {
-        return this.config.getInt(
-                "preferred_empty_message_width",
-                Constants.PREFERRED_EMPTY_MESSAGE_WIDTH);
+        return this.config.getInt("preferred_empty_message_width");
     }
 
     /**
@@ -617,19 +532,7 @@ public final class Preferences {
      * found.
      */
     public int getPreferredEmptyMessageHeight() {
-        return this.config.getInt(
-                "preferred_empty_message_height",
-                Constants.PREFERRED_EMPTY_MESSAGE_HEIGHT);
-    }
-
-    /**
-     * @return The title of the dialog that is displayed to choose the base
-     * directory.
-     */
-    public String getDirectoryChooserTitle() {
-        return this.config.getString(
-                "directory_chooser_title",
-                Constants.DIRECTORY_CHOOSER_TITLE);
+        return this.config.getInt("preferred_empty_message_height");
     }
 
     /**
@@ -638,9 +541,63 @@ public final class Preferences {
      * @return The maximum length of each line.
      */
     public int getMessageFilenameLineMaxLength() {
-        return this.config.getInt(
-                "message_filename_line_max_length",
-                Constants.MESSAGE_FILENAME_LINE_MAX_LENGTH);
+        return this.config.getInt("message_filename_line_max_length");
+    }
+
+    /**
+     * @return Default foreground color.
+     */
+    public Color getForeground() {
+        int foregroundValue = this.getUserPreferences().getIntSetting(
+                UserPreferences.GUI_HOMEPG_FG,
+                this.config.getInt("color_value_fg_def"));
+        return new Color(foregroundValue);
+    }
+
+    /**
+     * @return Default background color.
+     */
+    public Color getBackground() {
+        int backgroundValue = this.getUserPreferences().getIntSetting(
+                UserPreferences.GUI_HOMEPG_BG,
+                this.config.getInt("color_value_bg_def"));
+        return new Color(backgroundValue);
+    }
+
+    /**
+     * @return Default alternative background color.
+     */
+    public Color getBackgroundAlt() {
+        int backgroundAltValue = this.getUserPreferences().getIntSetting(
+                "gui.home_alt_bg",
+                this.config.getInt("color_value_bg_alt_def"));
+        return new Color(backgroundAltValue);
+    }
+
+    public Font getHeaderFont() {
+        return UIManager.getFont("OptionPane.font");
+    }
+
+    public Font getBodyFont() {
+        return UIManager.getFont("Label.font");
+    }
+
+    public int getHeaderRowHeight() {
+        return (int) (this.config.getDouble("factor_row_height")
+                * this.getHeaderFont().getSize());
+    }
+
+    public int getBodyRowHeight() {
+        return (int) (this.config.getDouble("factor_row_height")
+                * this.getBodyFont().getSize());
+    }
+
+    /**
+     * @return The title of the dialog that is displayed to choose the base
+     * directory.
+     */
+    public String getDirectoryChooserTitle() {
+        return this.localizable.getString("directory_chooser_title");
     }
 
     /**
@@ -649,10 +606,9 @@ public final class Preferences {
      *  deleted.
      */
     public String getConfirmationMessageDeleteFile(final String filename) {
-        String rawMessage = this.config.getString(
-                "confirmation_message_delete_file",
-                Constants.CONFIRMATION_MESSAGE_DELETE_FILE);
-        return rawMessage.replace("(0)", this.getMarkupFilename(filename));
+        String rawMessage = this.localizable.getString(
+                "confirmation_message_delete_file");
+        return rawMessage.replace("(0)", Helper.getMarkupFilename(filename));
     }
 
     /**
@@ -660,29 +616,24 @@ public final class Preferences {
      * @return Error message to be displayed if a file cannot be deleted.
      */
     public String getErrorMessageDeleteFile(final String filename) {
-        String rawMessage = this.config.getString(
-                "error_message_delete_file",
-                Constants.ERROR_MESSAGE_DELETE_FILE);
-        return rawMessage.replace("(0)", this.getMarkupFilename(filename));
+        String rawMessage = this.localizable.getString(
+                "error_message_delete_file");
+        return rawMessage.replace("(0)", Helper.getMarkupFilename(filename));
     }
 
     /**
      * @return Delete button in confirmation message.
      */
     public String getOptionDeleteFile() {
-        return this.config.getString(
-                "option_delete_file",
-                Constants.OPTION_DELETE_FILE);
+        return this.localizable.getString("option_delete_file");
     }
 
     /**
      * @return Cancel button in confirmation message.
      */
     public String getOptionCancel() {
-        return this.config.getString(
-                "option_cancel",
-                Constants.OPTION_CANCEL);
-    };
+        return this.localizable.getString("option_cancel");
+    }
 
     /**
      * @param baseDirectory The base directory which does not contain any files
@@ -690,32 +641,7 @@ public final class Preferences {
      * @return Message to display if the list of files is empty.
      */
     public String getEmptyMessage(final String baseDirectory) {
-        String rawMessage = this.config.getString(
-                "empty_message",
-                Constants.EMPTY_MESSAGE);
+        String rawMessage = this.localizable.getString("empty_message");
         return rawMessage.replace("(0)", baseDirectory);
-    }
-
-    private String getMarkupFilename(final String filename) {
-        int length = this.getMessageFilenameLineMaxLength();
-
-        int numberOfLines = filename.length() / length + 1;
-        String[] substrings = new String[numberOfLines];
-
-        for (int i = 0; i < numberOfLines; i++) {
-            int start =  i      * length;
-            int end   = (i + 1) * length;
-            substrings[i] = StringUtils.substring(filename, start, end);
-        }
-        return StringUtils.join(substrings, "<br>");
-    }
-
-    private static InputStream getInputStreamFromResource(
-            final String resource) {
-        ClassLoader cl          = Preferences.class.getClassLoader();
-        InputStream inputStream = cl.getResourceAsStream(resource);
-        Validate.notNull(inputStream,
-                "Resource " + resource + " was not found.");
-        return inputStream;
     }
 }

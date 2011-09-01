@@ -29,12 +29,12 @@ import javax.swing.JTable;
 
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 
-class DeleteEditor extends DefaultCellEditor {
+final class DeleteEditor extends DefaultCellEditor {
 
     private static final long serialVersionUID = -2042274086341185241L;
-    private final FileAdmin         fileAdmin;
-    private final ButtonRenderer    buttonRenderer;
-    private String label;
+    private final transient FileAdmin       fileAdmin;
+    private final transient ButtonRenderer  buttonRenderer;
+    private                 String          label;
 
     DeleteEditor(final FileAdmin argFileAdmin,
             final ButtonRenderer argButtonRenderer) {
@@ -44,12 +44,12 @@ class DeleteEditor extends DefaultCellEditor {
     }
 
     @Override
-    public final Object getCellEditorValue() {
+    public Object getCellEditorValue() {
         return this.label;
     }
 
     @Override
-    public final Component getTableCellEditorComponent(
+    public Component getTableCellEditorComponent(
             final JTable table,
             final Object value,
             final boolean isSelected,
@@ -75,5 +75,5 @@ class DeleteEditor extends DefaultCellEditor {
                 DeleteEditor.this.fileAdmin.deleteRow(rowNumber);
             }
         };
-    };
+    }
 }

@@ -18,7 +18,11 @@
 
 package com.moneydance.modules.features.importlist.view;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -73,6 +77,42 @@ class ButtonRenderer implements TableCellRenderer {
         if (value != null) {
             button.setText(value.toString());
         }
+        button.addMouseListener(getMouseListener(button));
         return button;
+    }
+
+    private static MouseListener getMouseListener(final AbstractButton button) {
+        return new MouseAdapter() {
+            private boolean wasOpaque;
+            private Color foreground;
+            private Color background;
+
+            @Override
+            public void mousePressed(final MouseEvent mouseevent) {
+                this.wasOpaque  = button.isOpaque();
+                this.foreground = button.getForeground();
+                this.background = button.getBackground();
+
+                Color newForeground = this.foreground.brighter();
+                Color newBackground = this.background.brighter();
+                if (newForeground.equals(this.foreground)) {
+                    newForeground = this.foreground.darker();
+                }
+                if (newBackground.equals(this.background)) {
+                    newBackground = this.background.darker();
+                }
+
+                button.setOpaque(true);
+                button.setForeground(newForeground);
+                button.setBackground(newBackground);
+            }
+
+            @Override
+            public void mouseReleased(final MouseEvent mouseevent) {
+                button.setOpaque(this.wasOpaque);
+                button.setForeground(this.foreground);
+                button.setBackground(this.background);
+            }
+        };
     }
 }

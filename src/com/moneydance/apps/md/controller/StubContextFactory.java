@@ -23,26 +23,27 @@ import org.apache.log4j.Logger;
 import com.moneydance.util.StreamTable;
 
 
-public class StubContextFactory {
+public final class StubContextFactory {
 
     /**
      * Static initialization of class-dependent logger.
      */
-    private static Logger log = Logger.getLogger(StubContextFactory.class);
+    private static final Logger LOG =
+        Logger.getLogger(StubContextFactory.class);
 
-    private final FeatureModule featureModule;
-    private final FeatureModuleContext featureModuleContext;
+    private final transient FeatureModule featureModule;
+    private final transient FeatureModuleContext context;
 
     public StubContextFactory(final FeatureModule argFeatureModule,
-            final FeatureModuleContext argFeatureModuleContext) {
-        this.featureModule        = argFeatureModule;
-        this.featureModuleContext = argFeatureModuleContext;
+            final FeatureModuleContext argContext) {
+        this.featureModule  = argFeatureModule;
+        this.context        = argContext;
     }
 
-    public final void setup() {
-        if (this.featureModuleContext == null) {
-            log.info("Setting up stub context");
-            FeatureModuleContext newContext =
+    public void setup() {
+        if (this.context == null) {
+            LOG.info("Setting up stub context");
+            final FeatureModuleContext newContext =
                 new StubContext(this.featureModule);
             this.featureModule.setup(
                     newContext,

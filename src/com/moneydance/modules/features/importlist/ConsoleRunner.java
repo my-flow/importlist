@@ -21,6 +21,11 @@ package com.moneydance.modules.features.importlist;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import org.apache.log4j.Logger;
+
+import com.moneydance.modules.features.importlist.util.Helper;
+
+
 /**
  * This class is used to run the extension as a stand-alone application from
  * the console or from an IDE. It allows for fast feedback during the
@@ -28,10 +33,20 @@ import javax.swing.JFrame;
  */
 final class ConsoleRunner {
 
+    static {
+        Helper.loadLoggerConfiguration();
+    }
+
     /**
-     * Private constructor prevents this class from being instantiated.
+     * Static initialization of class-dependent logger.
+     */
+    private static final Logger LOG = Logger.getLogger(ConsoleRunner.class);
+
+    /**
+     * Restrictive constructor.
      */
     private ConsoleRunner() {
+        // Prevents this class from being instantiated from the outside.
     }
 
     /**
@@ -43,18 +58,18 @@ final class ConsoleRunner {
     public static void main(final String[] args) {
         String baseDirectory = null;
 
-        for (int i = 0; args != null && i < args.length; i++) {
-            String arg = args[i].trim();
-            if (arg.equals("-d")) {
-                System.err.println("debugging...");
+        for (String arg : args) {
+            if ("-d".equals(arg)) {
+                LOG.warn("debugging...");
                 com.moneydance.apps.md.controller.Main.DEBUG = true;
                 continue;
             }
             if (arg.startsWith("-basedirectory=")) {
-                baseDirectory = arg.substring("-basedirectory=".length());
+                baseDirectory = arg.substring(
+                        "-basedirectory=".length());
                 continue;
             }
-            System.err.println("ignoring argument: " + arg);
+            LOG.warn("ignoring argument: " + arg);
         }
 
         Main main = new Main();
@@ -64,7 +79,10 @@ final class ConsoleRunner {
         JFrame frame = new JFrame(main.getDisplayName());
         JComponent guiView = main.getHomePageView().getGUIView(null);
         frame.setContentPane(guiView);
-        frame.setSize(guiView.getPreferredSize());
+        frame.setMinimumSize(guiView.getMinimumSize());
+        frame.setPreferredSize(guiView.getPreferredSize());
+        frame.setMaximumSize(guiView.getMaximumSize());
+        frame.setSize(frame.getPreferredSize());
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

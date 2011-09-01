@@ -17,7 +17,6 @@
  */
 
 /**
- * Provides classes for accessing and modifiying the visual components that are
- * displayed on the homepage.
+ * Provides classes for displaying the visual components on the homepage.
  */
 package com.moneydance.modules.features.importlist.view;

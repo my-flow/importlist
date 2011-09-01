@@ -27,13 +27,14 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
+import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 /**
  * This decorator class sets header-specific attributes to a
  * <code>TableCellRenderer</code>.
  */
-class HeaderRenderer implements TableCellRenderer {
+final class HeaderRenderer implements TableCellRenderer {
 
     private static final long serialVersionUID = 3121884943197710031L;
     private final TableCellRenderer defaultHeaderTableCellRenderer;
@@ -45,11 +46,11 @@ class HeaderRenderer implements TableCellRenderer {
             final TableCellRenderer argDefaultHeaderTableCellRenderer) {
         this.colorSchemeHelper              = argColorSchemeHelper;
         this.defaultHeaderTableCellRenderer = argDefaultHeaderTableCellRenderer;
-        this.prefs                          = Preferences.getInstance();
+        this.prefs                          = Helper.getPreferences();
     }
 
     @Override
-    public final Component getTableCellRendererComponent(
+    public Component getTableCellRendererComponent(
             final JTable table,
             final Object value,
             final boolean isSelected,

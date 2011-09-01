@@ -17,6 +17,7 @@
  */
 
 package com.moneydance.modules.features.importlist.io;
+
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -26,6 +27,7 @@ import org.apache.commons.io.filefilter.AbstractFileFilter;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.log4j.Logger;
 
+import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 
@@ -35,67 +37,63 @@ import com.moneydance.modules.features.importlist.util.Preferences;
  * system to be monitored. Choosing/resetting the base directory is reflected
  * in the user's preferences (if there are any).
  */
-class DirectoryChooser {
+final class DirectoryChooser {
 
     /**
      * Static initialization of class-dependent logger.
      */
-    private static Logger log = Logger.getLogger(DirectoryChooser.class);
+    private static final Logger LOG = Logger.getLogger(DirectoryChooser.class);
 
-    private static final long serialVersionUID = -8581693236906919725L;
-    private final Preferences prefs;
-    private File  baseDirectory;
+    private final   AbstractFileFilter validDirFilter;
+    private final   Preferences prefs;
+    private File    baseDirectory;
 
     /**
      * @param argBaseDirectory set the base directory when executed as a stand-
      * alone application
      */
     DirectoryChooser(final String argBaseDirectory) {
+        this.validDirFilter = new ValidDirFilter();
 
-        AbstractFileFilter validDirectoryFilter = new AbstractFileFilter() {
-            @Override
-            public boolean accept(final File file) {
-                return file != null
-                && DirectoryFileFilter.DIRECTORY.accept(file);
-            }
-        };
-
-        this.prefs = Preferences.getInstance();
+        this.prefs = Helper.getPreferences();
         if (argBaseDirectory != null) {
             this.baseDirectory  = new File(argBaseDirectory);
         } else if (this.prefs.getBaseDirectory() != null) {
             this.baseDirectory = new File(this.prefs.getBaseDirectory());
         }
+    }
 
-        if (!validDirectoryFilter.accept(this.baseDirectory)) {
+    void reset() {
+        this.baseDirectory = null;
+        this.validateBaseDirectory();
+        LOG.info("Reset base directory to "
+                + this.baseDirectory.getAbsolutePath());
+    }
+
+    File getBaseDirectory() {
+        this.validateBaseDirectory();
+        return this.baseDirectory;
+    }
+
+    private void validateBaseDirectory() {
+        if (!this.validDirFilter.accept(this.baseDirectory)) {
             this.displayFileChooser();
         }
 
-        if (!validDirectoryFilter.accept(this.baseDirectory)
+        if (!this.validDirFilter.accept(this.baseDirectory)
                 && this.prefs.getImportDirectory() != null) {
             this.baseDirectory = new File(this.prefs.getImportDirectory());
         }
 
-        if (!validDirectoryFilter.accept(this.baseDirectory)) {
+        if (!this.validDirFilter.accept(this.baseDirectory)) {
             this.baseDirectory = FileUtils.getUserDirectory();
         }
-        log.info("Base directory is " + this.baseDirectory.getAbsolutePath());
+        LOG.info("Base directory is " + this.baseDirectory.getAbsolutePath());
         this.saveBaseDirectoryInPreferences();
-    }
-
-    final void reset() {
-        this.displayFileChooser();
-        log.info("Reset base directory to "
-                + this.baseDirectory.getAbsolutePath());
-        this.saveBaseDirectoryInPreferences();
-    }
-
-    final File getBaseDirectory() {
-        return this.baseDirectory;
     }
 
     private void displayFileChooser() {
-        JFileChooser fileChooser = new JFileChooser();
+        final JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle(this.prefs.getDirectoryChooserTitle());
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         // disable the "All files" option.
@@ -103,7 +101,7 @@ class DirectoryChooser {
 
         fileChooser.setCurrentDirectory(FileUtils.getUserDirectory());
         if (this.baseDirectory != null) {
-            File parentDirectory = this.baseDirectory.getParentFile();
+            final File parentDirectory = this.baseDirectory.getParentFile();
             fileChooser.setCurrentDirectory(parentDirectory);
         }
 
@@ -111,10 +109,20 @@ class DirectoryChooser {
             return;
         }
 
-        this.baseDirectory = fileChooser.getSelectedFile();
+        if (this.validDirFilter.accept(fileChooser.getSelectedFile())) {
+            this.baseDirectory = fileChooser.getSelectedFile();
+        }
     }
 
     private void saveBaseDirectoryInPreferences() {
         this.prefs.setBaseDirectory(this.baseDirectory.getAbsolutePath());
+    }
+
+    private static class ValidDirFilter extends AbstractFileFilter {
+        @Override
+        public boolean accept(final File file) {
+            return file != null
+            && DirectoryFileFilter.DIRECTORY.accept(file);
+        }
     }
 }

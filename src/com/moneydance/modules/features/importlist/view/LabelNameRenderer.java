@@ -20,17 +20,24 @@ package com.moneydance.modules.features.importlist.view;
 
 import java.awt.Component;
 
-import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.DefaultTableCellRenderer;
 
-class LabelRenderer implements TableCellRenderer {
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Preferences;
+
+class LabelNameRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 7553393304980261323L;
-    private final ColorSchemeHelper colorSchemeHelper;
+    private final transient ColorSchemeHelper colorSchemeHelper;
+    private final transient Preferences       prefs;
 
-    LabelRenderer(final ColorSchemeHelper argColorSchemeHelper) {
+
+
+    LabelNameRenderer(final ColorSchemeHelper argColorSchemeHelper) {
+        super();
         this.colorSchemeHelper = argColorSchemeHelper;
+        this.prefs             = Helper.getPreferences();
     }
 
     @Override
@@ -41,12 +48,20 @@ class LabelRenderer implements TableCellRenderer {
             final boolean hasFocus,
             final int row,
             final int column) {
-        JLabel label = new JLabel();
-        label.setOpaque(false);
-        this.colorSchemeHelper.applyColorScheme(label, row);
+        this.setOpaque(false);
+        this.colorSchemeHelper.applyColorScheme(this, row);
+        String label = null;
         if (value != null) {
-            label.setText(value.toString());
+            label = this.prefs.getIndentationPrefix() + value.toString();
         }
-        return label;
+        super.getTableCellRendererComponent(
+                table,
+                label,
+                isSelected,
+                hasFocus,
+                row,
+                column);
+        this.setBorder(noFocusBorder);
+        return this;
     }
 }

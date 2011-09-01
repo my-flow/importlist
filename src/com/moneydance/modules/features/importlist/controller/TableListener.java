@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.view;
+package com.moneydance.modules.features.importlist.controller;
 
 import java.util.Hashtable;
 
@@ -31,6 +31,7 @@ import javax.swing.event.TableColumnModelListener;
 
 import org.apache.log4j.Logger;
 
+import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 /**
@@ -38,38 +39,39 @@ import com.moneydance.modules.features.importlist.util.Preferences;
  * and resizing of the table. It saves the modifications in the
  * <code>Preferences</code>.
  */
-class TableListener implements TableColumnModelListener, RowSorterListener {
+final class TableListener
+implements TableColumnModelListener, RowSorterListener {
 
     /**
      * Static initialization of class-dependent logger.
      */
-    private static Logger log = Logger.getLogger(TableListener.class);
+    private static final Logger LOG = Logger.getLogger(TableListener.class);
 
     private final Preferences prefs;
     private final JTable table;
     private int lastFrom;
     private int lastTo;
 
-    public TableListener(final JTable argTable) {
-        this.prefs = Preferences.getInstance();
+    TableListener(final JTable argTable) {
+        this.prefs = Helper.getPreferences();
         this.table = argTable;
     }
 
     @Override
-    public final void columnMarginChanged(final ChangeEvent e) {
-        log.info("Margin of a column changed.");
+    public void columnMarginChanged(final ChangeEvent event) {
+        LOG.info("Margin of a column changed.");
         this.saveColumnWidths();
     }
 
     @Override
-    public final void columnMoved(final TableColumnModelEvent e) {
-        if (e.getFromIndex() == this.lastFrom
-                && e.getToIndex() == this.lastTo) {
+    public void columnMoved(final TableColumnModelEvent event) {
+        if (event.getFromIndex() == this.lastFrom
+                && event.getToIndex() == this.lastTo) {
             return;
         }
-        log.info("Order of columns changed.");
-        this.lastFrom = e.getFromIndex();
-        this.lastTo   = e.getToIndex();
+        LOG.info("Order of columns changed.");
+        this.lastFrom = event.getFromIndex();
+        this.lastTo   = event.getToIndex();
 
         this.saveColumnOrder();
         this.saveSortKey();
@@ -77,8 +79,8 @@ class TableListener implements TableColumnModelListener, RowSorterListener {
     }
 
     @Override
-    public final void sorterChanged(final RowSorterEvent e) {
-        log.info("Sort order of a column changed.");
+    public void sorterChanged(final RowSorterEvent event) {
+        LOG.info("Sort order of a column changed.");
         this.saveSortKey();
     }
 
@@ -86,7 +88,7 @@ class TableListener implements TableColumnModelListener, RowSorterListener {
         Hashtable<String, String> hashtable = new Hashtable<String, String>();
         for (int column = 0; column < this.table.getColumnCount(); column++) {
             String columnName = this.table.getColumnName(column);
-            hashtable.put(column + "", columnName);
+            hashtable.put(Integer.toString(column), columnName);
         }
         this.prefs.setColumnNames(hashtable);
     }
@@ -115,14 +117,17 @@ class TableListener implements TableColumnModelListener, RowSorterListener {
     }
 
     @Override
-    public final void columnAdded(final TableColumnModelEvent e) {
+    public void columnAdded(final TableColumnModelEvent event) {
+        // columns cannot be added
     }
 
     @Override
-    public final void columnRemoved(final TableColumnModelEvent e) {
+    public void columnRemoved(final TableColumnModelEvent event) {
+        // columns cannot be removed
     }
 
     @Override
-    public final void columnSelectionChanged(final ListSelectionEvent e) {
+    public void columnSelectionChanged(final ListSelectionEvent event) {
+        // ignore selected columns
     }
 }

@@ -1,3 +1,4 @@
+package com.moneydance.modules.features.importlist.util;
 /*
  * The Alphanum Algorithm is an improved sorting algorithm for strings
  * containing numbers.  Instead of sorting numbers in ASCII order like
@@ -22,67 +23,115 @@
  *
  */
 
-package com.moneydance.modules.features.importlist.util;
 import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  * This is an updated version of the
- * <a href="http://www.davekoelle.com/alphanum.html">Alphanum Algorithm</a> with
- * enhancements made by Daniel Migowski, Andre Bogus, and David Koelle.
+ * <a href="http://www.davekoelle.com/alphanum.html">Alphanum Algorithm</a>
+ * with enhancements made by Daniel Migowski, Andre Bogus, David Koelle,
+ * and Florian J. Breunig.
  */
-public class AlphanumComparator implements Comparator<String>, Serializable {
+public final class AlphanumComparator
+implements Comparator<String>, Serializable {
 
-    private static final long serialVersionUID = 6905436500827769051L;
-    public  static final int  ASCII_DIGIT_LOWER_BOUND = 48;
-    public  static final int  ASCII_DIGIT_UPPER_BOUND = 57;
+    /**
+     * Alphanum comparator instance.
+     */
+    public static final Comparator<String> ALPHANUM
+    = new AlphanumComparator();
 
-    private boolean isDigit(final char ch) {
-        return ch >= ASCII_DIGIT_LOWER_BOUND && ch <= ASCII_DIGIT_UPPER_BOUND;
+    /**
+     * Serialization.
+     */
+    private static final long serialVersionUID = -6479933364695408622L;
+
+    /**
+     * The lowest ASCII symbol representing a digit.
+     */
+    private static final int  DIGIT_LOWER_BOUND = 48;
+
+    /**
+     * The highest ASCII symbol representing a digit.
+     */
+    private static final int  DIGIT_UPPER_BOUND = 57;
+
+    /**
+     * Restrictive constructor.
+     */
+    private AlphanumComparator() {
+        // Prevents this class from being instantiated from the outside.
     }
 
-    // The Length of string is passed in for improved efficiency
-    // (only need to calculate it once).
-    private String getChunk(final String s, final int slength, int marker) {
-        StringBuilder chunk = new StringBuilder();
-        char c = s.charAt(marker);
-        chunk.append(c);
-        marker++;
-        if (this.isDigit(c)) {
-            while (marker < slength) {
-                c = s.charAt(marker);
-                if (!this.isDigit(c)) {
+    /**
+     * @param character The character
+     * @return <code>true</code> if the given char represents a digit;
+     * <code>false</code> otherwise.
+     */
+    private boolean isDigit(final char character) {
+        return character >= DIGIT_LOWER_BOUND
+        && character <= DIGIT_UPPER_BOUND;
+    }
+
+    /**
+     * The length of the string is passed in for improved efficiency
+     * (only need to calculate it once).
+     * @param string The string to be analyzed.
+     * @param slength The length of the string to be analyzed.
+     * @param marker The index of the string to start analyzing from.
+     * @return A substring containing only digits or only non-digits.
+     */
+    private String getChunk(
+            final String string,
+            final int slength,
+            final int marker) {
+        int index = marker;
+        final StringBuilder chunk = new StringBuilder();
+        char character = string.charAt(index);
+        chunk.append(character);
+        index++;
+        if (this.isDigit(character)) {
+            while (index < slength) {
+                character = string.charAt(index);
+                if (!this.isDigit(character)) {
                     break;
                 }
-                chunk.append(c);
-                marker++;
+                chunk.append(character);
+                index++;
             }
         } else {
-            while (marker < slength) {
-                c = s.charAt(marker);
-                if (this.isDigit(c)) {
+            while (index < slength) {
+                character = string.charAt(index);
+                if (this.isDigit(character)) {
                     break;
                 }
-                chunk.append(c);
-                marker++;
+                chunk.append(character);
+                index++;
             }
         }
         return chunk.toString();
     }
 
+    /**
+     * @param string1 The first string to be compared.
+     * @param string2 The second string to be compared.
+     * @return A negative integer, zero, or a positive integer as the first
+     * argument is less than, equal to, or greater than the second.
+     */
     @Override
-    public final int compare(final String s1, final String s2) {
-
+    public int compare(final String string1, final String string2) {
         int thisMarker = 0;
         int thatMarker = 0;
-        int s1Length = s1.length();
-        int s2Length = s2.length();
+        final int s1Length = string1.length();
+        final int s2Length = string2.length();
 
         while (thisMarker < s1Length && thatMarker < s2Length) {
-            String thisChunk = this.getChunk(s1, s1Length, thisMarker);
+            final String thisChunk
+            = this.getChunk(string1, s1Length, thisMarker);
             thisMarker += thisChunk.length();
 
-            String thatChunk = this.getChunk(s2, s2Length, thatMarker);
+            final String thatChunk
+            = this.getChunk(string2, s2Length, thatMarker);
             thatMarker += thatChunk.length();
 
             // If both chunks contain numeric characters, sort them numerically
@@ -90,7 +139,7 @@ public class AlphanumComparator implements Comparator<String>, Serializable {
             if (this.isDigit(thisChunk.charAt(0))
                     && this.isDigit(thatChunk.charAt(0))) {
                 // Simple chunk comparison by length.
-                int thisChunkLength = thisChunk.length();
+                final int thisChunkLength = thisChunk.length();
                 result = thisChunkLength - thatChunk.length();
                 // If equal, the first different number counts
                 if (result == 0) {

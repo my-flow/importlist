@@ -25,9 +25,9 @@ import org.apache.log4j.Logger;
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.apps.md.view.HomePageView;
-import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.controller.ViewController;
+import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.view.View;
 
 /**
  * The main class of the extension, instantiated by Moneydance's class loader.
@@ -35,44 +35,44 @@ import com.moneydance.modules.features.importlist.view.View;
 public class Main extends FeatureModule {
 
     static {
-        Preferences.loadLoggerConfiguration();
+        Helper.loadLoggerConfiguration();
     }
 
     /**
      * Static initialization of class-dependent logger.
      */
-    private static Logger log = Logger.getLogger(Main.class);
+    private static final Logger LOG = Logger.getLogger(Main.class);
 
-    private String             baseDirectory;
-    private FileAdmin          fileAdmin;
-    private HomePageView       homePageView;
-    private final Preferences  prefs;
+    private final           Preferences  prefs;
+    private String          baseDirectory;
+    private ViewController  viewController;
 
     /**
      * Standard constructor must be available in the Moneydance context.
      */
     public Main() {
         super();
-        log.info("Initializing extension in Moneydance's application context.");
-        this.prefs = new Preferences(this);
+        LOG.info("Initializing extension in Moneydance's application context.");
+        Helper.setFeatureModule(this);
+        this.prefs = Helper.getPreferences();
     }
 
     @Override
     public final void init() {
-        StubContextFactory stubContextFactory =
+        final StubContextFactory factory =
             new StubContextFactory(this, this.getContext());
-        stubContextFactory.setup();
+        factory.setup();
 
-        this.fileAdmin = new FileAdmin(this.baseDirectory);
-        this.homePageView = new View(this.fileAdmin);
-        this.fileAdmin.setHomePageView(this.homePageView);
+        this.viewController = new ViewController(
+                this.baseDirectory,
+                this.getContext());
 
         // register this module's homepage view
-        log.debug("Registering homepage view");
-        this.getContext().registerHomePageView(this, this.homePageView);
+        LOG.debug("Registering homepage view");
+        this.getContext().registerHomePageView(this, this.viewController);
 
         // register this module to be invoked via the application toolbar
-        log.debug("Registering toolbar feature");
+        LOG.debug("Registering toolbar feature");
         this.getContext().registerFeature(
                 this,
                 this.prefs.getChooseBaseDirSuffix(),
@@ -87,35 +87,32 @@ public class Main extends FeatureModule {
 
     @Override
     public final Image getIconImage() {
-        return this.prefs.getIconImage();
+        return Helper.getIconImage();
     }
 
     @Override
     public final void invoke(final String uri) {
         if (this.prefs.getChooseBaseDirSuffix().equals(uri)) {
-            this.fileAdmin.reset();
+            this.viewController.resetBaseDirectory();
         }
 
         if (this.prefs.getReloadContextSuffix().equals(uri)) {
-            log.info("Reloading context from underlying framework.");
-            if (this.fileAdmin != null) {
-                this.fileAdmin.setContext(this.getContext());
-            }
+            LOG.info("Reloading context from underlying framework.");
             this.prefs.setContext(this.getContext());
         }
     }
 
     @Override
     public final void unload() {
-        log.info("Unloading extension.");
-        this.homePageView.setActive(false);
+        LOG.info("Unloading extension.");
+        this.viewController.setActive(false);
         this.cleanup();
         this.prefs.setAllWritablePreferencesToNull();
     }
 
     @Override
     public final void cleanup() {
-        this.fileAdmin.stopMonitor();
+        this.viewController.cleanup();
     }
 
     final void setBaseDirectory(final String argBaseDirectory) {
@@ -123,6 +120,6 @@ public class Main extends FeatureModule {
     }
 
     final HomePageView getHomePageView() {
-        return this.homePageView;
+        return this.viewController;
     }
 }

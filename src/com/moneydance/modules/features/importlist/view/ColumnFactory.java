@@ -19,6 +19,7 @@
 package com.moneydance.modules.features.importlist.view;
 
 import java.awt.Color;
+import java.text.DateFormat;
 
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -26,75 +27,93 @@ import javax.swing.table.TableCellRenderer;
 import org.apache.commons.lang.Validate;
 
 import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
+import com.moneydance.util.CustomDateFormat;
 
 /**
  * This factory provides unified access to the required renderer classes.
  */
-class ColumnFactory {
+public final class ColumnFactory {
 
-    private final Preferences       prefs;
-    private final ColorSchemeHelper colorSchemeHelper;
-    private final HeaderRenderer    headerRenderer;
-    private final LabelRenderer     labelRenderer;
-    private final ButtonRenderer    buttonRenderer;
-    private final ImportEditor      importEditor;
-    private final DeleteEditor      deleteEditor;
+    private final ColorSchemeHelper     colorSchemeHelper;
+    private final HeaderRenderer        headerRenderer;
+    private final LabelNameRenderer     labelNameRenderer;
+    private final LabelModifiedRenderer labelModifiedRenderer;
+    private final ButtonRenderer        buttonRenderer;
+    private final ImportEditor          importEditor;
+    private final DeleteEditor          deleteEditor;
 
-    ColumnFactory(
+    public ColumnFactory(
             final FileAdmin argFileAdmin,
             final TableCellRenderer argDefaultHeaderTableCellRenderer) {
         Validate.notNull(argFileAdmin, "argFileAdmin can't be null");
-        this.prefs              = Preferences.getInstance();
+        Preferences prefs          = Helper.getPreferences();
 
-        int opaqueVersion = this.prefs.getVersionWithOpaqueHomepageView();
-        if (this.prefs.getVersion() >= opaqueVersion) {
+        int opaqueVersion = prefs.getVersionWithOpaqueHomepageView();
+        if (prefs.getVersion() >= opaqueVersion) {
             this.colorSchemeHelper = new OpaqueColorSchemeHelper();
         } else {
             this.colorSchemeHelper = new DefaultColorSchemeHelper();
         }
-        this.headerRenderer     = new HeaderRenderer(
+        this.headerRenderer         = new HeaderRenderer(
                 this.colorSchemeHelper,
                 argDefaultHeaderTableCellRenderer);
-        this.labelRenderer      = new LabelRenderer(this.colorSchemeHelper);
-        this.buttonRenderer     = new ButtonRenderer(this.colorSchemeHelper);
-        this.importEditor       = new ImportEditor(
+        this.labelNameRenderer      = new LabelNameRenderer(
+                this.colorSchemeHelper);
+        this.labelModifiedRenderer  = new LabelModifiedRenderer(
+                this.colorSchemeHelper);
+        this.buttonRenderer         = new ButtonRenderer(
+                this.colorSchemeHelper);
+        this.importEditor           = new ImportEditor(
                 argFileAdmin,
                 this.buttonRenderer);
-        this.deleteEditor       = new DeleteEditor(
+        this.deleteEditor           = new DeleteEditor(
                 argFileAdmin,
                 this.buttonRenderer);
     }
 
-    final TableCellRenderer getHeaderRenderer() {
+    public TableCellRenderer getHeaderRenderer() {
         return this.headerRenderer;
     }
 
-    final TableCellRenderer getLabelRenderer() {
-        return this.labelRenderer;
+    public TableCellRenderer getLabelNameRenderer() {
+        return this.labelNameRenderer;
     }
 
-    final TableCellRenderer getButtonRenderer() {
+    public TableCellRenderer getLabelModifiedRenderer() {
+        return this.labelModifiedRenderer;
+    }
+
+    public TableCellRenderer getButtonRenderer() {
         return this.buttonRenderer;
     }
 
-    final TableCellEditor getImportEditor() {
+    public TableCellEditor getImportEditor() {
         return this.importEditor;
     }
 
-    final TableCellEditor getDeleteEditor() {
+    public TableCellEditor getDeleteEditor() {
         return this.deleteEditor;
     }
 
-    final void setForeground(final Color foreground) {
+    public void setForeground(final Color foreground) {
         this.colorSchemeHelper.setForeground(foreground);
     }
 
-    final void setBackground(final Color background) {
+    public void setBackground(final Color background) {
         this.colorSchemeHelper.setBackground(background);
     }
 
-    final void setBackgroundAlt(final Color backgroundAlt) {
+    public void setBackgroundAlt(final Color backgroundAlt) {
         this.colorSchemeHelper.setBackgroundAlt(backgroundAlt);
+    }
+
+    public void setDateFormatter(final CustomDateFormat argDateFormatter) {
+        this.labelModifiedRenderer.setDateFormatter(argDateFormatter);
+    }
+
+    public void setTimeFormatter(final DateFormat argTimeFormatter) {
+        this.labelModifiedRenderer.setTimeFormatter(argTimeFormatter);
     }
 }

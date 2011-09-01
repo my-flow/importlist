@@ -20,9 +20,13 @@ package com.moneydance.modules.features.importlist.io;
 
 import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -38,25 +42,24 @@ import org.apache.commons.io.filefilter.OrFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
-import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 import com.moneydance.apps.md.controller.FeatureModuleContext;
-import com.moneydance.apps.md.view.HomePageView;
+import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 /**
  * This core class coordinates and delegates operations on the file system.
  */
-public class FileAdmin {
+public final class FileAdmin extends Observable implements Observer {
 
     /**
      * Static initialization of class-dependent logger.
      */
-    private static Logger log = Logger.getLogger(FileAdmin.class);
+    private static final Logger LOG = Logger.getLogger(FileAdmin.class);
 
     private final Preferences               prefs;
-    private FeatureModuleContext            context;
+    private final FeatureModuleContext      context;
     private final DirectoryChooser          directoryChooser;
     private final AbstractFileFilter        transactionFileFilter;
     private final AbstractFileFilter        textFileFilter;
@@ -65,11 +68,12 @@ public class FileAdmin {
     private final TransactionFileListener   listener;
     private final FileAlterationMonitor     monitor;
     private final List<File>                files;
-    private boolean                         dirty;
-    private HomePageView                    homePageView;
 
-    public FileAdmin(final String baseDirectory) {
-        this.prefs            = Preferences.getInstance();
+    public FileAdmin(final String baseDirectory,
+            final FeatureModuleContext argContext) {
+        super();
+        this.prefs            = Helper.getPreferences();
+        this.context          = argContext;
         this.directoryChooser = new DirectoryChooser(baseDirectory);
         this.transactionFileFilter = new SuffixFileFilter(
                 this.prefs.getTransactionFileExtensions(),
@@ -81,36 +85,30 @@ public class FileAdmin {
                 CanReadFileFilter.CAN_READ,
                 new OrFileFilter(
                         this.transactionFileFilter,
-                        this.textFileFilter)
-        );
+                        this.textFileFilter));
 
-        this.listener = new TransactionFileListener(this);
+        this.listener = new TransactionFileListener();
+        this.listener.addObserver(this);
         this.monitor  = new FileAlterationMonitor(
                 this.prefs.getMonitorIntervall());
-        this.setFileMonitorToCurrentImportDir();
 
-        this.files = new ArrayList<File>();
-
-        this.dirty = true;
+        this.files = Collections.synchronizedList(new ArrayList<File>());
     }
 
-    public final void setContext(final FeatureModuleContext argContext) {
-        this.context = argContext;
-    }
-
-    public final void reset() {
-        log.info("Resetting base directory.");
+    public void resetBaseDirectory() {
+        LOG.info("Resetting base directory.");
         this.directoryChooser.reset();
         this.monitor.removeObserver(this.observer);
         this.setFileMonitorToCurrentImportDir();
-        this.setDirty(true);
+        this.setChanged();
+        this.notifyObservers();
     }
 
-    public final List<File> getFiles() {
-        return this.files;
+    public List<File> getFiles() {
+        return Collections.unmodifiableList(this.files);
     }
 
-    public final void reloadFiles() {
+    public synchronized void reloadFiles() {
         this.files.clear();
         try {
             Collection<File> collection = FileUtils.listFiles(
@@ -119,83 +117,79 @@ public class FileAdmin {
                     null); // ignore subdirectories
             this.files.addAll(collection);
         } catch (IllegalArgumentException e) {
-            log.warn(e.getMessage(), e);
+            LOG.warn(e.getMessage(), e);
         }
     }
 
-    public final File getBaseDirectory() {
+    public File getBaseDirectory() {
         return this.directoryChooser.getBaseDirectory();
     }
 
-    public final void setDirty(final boolean argDirty) {
-        this.dirty = argDirty;
-        if (this.dirty && this.homePageView != null) {
-            log.info("Base directory contains changes.");
-            this.reloadFiles();
-            this.homePageView.refresh();
-        }
-    }
-
-    public final boolean isDirty() {
-        return this.dirty;
+    @Override
+    public void update(final Observable observable, final Object object) {
+        this.setChanged();
+        this.notifyObservers();
     }
 
     /**
      * Start monitoring the current import directory.
      */
-    public final void startMonitor() {
-        log.debug("Starting the directory monitor.");
+    public void startMonitor() {
+        LOG.debug("Starting the directory monitor.");
+        this.setFileMonitorToCurrentImportDir();
         try {
             this.monitor.start();
         } catch (Exception e) {
-            log.warn(e.getMessage(), e);
+            LOG.warn(e.getMessage(), e);
         }
     }
 
     /**
      * Stop monitoring the current import directory.
      */
-    public final void stopMonitor() {
-        log.debug("Stopping the directory monitor.");
+    public void stopMonitor() {
+        LOG.debug("Stopping the directory monitor.");
         try {
             this.monitor.stop();
         } catch (Exception e) {
-            log.warn(e.getMessage(), e);
+            LOG.warn(e.getMessage(), e);
         }
     }
 
-    public final void setHomePageView(final HomePageView argHomePageView) {
-        Validate.notNull(argHomePageView, "argHomePageView can't be null");
-        this.homePageView = argHomePageView;
-        this.homePageView.refresh();
-        this.startMonitor();
-    }
-
-    public final void importRow(final int rowNumber) {
+    public void importRow(final int rowNumber) {
+        if (rowNumber >= this.files.size()) {
+            return;
+        }
         File file = this.files.get(rowNumber);
-        log.info("Importing file " + file.getAbsoluteFile());
+        LOG.info("Importing file " + file.getAbsoluteFile());
 
-        String callUri = this.prefs.getTransactionFileImportUriPrefix()
-        + file.getAbsolutePath();
-
+        String callUri = "";
+        if (this.transactionFileFilter.accept(file)) {
+            callUri = this.prefs.getTransactionFileImportUriPrefix()
+            + file.getAbsolutePath();
+        }
         if (this.textFileFilter.accept(file)) {
             callUri = this.prefs.getTextFileImportUriPrefix()
             + file.getAbsolutePath();
         }
-
         // Import the file identified by the file parameter
         this.context.showURL(callUri);
+
+        this.setChanged();
+        this.notifyObservers();
     }
 
-    public final void deleteRow(final int rowNumber) {
-        File file = this.files.get(rowNumber);
-        log.info("Deleting file " + file.getAbsoluteFile());
+    public void deleteRow(final int rowNumber) {
+        if (rowNumber >= this.files.size()) {
+            return;
+        }
+        final File file = this.files.get(rowNumber);
 
         final String confirmationMessage =
             this.prefs.getConfirmationMessageDeleteFile(file.getName());
         Object confirmationLabel = new JLabel(confirmationMessage);
-        Icon icon   = null;
-        Image image = this.prefs.getIconImage();
+        Icon  icon  = null;
+        Image image = Helper.getIconImage();
         if (image != null) {
             icon = new ImageIcon(image);
         }
@@ -214,35 +208,33 @@ public class FileAdmin {
                 options,
                 options[1]);
 
-        if (choice == 0) {
-            log.info("Deleting file " + file.getAbsoluteFile());
-
-            if (file.delete()) {
-                log.info("Deleted file " + file.getAbsoluteFile());
+        try {
+            if (choice == 0) {
+                FileUtils.forceDelete(file);
+                LOG.info("Deleted file " + file.getAbsoluteFile());
             } else {
-                log.warn("Could not delete file "
-                        + file.getAbsoluteFile());
-                final String errorMessage =
-                    this.prefs.getErrorMessageDeleteFile(file.getName());
-                Object errorLabel = new JLabel(errorMessage);
-                JOptionPane.showMessageDialog(
-                        null, // no parent component
-                        errorLabel,
-                        null, // no title
-                        JOptionPane.ERROR_MESSAGE);
+                LOG.info("Canceled deleting file " + file.getAbsoluteFile());
             }
-        } else {
-            log.info("Canceled deleting file " + file.getAbsoluteFile());
+        } catch (IOException e) {
+            LOG.warn("Could not delete file " + file.getAbsoluteFile());
+            final String errorMessage =
+                this.prefs.getErrorMessageDeleteFile(file.getName());
+            Object errorLabel = new JLabel(errorMessage);
+            JOptionPane.showMessageDialog(
+                    null, // no parent component
+                    errorLabel,
+                    null, // no title
+                    JOptionPane.ERROR_MESSAGE);
         }
-
-        this.setDirty(true);
-    };
+        this.setChanged();
+        this.notifyObservers();
+    }
 
     private void setFileMonitorToCurrentImportDir() {
         this.observer  = new FileAlterationObserver(
                 this.getBaseDirectory(),
                 this.readableFileFilter,
-                IOCase.SENSITIVE);
+                IOCase.SYSTEM);
         this.observer.addListener(this.listener);
         this.monitor.addObserver(this.observer);
     }

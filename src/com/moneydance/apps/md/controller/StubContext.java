@@ -33,77 +33,78 @@ import com.moneydance.apps.md.view.HomePageView;
  * <code>com.moneydance.apps.md.controller.Main</code> in order to request the
  * user's preferences.
  */
-public class StubContext extends Main implements FeatureModuleContext {
+public final class StubContext extends Main {
 
     /**
      * Static initialization of class-dependent logger.
      */
-    private static Logger log = Logger.getLogger(StubContext.class);
+    private static final Logger LOG = Logger.getLogger(StubContext.class);
 
-    private final FeatureModule featureModule;
+    private final transient FeatureModule featureModule;
 
     StubContext(final FeatureModule argFeatureModule) {
+        super();
         this.featureModule = argFeatureModule;
     }
 
     @Override
-    public final RootAccount getRootAccount() {
+    public RootAccount getRootAccount() {
         return null;
     }
 
     @Override
-    public final String getVersion() {
+    public String getVersion() {
         return null;
     }
 
     @Override
-    public final int getBuild() {
+    public int getBuild() {
         return 0;
     }
 
     @Override
-    public final void showURL(final String url) {
+    public void showURL(final String url) {
         String suffix = url;
-        int theIdx = url.lastIndexOf(':');
+        final int theIdx = url.lastIndexOf(':');
         if (theIdx >= 0) {
             suffix = url.substring(theIdx + 1);
         }
-        log.debug("Stub context forwards received URL " + suffix + " to module "
+        LOG.debug("Stub context forwards received URL " + suffix + " to module "
                 + this.featureModule);
         this.featureModule.invoke(suffix);
     }
 
     @Override
-    public final void registerFeature(
+    public void registerFeature(
             final FeatureModule module,
             final String parameters,
             final Image buttonImage,
             final String buttonText) {
-        log.debug("Stub context ignores registered feature " + buttonText
+        LOG.debug("Stub context ignores registered feature " + buttonText
                 + " of module " + module);
     }
 
     @Override
-    public final void registerHomePageView(
+    public void registerHomePageView(
             final FeatureModule module,
             final HomePageView view) {
-        log.debug("Stub context ignores registered homepage view " + view
+        LOG.debug("Stub context ignores registered homepage view " + view
                 + " of module " + module);
     }
 
     @Override
-    public final void registerAccountEditor(
+    public void registerAccountEditor(
             final FeatureModule module,
             final int accountType,
             final AccountEditor editor) {
-        log.debug("Stub context ignores registered account editor " + editor
+        LOG.debug("Stub context ignores registered account editor " + editor
                 + " of module " + module);
     }
 
     @Override
-    public final UserPreferences getPreferences() {
-        File preferencesFile = Common.getPreferencesFile();
-        log.debug("Stub context returns user preferences from file "
+    public UserPreferences getPreferences() {
+        final File preferencesFile = Common.getPreferencesFile();
+        LOG.debug("Stub context returns user preferences from file "
                 + preferencesFile.getAbsolutePath());
         return new UserPreferences(preferencesFile);
     }

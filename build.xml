@@ -1,39 +1,46 @@
-<!--
-build file for ant
-http://jakarta.apache.org/ant/index.html
--->
-
+<?xml version="1.0" encoding="utf-8"?>
 <project name="importlist" default="all" basedir=".">
+
   <property name="src"         value="src"/>
+  <property name="lib"         value="lib"/>
   <property name="build"       value="bin"/>
   <property name="dist"        value="dist"/>
+  <property name="docs"        value="docs"/>
+  <property name="log"         value="logs"/>
   <property name="privkeyfile" value="${src}/priv_key"/>
   <property name="pubkeyfile"  value="${src}/pub_key"/>
   <property name="privkeyid"   value="99"/>
   <property name="debug"       value="on"/>
   <property name="optimize"    value="on"/>
+  <property name="descriptor.file"
+      value="${src}/com/moneydance/modules/features/importlist/meta_info.dict"/>
+  <property name="jar.file"
+      value="${dist}/importlist.mxt"/>
+  <property name="main.class"
+      value="com.moneydance.modules.features.importlist.ConsoleRunner"/>
 
   <available file="${privkeyfile}" property="privkeyfile.present"/>
 
   <path id="compile.classpath">
-	    <pathelement path="lib/moneydance.jar"/>
-	    <pathelement path="lib/junit-4.8.2.jar"/>
-        <pathelement path="lib/commons-io-2.0.1.jar"/>
-        <pathelement path="lib/commons-lang-2.6.jar"/>
-        <pathelement path="lib/commons-configuration-1.6.jar"/>
-        <pathelement path="lib/log4j-1.2.16.jar"/>
+        <pathelement path="${lib}/moneydance.jar"/>
+        <pathelement path="${lib}/junit-4.8.2.jar"/>
+        <pathelement path="${lib}/commons-io-2.0.1.jar"/>
+        <pathelement path="${lib}/commons-lang-2.6.jar"/>
+        <pathelement path="${lib}/commons-configuration-1.6.jar"/>
+        <pathelement path="${lib}/log4j-1.2.16.jar"/>
   </path>
 
   <path id="manifest.classpath">
-    <pathelement path="lib/moneydance.jar"/>
+    <pathelement path="${lib}/moneydance.jar"/>
   </path>
 
   <path id="sign.classpath">
-    <pathelement path="lib/moneydance.jar"/>
-    <pathelement path="lib/extadmin.jar"/>
+    <pathelement path="${lib}/moneydance.jar"/>
+    <pathelement path="${lib}/extadmin.jar"/>
   </path>
 
 
+  <!-- Wipe the slate clean, to be used before starting the build process. -->
   <target name="init">
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
@@ -42,6 +49,7 @@ http://jakarta.apache.org/ant/index.html
   </target>   
 
 
+  <!-- Generate a password-protected key pair -->
   <target name="genkeys">
     <java classpathref="sign.classpath"
           classname="com.moneydance.admin.KeyAdmin">
@@ -52,7 +60,46 @@ http://jakarta.apache.org/ant/index.html
   </target>
 
 
+  <!-- Create a compressed file for the audition process. The zip file contains
+       all files required to build and deploy a new version. -->
+  <target name="audit" depends="init">
+
+    <!-- Extract build version from descriptor -->
+    <loadfile srcfile="${descriptor.file}" property="build.version">
+      <filterchain>
+        <striplinebreaks/>
+        <linecontains>
+          <contains value="module_build"/>
+        </linecontains>
+        <tokenfilter>
+           <replaceregex pattern=".*&quot;(\d+)&quot;.*" replace="\1"/>
+        </tokenfilter>
+      </filterchain>
+    </loadfile>
+
+    <echo message="Building version ${build.version} for auditing"/>
+
+    <property name="zip.file" value="${dist}/importlist-v${build.version}.zip"/>
+
+    <zip destfile="${zip.file}">
+       <zipfileset dir="." defaultexcludes="yes">
+         <include name="**/*"/>
+         <exclude name="**/${build}"/>
+         <exclude name="**/${build}/**/*"/>
+         <exclude name="**/${dist}"/>
+         <exclude name="**/${dist}/**/*"/>
+         <exclude name="**/${docs}"/>
+         <exclude name="**/${docs}/**/*"/>
+         <exclude name="**/${log}"/>
+         <exclude name="**/${log}/**/*"/>
+       </zipfileset>
+    </zip>
+  </target>
+
+
+  <!-- Build a new version. -->
   <target name="importlist" depends="init">
+
     <javac source="1.6"
            target="1.6"
            srcdir="${src}"
@@ -65,12 +112,12 @@ http://jakarta.apache.org/ant/index.html
                      com/moneydance/apps/md/controller/**"/>
 
     <manifestclasspath property="jar.classpath"
-                       jarfile="${dist}/importlist.mxt">
+                       jarfile="${jar.file}">
       <classpath refid="manifest.classpath"/>
     </manifestclasspath>
 
     <jar jarfile="${build}/external-libs.jar">
-        <zipgroupfileset dir="lib">
+        <zipgroupfileset dir="${lib}">
             <include name="commons-io-2.0.1.jar"/>
             <include name="commons-lang-2.6.jar"/>
             <include name="commons-configuration-1.6.jar"/>
@@ -80,8 +127,8 @@ http://jakarta.apache.org/ant/index.html
         </zipgroupfileset>
     </jar>
 
-    <!-- wait for one second to avoid getting warnings about the
-         files having modification dates in the future -->
+    <!-- Wait for one second to avoid getting warnings about the
+         files having modification dates in the future. -->
     <sleep seconds="1"/>
 
     <!-- run the timestamp task -->
@@ -89,22 +136,20 @@ http://jakarta.apache.org/ant/index.html
       <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss"/>
     </tstamp>
 
-
-    <jar destfile="${dist}/importlist.mxt">
+    <jar destfile="${jar.file}">
       <fileset dir="" includes="NOTICE"/>
       <fileset dir="" includes="COPYING"/>
       <fileset dir="" includes="LICENSE"/>
       <fileset dir="${src}" includes="
     com/moneydance/modules/features/importlist/meta_info.dict
-    com/moneydance/modules/features/importlist/resources/icon.png
-    com/moneydance/modules/features/importlist/resources/*.properties"/>
+    com/moneydance/modules/features/importlist/resources/*"/>
       <fileset dir="${build}"
          includes="com/moneydance/modules/features/importlist/**
                    com/moneydance/apps/md/controller/**"/>
 
       <manifest>
         <attribute name="Main-Class"
-            value="com.moneydance.modules.features.importlist.ConsoleRunner"/>
+            value="${main.class}"/>
         <attribute name="Class-Path"
             value="${jar.classpath}"/>
         <attribute name="Built-By"
@@ -124,6 +169,7 @@ http://jakarta.apache.org/ant/index.html
   </target>
 
 
+  <!-- Sign an MXT file with a private key that must already exist. -->
   <target name="sign" if="privkeyfile.present">
     <java classpathref="sign.classpath"
           classname="com.moneydance.admin.KeyAdmin">
@@ -131,20 +177,25 @@ http://jakarta.apache.org/ant/index.html
       <arg value="${privkeyfile}"/>
       <arg value="${privkeyid}"/>
       <arg value="importlist"/>
-      <arg line="${dist}/importlist.mxt"/>
+      <arg line="${jar.file}"/>
     </java>
 
-    <move file="s-importlist.mxt" tofile="${dist}/importlist.mxt"/>
+    <move file="s-importlist.mxt" tofile="${jar.file}"/>
   </target>
 
 
+  <!-- Create Javadoc files with references to external documentations -->
   <target name="javadoc">
+    <delete>
+      <fileset dir="${docs}/api" includes="**/*"/>
+    </delete>
+
     <javadoc packagenames="com.moneydance.modules.features.importlist.*"
              classpathref="compile.classpath"
              sourcepath="${src}"
              excludepackagenames=""
              defaultexcludes="true"
-             destdir="docs/api"
+             destdir="${docs}/api"
              access="protected"
              author="true"
              version="true"

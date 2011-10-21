@@ -18,13 +18,7 @@
 
 package com.moneydance.modules.features.importlist.controller;
 
-import java.io.File;
-import java.util.Date;
-import java.util.List;
-
 import javax.swing.table.AbstractTableModel;
-
-import org.apache.commons.lang.Validate;
 
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
@@ -36,60 +30,36 @@ import com.moneydance.modules.features.importlist.util.Preferences;
  * file and the date of its last modification, the last two columns represent
  * the action buttons to import and delete the file, respectively.
  */
-final class FileTableModel extends AbstractTableModel {
+final class AggregationTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 3552703741263935211L;
     private final transient Preferences         prefs;
-    private final           List<File>          files;
 
-    FileTableModel(final List<File> argFiles) {
+    AggregationTableModel() {
         super();
-        Validate.notNull(argFiles, "argFiles can't be null");
         this.prefs = Helper.getPreferences();
-        this.files = argFiles;
     }
 
     @Override
     public Class<?> getColumnClass(final int columnIndex) {
-        String columnName = this.getColumnName(columnIndex);
-
-        if (this.prefs.getDescName().equals(columnName)) {
-            return String.class;
-        }
-        if (this.prefs.getDescModified().equals(columnName)) {
-            return Date.class;
-        }
-        if (this.prefs.getDescImport().equals(columnName)) {
-            return String.class;
-        }
-        if (this.prefs.getDescDelete().equals(columnName)) {
-            return String.class;
-        }
-        return null;
+        return String.class;
     }
 
     @Override
     public Object getValueAt(final int row, final int column) {
-        if (row >= this.files.size()) {
-            this.fireTableDataChanged();
-            throw new IllegalArgumentException("Could not find value for row "
-                    + row + ", column " + column);
-        }
         String columnName = this.getColumnName(column);
 
         if (this.prefs.getDescName().equals(columnName)) {
-            final File file = this.files.get(row);
-            return file.getName();
+            return null;
         }
         if (this.prefs.getDescModified().equals(columnName)) {
-            final File file = this.files.get(row);
-            return new Date(file.lastModified());
+            return null;
         }
         if (this.prefs.getDescImport().equals(columnName)) {
-            return this.prefs.getLabelImportOneButton();
+            return this.prefs.getLabelImportAllButton();
         }
         if (this.prefs.getDescDelete().equals(columnName)) {
-            return this.prefs.getLabelDeleteOneButton();
+            return this.prefs.getLabelDeleteAllButton();
         }
         throw new IllegalArgumentException(
                 "Could not find value for row " + row + ", column " + column);
@@ -126,6 +96,6 @@ final class FileTableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return this.files.size();
+        return 1;
     }
 }

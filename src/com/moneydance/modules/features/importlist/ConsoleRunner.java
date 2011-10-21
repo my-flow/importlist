@@ -20,6 +20,7 @@ package com.moneydance.modules.features.importlist;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -72,12 +73,30 @@ final class ConsoleRunner {
             LOG.warn("ignoring argument: " + arg);
         }
 
-        Main main = new Main();
+        // Schedule a job for the event-dispatching thread:
+        // creating and showing this application's GUI.
+        final String argBaseDirectory = baseDirectory;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                createAndShowGUI(argBaseDirectory);
+            }
+        });
+    }
+
+    /**
+     * Create the GUI and show it. For thread safety, this method should be
+     * invoked from the event-dispatching thread.
+     * @param baseDirectory The base directory where the transaction files
+     * reside.
+     */
+    private static void createAndShowGUI(final String baseDirectory) {
+        final Main main = new Main();
         main.setBaseDirectory(baseDirectory);
         main.init();
 
-        JFrame frame = new JFrame(main.getDisplayName());
-        JComponent guiView = main.getHomePageView().getGUIView(null);
+        final JFrame frame = new JFrame(main.getDisplayName());
+        final JComponent guiView = main.getHomePageView().getGUIView(null);
         frame.setContentPane(guiView);
         frame.setMinimumSize(guiView.getMinimumSize());
         frame.setPreferredSize(guiView.getPreferredSize());

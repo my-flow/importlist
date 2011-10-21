@@ -78,7 +78,7 @@ public final class Preferences {
      * instance of this class.
      */
     Preferences() {
-        AbstractFileConfiguration abstractFileConfiguration =
+        final AbstractFileConfiguration abstractFileConfiguration =
             new PropertiesConfiguration();
 
         try {
@@ -146,12 +146,12 @@ public final class Preferences {
     }
 
     public int getVersion() {
-        String fullString = this.getUserPreferences().getSetting(
+        final String fullString = this.getUserPreferences().getSetting(
                 "current_version");
         if (fullString == null) {
             return 0;
         }
-        int endIndex = Math.min(
+        final int endIndex = Math.min(
                 this.config.getInt("length_of_version_digits"),
                 fullString.length());
         String substring = fullString.substring(0, endIndex);
@@ -431,15 +431,29 @@ public final class Preferences {
     /**
      * @return Label of the "import" button.
      */
-    public String getLabelImportButton() {
-        return this.localizable.getString("label_import_button");
+    public String getLabelImportOneButton() {
+        return this.localizable.getString("label_import_one_button");
+    }
+
+    /**
+     * @return Label of the "import all" button.
+     */
+    public String getLabelImportAllButton() {
+        return this.localizable.getString("label_import_all_button");
     }
 
     /**
      * @return Label of the "delete" button.
      */
-    public String getLabelDeleteButton() {
-        return this.localizable.getString("label_delete_button");
+    public String getLabelDeleteOneButton() {
+        return this.localizable.getString("label_delete_one_button");
+    }
+
+    /**
+     * @return Label of the "delete all" button.
+     */
+    public String getLabelDeleteAllButton() {
+        return this.localizable.getString("label_delete_all_button");
     }
 
     /**
@@ -605,10 +619,21 @@ public final class Preferences {
      * @return Confirmation message to be displayed before a file will be
      *  deleted.
      */
-    public String getConfirmationMessageDeleteFile(final String filename) {
+    public String getConfirmationMessageDeleteOneFile(final String filename) {
         String rawMessage = this.localizable.getString(
-                "confirmation_message_delete_file");
+                "confirmation_message_delete_one_file");
         return rawMessage.replace("(0)", Helper.getMarkupFilename(filename));
+    }
+
+    /**
+     * @param size The number of all files that are to be deleted.
+     * @return Confirmation message to be displayed before all files will be
+     *  deleted.
+     */
+    public String getConfirmationMessageDeleteAllFiles(final int size) {
+        String rawMessage = this.localizable.getString(
+                "confirmation_message_delete_all_files");
+        return rawMessage.replace("(0)", String.valueOf(size));
     }
 
     /**

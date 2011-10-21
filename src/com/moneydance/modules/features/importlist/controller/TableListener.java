@@ -59,7 +59,7 @@ implements TableColumnModelListener, RowSorterListener {
 
     @Override
     public void columnMarginChanged(final ChangeEvent event) {
-        LOG.info("Margin of a column changed.");
+        LOG.debug("Margin of a column changed.");
         this.saveColumnWidths();
     }
 
@@ -69,7 +69,7 @@ implements TableColumnModelListener, RowSorterListener {
                 && event.getToIndex() == this.lastTo) {
             return;
         }
-        LOG.info("Order of columns changed.");
+        LOG.debug("Order of columns changed.");
         this.lastFrom = event.getFromIndex();
         this.lastTo   = event.getToIndex();
 
@@ -80,7 +80,7 @@ implements TableColumnModelListener, RowSorterListener {
 
     @Override
     public void sorterChanged(final RowSorterEvent event) {
-        LOG.info("Sort order of a column changed.");
+        LOG.debug("Sort order of a column changed.");
         this.saveSortKey();
     }
 

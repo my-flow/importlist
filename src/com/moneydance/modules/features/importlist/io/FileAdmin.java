@@ -111,7 +111,7 @@ public final class FileAdmin extends Observable implements Observer {
     public synchronized void reloadFiles() {
         this.files.clear();
         try {
-            Collection<File> collection = FileUtils.listFiles(
+            final Collection<File> collection = FileUtils.listFiles(
                     this.getBaseDirectory(),
                     this.readableFileFilter,
                     null); // ignore subdirectories
@@ -156,13 +156,25 @@ public final class FileAdmin extends Observable implements Observer {
         }
     }
 
+    public void importAllRows() {
+        for (int row = 0; row < this.files.size(); row++) {
+            this.importRow(row);
+        }
+        this.setChanged();
+        this.notifyObservers();
+    }
+
     public void importRow(final int rowNumber) {
         if (rowNumber >= this.files.size()) {
             return;
         }
-        File file = this.files.get(rowNumber);
-        LOG.info("Importing file " + file.getAbsoluteFile());
+        final File file = this.files.get(rowNumber);
+        this.importFile(file);
+        this.setChanged();
+        this.notifyObservers();
+    }
 
+    private void importFile(final File file) {
         String callUri = "";
         if (this.transactionFileFilter.accept(file)) {
             callUri = this.prefs.getTransactionFileImportUriPrefix()
@@ -174,7 +186,27 @@ public final class FileAdmin extends Observable implements Observer {
         }
         // Import the file identified by the file parameter
         this.context.showURL(callUri);
+    }
 
+    public void deleteAllRows() {
+        if (this.showWarningBeforeDeletingAllFiles(this.files.size())) {
+            for (final File file : this.files) {
+                try {
+                    this.deleteFile(file);
+                } catch (IOException e) {
+                    LOG.warn(e.getMessage(), e);
+                    final String errorMessage = e.getMessage();
+                    final Object errorLabel = new JLabel(errorMessage);
+                    JOptionPane.showMessageDialog(
+                            null, // no parent component
+                            errorLabel,
+                            null, // no title
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            LOG.info("Canceled deleting all files");
+        }
         this.setChanged();
         this.notifyObservers();
     }
@@ -184,21 +216,47 @@ public final class FileAdmin extends Observable implements Observer {
             return;
         }
         final File file = this.files.get(rowNumber);
+        if (this.showWarningBeforeDeletingOneFile(file)) {
+            try {
+                this.deleteFile(file);
+            } catch (IOException e) {
+                LOG.warn("Could not delete file " + file.getAbsoluteFile());
+                final String errorMessage =
+                    this.prefs.getErrorMessageDeleteFile(file.getName());
+                final Object errorLabel = new JLabel(errorMessage);
+                JOptionPane.showMessageDialog(
+                        null, // no parent component
+                        errorLabel,
+                        null, // no title
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            LOG.info("Canceled deleting file " + file.getAbsoluteFile());
+        }
+        this.setChanged();
+        this.notifyObservers();
+    }
 
+    private void deleteFile(final File file) throws IOException {
+        LOG.info("Deleting file " + file.getAbsoluteFile());
+        FileUtils.forceDelete(file);
+    }
+
+    private boolean showWarningBeforeDeletingOneFile(final File file) {
         final String confirmationMessage =
-            this.prefs.getConfirmationMessageDeleteFile(file.getName());
-        Object confirmationLabel = new JLabel(confirmationMessage);
+            this.prefs.getConfirmationMessageDeleteOneFile(file.getName());
+        final Object confirmationLabel = new JLabel(confirmationMessage);
+        final Image image = Helper.getIconImage();
         Icon  icon  = null;
-        Image image = Helper.getIconImage();
         if (image != null) {
             icon = new ImageIcon(image);
         }
-        Object[] options = {
+        final Object[] options = {
                 this.prefs.getOptionDeleteFile(),
                 this.prefs.getOptionCancel()
         };
 
-        int choice = JOptionPane.showOptionDialog(
+        final int choice = JOptionPane.showOptionDialog(
                 null, // no parent component
                 confirmationLabel,
                 null, // no title
@@ -208,26 +266,34 @@ public final class FileAdmin extends Observable implements Observer {
                 options,
                 options[1]);
 
-        try {
-            if (choice == 0) {
-                FileUtils.forceDelete(file);
-                LOG.info("Deleted file " + file.getAbsoluteFile());
-            } else {
-                LOG.info("Canceled deleting file " + file.getAbsoluteFile());
-            }
-        } catch (IOException e) {
-            LOG.warn("Could not delete file " + file.getAbsoluteFile());
-            final String errorMessage =
-                this.prefs.getErrorMessageDeleteFile(file.getName());
-            Object errorLabel = new JLabel(errorMessage);
-            JOptionPane.showMessageDialog(
-                    null, // no parent component
-                    errorLabel,
-                    null, // no title
-                    JOptionPane.ERROR_MESSAGE);
+        return choice == 0;
+    }
+
+    private boolean showWarningBeforeDeletingAllFiles(final int size) {
+        final String confirmationMessage =
+            this.prefs.getConfirmationMessageDeleteAllFiles(size);
+        final Object confirmationLabel = new JLabel(confirmationMessage);
+        final Image image = Helper.getIconImage();
+        Icon  icon  = null;
+        if (image != null) {
+            icon = new ImageIcon(image);
         }
-        this.setChanged();
-        this.notifyObservers();
+        final Object[] options = {
+                this.prefs.getOptionDeleteFile(),
+                this.prefs.getOptionCancel()
+        };
+
+        final int choice = JOptionPane.showOptionDialog(
+                null, // no parent component
+                confirmationLabel,
+                null, // no title
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                icon,
+                options,
+                options[1]);
+
+        return choice == 0;
     }
 
     private void setFileMonitorToCurrentImportDir() {

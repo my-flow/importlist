@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.view;
+package com.moneydance.modules.features.importlist.table;
 
 import java.awt.Component;
 
@@ -29,6 +29,7 @@ import javax.swing.table.TableCellRenderer;
 
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
+import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
 
 /**
  * This decorator class sets header-specific attributes to a

@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.view;
+package com.moneydance.modules.features.importlist.table;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -31,6 +31,8 @@ import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.TableCellRenderer;
+
+import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
 
 class ButtonRenderer implements TableCellRenderer {
 

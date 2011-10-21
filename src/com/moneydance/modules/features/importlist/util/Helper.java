@@ -85,7 +85,7 @@ public final class Helper {
             return;
         }
 
-        Properties properties = new Properties();
+        final Properties properties = new Properties();
         try {
             InputStream inputStream = getInputStreamFromResource(
                     getPreferences().getLog4jPropertiesResource());

@@ -27,81 +27,108 @@ import java.util.Observer;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.JViewport;
 import javax.swing.RowSorter;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
-
-import org.apache.log4j.Logger;
 
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.table.ColumnFactory;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.view.ColumnFactory;
 import com.moneydance.modules.features.importlist.view.JCustomScrollPane;
+import com.moneydance.modules.features.importlist.view.JCustomSplitPane;
 
 /**
  * The user interface that is displayed on the homepage.
  */
 public final class ViewController implements HomePageView, Observer {
 
-    /**
-     * Static initialization of class-dependent logger.
-     */
-    private static final Logger LOG = Logger.getLogger(ViewController.class);
-
     private final Preferences           prefs;
     private final FileAdmin             fileAdmin;
     private       boolean               initialized;
-    private       FileTableModel        fileTableModel;
+    private       JViewport             viewport;
     private       JLabel                emptyLabel;
-    private       JTable                table;
-    private       ColumnFactory         columnFactory;
+    private       JSplitPane            splitPane;
     private       JScrollPane           scrollPane;
+    private       AbstractTableModel    baseTableModel;
+    private       JTable                baseTable;
+    private       AbstractTableModel    aggrTableModel;
+    private       JTable                aggrTable;
+    private       ColumnFactory         columnFactory;
     private       boolean               dirty;
 
 
     public ViewController(
-            final String argBaseDirectory,
-            final FeatureModuleContext argContext) {
+            final String baseDirectory,
+            final FeatureModuleContext context) {
         this.prefs      = Helper.getPreferences();
-        this.fileAdmin  = new FileAdmin(argBaseDirectory, argContext);
+        this.fileAdmin  = new FileAdmin(baseDirectory, context);
         this.fileAdmin.addObserver(this);
     }
 
 
     private void init() {
-        this.fileTableModel = new FileTableModel(this.fileAdmin.getFiles());
+        this.viewport = new JViewport();
+        this.viewport.setOpaque(false);
 
         this.emptyLabel = new JLabel();
         this.emptyLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        this.emptyLabel.setBorder(MoneydanceLAF.homePageBorder);
 
-        this.table = new JTable(this.fileTableModel);
-        this.table.setOpaque(false);
-        this.table.setShowGrid(false);
-        this.table.setShowVerticalLines(false);
-        this.table.setShowHorizontalLines(false);
-        this.table.setIntercellSpacing(new Dimension(0, 0));
-        this.table.setColumnSelectionAllowed(false);
-        this.table.setRowSelectionAllowed(false);
-        this.table.setCellSelectionEnabled(false);
+        this.splitPane = new JCustomSplitPane(JSplitPane.VERTICAL_SPLIT);
+        this.splitPane.setResizeWeight(1.0);
+        this.splitPane.setDividerSize(0);
+        this.splitPane.setContinuousLayout(true);
+        this.splitPane.setOpaque(false);
+        this.splitPane.setBorder(MoneydanceLAF.homePageBorder);
 
-        JTableHeader tableHeader     = this.table.getTableHeader();
-        TableColumnModel columnModel = this.table.getColumnModel();
+        this.baseTableModel = new FileTableModel(this.fileAdmin.getFiles());
+
+        this.baseTable = new JTable(this.baseTableModel);
+        this.baseTable.setOpaque(false);
+        this.baseTable.setShowGrid(false);
+        this.baseTable.setShowVerticalLines(false);
+        this.baseTable.setShowHorizontalLines(false);
+        this.baseTable.setIntercellSpacing(new Dimension(0, 0));
+        this.baseTable.setColumnSelectionAllowed(false);
+        this.baseTable.setRowSelectionAllowed(false);
+        this.baseTable.setCellSelectionEnabled(false);
+
+        this.aggrTableModel = new AggregationTableModel();
+        this.aggrTable = new JTable(this.aggrTableModel);
+        this.aggrTable.setOpaque(false);
+        this.aggrTable.setShowGrid(false);
+        this.aggrTable.setShowVerticalLines(false);
+        this.aggrTable.setShowHorizontalLines(false);
+        this.aggrTable.setIntercellSpacing(new Dimension(0, 0));
+        this.aggrTable.setColumnSelectionAllowed(false);
+        this.aggrTable.setRowSelectionAllowed(false);
+        this.aggrTable.setCellSelectionEnabled(false);
+
+        JTableHeader tableHeader         = this.baseTable.getTableHeader();
+        TableColumnModel baseColumnModel = this.baseTable.getColumnModel();
+        TableColumnModel aggrColumnModel = this.aggrTable.getColumnModel();
 
         this.columnFactory = new ColumnFactory(
                 this.fileAdmin,
                 tableHeader.getDefaultRenderer());
 
-        TableColumn nameCol = this.table.getColumn(this.prefs.getDescName());
-        int nameColNo = columnModel.getColumnIndex(this.prefs.getDescName());
+        TableColumn nameCol = this.baseTable.getColumn(
+                this.prefs.getDescName());
+        int nameColNo = baseColumnModel.getColumnIndex(
+                this.prefs.getDescName());
         nameCol.setIdentifier(this.prefs.getDescName());
         nameCol.setHeaderRenderer(this.columnFactory.getHeaderRenderer());
         nameCol.setCellRenderer(
@@ -109,9 +136,18 @@ public final class ViewController implements HomePageView, Observer {
         nameCol.setMinWidth(this.prefs.getMinColumnWidth());
         nameCol.setPreferredWidth(this.prefs.getColumnWidths(nameColNo));
 
-        TableColumn modifiedCol = this.table.getColumn(
+        nameCol = this.aggrTable.getColumn(this.prefs.getDescName());
+        nameColNo = aggrColumnModel.getColumnIndex(this.prefs.getDescName());
+        nameCol.setIdentifier(this.prefs.getDescName());
+        nameCol.setCellRenderer(
+                this.columnFactory.getLabelNameRenderer());
+        nameCol.setMinWidth(this.prefs.getMinColumnWidth());
+        nameCol.setPreferredWidth(this.prefs.getColumnWidths(nameColNo));
+
+
+        TableColumn modifiedCol = this.baseTable.getColumn(
                 this.prefs.getDescModified());
-        int modifiedColNo = columnModel.getColumnIndex(
+        int modifiedColNo = baseColumnModel.getColumnIndex(
                 this.prefs.getDescModified());
         modifiedCol.setIdentifier(this.prefs.getDescModified());
         modifiedCol.setHeaderRenderer(this.columnFactory.getHeaderRenderer());
@@ -121,58 +157,88 @@ public final class ViewController implements HomePageView, Observer {
         modifiedCol.setPreferredWidth(
                 this.prefs.getColumnWidths(modifiedColNo));
 
-        TableColumn importCol = this.table.getColumn(
+        modifiedCol = this.aggrTable.getColumn(
+                this.prefs.getDescModified());
+        modifiedColNo = aggrColumnModel.getColumnIndex(
+                this.prefs.getDescModified());
+        modifiedCol.setIdentifier(this.prefs.getDescModified());
+        modifiedCol.setCellRenderer(
+                this.columnFactory.getLabelModifiedRenderer());
+        modifiedCol.setMinWidth(this.prefs.getMinColumnWidth());
+        modifiedCol.setPreferredWidth(
+                this.prefs.getColumnWidths(modifiedColNo));
+
+
+        TableColumn importCol = this.baseTable.getColumn(
                 this.prefs.getDescImport());
-        int importColNo = columnModel.getColumnIndex(
+        int importColNo = baseColumnModel.getColumnIndex(
                 this.prefs.getDescImport());
         importCol.setIdentifier(this.prefs.getDescImport());
         importCol.setHeaderRenderer(this.columnFactory.getHeaderRenderer());
         importCol.setCellRenderer(this.columnFactory.getButtonRenderer());
-        importCol.setCellEditor(this.columnFactory.getImportEditor());
+        importCol.setCellEditor(this.columnFactory.getImportOneEditor());
         importCol.setResizable(this.prefs.isButtonResizable());
         importCol.setMinWidth(this.prefs.getMinColumnWidth());
         importCol.setPreferredWidth(this.prefs.getColumnWidths(importColNo));
 
-        TableColumn deleteCol = this.table.getColumn(
+        importCol = this.aggrTable.getColumn(
+                this.prefs.getDescImport());
+        importColNo = aggrColumnModel.getColumnIndex(
+                this.prefs.getDescImport());
+        importCol.setIdentifier(this.prefs.getDescImport());
+        importCol.setCellRenderer(this.columnFactory.getButtonRenderer());
+        importCol.setCellEditor(this.columnFactory.getImportAllEditor());
+        importCol.setResizable(this.prefs.isButtonResizable());
+        importCol.setMinWidth(this.prefs.getMinColumnWidth());
+        importCol.setPreferredWidth(this.prefs.getColumnWidths(importColNo));
+
+
+        TableColumn deleteCol = this.baseTable.getColumn(
                 this.prefs.getDescDelete());
-        int deleteColNo = columnModel.getColumnIndex(
+        int deleteColNo = baseColumnModel.getColumnIndex(
                 this.prefs.getDescDelete());
         deleteCol.setIdentifier(this.prefs.getDescDelete());
         deleteCol.setHeaderRenderer(this.columnFactory.getHeaderRenderer());
         deleteCol.setCellRenderer(this.columnFactory.getButtonRenderer());
-        deleteCol.setCellEditor(this.columnFactory.getDeleteEditor());
+        deleteCol.setCellEditor(this.columnFactory.getDeleteOneEditor());
         deleteCol.setResizable(this.prefs.isButtonResizable());
         deleteCol.setMinWidth(this.prefs.getMinColumnWidth());
         deleteCol.setPreferredWidth(this.prefs.getColumnWidths(deleteColNo));
 
+        deleteCol = this.aggrTable.getColumn(
+                this.prefs.getDescDelete());
+        deleteColNo = aggrColumnModel.getColumnIndex(
+                this.prefs.getDescDelete());
+        deleteCol.setIdentifier(this.prefs.getDescDelete());
+        deleteCol.setCellRenderer(this.columnFactory.getButtonRenderer());
+        deleteCol.setCellEditor(this.columnFactory.getDeleteAllEditor());
+        deleteCol.setResizable(this.prefs.isButtonResizable());
+        deleteCol.setMinWidth(this.prefs.getMinColumnWidth());
+        deleteCol.setPreferredWidth(this.prefs.getColumnWidths(deleteColNo));
+
+
         // resizing the columns
-        TableListener tableListener = new TableListener(this.table);
-        columnModel.addColumnModelListener(tableListener);
+        TableListener tableListener = new TableListener(this.baseTable);
+        baseColumnModel.addColumnModelListener(tableListener);
 
         // reordering the columns
         tableHeader.setReorderingAllowed(this.prefs.isReorderingAllowed());
 
         // sorting the columns
         RowSorter<TableModel> rowSorter =
-            new FileTableRowSorter(this.fileTableModel);
+            new FileTableRowSorter(this.baseTableModel);
         List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
         sortKeys.add(this.prefs.getSortKey());
         rowSorter.setSortKeys(sortKeys);
         rowSorter.addRowSorterListener(tableListener);
-        this.table.setRowSorter(rowSorter);
+        this.baseTable.setRowSorter(rowSorter);
 
-        this.table.setPreferredScrollableViewportSize(
+        this.baseTable.setPreferredScrollableViewportSize(
                 new Dimension(
                         this.prefs.getMinimumTableWidth(),
                         this.prefs.getMinimumTableHeight()));
 
         this.scrollPane = new JCustomScrollPane();
-        //see moneydance.com/pipermail/moneydance-dev/2006-September/000075.html
-        try {
-            this.scrollPane.setBorder(MoneydanceLAF.homePageBorder);
-        } catch (Throwable e) {
-            LOG.warn(e.getMessage(), e);
-        }
 
         this.setDirty(true);
         this.refresh();
@@ -193,15 +259,16 @@ public final class ViewController implements HomePageView, Observer {
         this.columnFactory.setBackground(this.prefs.getBackground());
         this.columnFactory.setBackgroundAlt(this.prefs.getBackgroundAlt());
         this.scrollPane.setBackground(this.prefs.getBackground());
-        TableColumn nameCol = this.table.getColumn(this.prefs.getDescName());
+        TableColumn nameCol = this.baseTable.getColumn(
+                this.prefs.getDescName());
         nameCol.setHeaderValue(this.prefs.getHeaderValueName());
-        TableColumn modifiedCol = this.table.getColumn(
+        TableColumn modifiedCol = this.baseTable.getColumn(
                 this.prefs.getDescModified());
         modifiedCol.setHeaderValue(this.prefs.getHeaderValueModified());
-        TableColumn importCol = this.table.getColumn(
+        TableColumn importCol = this.baseTable.getColumn(
                 this.prefs.getDescImport());
         importCol.setHeaderValue(this.prefs.getHeaderValueImport());
-        TableColumn deleteCol = this.table.getColumn(
+        TableColumn deleteCol = this.baseTable.getColumn(
                 this.prefs.getDescDelete());
         deleteCol.setHeaderValue(
                 this.prefs.getHeaderValueDelete());
@@ -209,46 +276,110 @@ public final class ViewController implements HomePageView, Observer {
         if (this.isDirty()) {
             this.setDirty(false);
             this.fileAdmin.reloadFiles();
-            this.fileTableModel.fireTableDataChanged();
+            this.baseTableModel.fireTableDataChanged();
+            this.aggrTableModel.fireTableDataChanged();
         }
 
-        if (this.fileTableModel.getRowCount() == 0) {
+        if (this.baseTableModel.getRowCount() == 0) {
             String emptyMessage = this.prefs.getEmptyMessage(
                     this.fileAdmin.getBaseDirectory().getAbsolutePath());
             this.emptyLabel.setText(emptyMessage);
             this.emptyLabel.setBackground(this.prefs.getBackground());
             this.emptyLabel.setFont(this.prefs.getBodyFont());
-            this.scrollPane.setViewportView(this.emptyLabel);
-            this.scrollPane.setMinimumSize(
+            this.viewport.setView(this.emptyLabel);
+            this.viewport.setMinimumSize(
                     new Dimension(
                             this.prefs.getPreferredEmptyMessageWidth(),
                             this.prefs.getPreferredEmptyMessageHeight()));
-            this.scrollPane.setPreferredSize(
+            this.viewport.setPreferredSize(
                     new Dimension(
                             this.prefs.getPreferredEmptyMessageWidth(),
                             this.prefs.getPreferredEmptyMessageHeight()));
-            this.scrollPane.setMaximumSize(
+            this.viewport.setMaximumSize(
                     new Dimension(
                             this.prefs.getPreferredEmptyMessageWidth(),
                             this.prefs.getPreferredEmptyMessageHeight()));
-        } else {
-            this.table.setBackground(this.prefs.getBackground());
-            this.table.setRowHeight(this.prefs.getBodyRowHeight());
-            this.scrollPane.setViewportView(this.table);
-            this.scrollPane.setMinimumSize(
+            return;
+        }
+
+        this.baseTable.setBackground(this.prefs.getBackground());
+        this.baseTable.setRowHeight(this.prefs.getBodyRowHeight());
+        this.scrollPane.setViewportView(this.baseTable);
+
+        this.scrollPane.setMinimumSize(
+                new Dimension(
+                        this.prefs.getMinimumTableWidth(),
+                        this.prefs.getMinimumTableHeight()));
+        this.scrollPane.setPreferredSize(
+                new Dimension(
+                        this.prefs.getPreferredTableWidth(
+                                this.baseTableModel.getRowCount()),
+                                this.prefs.getPreferredTableHeight(
+                                       this.baseTableModel.getRowCount())));
+        this.scrollPane.setMaximumSize(
+                new Dimension(
+                        this.prefs.getMaximumTableWidth(),
+                        this.prefs.getMaximumTableHeight()));
+
+        if (this.baseTableModel.getRowCount() == 1) {
+            this.scrollPane.setBorder(MoneydanceLAF.homePageBorder);
+            this.viewport.setView(this.scrollPane);
+            this.viewport.setMinimumSize(
                     new Dimension(
                             this.prefs.getMinimumTableWidth(),
                             this.prefs.getMinimumTableHeight()));
-            this.scrollPane.setPreferredSize(
+            this.viewport.setPreferredSize(
                     new Dimension(
                             this.prefs.getPreferredTableWidth(
-                                    this.fileTableModel.getRowCount()),
-                            this.prefs.getPreferredTableHeight(
-                                    this.fileTableModel.getRowCount())));
-            this.scrollPane.setMaximumSize(
+                                    this.baseTableModel.getRowCount()),
+                                    this.prefs.getPreferredTableHeight(
+                                           this.baseTableModel.getRowCount())));
+            this.viewport.setMaximumSize(
                     new Dimension(
                             this.prefs.getMaximumTableWidth(),
                             this.prefs.getMaximumTableHeight()));
+            return;
+        }
+
+        if (this.baseTableModel.getRowCount() > 1) {
+            this.scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+
+            this.aggrTable.setBackground(this.prefs.getBackground());
+            this.aggrTable.setRowHeight(this.prefs.getBodyRowHeight());
+            this.aggrTable.setMinimumSize(
+                    new Dimension(
+                            this.prefs.getMinimumTableWidth(),
+                            this.prefs.getBodyRowHeight()));
+            this.aggrTable.setPreferredSize(
+                    new Dimension(
+                            this.prefs.getPreferredTableWidth(1),
+                            this.prefs.getBodyRowHeight()));
+            this.aggrTable.setMaximumSize(
+                    new Dimension(
+                            this.prefs.getMaximumTableWidth(),
+                            this.prefs.getBodyRowHeight()));
+
+            TableColumn aggrNameCol = this.aggrTable.getColumn(
+                    this.prefs.getDescName());
+            aggrNameCol.setWidth(nameCol.getWidth());
+            TableColumn aggrModifiedCol = this.aggrTable.getColumn(
+                    this.prefs.getDescModified());
+            aggrModifiedCol.setWidth(modifiedCol.getWidth());
+            TableColumn aggrImportCol = this.baseTable.getColumn(
+                    this.prefs.getDescImport());
+            aggrImportCol.setWidth(importCol.getWidth());
+            TableColumn aggrDeleteCol = this.baseTable.getColumn(
+                    this.prefs.getDescDelete());
+            aggrDeleteCol.setWidth(deleteCol.getWidth());
+
+            this.splitPane.setTopComponent(this.scrollPane);
+            this.splitPane.setBottomComponent(this.aggrTable);
+
+            this.viewport.setView(this.splitPane);
+            this.viewport.setMinimumSize(null);
+            this.viewport.setPreferredSize(null);
+            this.viewport.setMaximumSize(null);
+            return;
         }
     }
 
@@ -266,7 +397,7 @@ public final class ViewController implements HomePageView, Observer {
             this.initialized = true;
             this.init();
         }
-        return this.scrollPane;
+        return this.viewport;
     }
 
 

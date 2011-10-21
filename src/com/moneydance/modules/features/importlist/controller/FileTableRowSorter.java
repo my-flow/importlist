@@ -36,10 +36,10 @@ final class FileTableRowSorter extends TableRowSorter<TableModel> {
     private final Preferences prefs;
 
     /**
-     * @param argListTableModel The table model that is to be sorted
+     * @param tableModel The table model that is to be sorted
      */
-    FileTableRowSorter(final FileTableModel argListTableModel) {
-        super(argListTableModel);
+    FileTableRowSorter(final TableModel tableModel) {
+        super(tableModel);
         this.prefs = Helper.getPreferences();
     }
 

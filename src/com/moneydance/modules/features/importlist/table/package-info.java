@@ -16,22 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.view;
-
-import java.awt.Color;
-import java.awt.Component;
-
 /**
- * This template class defines the abstract methods required to apply a color
- * scheme to the components of the GUI framework.
+ * Contains the classes necessary for rendering and editing the cells.
  */
-public interface ColorSchemeHelper {
-
-    void applyColorScheme(final Component component, final int row);
-
-    void setForeground(final Color argForeground);
-
-    void setBackground(final Color argBackground);
-
-    void setBackgroundAlt(final Color argBackgroundAlt);
-}
+package com.moneydance.modules.features.importlist.table;

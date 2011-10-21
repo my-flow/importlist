@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.view;
+package com.moneydance.modules.features.importlist.table;
 
 import java.awt.Component;
 import java.text.DateFormat;
@@ -29,9 +29,10 @@ import org.apache.commons.lang.Validate;
 
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
+import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
 import com.moneydance.util.CustomDateFormat;
 
-class LabelModifiedRenderer extends DefaultTableCellRenderer {
+final class LabelModifiedRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 7553393304980261323L;
     private final transient ColorSchemeHelper colorSchemeHelper;
@@ -46,7 +47,7 @@ class LabelModifiedRenderer extends DefaultTableCellRenderer {
     }
 
     @Override
-    public final Component getTableCellRendererComponent(
+    public Component getTableCellRendererComponent(
             final JTable table,
             final Object value,
             final boolean isSelected,

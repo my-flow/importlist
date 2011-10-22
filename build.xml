@@ -28,6 +28,9 @@
         <pathelement path="${lib}/commons-lang-2.6.jar"/>
         <pathelement path="${lib}/commons-configuration-1.6.jar"/>
         <pathelement path="${lib}/log4j-1.2.16.jar"/>
+        <pathelement path="${lib}/JGoogleAnalyticsTracker-1.2.0.jar"/>
+        <pathelement path="${lib}/slf4j-api-1.6.3.jar"/>
+        <pathelement path="${lib}/slf4j-log4j12-1.6.3.jar"/>
   </path>
 
   <path id="manifest.classpath">
@@ -124,6 +127,9 @@
             <include name="commons-logging-1.1.1.jar"/>
             <include name="commons-collections-3.2.1.jar"/>
             <include name="log4j-1.2.16.jar"/>
+            <include name="JGoogleAnalyticsTracker-1.2.0.jar"/>
+            <include name="slf4j-api-1.6.3.jar"/>
+            <include name="slf4j-log4j12-1.6.3.jar"/>
         </zipgroupfileset>
     </jar>
 

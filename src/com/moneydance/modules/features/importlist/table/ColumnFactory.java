@@ -56,7 +56,7 @@ public final class ColumnFactory {
         final Preferences prefs = Helper.getPreferences();
 
         int opaqueVersion = prefs.getVersionWithOpaqueHomepageView();
-        if (prefs.getVersion() >= opaqueVersion) {
+        if (prefs.getMajorVersion() >= opaqueVersion) {
             this.colorSchemeHelper  = new OpaqueColorSchemeHelper();
         } else {
             this.colorSchemeHelper  = new DefaultColorSchemeHelper();

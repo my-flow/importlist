@@ -65,7 +65,8 @@ public class Main extends FeatureModule {
 
         this.viewController = new ViewController(
                 this.baseDirectory,
-                this.getContext());
+                this.getContext(),
+                this.getBuild());
 
         // register this module's homepage view
         LOG.debug("Registering homepage view");

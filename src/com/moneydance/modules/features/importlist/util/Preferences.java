@@ -22,6 +22,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.InputStream;
+import java.net.Authenticator;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
+import java.net.SocketAddress;
 import java.text.DateFormat;
 import java.util.Hashtable;
 import java.util.ResourceBundle;
@@ -145,12 +150,17 @@ public final class Preferences {
                 (StreamTable) null);
     }
 
-    public int getVersion() {
+    public String getFullVersion() {
         final String fullString = this.getUserPreferences().getSetting(
-                "current_version");
+        "current_version");
         if (fullString == null) {
-            return 0;
+            return "0";
         }
+        return fullString;
+    }
+
+    public int getMajorVersion() {
+        final String fullString = this.getFullVersion();
         final int endIndex = Math.min(
                 this.config.getInt("length_of_version_digits"),
                 fullString.length());
@@ -178,6 +188,52 @@ public final class Preferences {
 
     public String getImportDirectory() {
         return this.getUserPreferences().getSetting(UserPreferences.IMPORT_DIR);
+    }
+
+    /**
+     * @return The proxy server that the extension use to establish
+     * a connection.
+     */
+    public Proxy getProxy() {
+        boolean useProxy = this.getUserPreferences().getBoolSetting(
+                UserPreferences.NET_USE_PROXY,
+                false);
+
+        if (!useProxy) {
+            return Proxy.NO_PROXY;
+        }
+
+        final SocketAddress socketAddress = new InetSocketAddress(
+                this.getUserPreferences().getSetting(
+                        UserPreferences.NET_PROXY_HOST),
+                this.getUserPreferences().getIntSetting(
+                        UserPreferences.NET_PROXY_PORT,
+                        0));
+
+        boolean authProxy = this.getUserPreferences().getBoolSetting(
+                UserPreferences.NET_AUTH_PROXY,
+                false);
+
+        Proxy.Type proxyType = Proxy.Type.HTTP;
+
+        if (authProxy) {
+            proxyType = Proxy.Type.SOCKS;
+            Authenticator.setDefault(new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    String proxyUser =
+                        Preferences.this.getUserPreferences().getSetting(
+                                UserPreferences.NET_PROXY_USER, "");
+                    String proxyPass =
+                        Preferences.this.getUserPreferences().getSetting(
+                                UserPreferences.NET_PROXY_PASS, "");
+                    return new PasswordAuthentication(
+                            proxyUser,
+                            proxyPass.toCharArray());
+                }
+            });
+        }
+        return new Proxy(proxyType, socketAddress);
     }
 
     public void setColumnWidths(
@@ -607,6 +663,13 @@ public final class Preferences {
     }
 
     /**
+     * @return Tracking code for Google Analytics (aka "utmac")
+     */
+    public String getTrackingCode() {
+        return this.config.getString("tracking_code");
+    }
+
+    /**
      * @return The title of the dialog that is displayed to choose the base
      * directory.
      */
@@ -621,7 +684,7 @@ public final class Preferences {
      */
     public String getConfirmationMessageDeleteOneFile(final String filename) {
         String rawMessage = this.localizable.getString(
-                "confirmation_message_delete_one_file");
+        "confirmation_message_delete_one_file");
         return rawMessage.replace("(0)", Helper.getMarkupFilename(filename));
     }
 
@@ -632,7 +695,7 @@ public final class Preferences {
      */
     public String getConfirmationMessageDeleteAllFiles(final int size) {
         String rawMessage = this.localizable.getString(
-                "confirmation_message_delete_all_files");
+        "confirmation_message_delete_all_files");
         return rawMessage.replace("(0)", String.valueOf(size));
     }
 
@@ -642,7 +705,7 @@ public final class Preferences {
      */
     public String getErrorMessageDeleteFile(final String filename) {
         String rawMessage = this.localizable.getString(
-                "error_message_delete_file");
+        "error_message_delete_file");
         return rawMessage.replace("(0)", Helper.getMarkupFilename(filename));
     }
 

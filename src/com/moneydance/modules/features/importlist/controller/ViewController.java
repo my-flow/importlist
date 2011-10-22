@@ -57,6 +57,7 @@ public final class ViewController implements HomePageView, Observer {
 
     private final Preferences           prefs;
     private final FileAdmin             fileAdmin;
+    private final Tracker               tracker;
     private       boolean               initialized;
     private       JViewport             viewport;
     private       JLabel                emptyLabel;
@@ -72,10 +73,16 @@ public final class ViewController implements HomePageView, Observer {
 
     public ViewController(
             final String baseDirectory,
-            final FeatureModuleContext context) {
+            final FeatureModuleContext context,
+            final int build) {
         this.prefs      = Helper.getPreferences();
         this.fileAdmin  = new FileAdmin(baseDirectory, context);
         this.fileAdmin.addObserver(this);
+        this.tracker    = new Tracker(
+                this.prefs.getFullVersion(),
+                build,
+                this.prefs.getProxy(),
+                this.prefs.getTrackingCode());
     }
 
 
@@ -243,6 +250,8 @@ public final class ViewController implements HomePageView, Observer {
         this.setDirty(true);
         this.refresh();
         this.fileAdmin.startMonitor();
+
+        this.tracker.track("Display");
     }
 
 

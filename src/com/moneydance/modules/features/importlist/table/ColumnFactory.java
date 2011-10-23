@@ -30,8 +30,8 @@ import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
-import com.moneydance.modules.features.importlist.view.DefaultColorSchemeHelper;
-import com.moneydance.modules.features.importlist.view.OpaqueColorSchemeHelper;
+import com.moneydance.modules.features.importlist.view.EvenColorSchemeHelper;
+import com.moneydance.modules.features.importlist.view.OddColorSchemeHelper;
 import com.moneydance.util.CustomDateFormat;
 
 /**
@@ -39,11 +39,15 @@ import com.moneydance.util.CustomDateFormat;
  */
 public final class ColumnFactory {
 
-    private final ColorSchemeHelper     colorSchemeHelper;
+    private final ColorSchemeHelper     evenColorSchemeHelper;
+    private final ColorSchemeHelper     oddColorSchemeHelper;
     private final TableCellRenderer     headerRenderer;
-    private final TableCellRenderer     labelNameRenderer;
-    private final LabelModifiedRenderer labelModifiedRenderer;
-    private final ButtonRenderer        buttonRenderer;
+    private final TableCellRenderer     labelNameOneRenderer;
+    private final TableCellRenderer     labelNameAllRenderer;
+    private final LabelModifiedRenderer labelModifiedOneRenderer;
+    private final LabelModifiedRenderer labelModifiedAllRenderer;
+    private final ButtonRenderer        buttonOneRenderer;
+    private final ButtonRenderer        buttonAllRenderer;
     private final TableCellEditor       importOneEditor;
     private final TableCellEditor       importAllEditor;
     private final TableCellEditor       deleteOneEditor;
@@ -55,49 +59,71 @@ public final class ColumnFactory {
         Validate.notNull(fileAdmin, "fileAdmin can't be null");
         final Preferences prefs = Helper.getPreferences();
 
+        this.evenColorSchemeHelper = new EvenColorSchemeHelper();
+        this.oddColorSchemeHelper  = new OddColorSchemeHelper();
+
+        ColorSchemeHelper defaultColorSchemeHelper = this.evenColorSchemeHelper;
+        ColorSchemeHelper customColorSchemeHelper  = this.oddColorSchemeHelper;
         int opaqueVersion = prefs.getVersionWithOpaqueHomepageView();
         if (prefs.getMajorVersion() >= opaqueVersion) {
-            this.colorSchemeHelper  = new OpaqueColorSchemeHelper();
-        } else {
-            this.colorSchemeHelper  = new DefaultColorSchemeHelper();
+            defaultColorSchemeHelper = this.oddColorSchemeHelper;
         }
-        this.headerRenderer         = new HeaderRenderer(
-                this.colorSchemeHelper,
+
+        this.headerRenderer           = new HeaderRenderer(
+                defaultColorSchemeHelper,
                 defaultHeaderTableCellRenderer);
-        this.labelNameRenderer      = new LabelNameRenderer(
-                this.colorSchemeHelper);
-        this.labelModifiedRenderer  = new LabelModifiedRenderer(
-                this.colorSchemeHelper);
-        this.buttonRenderer         = new ButtonRenderer(
-                this.colorSchemeHelper);
-        this.importOneEditor        = new ImportOneEditor(
+        this.labelNameOneRenderer     = new LabelNameRenderer(
+                defaultColorSchemeHelper);
+        this.labelNameAllRenderer     = new LabelNameRenderer(
+                customColorSchemeHelper);
+        this.labelModifiedOneRenderer = new LabelModifiedRenderer(
+                defaultColorSchemeHelper);
+        this.labelModifiedAllRenderer = new LabelModifiedRenderer(
+                customColorSchemeHelper);
+        this.buttonOneRenderer        = new ButtonRenderer(
+                defaultColorSchemeHelper);
+        this.buttonAllRenderer        = new ButtonRenderer(
+                customColorSchemeHelper);
+        this.importOneEditor          = new ImportOneEditor(
                 fileAdmin,
-                this.buttonRenderer);
-        this.importAllEditor        = new ImportAllEditor(
+                this.buttonOneRenderer);
+        this.importAllEditor          = new ImportAllEditor(
                 fileAdmin,
-                this.buttonRenderer);
-        this.deleteOneEditor        = new DeleteOneEditor(
+                this.buttonAllRenderer);
+        this.deleteOneEditor          = new DeleteOneEditor(
                 fileAdmin,
-                this.buttonRenderer);
-        this.deleteAllEditor        = new DeleteAllEditor(
+                this.buttonOneRenderer);
+        this.deleteAllEditor          = new DeleteAllEditor(
                 fileAdmin,
-                this.buttonRenderer);
+                this.buttonAllRenderer);
     }
 
     public TableCellRenderer getHeaderRenderer() {
         return this.headerRenderer;
     }
 
-    public TableCellRenderer getLabelNameRenderer() {
-        return this.labelNameRenderer;
+    public TableCellRenderer getLabelNameOneRenderer() {
+        return this.labelNameOneRenderer;
     }
 
-    public TableCellRenderer getLabelModifiedRenderer() {
-        return this.labelModifiedRenderer;
+    public TableCellRenderer getLabelNameAllRenderer() {
+        return this.labelNameAllRenderer;
     }
 
-    public TableCellRenderer getButtonRenderer() {
-        return this.buttonRenderer;
+    public TableCellRenderer getLabelModifiedOneRenderer() {
+        return this.labelModifiedOneRenderer;
+    }
+
+    public TableCellRenderer getLabelModifiedAllRenderer() {
+        return this.labelModifiedAllRenderer;
+    }
+
+    public TableCellRenderer getButtonOneRenderer() {
+        return this.buttonOneRenderer;
+    }
+
+    public TableCellRenderer getButtonAllRenderer() {
+        return this.buttonAllRenderer;
     }
 
     public TableCellEditor getImportOneEditor() {
@@ -117,22 +143,25 @@ public final class ColumnFactory {
     }
 
     public void setForeground(final Color foreground) {
-        this.colorSchemeHelper.setForeground(foreground);
+        this.evenColorSchemeHelper.setForeground(foreground);
+        this.oddColorSchemeHelper.setForeground(foreground);
     }
 
     public void setBackground(final Color background) {
-        this.colorSchemeHelper.setBackground(background);
+        this.evenColorSchemeHelper.setBackground(background);
+        this.oddColorSchemeHelper.setBackground(background);
     }
 
     public void setBackgroundAlt(final Color backgroundAlt) {
-        this.colorSchemeHelper.setBackgroundAlt(backgroundAlt);
+        this.evenColorSchemeHelper.setBackgroundAlt(backgroundAlt);
+        this.oddColorSchemeHelper.setBackgroundAlt(backgroundAlt);
     }
 
     public void setDateFormatter(final CustomDateFormat argDateFormatter) {
-        this.labelModifiedRenderer.setDateFormatter(argDateFormatter);
+        this.labelModifiedOneRenderer.setDateFormatter(argDateFormatter);
     }
 
     public void setTimeFormatter(final DateFormat argTimeFormatter) {
-        this.labelModifiedRenderer.setTimeFormatter(argTimeFormatter);
+        this.labelModifiedOneRenderer.setTimeFormatter(argTimeFormatter);
     }
 }

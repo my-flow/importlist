@@ -206,9 +206,9 @@ public final class Preferences {
         final SocketAddress socketAddress = new InetSocketAddress(
                 this.getUserPreferences().getSetting(
                         UserPreferences.NET_PROXY_HOST),
-                this.getUserPreferences().getIntSetting(
-                        UserPreferences.NET_PROXY_PORT,
-                        0));
+                        this.getUserPreferences().getIntSetting(
+                                UserPreferences.NET_PROXY_PORT,
+                                0));
 
         boolean authProxy = this.getUserPreferences().getBoolSetting(
                 UserPreferences.NET_AUTH_PROXY,
@@ -567,10 +567,10 @@ public final class Preferences {
      * @return Preferred height of the file table.
      */
     public int getPreferredTableHeight(final int rowCount) {
-        int fit = this.getTableHeightOffset() + this.getHeaderRowHeight()
-        + rowCount * this.getBodyRowHeight();
+        int fit = this.getHeaderRowHeight()
+                + rowCount * this.getBodyRowHeight();
         int min = Math.min(this.getMaximumTableHeight(), fit);
-        return Math.max(this.getMinColumnWidth(), min);
+        return Math.max(this.getMinimumTableHeight(), min);
     }
 
     /**

@@ -28,7 +28,7 @@ import javax.swing.JComponent;
  * It is used by different <code>TableCellRenderer</code>s to guarantee a
  * consistent style in a table.
  */
-public final class DefaultColorSchemeHelper implements ColorSchemeHelper {
+public final class EvenColorSchemeHelper implements ColorSchemeHelper {
 
     private static final long serialVersionUID = -2724848115953702911L;
     private Color foreground;

@@ -663,7 +663,21 @@ public final class Preferences {
     }
 
     /**
-     * @return Tracking code for Google Analytics (aka "utmac")
+     * @return Keyboard shortcut to import files.
+     */
+    public String getKeyboardShortcutImport() {
+        return this.config.getString("keyboard_shortcut_import");
+    }
+
+    /**
+     * @return Keyboard shortcut to delete files.
+     */
+    public String getKeyboardShortcutDelete() {
+        return this.config.getString("keyboard_shortcut_delete");
+    }
+
+    /**
+     * @return Tracking code for Google Analytics (aka "utmac").
      */
     public String getTrackingCode() {
         return this.config.getString("tracking_code");

@@ -21,7 +21,6 @@ package com.moneydance.modules.features.importlist.table;
 import java.awt.Color;
 import java.text.DateFormat;
 
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.commons.lang.Validate;
@@ -48,10 +47,10 @@ public final class ColumnFactory {
     private final LabelModifiedRenderer labelModifiedAllRenderer;
     private final ButtonRenderer        buttonOneRenderer;
     private final ButtonRenderer        buttonAllRenderer;
-    private final TableCellEditor       importOneEditor;
-    private final TableCellEditor       importAllEditor;
-    private final TableCellEditor       deleteOneEditor;
-    private final TableCellEditor       deleteAllEditor;
+    private final AbstractEditor        importOneEditor;
+    private final AbstractEditor        importAllEditor;
+    private final AbstractEditor        deleteOneEditor;
+    private final AbstractEditor        deleteAllEditor;
 
     public ColumnFactory(
             final FileAdmin fileAdmin,
@@ -126,19 +125,19 @@ public final class ColumnFactory {
         return this.buttonAllRenderer;
     }
 
-    public TableCellEditor getImportOneEditor() {
+    public AbstractEditor getImportOneEditor() {
         return this.importOneEditor;
     }
 
-    public TableCellEditor getImportAllEditor() {
+    public AbstractEditor getImportAllEditor() {
         return this.importAllEditor;
     }
 
-    public TableCellEditor getDeleteOneEditor() {
+    public AbstractEditor getDeleteOneEditor() {
         return this.deleteOneEditor;
     }
 
-    public TableCellEditor getDeleteAllEditor() {
+    public AbstractEditor getDeleteAllEditor() {
         return this.deleteAllEditor;
     }
 

@@ -21,6 +21,8 @@ package com.moneydance.modules.features.importlist.table;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.KeyStroke;
+
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 
 final class DeleteOneEditor extends AbstractEditor {
@@ -34,12 +36,18 @@ final class DeleteOneEditor extends AbstractEditor {
     }
 
     @Override
-    ActionListener getActionListener(final int rowNumber) {
+    public ActionListener getActionListener(final int rowNumber) {
         return new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent actionEvent) {
                 DeleteOneEditor.this.getFileAdmin().deleteRow(rowNumber);
             }
         };
+    }
+
+    @Override
+    public KeyStroke getKeyStroke() {
+        final String shortcut = this.getPrefs().getKeyboardShortcutDelete();
+        return KeyStroke.getKeyStroke(shortcut);
     }
 }

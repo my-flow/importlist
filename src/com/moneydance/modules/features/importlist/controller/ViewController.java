@@ -44,6 +44,7 @@ import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.table.AbstractEditor;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
@@ -292,6 +293,7 @@ public final class ViewController implements HomePageView, Observer {
             this.aggrTableModel.fireTableDataChanged();
         }
 
+        // display a label iff there are no files in the list
         if (this.baseTableModel.getRowCount() == 0) {
             String emptyMessage = this.prefs.getEmptyMessage(
                     this.fileAdmin.getBaseDirectory().getAbsolutePath());
@@ -334,6 +336,7 @@ public final class ViewController implements HomePageView, Observer {
                         this.prefs.getMaximumTableWidth(),
                         this.prefs.getMaximumTableHeight()));
 
+        // display only scroll pane iff there is exactly one file in the list
         if (this.baseTableModel.getRowCount() == 1) {
             this.scrollPane.setBorder(MoneydanceLAF.homePageBorder);
             this.viewport.setView(this.scrollPane);
@@ -351,9 +354,12 @@ public final class ViewController implements HomePageView, Observer {
                     new Dimension(
                             this.prefs.getMaximumTableWidth(),
                             this.prefs.getMaximumTableHeight()));
+            this.registerKeyboardShortcuts4One();
             return;
         }
 
+        // display scroll pane and an additional import all/delete all table
+        // iff there is more than one file in the list
         if (this.baseTableModel.getRowCount() > 1) {
             this.scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 
@@ -384,6 +390,7 @@ public final class ViewController implements HomePageView, Observer {
             this.viewport.setMinimumSize(null);
             this.viewport.setPreferredSize(null);
             this.viewport.setMaximumSize(null);
+            this.registerKeyboardShortcuts4All();
             return;
         }
     }
@@ -448,5 +455,25 @@ public final class ViewController implements HomePageView, Observer {
 
     public boolean isDirty() {
         return this.dirty;
+    }
+
+    private void registerKeyboardShortcuts4One() {
+        AbstractEditor importOneEditor =
+            this.columnFactory.getImportOneEditor();
+        importOneEditor.registerKeyboardShortcut(this.scrollPane);
+
+        AbstractEditor deleteOneEditor =
+            this.columnFactory.getDeleteOneEditor();
+        deleteOneEditor.registerKeyboardShortcut(this.scrollPane);
+    }
+
+    private void registerKeyboardShortcuts4All() {
+        AbstractEditor importAllEditor =
+            this.columnFactory.getImportAllEditor();
+        importAllEditor.registerKeyboardShortcut(this.scrollPane);
+
+        AbstractEditor deleteAllEditor =
+            this.columnFactory.getDeleteAllEditor();
+        deleteAllEditor.registerKeyboardShortcut(this.scrollPane);
     }
 }

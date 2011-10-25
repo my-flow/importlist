@@ -19,43 +19,54 @@
 package com.moneydance.modules.features.importlist.table;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
+import javax.swing.Action;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 
 import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Preferences;
 
-abstract class AbstractEditor extends DefaultCellEditor {
+public abstract class AbstractEditor extends DefaultCellEditor {
 
     private static final long serialVersionUID = -2042274086341185241L;
+    private final transient Preferences     prefs;
     private final transient FileAdmin       fileAdmin;
     private final transient ButtonRenderer  buttonRenderer;
     private                 String          label;
+
+    public abstract ActionListener getActionListener(final int rowNumber);
+
+    public abstract KeyStroke getKeyStroke();
 
     AbstractEditor(
             final FileAdmin argFileAdmin,
             final ButtonRenderer argButtonRenderer) {
         super(new JCheckBox());
+        this.prefs          = Helper.getPreferences();
         this.fileAdmin      = argFileAdmin;
         this.buttonRenderer = argButtonRenderer;
     }
 
-    abstract ActionListener getActionListener(final int rowNumber);
-
-    protected FileAdmin getFileAdmin() {
+    protected final FileAdmin getFileAdmin() {
         return this.fileAdmin;
     }
 
     @Override
-    public Object getCellEditorValue() {
+    public final Object getCellEditorValue() {
         return this.label;
     }
 
     @Override
-    public Component getTableCellEditorComponent(
+    public final Component getTableCellEditorComponent(
             final JTable table,
             final Object value,
             final boolean isSelected,
@@ -72,5 +83,33 @@ abstract class AbstractEditor extends DefaultCellEditor {
         button.addActionListener(actionListener);
 
         return button;
+    }
+
+
+    public final void registerKeyboardShortcut(final JComponent jComponent) {
+        if (this.getKeyStroke() == null) {
+            return;
+        }
+
+        final Action action = new AbstractAction() {
+            private static final long serialVersionUID = 947999658820121305L;
+
+            @Override
+            public void actionPerformed(final ActionEvent actionEvent) {
+                ActionListener actionListener =
+                    AbstractEditor.this.getActionListener(0);
+                actionListener.actionPerformed(actionEvent);
+            }
+        };
+
+        final String actionMapKey = this.getClass().getName(); // unique
+        jComponent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                this.getKeyStroke(),
+                actionMapKey);
+        jComponent.getActionMap().put(actionMapKey, action);
+    }
+
+    public final Preferences getPrefs() {
+        return this.prefs;
     }
 }

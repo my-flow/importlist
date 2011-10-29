@@ -18,7 +18,8 @@
 
 package com.moneydance.apps.md.controller;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.moneydance.util.StreamTable;
 
@@ -29,7 +30,7 @@ public final class StubContextFactory {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-        Logger.getLogger(StubContextFactory.class);
+        LoggerFactory.getLogger(StubContextFactory.class);
 
     private final transient FeatureModule featureModule;
     private final transient FeatureModuleContext context;

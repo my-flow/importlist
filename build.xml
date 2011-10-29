@@ -23,10 +23,10 @@
 
   <path id="compile.classpath">
         <pathelement path="${lib}/moneydance.jar"/>
-        <pathelement path="${lib}/junit-4.8.2.jar"/>
-        <pathelement path="${lib}/commons-io-2.0.1.jar"/>
+        <pathelement path="${lib}/commons-io-2.1.jar"/>
         <pathelement path="${lib}/commons-lang-2.6.jar"/>
-        <pathelement path="${lib}/commons-configuration-1.6.jar"/>
+        <pathelement path="${lib}/commons-lang3-3.0.1.jar"/>
+        <pathelement path="${lib}/commons-configuration-1.7.jar"/>
         <pathelement path="${lib}/log4j-1.2.16.jar"/>
         <pathelement path="${lib}/JGoogleAnalyticsTracker-1.2.0.jar"/>
         <pathelement path="${lib}/slf4j-api-1.6.3.jar"/>
@@ -121,9 +121,10 @@
 
     <jar jarfile="${build}/external-libs.jar">
         <zipgroupfileset dir="${lib}">
-            <include name="commons-io-2.0.1.jar"/>
+            <include name="commons-io-2.1.jar"/>
             <include name="commons-lang-2.6.jar"/>
-            <include name="commons-configuration-1.6.jar"/>
+            <include name="commons-lang3-3.0.1.jar"/>
+            <include name="commons-configuration-1.7.jar"/>
             <include name="commons-logging-1.1.1.jar"/>
             <include name="commons-collections-3.2.1.jar"/>
             <include name="log4j-1.2.16.jar"/>
@@ -212,8 +213,15 @@
       <doctitle><![CDATA[<h1>Import List for Moneydance</h1>]]></doctitle>
       <link href="http://download.oracle.com/javase/6/docs/api/"/>
       <link href="http://moneydance.com/dev/apidoc/"/>
-      <link href="http://commons.apache.org/io/apidocs/"/>
+      <link href="http://commons.apache.org/collections/apidocs/"/>
+      <link href="http://www.dmurph.com/jgoogleanalyticstracker/"/>
+      <link href="http://www.slf4j.org/apidocs/"/>
+      <link href="http://commons.apache.org/configuration/apidocs/"/>
+      <link href="http://commons.apache.org/io/api-2.1/"/>
+      <link href="http://commons.apache.org/lang/api-3.0.1/"/>
+      <link href="http://commons.apache.org/lang/api-2.6/"/>
       <link href="http://logging.apache.org/log4j/1.2/apidocs/"/>
+      <link href="http://commons.apache.org/logging/apidocs/"/>
       <footer><![CDATA[
       	<a href="https://github.com/my-flow/importlist">
       	 Import List on GitHub

@@ -36,7 +36,6 @@ import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
 
 class ButtonRenderer implements TableCellRenderer {
 
-    private static final long serialVersionUID = -5002244293774549298L;
     private final ColorSchemeHelper colorSchemeHelper;
 
     ButtonRenderer(final ColorSchemeHelper argColorSchemeHelper) {

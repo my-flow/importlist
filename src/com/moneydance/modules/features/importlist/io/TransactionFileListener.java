@@ -23,7 +23,8 @@ import java.util.Observable;
 
 import org.apache.commons.io.monitor.FileAlterationListener;
 import org.apache.commons.io.monitor.FileAlterationObserver;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This <code>FileAlterationListener</code> implementation is notified about
@@ -37,7 +38,7 @@ extends Observable implements FileAlterationListener {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-        Logger.getLogger(TransactionFileListener.class);
+        LoggerFactory.getLogger(TransactionFileListener.class);
 
     @Override
     public void onStart(final FileAlterationObserver observer) {

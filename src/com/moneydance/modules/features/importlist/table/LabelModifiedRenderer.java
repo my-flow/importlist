@@ -25,7 +25,7 @@ import java.util.Date;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;

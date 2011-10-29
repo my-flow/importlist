@@ -20,7 +20,8 @@ package com.moneydance.modules.features.importlist;
 
 import java.awt.Image;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.StubContextFactory;
@@ -41,7 +42,7 @@ public class Main extends FeatureModule {
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG = Logger.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     private final           Preferences  prefs;
     private String          baseDirectory;

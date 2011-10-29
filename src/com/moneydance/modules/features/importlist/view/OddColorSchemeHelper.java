@@ -30,7 +30,6 @@ import javax.swing.JComponent;
  */
 public final class OddColorSchemeHelper implements ColorSchemeHelper {
 
-    private static final long serialVersionUID = -2724848115953702911L;
     private Color foreground;
     private Color background;
     private Color backgroundAlt;

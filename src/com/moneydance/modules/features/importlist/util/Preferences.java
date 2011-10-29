@@ -39,8 +39,9 @@ import org.apache.commons.configuration.AbstractFileConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
@@ -60,7 +61,8 @@ public final class Preferences {
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG = Logger.getLogger(Preferences.class);
+    private static final Logger LOG =
+            LoggerFactory.getLogger(Preferences.class);
 
     /**
      * The resource in the JAR file to read the properties from.

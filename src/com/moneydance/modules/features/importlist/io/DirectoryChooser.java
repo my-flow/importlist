@@ -25,7 +25,8 @@ import javax.swing.JFileChooser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.AbstractFileFilter;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
@@ -42,7 +43,8 @@ final class DirectoryChooser {
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG = Logger.getLogger(DirectoryChooser.class);
+    private static final Logger LOG =
+            LoggerFactory.getLogger(DirectoryChooser.class);
 
     private final   AbstractFileFilter validDirFilter;
     private final   Preferences prefs;

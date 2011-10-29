@@ -21,7 +21,8 @@ package com.moneydance.apps.md.controller;
 import java.awt.Image;
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.moneydance.apps.md.extensionapi.AccountEditor;
 import com.moneydance.apps.md.model.RootAccount;
@@ -38,7 +39,8 @@ public final class StubContext extends Main {
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG = Logger.getLogger(StubContext.class);
+    private static final Logger LOG =
+            LoggerFactory.getLogger(StubContext.class);
 
     private final transient FeatureModule featureModule;
 

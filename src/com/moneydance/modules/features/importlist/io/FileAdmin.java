@@ -42,7 +42,8 @@ import org.apache.commons.io.filefilter.OrFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.modules.features.importlist.util.Helper;
@@ -56,7 +57,7 @@ public final class FileAdmin extends Observable implements Observer {
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG = Logger.getLogger(FileAdmin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FileAdmin.class);
 
     private final Preferences               prefs;
     private final FeatureModuleContext      context;
@@ -150,7 +151,7 @@ public final class FileAdmin extends Observable implements Observer {
     public void stopMonitor() {
         LOG.debug("Stopping the directory monitor.");
         try {
-            this.monitor.stop();
+            this.monitor.stop(0);
         } catch (Exception e) {
             LOG.warn(e.getMessage(), e);
         }
@@ -189,6 +190,9 @@ public final class FileAdmin extends Observable implements Observer {
     }
 
     public void deleteAllRows() {
+        if (this.files.isEmpty()) {
+            return;
+        }
         if (this.showWarningBeforeDeletingAllFiles(this.files.size())) {
             for (final File file : this.files) {
                 try {

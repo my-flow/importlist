@@ -29,7 +29,8 @@ import javax.swing.event.RowSorterListener;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
@@ -45,7 +46,8 @@ implements TableColumnModelListener, RowSorterListener {
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG = Logger.getLogger(TableListener.class);
+    private static final Logger LOG =
+            LoggerFactory.getLogger(TableListener.class);
 
     private final Preferences prefs;
     private final JTable table;

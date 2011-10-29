@@ -22,7 +22,8 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.moneydance.modules.features.importlist.util.Helper;
 
@@ -41,7 +42,8 @@ final class ConsoleRunner {
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG = Logger.getLogger(ConsoleRunner.class);
+    private static final Logger LOG =
+            LoggerFactory.getLogger(ConsoleRunner.class);
 
     /**
      * Restrictive constructor.

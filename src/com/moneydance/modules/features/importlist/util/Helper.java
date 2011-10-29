@@ -25,20 +25,20 @@ import java.util.Properties;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.moneydance.apps.md.controller.FeatureModule;
-import com.moneydance.apps.md.view.resources.Resources;
 
 public final class Helper {
 
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG = Logger.getLogger(Resources.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Helper.class);
 
     private static  Preferences     prefs;
 
@@ -78,8 +78,8 @@ public final class Helper {
 
 
     public static void loadLoggerConfiguration() {
-        boolean rootIsConfigured =
-            Logger.getRootLogger().getAllAppenders().hasMoreElements();
+        org.apache.log4j.Logger root = org.apache.log4j.Logger.getRootLogger();
+        boolean rootIsConfigured = root.getAllAppenders().hasMoreElements();
         if (rootIsConfigured) {
             // do not overwrite any existing configurations
             return;

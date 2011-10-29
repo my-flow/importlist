@@ -37,7 +37,6 @@ import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
  */
 final class HeaderRenderer implements TableCellRenderer {
 
-    private static final long serialVersionUID = 3121884943197710031L;
     private final TableCellRenderer defaultHeaderTableCellRenderer;
     private final Preferences       prefs;
     private final ColorSchemeHelper colorSchemeHelper;

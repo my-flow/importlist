@@ -647,7 +647,8 @@ public final class Preferences {
     }
 
     public Font getHeaderFont() {
-        return UIManager.getFont("OptionPane.font");
+        final Font baseFont = UIManager.getFont("Label.font");
+        return baseFont.deriveFont(Font.BOLD, baseFont.getSize2D() + 2.0F);
     }
 
     public Font getBodyFont() {
@@ -655,13 +656,15 @@ public final class Preferences {
     }
 
     public int getHeaderRowHeight() {
-        return (int) (this.config.getDouble("factor_row_height")
-                * this.getHeaderFont().getSize());
+        return Math.round(
+                (float) this.config.getDouble("factor_row_height_header")
+                * this.getBodyFont().getSize2D());
     }
 
     public int getBodyRowHeight() {
-        return (int) (this.config.getDouble("factor_row_height")
-                * this.getBodyFont().getSize());
+        return Math.round(
+                (float) this.config.getDouble("summand_row_height_body")
+                + this.getBodyFont().getSize2D());
     }
 
     /**

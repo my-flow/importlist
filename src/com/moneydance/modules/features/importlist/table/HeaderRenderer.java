@@ -19,6 +19,7 @@
 package com.moneydance.modules.features.importlist.table;
 
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -73,9 +74,18 @@ final class HeaderRenderer implements TableCellRenderer {
         }
 
         component.setFont(this.prefs.getHeaderFont());
-        component.setSize(
+        component.setSize(new Dimension(
                 component.getWidth(),
-                this.prefs.getHeaderRowHeight());
+                this.prefs.getHeaderRowHeight()));
+        component.setMinimumSize(new Dimension(
+                component.getWidth(),
+                this.prefs.getHeaderRowHeight()));
+        component.setPreferredSize(new Dimension(
+                component.getWidth(),
+                this.prefs.getHeaderRowHeight()));
+        component.setMaximumSize(new Dimension(
+                component.getWidth(),
+                this.prefs.getHeaderRowHeight()));
 
         return component;
     }

@@ -27,7 +27,9 @@ import javax.swing.table.AbstractTableModel;
 import org.apache.commons.lang3.Validate;
 
 import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
+import com.moneydance.modules.features.importlist.util.Settings;
 
 /**
  * This class provides a <code>TableModel</code> implementation for a given
@@ -35,34 +37,40 @@ import com.moneydance.modules.features.importlist.util.Preferences;
  * caching of its table values. The first two columns represent the name of the
  * file and the date of its last modification, the last two columns represent
  * the action buttons to import and delete the file, respectively.
+ *
+ * @author Florian J. Breunig
  */
 final class FileTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 3552703741263935211L;
-    private final transient Preferences         prefs;
-    private final           List<File>          files;
+    private final transient Preferences prefs;
+    private final transient Settings    settings;
+    private final transient Localizable localizable;
+    private final           List<File>  files;
 
     FileTableModel(final List<File> argFiles) {
-        super();
         Validate.notNull(argFiles, "argFiles can't be null");
-        this.prefs = Helper.getPreferences();
-        this.files = argFiles;
+        this.prefs       = Helper.getPreferences();
+        this.settings    = Helper.getSettings();
+        this.localizable = Helper.getLocalizable();
+        // ESCA-JAVA0256: argFiles is readonly by design
+        this.files       = argFiles;
     }
 
     @Override
     public Class<?> getColumnClass(final int columnIndex) {
         String columnName = this.getColumnName(columnIndex);
 
-        if (this.prefs.getDescName().equals(columnName)) {
+        if (this.settings.getDescName().equals(columnName)) {
             return String.class;
         }
-        if (this.prefs.getDescModified().equals(columnName)) {
+        if (this.settings.getDescModified().equals(columnName)) {
             return Date.class;
         }
-        if (this.prefs.getDescImport().equals(columnName)) {
+        if (this.settings.getDescImport().equals(columnName)) {
             return String.class;
         }
-        if (this.prefs.getDescDelete().equals(columnName)) {
+        if (this.settings.getDescDelete().equals(columnName)) {
             return String.class;
         }
         return null;
@@ -77,19 +85,19 @@ final class FileTableModel extends AbstractTableModel {
         }
         String columnName = this.getColumnName(column);
 
-        if (this.prefs.getDescName().equals(columnName)) {
+        if (this.settings.getDescName().equals(columnName)) {
             final File file = this.files.get(row);
             return file.getName();
         }
-        if (this.prefs.getDescModified().equals(columnName)) {
+        if (this.settings.getDescModified().equals(columnName)) {
             final File file = this.files.get(row);
             return new Date(file.lastModified());
         }
-        if (this.prefs.getDescImport().equals(columnName)) {
-            return this.prefs.getLabelImportOneButton();
+        if (this.settings.getDescImport().equals(columnName)) {
+            return this.localizable.getLabelImportOneButton();
         }
-        if (this.prefs.getDescDelete().equals(columnName)) {
-            return this.prefs.getLabelDeleteOneButton();
+        if (this.settings.getDescDelete().equals(columnName)) {
+            return this.localizable.getLabelDeleteOneButton();
         }
         throw new IllegalArgumentException(
                 "Could not find value for row " + row + ", column " + column);
@@ -105,10 +113,10 @@ final class FileTableModel extends AbstractTableModel {
     @Override
     public boolean isCellEditable(final int row, final int column) {
         String columnName = this.getColumnName(column);
-        if (this.prefs.getDescImport().equals(columnName)) {
+        if (this.settings.getDescImport().equals(columnName)) {
             return true;
         }
-        if (this.prefs.getDescDelete().equals(columnName)) {
+        if (this.settings.getDescDelete().equals(columnName)) {
             return true;
         }
         return false;

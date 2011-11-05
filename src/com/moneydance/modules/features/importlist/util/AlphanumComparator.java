@@ -28,9 +28,9 @@ import java.util.Comparator;
 
 /**
  * This is an updated version of the
- * <a href="http://www.davekoelle.com/alphanum.html">Alphanum Algorithm</a>
- * with enhancements made by Daniel Migowski, Andre Bogus, David Koelle,
- * and Florian J. Breunig.
+ * <a href="http://www.davekoelle.com/alphanum.html">Alphanum Algorithm</a>.
+ *
+ * @author Daniel Migowski, Andre Bogus, David Koelle, and Florian J. Breunig.
  */
 public final class AlphanumComparator
 implements Comparator<String>, Serializable {
@@ -68,7 +68,7 @@ implements Comparator<String>, Serializable {
      * @return <code>true</code> if the given char represents a digit;
      * <code>false</code> otherwise.
      */
-    private boolean isDigit(final char character) {
+    private static boolean isDigit(final char character) {
         return character >= DIGIT_LOWER_BOUND
         && character <= DIGIT_UPPER_BOUND;
     }
@@ -81,7 +81,7 @@ implements Comparator<String>, Serializable {
      * @param marker The index of the string to start analyzing from.
      * @return A substring containing only digits or only non-digits.
      */
-    private String getChunk(
+    private static String getChunk(
             final String string,
             final int slength,
             final int marker) {
@@ -90,10 +90,10 @@ implements Comparator<String>, Serializable {
         char character = string.charAt(index);
         chunk.append(character);
         index++;
-        if (this.isDigit(character)) {
+        if (isDigit(character)) {
             while (index < slength) {
                 character = string.charAt(index);
-                if (!this.isDigit(character)) {
+                if (!isDigit(character)) {
                     break;
                 }
                 chunk.append(character);
@@ -102,7 +102,7 @@ implements Comparator<String>, Serializable {
         } else {
             while (index < slength) {
                 character = string.charAt(index);
-                if (this.isDigit(character)) {
+                if (isDigit(character)) {
                     break;
                 }
                 chunk.append(character);
@@ -127,17 +127,17 @@ implements Comparator<String>, Serializable {
 
         while (thisMarker < s1Length && thatMarker < s2Length) {
             final String thisChunk
-            = this.getChunk(string1, s1Length, thisMarker);
+            = getChunk(string1, s1Length, thisMarker);
             thisMarker += thisChunk.length();
 
             final String thatChunk
-            = this.getChunk(string2, s2Length, thatMarker);
+            = getChunk(string2, s2Length, thatMarker);
             thatMarker += thatChunk.length();
 
             // If both chunks contain numeric characters, sort them numerically
             int result = 0;
-            if (this.isDigit(thisChunk.charAt(0))
-                    && this.isDigit(thatChunk.charAt(0))) {
+            if (isDigit(thisChunk.charAt(0))
+                    && isDigit(thatChunk.charAt(0))) {
                 // Simple chunk comparison by length.
                 final int thisChunkLength = thisChunk.length();
                 result = thisChunkLength - thatChunk.length();

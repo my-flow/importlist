@@ -28,6 +28,7 @@ import org.apache.commons.lang3.Validate;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
+import com.moneydance.modules.features.importlist.util.Settings;
 import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
 import com.moneydance.modules.features.importlist.view.EvenColorSchemeHelper;
 import com.moneydance.modules.features.importlist.view.OddColorSchemeHelper;
@@ -35,6 +36,8 @@ import com.moneydance.util.CustomDateFormat;
 
 /**
  * This factory provides unified access to the required renderer classes.
+ *
+ * @author Florian J. Breunig
  */
 public final class ColumnFactory {
 
@@ -56,14 +59,15 @@ public final class ColumnFactory {
             final FileAdmin fileAdmin,
             final TableCellRenderer defaultHeaderTableCellRenderer) {
         Validate.notNull(fileAdmin, "fileAdmin can't be null");
-        final Preferences prefs = Helper.getPreferences();
+        final Preferences prefs    = Helper.getPreferences();
+        final Settings    settings = Helper.getSettings();
 
         this.evenColorSchemeHelper = new EvenColorSchemeHelper();
         this.oddColorSchemeHelper  = new OddColorSchemeHelper();
 
         ColorSchemeHelper defaultColorSchemeHelper = this.evenColorSchemeHelper;
         ColorSchemeHelper customColorSchemeHelper  = this.oddColorSchemeHelper;
-        int opaqueVersion = prefs.getVersionWithOpaqueHomepageView();
+        int opaqueVersion = settings.getVersionWithOpaqueHomepageView();
         if (prefs.getMajorVersion() >= opaqueVersion) {
             defaultColorSchemeHelper = this.oddColorSchemeHelper;
         }

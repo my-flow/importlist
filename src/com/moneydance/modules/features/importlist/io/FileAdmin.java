@@ -47,10 +47,13 @@ import org.slf4j.LoggerFactory;
 
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Preferences;
+import com.moneydance.modules.features.importlist.util.Localizable;
+import com.moneydance.modules.features.importlist.util.Settings;
 
 /**
  * This core class coordinates and delegates operations on the file system.
+ *
+ * @author Florian J. Breunig
  */
 public final class FileAdmin extends Observable implements Observer {
 
@@ -59,7 +62,8 @@ public final class FileAdmin extends Observable implements Observer {
      */
     private static final Logger LOG = LoggerFactory.getLogger(FileAdmin.class);
 
-    private final Preferences               prefs;
+    private final Settings                  settings;
+    private final Localizable               localizable;
     private final FeatureModuleContext      context;
     private final DirectoryChooser          directoryChooser;
     private final AbstractFileFilter        transactionFileFilter;
@@ -72,15 +76,15 @@ public final class FileAdmin extends Observable implements Observer {
 
     public FileAdmin(final String baseDirectory,
             final FeatureModuleContext argContext) {
-        super();
-        this.prefs            = Helper.getPreferences();
+        this.settings         = Helper.getSettings();
+        this.localizable      = Helper.getLocalizable();
         this.context          = argContext;
         this.directoryChooser = new DirectoryChooser(baseDirectory);
         this.transactionFileFilter = new SuffixFileFilter(
-                this.prefs.getTransactionFileExtensions(),
+                this.settings.getTransactionFileExtensions(),
                 IOCase.INSENSITIVE);
         this.textFileFilter = new SuffixFileFilter(
-                this.prefs.getTextFileExtensions(),
+                this.settings.getTextFileExtensions(),
                 IOCase.INSENSITIVE);
         this.readableFileFilter = new AndFileFilter(
                 CanReadFileFilter.CAN_READ,
@@ -91,7 +95,7 @@ public final class FileAdmin extends Observable implements Observer {
         this.listener = new TransactionFileListener();
         this.listener.addObserver(this);
         this.monitor  = new FileAlterationMonitor(
-                this.prefs.getMonitorIntervall());
+                this.settings.getMonitorIntervall());
 
         this.files = Collections.synchronizedList(new ArrayList<File>());
     }
@@ -178,11 +182,11 @@ public final class FileAdmin extends Observable implements Observer {
     private void importFile(final File file) {
         String callUri = "";
         if (this.transactionFileFilter.accept(file)) {
-            callUri = this.prefs.getTransactionFileImportUriPrefix()
+            callUri = this.settings.getTransactionFileImportUriPrefix()
             + file.getAbsolutePath();
         }
         if (this.textFileFilter.accept(file)) {
-            callUri = this.prefs.getTextFileImportUriPrefix()
+            callUri = this.settings.getTextFileImportUriPrefix()
             + file.getAbsolutePath();
         }
         // Import the file identified by the file parameter
@@ -226,7 +230,7 @@ public final class FileAdmin extends Observable implements Observer {
             } catch (IOException e) {
                 LOG.warn("Could not delete file " + file.getAbsoluteFile());
                 final String errorMessage =
-                    this.prefs.getErrorMessageDeleteFile(file.getName());
+                    this.localizable.getErrorMessageDeleteFile(file.getName());
                 final Object errorLabel = new JLabel(errorMessage);
                 JOptionPane.showMessageDialog(
                         null, // no parent component
@@ -248,7 +252,7 @@ public final class FileAdmin extends Observable implements Observer {
 
     private boolean showWarningBeforeDeletingOneFile(final File file) {
         final String confirmationMessage =
-            this.prefs.getConfirmationMessageDeleteOneFile(file.getName());
+           this.localizable.getConfirmationMessageDeleteOneFile(file.getName());
         final Object confirmationLabel = new JLabel(confirmationMessage);
         final Image image = Helper.getIconImage();
         Icon  icon  = null;
@@ -256,8 +260,8 @@ public final class FileAdmin extends Observable implements Observer {
             icon = new ImageIcon(image);
         }
         final Object[] options = {
-                this.prefs.getOptionDeleteFile(),
-                this.prefs.getOptionCancel()
+                this.localizable.getOptionDeleteFile(),
+                this.localizable.getOptionCancel()
         };
 
         final int choice = JOptionPane.showOptionDialog(
@@ -275,7 +279,7 @@ public final class FileAdmin extends Observable implements Observer {
 
     private boolean showWarningBeforeDeletingAllFiles(final int size) {
         final String confirmationMessage =
-            this.prefs.getConfirmationMessageDeleteAllFiles(size);
+            this.localizable.getConfirmationMessageDeleteAllFiles(size);
         final Object confirmationLabel = new JLabel(confirmationMessage);
         final Image image = Helper.getIconImage();
         Icon  icon  = null;
@@ -283,8 +287,8 @@ public final class FileAdmin extends Observable implements Observer {
             icon = new ImageIcon(image);
         }
         final Object[] options = {
-                this.prefs.getOptionDeleteFile(),
-                this.prefs.getOptionCancel()
+                this.localizable.getOptionDeleteFile(),
+                this.localizable.getOptionCancel()
         };
 
         final int choice = JOptionPane.showOptionDialog(

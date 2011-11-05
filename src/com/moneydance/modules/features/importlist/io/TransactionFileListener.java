@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
  * This <code>FileAlterationListener</code> implementation is notified about
  * relevant modifications in the file system. It propagates these modifications
  * to its <code>Observer</code>s.
+ *
+ * @author Florian J. Breunig
  */
 final class TransactionFileListener
 extends Observable implements FileAlterationListener {

@@ -25,39 +25,41 @@ import javax.swing.table.TableRowSorter;
 
 import com.moneydance.modules.features.importlist.util.AlphanumComparator;
 import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Preferences;
+import com.moneydance.modules.features.importlist.util.Settings;
 
 /**
  * An implementation of <code>RowSorter</code> that provides sorting for a
  * <code>ListTableModel</code>.
+ *
+ * @author Florian J. Breunig
  */
 final class FileTableRowSorter extends TableRowSorter<TableModel> {
 
-    private final Preferences prefs;
+    private final Settings settings;
 
     /**
      * @param tableModel The table model that is to be sorted
      */
     FileTableRowSorter(final TableModel tableModel) {
         super(tableModel);
-        this.prefs = Helper.getPreferences();
+        this.settings = Helper.getSettings();
     }
 
     @Override
     public boolean isSortable(final int column) {
         String columnName = this.getModel().getColumnName(column);
-        return this.prefs.getDescName().equals(columnName)
-        || this.prefs.getDescModified().equals(columnName);
+        return this.settings.getDescName().equals(columnName)
+        || this.settings.getDescModified().equals(columnName);
     }
 
     @Override
     public Comparator<?> getComparator(final int column) {
         final String columnName  = this.getModel().getColumnName(column);
         Comparator<?> comparator = null;
-        if (this.prefs.getDescName().equals(columnName)) {
+        if (this.settings.getDescName().equals(columnName)) {
             comparator = AlphanumComparator.ALPHANUM;
         }
-        if (this.prefs.getDescModified().equals(columnName)) {
+        if (this.settings.getDescModified().equals(columnName)) {
             comparator = super.getComparator(column);
         }
         return comparator;

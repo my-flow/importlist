@@ -16,11 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.view;
+package com.moneydance.modules.features.importlist.controller;
 
 import javax.swing.JScrollPane;
 
-public final class JCustomScrollPane extends JScrollPane {
+/**
+ * @author Florian J. Breunig
+ */
+final class JCustomScrollPane extends JScrollPane {
 
     private static final long serialVersionUID = -2741147624999364681L;
 

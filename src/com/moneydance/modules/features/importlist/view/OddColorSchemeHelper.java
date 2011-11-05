@@ -27,6 +27,8 @@ import javax.swing.JComponent;
  * This helper class applies a given color scheme to a <code>Component</code>.
  * It is used by different <code>TableCellRenderer</code>s to guarantee a
  * consistent style in a table.
+ *
+ * @author Florian J. Breunig
  */
 public final class OddColorSchemeHelper implements ColorSchemeHelper {
 

@@ -23,7 +23,9 @@ import org.slf4j.LoggerFactory;
 
 import com.moneydance.util.StreamTable;
 
-
+/**
+ * @author Florian J. Breunig
+ */
 public final class StubContextFactory {
 
     /**
@@ -32,8 +34,8 @@ public final class StubContextFactory {
     private static final Logger LOG =
         LoggerFactory.getLogger(StubContextFactory.class);
 
-    private final transient FeatureModule featureModule;
-    private final transient FeatureModuleContext context;
+    private final FeatureModule featureModule;
+    private final FeatureModuleContext context;
 
     public StubContextFactory(final FeatureModule argFeatureModule,
             final FeatureModuleContext argContext) {

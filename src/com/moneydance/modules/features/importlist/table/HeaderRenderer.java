@@ -35,6 +35,8 @@ import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
 /**
  * This decorator class sets header-specific attributes to a
  * <code>TableCellRenderer</code>.
+ *
+ * @author Florian J. Breunig
  */
 final class HeaderRenderer implements TableCellRenderer {
 
@@ -50,6 +52,7 @@ final class HeaderRenderer implements TableCellRenderer {
         this.prefs                          = Helper.getPreferences();
     }
 
+    // ESCA-JAVA0138: abstract method from interface TableCellRenderer
     @Override
     public Component getTableCellRendererComponent(
             final JTable table,

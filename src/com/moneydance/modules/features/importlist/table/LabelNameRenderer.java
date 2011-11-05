@@ -24,23 +24,25 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Preferences;
+import com.moneydance.modules.features.importlist.util.Settings;
 import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
 
+/**
+ * @author Florian J. Breunig
+ */
 class LabelNameRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 7553393304980261323L;
     private final transient ColorSchemeHelper colorSchemeHelper;
-    private final transient Preferences       prefs;
-
+    private final transient Settings settings;
 
 
     LabelNameRenderer(final ColorSchemeHelper argColorSchemeHelper) {
-        super();
         this.colorSchemeHelper = argColorSchemeHelper;
-        this.prefs             = Helper.getPreferences();
+        this.settings          = Helper.getSettings();
     }
 
+    // ESCA-JAVA0138: abstract method from interface TableCellRenderer
     @Override
     public final Component getTableCellRendererComponent(
             final JTable table,
@@ -53,7 +55,7 @@ class LabelNameRenderer extends DefaultTableCellRenderer {
         this.colorSchemeHelper.applyColorScheme(this, row);
         String label = null;
         if (value != null) {
-            label = this.prefs.getIndentationPrefix() + value.toString();
+            label = this.settings.getIndentationPrefix() + value.toString();
         }
         super.getTableCellRendererComponent(
                 table,

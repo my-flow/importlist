@@ -33,12 +33,15 @@ import javax.swing.KeyStroke;
 
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Preferences;
+import com.moneydance.modules.features.importlist.util.Settings;
 
+/**
+ * @author Florian J. Breunig
+ */
 public abstract class AbstractEditor extends DefaultCellEditor {
 
     private static final long serialVersionUID = -2042274086341185241L;
-    private final transient Preferences     prefs;
+    private final transient Settings        settings;
     private final transient FileAdmin       fileAdmin;
     private final transient ButtonRenderer  buttonRenderer;
     private                 String          label;
@@ -51,7 +54,7 @@ public abstract class AbstractEditor extends DefaultCellEditor {
             final FileAdmin argFileAdmin,
             final ButtonRenderer argButtonRenderer) {
         super(new JCheckBox());
-        this.prefs          = Helper.getPreferences();
+        this.settings       = Helper.getSettings();
         this.fileAdmin      = argFileAdmin;
         this.buttonRenderer = argButtonRenderer;
     }
@@ -109,7 +112,7 @@ public abstract class AbstractEditor extends DefaultCellEditor {
         jComponent.getActionMap().put(actionMapKey, action);
     }
 
-    public final Preferences getPrefs() {
-        return this.prefs;
+    public final Settings getSettings() {
+        return this.settings;
     }
 }

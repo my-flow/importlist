@@ -25,6 +25,9 @@ import javax.swing.KeyStroke;
 
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 
+/**
+ * @author Florian J. Breunig
+ */
 final class ImportOneEditor extends AbstractEditor {
 
     private static final long serialVersionUID = 4286061728240721119L;
@@ -47,7 +50,7 @@ final class ImportOneEditor extends AbstractEditor {
 
     @Override
     public KeyStroke getKeyStroke() {
-        final String shortcut = this.getPrefs().getKeyboardShortcutImport();
+        final String shortcut = this.getSettings().getKeyboardShortcutImport();
         return KeyStroke.getKeyStroke(shortcut);
     }
 }

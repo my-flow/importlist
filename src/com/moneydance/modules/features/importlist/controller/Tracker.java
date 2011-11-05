@@ -18,14 +18,24 @@
 
 package com.moneydance.modules.features.importlist.controller;
 
+import java.net.Authenticator;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
 import java.net.Proxy;
+import java.net.SocketAddress;
 
 import com.dmurph.tracking.AnalyticsConfigData;
 import com.dmurph.tracking.JGoogleAnalyticsTracker;
 import com.dmurph.tracking.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Preferences;
 
+/**
+ * @author Florian J. Breunig
+ */
 final class Tracker {
 
+    private final Preferences prefs;
     private final String fullVersion;
     private final String build;
 
@@ -33,23 +43,53 @@ final class Tracker {
 
     Tracker(final String argFullVersion,
             final int argBuild,
-            final Proxy proxy,
             final String trackingCode) {
+        this.prefs       = Helper.getPreferences();
         this.fullVersion = argFullVersion;
         this.build       = String.valueOf(argBuild);
 
-        JGoogleAnalyticsTracker.setProxy(proxy);
+        JGoogleAnalyticsTracker.setProxy(this.getProxy());
         AnalyticsConfigData config = new AnalyticsConfigData(trackingCode);
         this.tracker = new JGoogleAnalyticsTracker(
                 config,
                 GoogleAnalyticsVersion.V_4_7_2);
     }
 
-
     void track(final String eventName) {
         final String trackVersion = "Moneydance " + this.fullVersion;
         final String trackBuild   = "Import List v" + this.build;
 
         this.tracker.trackEvent(trackVersion, eventName, trackBuild);
+    }
+
+    /**
+     * @return The proxy server that the extension use to establish
+     * a connection.
+     */
+    private Proxy getProxy() {
+        if (!this.prefs.useProxy()) {
+            return Proxy.NO_PROXY;
+        }
+
+        final SocketAddress socketAddress = new InetSocketAddress(
+                this.prefs.getProxyHost(),
+                this.prefs.getProxyPort());
+
+        boolean authProxy = this.prefs.needProxyAuthentication();
+
+        Proxy.Type proxyType = Proxy.Type.HTTP;
+
+        if (authProxy) {
+            proxyType = Proxy.Type.SOCKS;
+            Authenticator.setDefault(new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(
+                           Tracker.this.prefs.getProxyUsername(),
+                           Tracker.this.prefs.getProxyPassword().toCharArray());
+                }
+            });
+        }
+        return new Proxy(proxyType, socketAddress);
     }
 }

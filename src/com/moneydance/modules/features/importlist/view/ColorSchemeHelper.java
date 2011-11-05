@@ -24,6 +24,8 @@ import java.awt.Component;
 /**
  * This template class defines the abstract methods required to apply a color
  * scheme to the components of the GUI framework.
+ *
+ * @author Florian J. Breunig
  */
 public interface ColorSchemeHelper {
 

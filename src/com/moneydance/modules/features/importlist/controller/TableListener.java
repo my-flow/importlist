@@ -39,6 +39,8 @@ import com.moneydance.modules.features.importlist.util.Preferences;
  * This <code>EventListener</code> is notified upon rearrangement, resorting,
  * and resizing of the table. It saves the modifications in the
  * <code>Preferences</code>.
+ *
+ * @author Florian J. Breunig
  */
 final class TableListener
 implements TableColumnModelListener, RowSorterListener {

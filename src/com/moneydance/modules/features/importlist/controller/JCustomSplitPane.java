@@ -16,16 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.view;
+package com.moneydance.modules.features.importlist.controller;
 
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
-public final class JCustomSplitPane extends JSplitPane {
+/**
+ * @author Florian J. Breunig
+ */
+final class JCustomSplitPane extends JSplitPane {
 
     private static final long serialVersionUID = -2741147624999364681L;
 
-    public JCustomSplitPane(final int newOrientation) {
+    JCustomSplitPane(final int newOrientation) {
         super(newOrientation);
     }
 

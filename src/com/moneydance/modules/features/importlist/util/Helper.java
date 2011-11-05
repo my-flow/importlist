@@ -25,14 +25,16 @@ import java.util.Properties;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.moneydance.apps.md.controller.FeatureModule;
-
+/**
+ * This helper class provides public convenience methods.
+ *
+ * @author Florian J. Breunig
+ */
 public final class Helper {
 
     /**
@@ -40,7 +42,15 @@ public final class Helper {
      */
     private static final Logger LOG = LoggerFactory.getLogger(Helper.class);
 
-    private static  Preferences     prefs;
+    private static Preferences prefs;
+    private static Settings    settings;
+    private static Localizable localizable;
+
+    static {
+       prefs       = new Preferences();
+       settings    = new Settings();
+       localizable = new Localizable();
+    }
 
     /**
      * Restrictive constructor.
@@ -49,37 +59,21 @@ public final class Helper {
         // Prevents this class from being instantiated from the outside.
     }
 
-    public static void setFeatureModule(final FeatureModule argFeatureModule) {
-        prefs.setFeatureModule(argFeatureModule);
-    }
-
-    public static synchronized Preferences getPreferences() {
-        if (prefs == null) {
-            prefs = new Preferences();
-        }
+    public static Preferences getPreferences() {
         return prefs;
     }
 
-    public static Image getIconImage() {
-        Image image = null;
-        try {
-            LOG.debug("Loading icon " + getPreferences().getIconResource()
-                    + " from resource.");
-            InputStream inputStream = Helper.getInputStreamFromResource(
-                    getPreferences().getIconResource());
-            image = ImageIO.read(inputStream);
-        } catch (IllegalArgumentException e) {
-            LOG.warn(e.getMessage(), e);
-        } catch (IOException e) {
-            LOG.warn(e.getMessage(), e);
-        }
-        return image;
+    public static Settings getSettings() {
+        return settings;
     }
 
+    public static Localizable getLocalizable() {
+        return localizable;
+    }
 
     public static void loadLoggerConfiguration() {
-        org.apache.log4j.Logger root = org.apache.log4j.Logger.getRootLogger();
-        boolean rootIsConfigured = root.getAllAppenders().hasMoreElements();
+        boolean rootIsConfigured = org.apache.log4j.Logger
+                .getRootLogger().getAllAppenders().hasMoreElements();
         if (rootIsConfigured) {
             // do not overwrite any existing configurations
             return;
@@ -88,7 +82,7 @@ public final class Helper {
         final Properties properties = new Properties();
         try {
             InputStream inputStream = getInputStreamFromResource(
-                    getPreferences().getLog4jPropertiesResource());
+                    settings.getLog4jPropertiesResource());
             properties.load(inputStream);
         }  catch (IllegalArgumentException e) {
             e.printStackTrace(System.err);
@@ -107,18 +101,19 @@ public final class Helper {
         return inputStream;
     }
 
-
-    public static String getMarkupFilename(final String filename) {
-        int length = getPreferences().getMessageFilenameLineMaxLength();
-
-        int numberOfLines = filename.length() / length + 1;
-        String[] substrings = new String[numberOfLines];
-
-        for (int i = 0; i < numberOfLines; i++) {
-            int start =  i      * length;
-            int end   = (i + 1) * length;
-            substrings[i] = StringUtils.substring(filename, start, end);
+    public static Image getIconImage() {
+        Image image = null;
+        try {
+            LOG.debug("Loading icon " + settings.getIconResource()
+                    + " from resource.");
+            InputStream inputStream = Helper.getInputStreamFromResource(
+                    settings.getIconResource());
+            image = ImageIO.read(inputStream);
+        } catch (IllegalArgumentException e) {
+            LOG.warn(e.getMessage(), e);
+        } catch (IOException e) {
+            LOG.warn(e.getMessage(), e);
         }
-        return StringUtils.join(substrings, "<br>");
+        return image;
     }
 }

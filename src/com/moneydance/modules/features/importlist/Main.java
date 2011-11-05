@@ -19,6 +19,8 @@
 package com.moneydance.modules.features.importlist;
 
 import java.awt.Image;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,11 +31,14 @@ import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.modules.features.importlist.controller.ViewController;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
+import com.moneydance.modules.features.importlist.util.Settings;
 
 /**
  * The main class of the extension, instantiated by Moneydance's class loader.
+ *
+ * @author Florian J. Breunig
  */
-public class Main extends FeatureModule {
+public final class Main extends FeatureModule implements Observer {
 
     static {
         Helper.loadLoggerConfiguration();
@@ -45,6 +50,7 @@ public class Main extends FeatureModule {
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     private final           Preferences  prefs;
+    private final           Settings     settings;
     private String          baseDirectory;
     private ViewController  viewController;
 
@@ -52,17 +58,18 @@ public class Main extends FeatureModule {
      * Standard constructor must be available in the Moneydance context.
      */
     public Main() {
-        super();
         LOG.info("Initializing extension in Moneydance's application context.");
-        Helper.setFeatureModule(this);
-        this.prefs = Helper.getPreferences();
+        this.prefs    = Helper.getPreferences();
+        this.settings = Helper.getSettings();
     }
 
     @Override
-    public final void init() {
+    public void init() {
         final StubContextFactory factory =
-            new StubContextFactory(this, this.getContext());
+                new StubContextFactory(this, this.getContext());
         factory.setup();
+
+        this.prefs.addObserver(this);
 
         this.viewController = new ViewController(
                 this.baseDirectory,
@@ -77,35 +84,36 @@ public class Main extends FeatureModule {
         LOG.debug("Registering toolbar feature");
         this.getContext().registerFeature(
                 this,
-                this.prefs.getChooseBaseDirSuffix(),
+                this.settings.getChooseBaseDirSuffix(),
                 null, // buttonImage
                 this.getName());
     }
 
     @Override
-    public final String getName() {
-        return this.prefs.getExtensionName();
+    public String getName() {
+        return this.settings.getExtensionName();
     }
 
     @Override
-    public final Image getIconImage() {
+    public Image getIconImage() {
         return Helper.getIconImage();
     }
 
     @Override
-    public final void invoke(final String uri) {
-        if (this.prefs.getChooseBaseDirSuffix().equals(uri)) {
+    public void invoke(final String uri) {
+        if (this.settings.getChooseBaseDirSuffix().equals(uri)) {
             this.viewController.resetBaseDirectory();
-        }
-
-        if (this.prefs.getReloadContextSuffix().equals(uri)) {
-            LOG.info("Reloading context from underlying framework.");
-            this.prefs.setContext(this.getContext());
         }
     }
 
     @Override
-    public final void unload() {
+    public void update(final Observable observable, final Object updateAll) {
+        LOG.info("Reloading context from underlying framework.");
+        this.prefs.setContext(this.getContext());
+    }
+
+    @Override
+    public void unload() {
         LOG.info("Unloading extension.");
         this.viewController.setActive(false);
         this.cleanup();
@@ -113,15 +121,15 @@ public class Main extends FeatureModule {
     }
 
     @Override
-    public final void cleanup() {
+    public void cleanup() {
         this.viewController.cleanup();
     }
 
-    final void setBaseDirectory(final String argBaseDirectory) {
+    void setBaseDirectory(final String argBaseDirectory) {
         this.baseDirectory = argBaseDirectory;
     }
 
-    final HomePageView getHomePageView() {
+    HomePageView getHomePageView() {
         return this.viewController;
     }
 }

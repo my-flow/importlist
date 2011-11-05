@@ -33,6 +33,8 @@ import com.moneydance.apps.md.view.HomePageView;
  * answers to the standard calls. Also, it can be cast safely to
  * <code>com.moneydance.apps.md.controller.Main</code> in order to request the
  * user's preferences.
+ *
+ * @author Florian J. Breunig
  */
 public final class StubContext extends Main {
 
@@ -42,10 +44,9 @@ public final class StubContext extends Main {
     private static final Logger LOG =
             LoggerFactory.getLogger(StubContext.class);
 
-    private final transient FeatureModule featureModule;
+    private final FeatureModule featureModule;
 
     StubContext(final FeatureModule argFeatureModule) {
-        super();
         this.featureModule = argFeatureModule;
     }
 

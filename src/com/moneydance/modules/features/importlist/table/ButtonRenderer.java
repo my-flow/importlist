@@ -34,6 +34,9 @@ import javax.swing.table.TableCellRenderer;
 
 import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
 
+/**
+ * @author Florian J. Breunig
+ */
 class ButtonRenderer implements TableCellRenderer {
 
     private final ColorSchemeHelper colorSchemeHelper;
@@ -42,6 +45,7 @@ class ButtonRenderer implements TableCellRenderer {
         this.colorSchemeHelper = argColorSchemeHelper;
     }
 
+    // ESCA-JAVA0138: abstract method from interface TableCellRenderer
     @Override
     public final Component getTableCellRendererComponent(
             final JTable table,
@@ -54,7 +58,7 @@ class ButtonRenderer implements TableCellRenderer {
                 table, value, hasFocus, hasFocus, row, column);
     }
 
-    final AbstractButton getTableCellRendererButton(
+   final AbstractButton getTableCellRendererButton(
             final JTable table,
             final Object value,
             final boolean isSelected,

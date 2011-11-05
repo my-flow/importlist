@@ -25,6 +25,9 @@ import javax.swing.KeyStroke;
 
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 
+/**
+ * @author Florian J. Breunig
+ */
 final class DeleteAllEditor extends AbstractEditor {
 
     private static final long serialVersionUID = 4632443623178927295L;
@@ -47,7 +50,7 @@ final class DeleteAllEditor extends AbstractEditor {
 
     @Override
     public KeyStroke getKeyStroke() {
-        final String shortcut = this.getPrefs().getKeyboardShortcutDelete();
+        final String shortcut = this.getSettings().getKeyboardShortcutDelete();
         return KeyStroke.getKeyStroke(shortcut);
     }
 }

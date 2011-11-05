@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 
@@ -37,6 +38,8 @@ import com.moneydance.modules.features.importlist.util.Preferences;
  * extension's base directory. The base directory is the directory in the file
  * system to be monitored. Choosing/resetting the base directory is reflected
  * in the user's preferences (if there are any).
+ *
+ * @author Florian J. Breunig
  */
 final class DirectoryChooser {
 
@@ -48,6 +51,7 @@ final class DirectoryChooser {
 
     private final   AbstractFileFilter validDirFilter;
     private final   Preferences prefs;
+    private final   Localizable localizable;
     private File    baseDirectory;
 
     /**
@@ -57,7 +61,8 @@ final class DirectoryChooser {
     DirectoryChooser(final String argBaseDirectory) {
         this.validDirFilter = new ValidDirFilter();
 
-        this.prefs = Helper.getPreferences();
+        this.prefs       = Helper.getPreferences();
+        this.localizable = Helper.getLocalizable();
         if (argBaseDirectory != null) {
             this.baseDirectory  = new File(argBaseDirectory);
         } else if (this.prefs.getBaseDirectory() != null) {
@@ -96,7 +101,7 @@ final class DirectoryChooser {
 
     private void displayFileChooser() {
         final JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle(this.prefs.getDirectoryChooserTitle());
+        fileChooser.setDialogTitle(this.localizable.getDirectoryChooserTitle());
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         // disable the "All files" option.
         fileChooser.setAcceptAllFileFilterUsed(false);

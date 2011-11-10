@@ -18,11 +18,14 @@
 
 package com.moneydance.modules.features.importlist.util;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
+import org.apache.commons.lang3.text.WordUtils;
 
 /**
  * This i18n class provides language-dependent strings such as labels and
@@ -137,9 +140,14 @@ public final class Localizable implements Observer {
      *  deleted.
      */
     public String getConfirmationMessageDeleteOneFile(final String filename) {
-        String rawMessage = this.getResourceBundle().getString(
+        final String templateString = this.getResourceBundle().getString(
         "confirmation_message_delete_one_file");
-        return rawMessage.replace("(0)", this.getMarkupFilename(filename));
+
+        Map<String, String> valuesMap = new HashMap<String, String>();
+        valuesMap.put("filename",  this.getMarkupFilename(filename));
+        StrSubstitutor sub = new StrSubstitutor(valuesMap);
+
+        return sub.replace(templateString);
     }
 
     /**
@@ -148,9 +156,14 @@ public final class Localizable implements Observer {
      *  deleted.
      */
     public String getConfirmationMessageDeleteAllFiles(final int size) {
-        String rawMessage = this.getResourceBundle().getString(
+        final String templateString = this.getResourceBundle().getString(
         "confirmation_message_delete_all_files");
-        return rawMessage.replace("(0)", String.valueOf(size));
+
+        Map<String, String> valuesMap = new HashMap<String, String>();
+        valuesMap.put("no.files",  String.valueOf(size));
+        StrSubstitutor sub = new StrSubstitutor(valuesMap);
+
+        return sub.replace(templateString);
     }
 
     /**
@@ -158,9 +171,14 @@ public final class Localizable implements Observer {
      * @return Error message to be displayed if a file cannot be deleted.
      */
     public String getErrorMessageDeleteFile(final String filename) {
-        String rawMessage = this.getResourceBundle().getString(
+        final String templateString = this.getResourceBundle().getString(
         "error_message_delete_file");
-        return rawMessage.replace("(0)", this.getMarkupFilename(filename));
+
+        Map<String, String> valuesMap = new HashMap<String, String>();
+        valuesMap.put("filename",  this.getMarkupFilename(filename));
+        StrSubstitutor sub = new StrSubstitutor(valuesMap);
+
+        return sub.replace(templateString);
     }
 
     /**
@@ -183,21 +201,18 @@ public final class Localizable implements Observer {
      * @return Message to display if the list of files is empty.
      */
     public String getEmptyMessage(final String baseDirectory) {
-        String rawMessage = this.getResourceBundle().getString("empty_message");
-        return rawMessage.replace("(0)", baseDirectory);
+        final String templateString = this.getResourceBundle().getString(
+        "empty_message");
+
+        Map<String, String> valuesMap = new HashMap<String, String>();
+        valuesMap.put("import.dir", baseDirectory);
+        StrSubstitutor sub = new StrSubstitutor(valuesMap);
+
+        return sub.replace(templateString);
     }
 
     private String getMarkupFilename(final String filename) {
         int length = this.settings.getMessageFilenameLineMaxLength();
-
-        int numberOfLines = filename.length() / length + 1;
-        String[] substrings = new String[numberOfLines];
-
-        for (int i = 0; i < numberOfLines; i++) {
-            int start =  i      * length;
-            int end   = (i + 1) * length;
-            substrings[i] = StringUtils.substring(filename, start, end);
-        }
-        return StringUtils.join(substrings, "<br>");
+        return WordUtils.wrap(filename, length, "<br>", /*wrapLongWords*/ true);
     }
 }

@@ -111,18 +111,18 @@ public final class Settings {
     }
 
     /**
-     * @return The prefix of the application event that imports a given file.
+     * @return The scheme of the application event that imports a given file.
      */
-    public String getTransactionFileImportUriPrefix() {
-        return this.config.getString("transaction_file_import_uri_prefix");
+    public String getTransactionFileImportUriScheme() {
+        return this.config.getString("transaction_file_import_uri_scheme");
     }
 
     /**
-     * @return The prefix of the application event that imports a given CSV file
+     * @return The scheme of the application event that imports a given CSV file
      * using the text file importer plugin.
      */
-    public String getTextFileImportUriPrefix() {
-        return this.config.getString("text_file_import_uri_prefix");
+    public String getTextFileImportUriScheme() {
+        return this.config.getString("text_file_import_uri_scheme");
     }
 
     /**

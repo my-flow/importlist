@@ -68,9 +68,6 @@ public final class Preferences extends Observable {
         this.sortOrderDefault.put("0", SortOrder.ASCENDING.toString());
     }
 
-    /**
-     * Reload context from feature module.
-     */
     public void reload() {
         this.setChanged();
         this.notifyObservers(Boolean.TRUE);

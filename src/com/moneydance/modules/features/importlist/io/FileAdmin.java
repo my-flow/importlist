@@ -162,8 +162,17 @@ public final class FileAdmin extends Observable implements Observer {
     }
 
     public void importAllRows() {
-        for (int row = 0; row < this.files.size(); row++) {
-            this.importRow(row);
+        FileOperation fileImporter = new FileImporter(
+                this.context,
+                this.transactionFileFilter,
+                this.textFileFilter);
+
+        for (final File file : this.files) {
+            try {
+                fileImporter.perform(file);
+            } catch (IOException e) {
+                LOG.warn(e.getMessage(), e);
+            }
         }
         this.setChanged();
         this.notifyObservers();
@@ -174,23 +183,17 @@ public final class FileAdmin extends Observable implements Observer {
             return;
         }
         final File file = this.files.get(rowNumber);
-        this.importFile(file);
+        try {
+            FileOperation fileImporter = new FileImporter(
+                    this.context,
+                    this.transactionFileFilter,
+                    this.textFileFilter);
+            fileImporter.perform(file);
+        } catch (IOException e) {
+            LOG.warn(e.getMessage(), e);
+        }
         this.setChanged();
         this.notifyObservers();
-    }
-
-    private void importFile(final File file) {
-        String callUri = "";
-        if (this.transactionFileFilter.accept(file)) {
-            callUri = this.settings.getTransactionFileImportUriPrefix()
-            + file.getAbsolutePath();
-        }
-        if (this.textFileFilter.accept(file)) {
-            callUri = this.settings.getTextFileImportUriPrefix()
-            + file.getAbsolutePath();
-        }
-        // Import the file identified by the file parameter
-        this.context.showURL(callUri);
     }
 
     public void deleteAllRows() {
@@ -198,9 +201,10 @@ public final class FileAdmin extends Observable implements Observer {
             return;
         }
         if (this.showWarningBeforeDeletingAllFiles(this.files.size())) {
+            FileOperation fileDeleter = new FileDeleter();
             for (final File file : this.files) {
                 try {
-                    this.deleteFile(file);
+                    fileDeleter.perform(file);
                 } catch (IOException e) {
                     LOG.warn(e.getMessage(), e);
                     final String errorMessage = e.getMessage();
@@ -226,7 +230,7 @@ public final class FileAdmin extends Observable implements Observer {
         final File file = this.files.get(rowNumber);
         if (this.showWarningBeforeDeletingOneFile(file)) {
             try {
-                this.deleteFile(file);
+                new FileDeleter().perform(file);
             } catch (IOException e) {
                 LOG.warn("Could not delete file " + file.getAbsoluteFile());
                 final String errorMessage =
@@ -243,11 +247,6 @@ public final class FileAdmin extends Observable implements Observer {
         }
         this.setChanged();
         this.notifyObservers();
-    }
-
-    private void deleteFile(final File file) throws IOException {
-        LOG.info("Deleting file " + file.getAbsoluteFile());
-        FileUtils.forceDelete(file);
     }
 
     private boolean showWarningBeforeDeletingOneFile(final File file) {

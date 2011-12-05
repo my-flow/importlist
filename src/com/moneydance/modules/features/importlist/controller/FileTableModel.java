@@ -31,6 +31,7 @@ import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
+
 /**
  * This class provides a <code>TableModel</code> implementation for a given
  * <code>List</code> of <code>File</code>s. It takes care of the formatting and
@@ -49,7 +50,7 @@ final class FileTableModel extends AbstractTableModel {
     private final           List<File>  files;
 
     FileTableModel(final List<File> argFiles) {
-        Validate.notNull(argFiles, "argFiles can't be null");
+        Validate.notNull(argFiles, "argFiles must not be null");
         this.prefs       = Helper.getPreferences();
         this.settings    = Helper.getSettings();
         this.localizable = Helper.getLocalizable();

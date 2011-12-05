@@ -70,7 +70,7 @@ implements Comparator<String>, Serializable {
      */
     private static boolean isDigit(final char character) {
         return character >= DIGIT_LOWER_BOUND
-        && character <= DIGIT_UPPER_BOUND;
+                && character <= DIGIT_UPPER_BOUND;
     }
 
     /**

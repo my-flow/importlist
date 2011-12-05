@@ -125,6 +125,11 @@ final class DirectoryChooser {
         this.prefs.setBaseDirectory(this.baseDirectory.getAbsolutePath());
     }
 
+    /**
+     * Check for a valid directory.
+     *
+     * @author Florian J. Breunig
+     */
     private static class ValidDirFilter extends AbstractFileFilter {
         @Override
         public boolean accept(final File file) {

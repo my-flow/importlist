@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.moneydance.apps.md.controller.FeatureModule;
-import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.modules.features.importlist.controller.ViewController;
 import com.moneydance.modules.features.importlist.util.Helper;
@@ -65,10 +64,6 @@ public final class Main extends FeatureModule implements Observer {
 
     @Override
     public void init() {
-        final StubContextFactory factory =
-                new StubContextFactory(this, this.getContext());
-        factory.setup();
-
         this.prefs.addObserver(this);
 
         this.viewController = new ViewController(

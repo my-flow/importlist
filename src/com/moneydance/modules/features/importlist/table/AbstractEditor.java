@@ -31,6 +31,8 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 
+import org.apache.commons.lang3.Validate;
+
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Settings;
@@ -54,9 +56,19 @@ public abstract class AbstractEditor extends DefaultCellEditor {
             final FileAdmin argFileAdmin,
             final ButtonRenderer argButtonRenderer) {
         super(new JCheckBox());
+        Validate.notNull(
+                argFileAdmin,
+                "argFileAdmin must not be null");
+        Validate.notNull(
+                argButtonRenderer,
+                "argButtonRenderer must not be null");
         this.settings       = Helper.getSettings();
         this.fileAdmin      = argFileAdmin;
         this.buttonRenderer = argButtonRenderer;
+    }
+
+    protected final Settings getSettings() {
+        return this.settings;
     }
 
     protected final FileAdmin getFileAdmin() {
@@ -90,6 +102,7 @@ public abstract class AbstractEditor extends DefaultCellEditor {
 
 
     public final void registerKeyboardShortcut(final JComponent jComponent) {
+        Validate.notNull(jComponent, "jComponent must not be null");
         if (this.getKeyStroke() == null) {
             return;
         }
@@ -110,9 +123,5 @@ public abstract class AbstractEditor extends DefaultCellEditor {
                 this.getKeyStroke(),
                 actionMapKey);
         jComponent.getActionMap().put(actionMapKey, action);
-    }
-
-    public final Settings getSettings() {
-        return this.settings;
     }
 }

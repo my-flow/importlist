@@ -32,6 +32,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.TableCellRenderer;
 
+import org.apache.commons.lang.Validate;
+
 import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
 
 /**
@@ -42,6 +44,9 @@ class ButtonRenderer implements TableCellRenderer {
     private final ColorSchemeHelper colorSchemeHelper;
 
     ButtonRenderer(final ColorSchemeHelper argColorSchemeHelper) {
+        Validate.notNull(
+                argColorSchemeHelper,
+                "argColorSchemeHelper must not be null");
         this.colorSchemeHelper = argColorSchemeHelper;
     }
 
@@ -58,7 +63,7 @@ class ButtonRenderer implements TableCellRenderer {
                 table, value, hasFocus, hasFocus, row, column);
     }
 
-   final AbstractButton getTableCellRendererButton(
+    final AbstractButton getTableCellRendererButton(
             final JTable table,
             final Object value,
             final boolean isSelected,
@@ -79,6 +84,7 @@ class ButtonRenderer implements TableCellRenderer {
                     button.getBackground().brighter());
         }
         button.setBorder(border);
+
         if (value != null) {
             button.setText(value.toString());
         }

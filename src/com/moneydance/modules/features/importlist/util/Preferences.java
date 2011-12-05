@@ -30,6 +30,8 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.UIManager;
 
+import org.apache.commons.lang.Validate;
+
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.controller.UserPreferences;
 import com.moneydance.util.CustomDateFormat;
@@ -82,6 +84,8 @@ public final class Preferences extends Observable {
         if (this.userPreferences == null) {
             this.setChanged();
             this.notifyObservers(Boolean.FALSE);
+            Validate.notNull(this.userPreferences,
+                    "user preferences not initialized");
         }
         return this.userPreferences;
     }
@@ -100,10 +104,7 @@ public final class Preferences extends Observable {
 
     public String getFullVersion() {
         final String fullString = this.getUserPreferences().getSetting(
-                "current_version");
-        if (fullString == null) {
-            return "0";
-        }
+                "current_version", "0");
         return fullString;
     }
 
@@ -215,11 +216,7 @@ public final class Preferences extends Observable {
 
     public RowSorter.SortKey getSortKey() {
         StreamTable streamTable = this.getUserPreferences().getTableSetting(
-                "importlist.sort_order",
-                null);
-        if (streamTable == null || streamTable.keySet().isEmpty()) {
-            streamTable = this.sortOrderDefault;
-        }
+                "importlist.sort_order", this.sortOrderDefault);
         Object key        = streamTable.keys().nextElement();
         int column        = Integer.parseInt(key.toString());
         String sortOrder  = streamTable.getStr(key, null);

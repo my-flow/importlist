@@ -25,6 +25,7 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.modules.features.importlist.util.Helper;
 
 
@@ -97,6 +98,8 @@ final class ConsoleRunner {
     private static void createAndShowGUI(final String baseDirectory) {
         final Main main = new Main();
         main.setBaseDirectory(baseDirectory);
+        final StubContextFactory factory = new StubContextFactory(main);
+        factory.init();
         main.init();
 
         final JFrame frame = new JFrame(main.getDisplayName());

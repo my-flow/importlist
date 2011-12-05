@@ -23,6 +23,8 @@ import java.awt.Component;
 
 import javax.swing.JComponent;
 
+import org.apache.commons.lang3.Validate;
+
 /**
  * This helper class applies a given color scheme to a <code>Component</code>.
  * It is used by different <code>TableCellRenderer</code>s to guarantee a
@@ -35,6 +37,15 @@ public final class OddColorSchemeHelper implements ColorSchemeHelper {
     private Color foreground;
     private Color background;
     private Color backgroundAlt;
+
+    public OddColorSchemeHelper(
+            final Color argForeground,
+            final Color argBackground,
+            final Color argBackgroundAlt) {
+        this.setForeground(argForeground);
+        this.setBackground(argBackground);
+        this.setBackgroundAlt(argBackgroundAlt);
+    }
 
     @Override
     public void applyColorScheme(final Component component, final int row) {
@@ -51,16 +62,19 @@ public final class OddColorSchemeHelper implements ColorSchemeHelper {
 
     @Override
     public void setForeground(final Color argForeground) {
+        Validate.notNull(argForeground, "argForeground must not be null");
         this.foreground = argForeground;
     }
 
     @Override
     public void setBackground(final Color argBackground) {
+        Validate.notNull(argBackground, "argBackground must not be null");
         this.background = argBackground;
     }
 
     @Override
     public void setBackgroundAlt(final Color argBackgroundAlt) {
+        Validate.notNull(argBackgroundAlt, "argBackgroundAlt must not be null");
         this.backgroundAlt = argBackgroundAlt;
     }
 }

@@ -43,8 +43,15 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
     private       transient CustomDateFormat  dateFormatter;
     private                 DateFormat        timeFormatter;
 
-    LabelModifiedRenderer(final ColorSchemeHelper argColorSchemeHelper) {
+    LabelModifiedRenderer(
+            final ColorSchemeHelper argColorSchemeHelper,
+            final CustomDateFormat argDateFormatter,
+            final DateFormat argTimeFormatter) {
+        Validate.notNull(argColorSchemeHelper,
+                "argColorCchemeHelper must not be null");
         this.colorSchemeHelper = argColorSchemeHelper;
+        this.setDateFormatter(argDateFormatter);
+        this.setTimeFormatter(argTimeFormatter);
         this.settings          = Helper.getSettings();
     }
 
@@ -57,10 +64,11 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
             final boolean hasFocus,
             final int row,
             final int column) {
+
         this.setOpaque(false);
         this.colorSchemeHelper.applyColorScheme(this, row);
         String label = null;
-        if (value != null) {
+        if (value != null && value instanceof Date) {
             final Date fileDate = (Date) value;
             label = this.settings.getIndentationPrefix()
             + this.dateFormatter.format(fileDate)
@@ -80,12 +88,12 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
     }
 
     void setDateFormatter(final CustomDateFormat argDateFormatter) {
-        Validate.notNull(argDateFormatter, "argDateFormatter can't be null");
+        Validate.notNull(argDateFormatter, "argDateFormatter must not be null");
         this.dateFormatter = argDateFormatter;
     }
 
     void setTimeFormatter(final DateFormat argTimeFormatter) {
-        Validate.notNull(argTimeFormatter, "argTimeFormatter can't be null");
+        Validate.notNull(argTimeFormatter, "argTimeFormatter must not be null");
         this.timeFormatter = argTimeFormatter;
     }
 }

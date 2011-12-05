@@ -46,12 +46,6 @@ public final class Helper {
     private static Settings    settings;
     private static Localizable localizable;
 
-    static {
-       prefs       = new Preferences();
-       settings    = new Settings();
-       localizable = new Localizable();
-    }
-
     /**
      * Restrictive constructor.
      */
@@ -59,15 +53,30 @@ public final class Helper {
         // Prevents this class from being instantiated from the outside.
     }
 
-    public static Preferences getPreferences() {
+    public static synchronized Preferences getPreferences() {
+        synchronized (Helper.class) {
+            if (prefs == null) {
+                prefs = new Preferences();
+            }
+        }
         return prefs;
     }
 
     public static Settings getSettings() {
+        synchronized (Helper.class) {
+            if (settings == null) {
+                settings = new Settings();
+            }
+        }
         return settings;
     }
 
-    public static Localizable getLocalizable() {
+    public static synchronized Localizable getLocalizable() {
+        synchronized (Helper.class) {
+            if (localizable == null) {
+                localizable = new Localizable();
+            }
+        }
         return localizable;
     }
 
@@ -82,7 +91,7 @@ public final class Helper {
         final Properties properties = new Properties();
         try {
             InputStream inputStream = getInputStreamFromResource(
-                    settings.getLog4jPropertiesResource());
+                    getSettings().getLog4jPropertiesResource());
             properties.load(inputStream);
         }  catch (IllegalArgumentException e) {
             e.printStackTrace(System.err);
@@ -107,7 +116,7 @@ public final class Helper {
             LOG.debug("Loading icon " + settings.getIconResource()
                     + " from resource.");
             InputStream inputStream = Helper.getInputStreamFromResource(
-                    settings.getIconResource());
+                    getSettings().getIconResource());
             image = ImageIO.read(inputStream);
         } catch (IllegalArgumentException e) {
             LOG.warn(e.getMessage(), e);

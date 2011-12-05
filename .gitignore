@@ -11,8 +11,10 @@
 # project specific
 bin
 docs/api
+docs/checkstyle-report
+docs/coverage-report
+docs/pmd-report
 dist
 logs
-reports
 src/priv_key
 src/pub_key

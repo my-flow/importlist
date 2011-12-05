@@ -36,16 +36,6 @@ final class JCustomSplitPane extends JSplitPane {
     public void addNotify() {
         super.addNotify();
 
-        if (this.getLeftComponent() != null) {
-            ((JComponent) this.getLeftComponent()).setOpaque(false);
-            this.getLeftComponent().setBackground(this.getBackground());
-        }
-
-        if (this.getRightComponent() != null) {
-            ((JComponent) this.getRightComponent()).setOpaque(false);
-            this.getRightComponent().setBackground(this.getBackground());
-        }
-
         if (this.getTopComponent() != null) {
             ((JComponent) this.getTopComponent()).setOpaque(false);
             this.getTopComponent().setBackground(this.getBackground());

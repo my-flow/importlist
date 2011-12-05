@@ -18,9 +18,11 @@
 
 package com.moneydance.apps.md.controller;
 
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.util.StreamTable;
 
 /**
@@ -32,28 +34,33 @@ public final class StubContextFactory {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-        LoggerFactory.getLogger(StubContextFactory.class);
+            LoggerFactory.getLogger(StubContextFactory.class);
 
-    private final FeatureModule featureModule;
-    private final FeatureModuleContext context;
+    private final StubContext   context;
+    private       FeatureModule featureModule = null;
 
-    public StubContextFactory(final FeatureModule argFeatureModule,
-            final FeatureModuleContext argContext) {
-        this.featureModule  = argFeatureModule;
-        this.context        = argContext;
+    public StubContextFactory() {
+        this.context       = new StubContext(this.featureModule);
+        Helper.getPreferences().setContext(this.getContext());
     }
 
-    public void setup() {
-        if (this.context == null) {
-            LOG.info("Setting up stub context");
-            final FeatureModuleContext newContext =
-                new StubContext(this.featureModule);
-            this.featureModule.setup(
-                    newContext,
-                    null,
-                    new StreamTable(),
-                    null,
-                    null);
-        }
+    public StubContextFactory(final FeatureModule argFeatureModule) {
+        Validate.notNull(argFeatureModule, "featureModule must not be null");
+        this.featureModule  = argFeatureModule;
+        this.context        = new StubContext(this.featureModule);
+    }
+
+    public void init() {
+        LOG.info("Setting up stub context");
+        this.featureModule.setup(
+                this.context,
+                null,
+                new StreamTable(),
+                null,
+                null);
+    }
+
+    public StubContext getContext() {
+        return this.context;
     }
 }

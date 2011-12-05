@@ -139,7 +139,12 @@ public final class ViewController implements HomePageView, Observer {
 
         this.columnFactory = new ColumnFactory(
                 this.fileAdmin,
-                tableHeader.getDefaultRenderer());
+                this.prefs.getForeground(),
+                this.prefs.getBackground(),
+                this.prefs.getBackgroundAlt(),
+                tableHeader.getDefaultRenderer(),
+                this.prefs.getDateFormatter(),
+                this.prefs.getTimeFormatter());
 
         TableColumn nameCol = this.baseTable.getColumn(
                 this.settings.getDescName());
@@ -241,9 +246,10 @@ public final class ViewController implements HomePageView, Observer {
         tableHeader.setReorderingAllowed(this.settings.isReorderingAllowed());
 
         // sorting the columns
-        RowSorter<TableModel> rowSorter =
-            new FileTableRowSorter(this.baseTableModel);
-        List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
+        final RowSorter<TableModel> rowSorter =
+                new FileTableRowSorter(this.baseTableModel);
+        final List<RowSorter.SortKey> sortKeys =
+                new ArrayList<RowSorter.SortKey>();
         sortKeys.add(this.prefs.getSortKey());
         rowSorter.setSortKeys(sortKeys);
         rowSorter.addRowSorterListener(tableListener);
@@ -422,6 +428,9 @@ public final class ViewController implements HomePageView, Observer {
 
     @Override
     public void setActive(final boolean active) {
+        if (this.scrollPane == null) {
+            return;
+        }
         this.scrollPane.setVisible(active);
         this.refresh();
     }
@@ -445,6 +454,9 @@ public final class ViewController implements HomePageView, Observer {
 
 
     public void cleanup() {
+        if (!this.initialized) {
+            return;
+        }
         this.viewport.setEnabled(false);
         this.viewport.removeAll();
         this.fileAdmin.stopMonitor();

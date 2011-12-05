@@ -42,7 +42,10 @@ public final class Localizable implements Observer {
     Localizable() {
         this.prefs    = Helper.getPreferences();
         this.prefs.addObserver(this);
-        this.settings = new Settings();
+        this.settings = Helper.getSettings();
+        this.resourceBundle = ResourceBundle.getBundle(
+                this.settings.getLocalizableResource(),
+                this.prefs.getLocale());
     }
 
     @Override
@@ -56,9 +59,6 @@ public final class Localizable implements Observer {
     }
 
     private ResourceBundle getResourceBundle() {
-        if (this.resourceBundle == null) {
-            this.update(this.prefs, null);
-        }
         return this.resourceBundle;
     }
 

@@ -129,8 +129,8 @@ public final class Settings {
      * @return The amount of milliseconds to wait between two runs of the file
      * scanner.
      */
-    public int getMonitorIntervall() {
-        return this.config.getInt("monitor_intervall");
+    public int getMonitorInterval() {
+        return this.config.getInt("monitor_interval");
     }
 
     /**

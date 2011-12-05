@@ -39,7 +39,7 @@ final class Tracker {
     private final String fullVersion;
     private final String build;
 
-    private final JGoogleAnalyticsTracker tracker;
+    private final JGoogleAnalyticsTracker analyticsTracker;
 
     Tracker(final String argFullVersion,
             final int argBuild,
@@ -50,7 +50,7 @@ final class Tracker {
 
         JGoogleAnalyticsTracker.setProxy(this.getProxy());
         AnalyticsConfigData config = new AnalyticsConfigData(trackingCode);
-        this.tracker = new JGoogleAnalyticsTracker(
+        this.analyticsTracker = new JGoogleAnalyticsTracker(
                 config,
                 GoogleAnalyticsVersion.V_4_7_2);
     }
@@ -59,7 +59,7 @@ final class Tracker {
         final String trackVersion = "Moneydance " + this.fullVersion;
         final String trackBuild   = "Import List v" + this.build;
 
-        this.tracker.trackEvent(trackVersion, eventName, trackBuild);
+        this.analyticsTracker.trackEvent(trackVersion, eventName, trackBuild);
     }
 
     /**

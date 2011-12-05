@@ -71,8 +71,7 @@ final class FileImporter implements FileOperation {
         String uriScheme = "";
         if (this.transactionFileFilter.accept(file)) {
             uriScheme = this.settings.getTransactionFileImportUriScheme();
-        }
-        if (this.textFileFilter.accept(file)) {
+        } else if (this.textFileFilter.accept(file)) {
             uriScheme = this.settings.getTextFileImportUriScheme();
         }
 
@@ -88,21 +87,17 @@ final class FileImporter implements FileOperation {
     }
 
     private String getAccountNumberForFile(final File file) {
-        RootAccount rootAccount = this.context.getRootAccount();
-        if (rootAccount == null) {
-            return "-1";
-        }
-
         final String fileName = FilenameUtils.removeExtension(file.getName());
 
+        RootAccount rootAccount = this.context.getRootAccount();
+
+        String accountNumber = "-1";
         Iterator<Account> iterator =
                 AccountUtil.getAccountIterator(rootAccount);
         while (iterator.hasNext()) {
             final Account account = iterator.next();
-            if (!AcctFilter.NON_CATEGORY_FILTER.matches(account)) {
-                continue;
-            }
-            if (rootAccount.equals(account)) {
+            if (!AcctFilter.NON_CATEGORY_FILTER.matches(account)
+                    || rootAccount.equals(account)) {
                 continue;
             }
 
@@ -111,11 +106,11 @@ final class FileImporter implements FileOperation {
                 LOG.debug("Found matching account \""
                         + account.getFullAccountName()
                         + "\" for file " + file.getName());
-                return String.valueOf(account.getAccountNum());
+                accountNumber = String.valueOf(account.getAccountNum());
             }
         }
 
-        return "-1";
+        return accountNumber;
     }
 
     private boolean isEqual(final String first, final String second) {

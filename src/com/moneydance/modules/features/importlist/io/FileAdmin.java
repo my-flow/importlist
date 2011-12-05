@@ -95,7 +95,7 @@ public final class FileAdmin extends Observable implements Observer {
         this.listener = new TransactionFileListener();
         this.listener.addObserver(this);
         this.monitor  = new FileAlterationMonitor(
-                this.settings.getMonitorIntervall());
+                this.settings.getMonitorInterval());
 
         this.files = Collections.synchronizedList(new ArrayList<File>());
     }
@@ -207,7 +207,8 @@ public final class FileAdmin extends Observable implements Observer {
                     fileDeleter.perform(file);
                 } catch (IOException e) {
                     LOG.warn(e.getMessage(), e);
-                    final String errorMessage = e.getMessage();
+                    final String errorMessage =
+                     this.localizable.getErrorMessageDeleteFile(file.getName());
                     final Object errorLabel = new JLabel(errorMessage);
                     JOptionPane.showMessageDialog(
                             null, // no parent component
@@ -250,9 +251,9 @@ public final class FileAdmin extends Observable implements Observer {
     }
 
     private boolean showWarningBeforeDeletingOneFile(final File file) {
-        final String confirmationMessage =
+        final String message =
            this.localizable.getConfirmationMessageDeleteOneFile(file.getName());
-        final Object confirmationLabel = new JLabel(confirmationMessage);
+        final Object confirmationLabel = new JLabel(message);
         final Image image = Helper.getIconImage();
         Icon  icon  = null;
         if (image != null) {
@@ -277,9 +278,9 @@ public final class FileAdmin extends Observable implements Observer {
     }
 
     private boolean showWarningBeforeDeletingAllFiles(final int size) {
-        final String confirmationMessage =
+        final String message =
             this.localizable.getConfirmationMessageDeleteAllFiles(size);
-        final Object confirmationLabel = new JLabel(confirmationMessage);
+        final Object confirmationLabel = new JLabel(message);
         final Image image = Helper.getIconImage();
         Icon  icon  = null;
         if (image != null) {

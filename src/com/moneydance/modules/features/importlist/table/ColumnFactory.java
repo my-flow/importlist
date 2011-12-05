@@ -57,13 +57,24 @@ public final class ColumnFactory {
 
     public ColumnFactory(
             final FileAdmin fileAdmin,
-            final TableCellRenderer defaultHeaderTableCellRenderer) {
-        Validate.notNull(fileAdmin, "fileAdmin can't be null");
+            final Color foreground,
+            final Color background,
+            final Color backgroundAlt,
+            final TableCellRenderer defaultHeaderTableCellRenderer,
+            final CustomDateFormat argDateFormatter,
+            final DateFormat argTimeFormatter) {
+        Validate.notNull(fileAdmin, "fileAdmin must not be null");
         final Preferences prefs    = Helper.getPreferences();
         final Settings    settings = Helper.getSettings();
 
-        this.evenColorSchemeHelper = new EvenColorSchemeHelper();
-        this.oddColorSchemeHelper  = new OddColorSchemeHelper();
+        this.evenColorSchemeHelper = new EvenColorSchemeHelper(
+                foreground,
+                background,
+                backgroundAlt);
+        this.oddColorSchemeHelper  = new OddColorSchemeHelper(
+                foreground,
+                background,
+                backgroundAlt);
 
         ColorSchemeHelper defaultColorSchemeHelper = this.evenColorSchemeHelper;
         ColorSchemeHelper customColorSchemeHelper  = this.oddColorSchemeHelper;
@@ -80,9 +91,13 @@ public final class ColumnFactory {
         this.labelNameAllRenderer     = new LabelNameRenderer(
                 customColorSchemeHelper);
         this.labelModifiedOneRenderer = new LabelModifiedRenderer(
-                defaultColorSchemeHelper);
+                defaultColorSchemeHelper,
+                argDateFormatter,
+                argTimeFormatter);
         this.labelModifiedAllRenderer = new LabelModifiedRenderer(
-                customColorSchemeHelper);
+                customColorSchemeHelper,
+                argDateFormatter,
+                argTimeFormatter);
         this.buttonOneRenderer        = new ButtonRenderer(
                 defaultColorSchemeHelper);
         this.buttonAllRenderer        = new ButtonRenderer(

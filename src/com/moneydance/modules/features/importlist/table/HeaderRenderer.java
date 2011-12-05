@@ -28,6 +28,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
+import org.apache.commons.lang.Validate;
+
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
@@ -47,6 +49,12 @@ final class HeaderRenderer implements TableCellRenderer {
     HeaderRenderer(
             final ColorSchemeHelper argColorSchemeHelper,
             final TableCellRenderer argDefaultHeaderTableCellRenderer) {
+        Validate.notNull(
+                argColorSchemeHelper,
+                "argColorSchemeHelper must not be null");
+        Validate.notNull(
+                argDefaultHeaderTableCellRenderer,
+                "argDefaultHeaderTableCellRenderer must not be null");
         this.colorSchemeHelper              = argColorSchemeHelper;
         this.defaultHeaderTableCellRenderer = argDefaultHeaderTableCellRenderer;
         this.prefs                          = Helper.getPreferences();
@@ -69,11 +77,11 @@ final class HeaderRenderer implements TableCellRenderer {
         if (component instanceof JComponent) {
             JComponent jComponent = (JComponent) component;
             jComponent.setBorder(new EmptyBorder(1, 1, 1, 1));
-        }
 
-        if (component instanceof JLabel) {
-            JLabel jLabel = (JLabel) component;
-            jLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            if (jComponent instanceof JLabel) {
+                JLabel jLabel = (JLabel) jComponent;
+                jLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            }
         }
 
         component.setFont(this.prefs.getHeaderFont());

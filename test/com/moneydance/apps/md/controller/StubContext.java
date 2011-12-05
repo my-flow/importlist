@@ -45,14 +45,19 @@ public final class StubContext extends Main {
             LoggerFactory.getLogger(StubContext.class);
 
     private final FeatureModule featureModule;
+    private       RootAccount rootAccount;
 
     StubContext(final FeatureModule argFeatureModule) {
         this.featureModule = argFeatureModule;
     }
 
+    public void setRootAccount(final RootAccount argRootAccount) {
+        this.rootAccount = argRootAccount;
+    }
+
     @Override
     public RootAccount getRootAccount() {
-        return null;
+        return this.rootAccount;
     }
 
     @Override
@@ -67,14 +72,16 @@ public final class StubContext extends Main {
 
     @Override
     public void showURL(final String url) {
-        String suffix = url;
-        final int theIdx = url.lastIndexOf(':');
-        if (theIdx >= 0) {
-            suffix = url.substring(theIdx + 1);
+        if (this.featureModule != null) {
+            String suffix = url;
+            final int theIdx = url.lastIndexOf(':');
+            if (theIdx >= 0) {
+                suffix = url.substring(theIdx + 1);
+            }
+            LOG.debug("Stub context forwards received URL " + suffix
+                    + " to module " + this.featureModule);
+            this.featureModule.invoke(suffix);
         }
-        LOG.debug("Stub context forwards received URL " + suffix + " to module "
-                + this.featureModule);
-        this.featureModule.invoke(suffix);
     }
 
     @Override

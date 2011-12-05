@@ -27,28 +27,17 @@ Signing the extension
 Running the extension
 ---------------------
 After the build process has succeeded, the resulting extension file 
-`dist/importlist.mxt` can be added to Moneydance®. However, it can also run in 
-stand-alone mode, which allows for easy testing with fast feedback:
+`dist/importlist.mxt` can be added to Moneydance®.
 
-* `java -jar dist/importlist.mxt` runs the extension in stand-alone mode.
-
-System properties:
-
-* `java -Dlog4j.configuration=file:///$HOME/log4j.properties -jar 
-dist/importlist.mxt` runs the extension using an [Apache log4j™]
-(http://logging.apache.org/log4j/) configuration file.
-
-Arguments:
-
-* `java -jar dist/importlist.mxt -d` runs the extension in Moneydance®'s debug 
-mode.
-* `java -jar dist/importlist.mxt -basedirectory=$HOME/Downloads/` runs the 
-extension using a predefined base directory.
-
-Further Assistance
-------------------
-* [Import List API](http://my-flow.github.com/importlist/docs/api/index.html) 
-* [Core API](http://www.moneydance.com/dev/apidoc/index.html)
+Documentation
+-------------
+* [Import List API](http://my-flow.github.com/importlist/docs/api/)
+* [CheckStyle Audit]
+(http://my-flow.github.com/importlist/docs/checkstyle-report/)
+* [JMockit Coverage Report]
+(http://my-flow.github.com/importlist/docs/coverage-report/)
+* [PMD report]
+(http://my-flow.github.com/importlist/docs/pmd-report/pmd-report.html)
 
 License
 -------

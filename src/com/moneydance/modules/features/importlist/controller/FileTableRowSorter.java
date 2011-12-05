@@ -27,20 +27,21 @@ import com.moneydance.modules.features.importlist.util.AlphanumComparator;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Settings;
 
+
 /**
  * An implementation of <code>RowSorter</code> that provides sorting for a
  * <code>ListTableModel</code>.
  *
  * @author Florian J. Breunig
  */
-final class FileTableRowSorter extends TableRowSorter<TableModel> {
+public final class FileTableRowSorter extends TableRowSorter<TableModel> {
 
     private final Settings settings;
 
     /**
      * @param tableModel The table model that is to be sorted
      */
-    FileTableRowSorter(final TableModel tableModel) {
+    public FileTableRowSorter(final TableModel tableModel) {
         super(tableModel);
         this.settings = Helper.getSettings();
     }
@@ -58,8 +59,7 @@ final class FileTableRowSorter extends TableRowSorter<TableModel> {
         Comparator<?> comparator = null;
         if (this.settings.getDescName().equals(columnName)) {
             comparator = AlphanumComparator.ALPHANUM;
-        }
-        if (this.settings.getDescModified().equals(columnName)) {
+        } else if (this.settings.getDescModified().equals(columnName)) {
             comparator = super.getComparator(column);
         }
         return comparator;

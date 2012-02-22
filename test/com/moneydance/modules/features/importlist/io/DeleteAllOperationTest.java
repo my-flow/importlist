@@ -18,42 +18,40 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import static org.junit.Assert.fail;
-
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
+
+import com.moneydance.apps.md.controller.StubContextFactory;
 
 /**
  * @author Florian J. Breunig
  */
-public final class FileDeleterTest {
+public final class DeleteAllOperationTest {
 
-    private final File incomeFile;
-    private final File deleteFile;
+    private FileOperation fileOperation;
+    private List<File> files;
 
-    public FileDeleterTest() {
-        this.incomeFile = new File("mybank.csv");
-        this.deleteFile = new File("deleteme.csv");
+    @Before
+    public void setUp() {
+        new StubContextFactory();
+
+        this.files = new ArrayList<File>();
+        this.files.add(new File("."));
+
+        this.fileOperation = new DeleteAllOperation();
     }
 
-    @Test(expected = IOException.class)
-    public void testPerform() throws IOException {
-        try {
-            this.deleteFile.createNewFile();
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
+    @Test
+    public void testShowWarningAndPerform() {
+        this.fileOperation.showWarningAndPerform(this.files);
+    }
 
-        FileOperation fileOperation = new FileDeleter();
-
-        try {
-            fileOperation.perform(this.deleteFile);
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
-
-        fileOperation.perform(this.incomeFile);
+    @Test
+    public void testPerform() {
+        this.fileOperation.perform(this.files);
     }
 }

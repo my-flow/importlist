@@ -19,12 +19,14 @@
 package com.moneydance.modules.features.importlist.io;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.List;
+
 
 /**
  * @author Florian J. Breunig
  */
 interface FileOperation {
 
-    void perform(final File file) throws IOException;
+    void showWarningAndPerform(final List<File> files);
+    void perform(final List<File> files);
 }

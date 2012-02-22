@@ -34,14 +34,14 @@ import com.moneydance.modules.features.importlist.util.Settings;
  *
  * @author Florian J. Breunig
  */
-final class AggregationTableModel extends AbstractTableModel {
+public final class AggregationTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 3552703741263935211L;
     private final transient Preferences prefs;
     private final transient Settings settings;
     private final transient Localizable localizable;
 
-    AggregationTableModel() {
+    public AggregationTableModel() {
         this.prefs       = Helper.getPreferences();
         this.settings    = Helper.getSettings();
         this.localizable = Helper.getLocalizable();

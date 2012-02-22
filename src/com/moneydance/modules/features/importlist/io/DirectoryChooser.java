@@ -49,10 +49,9 @@ final class DirectoryChooser {
     private static final Logger LOG =
             LoggerFactory.getLogger(DirectoryChooser.class);
 
-    private final   AbstractFileFilter validDirFilter;
-    private final   Preferences prefs;
-    private final   Localizable localizable;
-    private File    baseDirectory;
+    private final AbstractFileFilter validDirFilter;
+    private final Preferences prefs;
+    private final Localizable localizable;
 
     /**
      * @param argBaseDirectory set the base directory when executed as a stand-
@@ -64,42 +63,18 @@ final class DirectoryChooser {
         this.prefs       = Helper.getPreferences();
         this.localizable = Helper.getLocalizable();
         if (argBaseDirectory != null) {
-            this.baseDirectory  = new File(argBaseDirectory);
-        } else if (this.prefs.getBaseDirectory() != null) {
-            this.baseDirectory = new File(this.prefs.getBaseDirectory());
+            this.prefs.setBaseDirectory(argBaseDirectory);
         }
-    }
-
-    void reset() {
-        this.baseDirectory = null;
-        this.validateBaseDirectory();
-        LOG.info("Reset base directory to "
-                + this.baseDirectory.getAbsolutePath());
     }
 
     File getBaseDirectory() {
-        this.validateBaseDirectory();
-        return this.baseDirectory;
+        if (this.prefs.getBaseDirectory() == null) {
+            return null;
+        }
+        return new File(this.prefs.getBaseDirectory());
     }
 
-    private void validateBaseDirectory() {
-        if (!this.validDirFilter.accept(this.baseDirectory)) {
-            this.displayFileChooser();
-        }
-
-        if (!this.validDirFilter.accept(this.baseDirectory)
-                && this.prefs.getImportDirectory() != null) {
-            this.baseDirectory = new File(this.prefs.getImportDirectory());
-        }
-
-        if (!this.validDirFilter.accept(this.baseDirectory)) {
-            this.baseDirectory = FileUtils.getUserDirectory();
-        }
-        LOG.info("Base directory is " + this.baseDirectory.getAbsolutePath());
-        this.saveBaseDirectoryInPreferences();
-    }
-
-    private void displayFileChooser() {
+    void chooseBaseDirectory() {
         final JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle(this.localizable.getDirectoryChooserTitle());
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -107,8 +82,9 @@ final class DirectoryChooser {
         fileChooser.setAcceptAllFileFilterUsed(false);
 
         fileChooser.setCurrentDirectory(FileUtils.getUserDirectory());
-        if (this.baseDirectory != null) {
-            final File parentDirectory = this.baseDirectory.getParentFile();
+        if (this.prefs.getBaseDirectory() != null) {
+            final File parentDirectory =
+                    new File(this.prefs.getBaseDirectory()).getParentFile();
             fileChooser.setCurrentDirectory(parentDirectory);
         }
 
@@ -117,12 +93,11 @@ final class DirectoryChooser {
         }
 
         if (this.validDirFilter.accept(fileChooser.getSelectedFile())) {
-            this.baseDirectory = fileChooser.getSelectedFile();
+           this.prefs.setBaseDirectory(
+                   fileChooser.getSelectedFile().getAbsolutePath());
         }
-    }
 
-    private void saveBaseDirectoryInPreferences() {
-        this.prefs.setBaseDirectory(this.baseDirectory.getAbsolutePath());
+        LOG.info("Base directory is " + this.prefs.getBaseDirectory());
     }
 
     /**

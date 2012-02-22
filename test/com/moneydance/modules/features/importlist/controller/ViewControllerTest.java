@@ -86,8 +86,8 @@ public final class ViewControllerTest {
     }
 
     @Test
-    public void testResetBaseDirectory() {
-        this.viewController.resetBaseDirectory();
+    public void testChooseBaseDirectory() {
+        this.viewController.chooseBaseDirectory();
     }
 
     @Test

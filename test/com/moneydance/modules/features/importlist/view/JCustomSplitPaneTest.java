@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.controller;
+package com.moneydance.modules.features.importlist.view;
 
 import javax.swing.JLabel;
 import javax.swing.JSplitPane;

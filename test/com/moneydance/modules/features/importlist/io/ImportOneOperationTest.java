@@ -18,10 +18,8 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import static org.junit.Assert.fail;
-
 import java.io.File;
-import java.io.IOException;
+import java.util.Collections;
 
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -40,7 +38,7 @@ import com.moneydance.apps.md.model.RootAccount;
 /**
  * @author Florian J. Breunig
  */
-public final class FileImporterTest {
+public final class ImportOneOperationTest {
 
     private final File incomeFile;
     private final File creditcardFile;
@@ -49,7 +47,7 @@ public final class FileImporterTest {
     private final CurrencyTable currencyTable;
     private final CurrencyType  currencyType;
 
-    public FileImporterTest() {
+    public ImportOneOperationTest() {
         this.incomeFile     = new File("mybank.csv");
         this.creditcardFile = new File("credit.csv");
         this.noCategoryFile = new File("nocategory.csv");
@@ -97,45 +95,61 @@ public final class FileImporterTest {
 
         FileOperation fileOperation = null;
 
-        try {
-            context.setRootAccount(fullRootAccount);
-            fileOperation = new FileImporter(
-                    factory.getContext(),
-                    TrueFileFilter.TRUE,
-                    FalseFileFilter.FALSE);
-            fileOperation.perform(this.incomeFile);
-            fileOperation.perform(this.creditcardFile);
-            fileOperation.perform(this.noCategoryFile);
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
+        context.setRootAccount(fullRootAccount);
+        fileOperation = new ImportOneOperation(
+                context,
+                TrueFileFilter.TRUE,
+                FalseFileFilter.FALSE);
+        fileOperation.perform(Collections.singletonList(this.incomeFile));
 
-        try {
-            context.setRootAccount(fullRootAccount);
-            fileOperation = new FileImporter(
-                    factory.getContext(),
-                    FalseFileFilter.FALSE,
-                    TrueFileFilter.TRUE);
+        fileOperation = new ImportOneOperation(
+                context,
+                TrueFileFilter.TRUE,
+                FalseFileFilter.FALSE);
+        fileOperation.perform(Collections.singletonList(this.creditcardFile));
 
-            fileOperation.perform(this.incomeFile);
-            fileOperation.perform(this.creditcardFile);
-            fileOperation.perform(this.noCategoryFile);
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
+        fileOperation = new ImportOneOperation(
+                context,
+                TrueFileFilter.TRUE,
+                FalseFileFilter.FALSE);
+        fileOperation.perform(Collections.singletonList(this.noCategoryFile));
 
-        try {
-            context.setRootAccount(fullRootAccount);
-            fileOperation = new FileImporter(
-                    factory.getContext(),
-                    FalseFileFilter.FALSE,
-                    FalseFileFilter.FALSE);
+        context.setRootAccount(fullRootAccount);
+        fileOperation = new ImportOneOperation(
+                context,
+                FalseFileFilter.FALSE,
+                TrueFileFilter.TRUE);
+        fileOperation.perform(Collections.singletonList(this.incomeFile));
 
-            fileOperation.perform(this.incomeFile);
-            fileOperation.perform(this.creditcardFile);
-            fileOperation.perform(this.noCategoryFile);
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
+        fileOperation = new ImportOneOperation(
+                context,
+                FalseFileFilter.FALSE,
+                TrueFileFilter.TRUE);
+        fileOperation.perform(Collections.singletonList(this.creditcardFile));
+
+        fileOperation = new ImportOneOperation(
+                context,
+                FalseFileFilter.FALSE,
+                TrueFileFilter.TRUE);
+        fileOperation.perform(Collections.singletonList(this.noCategoryFile));
+
+        context.setRootAccount(fullRootAccount);
+        fileOperation = new ImportOneOperation(
+                context,
+                FalseFileFilter.FALSE,
+                FalseFileFilter.FALSE);
+        fileOperation.perform(Collections.singletonList(this.incomeFile));
+
+        fileOperation = new ImportOneOperation(
+                context,
+                FalseFileFilter.FALSE,
+                FalseFileFilter.FALSE);
+        fileOperation.perform(Collections.singletonList(this.creditcardFile));
+
+        fileOperation = new ImportOneOperation(
+                context,
+                FalseFileFilter.FALSE,
+                FalseFileFilter.FALSE);
+        fileOperation.perform(Collections.singletonList(this.noCategoryFile));
     }
 }

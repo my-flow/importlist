@@ -108,12 +108,6 @@ public final class PreferencesTest {
     }
 
     @Test
-    public void testGetImportDirectory() {
-        Assert.assertNotNull("import directory must not be null",
-                this.prefs.getImportDirectory());
-    }
-
-    @Test
     public void testUseProxy() {
         this.prefs.useProxy();
     }

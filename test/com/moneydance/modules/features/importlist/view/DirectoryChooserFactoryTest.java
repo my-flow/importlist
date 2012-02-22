@@ -16,29 +16,30 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.io;
+package com.moneydance.modules.features.importlist.view;
 
-import java.io.File;
-import java.io.IOException;
+import junit.framework.Assert;
 
-import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Florian J. Breunig
  */
-final class FileDeleter implements FileOperation {
+public final class DirectoryChooserFactoryTest {
 
-    /**
-     * Static initialization of class-dependent logger.
-     */
-    private static final Logger LOG =
-            LoggerFactory.getLogger(FileDeleter.class);
+    private DirectoryChooserFactory directoryChooserFactory;
 
-    @Override
-    public void perform(final File file) throws IOException {
-        LOG.info("Deleting file " + file.getAbsoluteFile());
-        FileUtils.forceDelete(file);
+    @Before
+    public void setUp() throws Exception {
+        this.directoryChooserFactory = new DirectoryChooserFactory(null);
+    }
+
+    @Test
+    public void testGetComponent() {
+        Assert.assertNotNull("component must not be null",
+                this.directoryChooserFactory.getComponent()); // init
+        Assert.assertNotNull("component must not be null",
+                this.directoryChooserFactory.getComponent());
     }
 }

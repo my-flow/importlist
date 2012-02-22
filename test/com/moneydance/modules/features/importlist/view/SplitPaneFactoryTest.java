@@ -16,27 +16,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.io;
+package com.moneydance.modules.features.importlist.view;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @author Florian J. Breunig
  */
-public final class DirectoryChooserTest {
+public final class SplitPaneFactoryTest {
 
-    @Test
-    public void testGetBaseDirectory() {
-        DirectoryChooser directoryChooser = new DirectoryChooser(".");
-        Assert.assertNotNull("base directory must not be null",
-                directoryChooser.getBaseDirectory());
+    private SplitPaneFactory splitPaneFactory;
+
+    @Before
+    public void setUp() throws Exception {
+        this.splitPaneFactory = new SplitPaneFactory(
+                new EmptyLabelFactory(),
+                new EmptyLabelFactory());
     }
 
     @Test
-    public void testChooseBaseDirectory() {
-        DirectoryChooser directoryChooser = new DirectoryChooser(null);
-        directoryChooser.chooseBaseDirectory();
+    public void testGetComponent() {
+        Assert.assertNotNull("component must not be null",
+                this.splitPaneFactory.getComponent()); // init
+        Assert.assertNotNull("component must not be null",
+                this.splitPaneFactory.getComponent());
     }
 }

@@ -44,8 +44,8 @@ public final class FileAdminTest {
     }
 
     @Test
-    public void testResetBaseDirectory() {
-        this.fileAdmin.resetBaseDirectory();
+    public void testChooseBaseDirectory() {
+        this.fileAdmin.chooseBaseDirectory();
     }
 
     @Test

@@ -27,11 +27,13 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-    FileImporterTest.class,
-    FileDeleterTest.class,
+    DeleteAllOperationTest.class,
+    DeleteOneOperationTest.class,
     TransactionFileListenerTest.class,
     DirectoryChooserTest.class,
-    FileAdminTest.class })
+    FileAdminTest.class,
+    ImportAllOperationTest.class,
+    ImportOneOperationTest.class })
 public final class AllTests {
 
 }

@@ -30,9 +30,6 @@ import org.junit.runners.Suite.SuiteClasses;
     AggregationTableModelTest.class,
     FileTableModelTest.class,
     FileTableRowSorterTest.class,
-    JCustomScrollPaneTest.class,
-    JCustomSplitPaneTest.class,
-    TableListenerTest.class,
     TrackerTest.class,
     ViewControllerTest.class })
 public final class AllTests {

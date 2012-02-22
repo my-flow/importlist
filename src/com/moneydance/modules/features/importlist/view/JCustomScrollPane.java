@@ -16,27 +16,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.io;
+package com.moneydance.modules.features.importlist.view;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
+import javax.swing.JScrollPane;
 
 /**
  * @author Florian J. Breunig
  */
-public final class DirectoryChooserTest {
+final class JCustomScrollPane extends JScrollPane {
 
-    @Test
-    public void testGetBaseDirectory() {
-        DirectoryChooser directoryChooser = new DirectoryChooser(".");
-        Assert.assertNotNull("base directory must not be null",
-                directoryChooser.getBaseDirectory());
-    }
+    private static final long serialVersionUID = -2741147624999364681L;
 
-    @Test
-    public void testChooseBaseDirectory() {
-        DirectoryChooser directoryChooser = new DirectoryChooser(null);
-        directoryChooser.chooseBaseDirectory();
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        if (this.getColumnHeader() != null) {
+            this.getColumnHeader().setOpaque(false);
+            this.getColumnHeader().setBackground(this.getBackground());
+        }
+
+        if (this.getViewport() != null) {
+            this.getViewport().setOpaque(false);
+            this.getViewport().setBackground(this.getBackground());
+        }
     }
 }

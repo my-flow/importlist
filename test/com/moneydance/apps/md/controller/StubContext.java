@@ -44,8 +44,9 @@ public final class StubContext extends Main {
     private static final Logger LOG =
             LoggerFactory.getLogger(StubContext.class);
 
-    private final FeatureModule featureModule;
-    private       RootAccount rootAccount;
+    private final FeatureModule   featureModule;
+    private       RootAccount     rootAccount;
+    private       UserPreferences userPreferences;
 
     StubContext(final FeatureModule argFeatureModule) {
         this.featureModule = argFeatureModule;
@@ -113,9 +114,12 @@ public final class StubContext extends Main {
 
     @Override
     public UserPreferences getPreferences() {
-        final File preferencesFile = Common.getPreferencesFile();
-        LOG.debug("Stub context returns user preferences from file "
-                + preferencesFile.getAbsolutePath());
-        return new UserPreferences(preferencesFile);
+        if (this.userPreferences == null) {
+            final File preferencesFile = Common.getPreferencesFile();
+            this.userPreferences       = new UserPreferences(preferencesFile);
+            LOG.debug("Stub context returns user preferences from file "
+                    + preferencesFile.getAbsolutePath());
+        }
+        return this.userPreferences;
     }
 }

@@ -68,7 +68,7 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
         this.setOpaque(false);
         this.colorSchemeHelper.applyColorScheme(this, row);
         String label = null;
-        if (value != null && value instanceof Date) {
+        if (value instanceof Date) {
             final Date fileDate = (Date) value;
             label = this.settings.getIndentationPrefix()
             + this.dateFormatter.format(fileDate)

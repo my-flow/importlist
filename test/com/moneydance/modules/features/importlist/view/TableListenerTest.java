@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.controller;
+package com.moneydance.modules.features.importlist.view;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,6 +30,8 @@ import javax.swing.table.TableModel;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.moneydance.modules.features.importlist.controller.FileTableModel;
+import com.moneydance.modules.features.importlist.controller.FileTableRowSorter;
 import com.moneydance.modules.features.importlist.util.Helper;
 
 /**

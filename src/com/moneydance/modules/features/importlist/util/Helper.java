@@ -53,7 +53,7 @@ public final class Helper {
         // Prevents this class from being instantiated from the outside.
     }
 
-    public static synchronized Preferences getPreferences() {
+    public static Preferences getPreferences() {
         synchronized (Helper.class) {
             if (prefs == null) {
                 prefs = new Preferences();
@@ -71,7 +71,7 @@ public final class Helper {
         return settings;
     }
 
-    public static synchronized Localizable getLocalizable() {
+    public static Localizable getLocalizable() {
         synchronized (Helper.class) {
             if (localizable == null) {
                 localizable = new Localizable();

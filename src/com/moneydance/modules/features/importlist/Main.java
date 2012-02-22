@@ -97,7 +97,7 @@ public final class Main extends FeatureModule implements Observer {
     @Override
     public void invoke(final String uri) {
         if (this.settings.getChooseBaseDirSuffix().equals(uri)) {
-            this.viewController.resetBaseDirectory();
+            this.viewController.chooseBaseDirectory();
         }
     }
 

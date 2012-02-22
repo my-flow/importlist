@@ -16,28 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.controller;
+package com.moneydance.modules.features.importlist.view;
 
-import javax.swing.JScrollPane;
+import javax.swing.JComponent;
 
 /**
  * @author Florian J. Breunig
+ *
  */
-final class JCustomScrollPane extends JScrollPane {
+public interface ComponentFactory {
 
-    private static final long serialVersionUID = -2741147624999364681L;
-
-    @Override
-    public void addNotify() {
-        super.addNotify();
-        if (this.getColumnHeader() != null) {
-            this.getColumnHeader().setOpaque(false);
-            this.getColumnHeader().setBackground(this.getBackground());
-        }
-
-        if (this.getViewport() != null) {
-            this.getViewport().setOpaque(false);
-            this.getViewport().setBackground(this.getBackground());
-        }
-    }
+    JComponent getComponent();
 }

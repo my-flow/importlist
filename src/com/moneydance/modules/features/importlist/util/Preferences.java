@@ -131,10 +131,6 @@ public final class Preferences extends Observable {
                 baseDirectory);
     }
 
-    public String getImportDirectory() {
-        return this.getUserPreferences().getSetting(UserPreferences.IMPORT_DIR);
-    }
-
     public boolean useProxy() {
         return this.getUserPreferences().getBoolSetting(
                 UserPreferences.NET_USE_PROXY,

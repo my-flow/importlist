@@ -27,8 +27,16 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
+    AggregationTableFactoryTest.class,
+    BaseTableFactoryTest.class,
+    DirectoryChooserFactoryTest.class,
+    EmptyLabelFactoryTest.class,
     EvenColorSchemeHelperTest.class,
-    OddColorSchemeHelperTest.class })
+    JCustomScrollPaneTest.class,
+    JCustomSplitPaneTest.class,
+    OddColorSchemeHelperTest.class,
+    SplitPaneFactoryTest.class,
+    TableListenerTest.class })
 public final class AllTests {
 
 }

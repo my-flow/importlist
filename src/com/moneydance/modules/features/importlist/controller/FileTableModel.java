@@ -41,7 +41,7 @@ import com.moneydance.modules.features.importlist.util.Settings;
  *
  * @author Florian J. Breunig
  */
-final class FileTableModel extends AbstractTableModel {
+public final class FileTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 3552703741263935211L;
     private final transient Preferences prefs;
@@ -49,7 +49,7 @@ final class FileTableModel extends AbstractTableModel {
     private final transient Localizable localizable;
     private final           List<File>  files;
 
-    FileTableModel(final List<File> argFiles) {
+    public FileTableModel(final List<File> argFiles) {
         Validate.notNull(argFiles, "argFiles must not be null");
         this.prefs       = Helper.getPreferences();
         this.settings    = Helper.getSettings();

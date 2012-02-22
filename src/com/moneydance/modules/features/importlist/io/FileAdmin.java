@@ -18,20 +18,13 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import java.awt.Image;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
@@ -47,7 +40,6 @@ import org.slf4j.LoggerFactory;
 
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Settings;
 
 /**
@@ -62,29 +54,27 @@ public final class FileAdmin extends Observable implements Observer {
      */
     private static final Logger LOG = LoggerFactory.getLogger(FileAdmin.class);
 
-    private final Settings                  settings;
-    private final Localizable               localizable;
     private final FeatureModuleContext      context;
     private final DirectoryChooser          directoryChooser;
     private final AbstractFileFilter        transactionFileFilter;
     private final AbstractFileFilter        textFileFilter;
     private final AbstractFileFilter        readableFileFilter;
-    private FileAlterationObserver          observer;
     private final TransactionFileListener   listener;
     private final FileAlterationMonitor     monitor;
     private final List<File>                files;
+    private       FileAlterationObserver    observer;
+    private       boolean                   isMonitorRunning;
 
     public FileAdmin(final String baseDirectory,
             final FeatureModuleContext argContext) {
-        this.settings         = Helper.getSettings();
-        this.localizable      = Helper.getLocalizable();
         this.context          = argContext;
         this.directoryChooser = new DirectoryChooser(baseDirectory);
+        Settings settings = Helper.getSettings();
         this.transactionFileFilter = new SuffixFileFilter(
-                this.settings.getTransactionFileExtensions(),
+                settings.getTransactionFileExtensions(),
                 IOCase.INSENSITIVE);
         this.textFileFilter = new SuffixFileFilter(
-                this.settings.getTextFileExtensions(),
+                settings.getTextFileExtensions(),
                 IOCase.INSENSITIVE);
         this.readableFileFilter = new AndFileFilter(
                 CanReadFileFilter.CAN_READ,
@@ -95,16 +85,17 @@ public final class FileAdmin extends Observable implements Observer {
         this.listener = new TransactionFileListener();
         this.listener.addObserver(this);
         this.monitor  = new FileAlterationMonitor(
-                this.settings.getMonitorInterval());
+                settings.getMonitorInterval());
 
         this.files = Collections.synchronizedList(new ArrayList<File>());
     }
 
-    public void resetBaseDirectory() {
-        LOG.info("Resetting base directory.");
-        this.directoryChooser.reset();
+    public void chooseBaseDirectory() {
+        LOG.info("Choosing new base directory.");
+        this.directoryChooser.chooseBaseDirectory();
         this.monitor.removeObserver(this.observer);
         this.setFileMonitorToCurrentImportDir();
+        this.startMonitor();
         this.setChanged();
         this.notifyObservers();
     }
@@ -140,10 +131,17 @@ public final class FileAdmin extends Observable implements Observer {
      * Start monitoring the current import directory.
      */
     public void startMonitor() {
+        if (this.isMonitorRunning) {
+            return;
+        }
+        if (this.getBaseDirectory() == null) {
+            return;
+        }
         LOG.debug("Starting the directory monitor.");
         this.setFileMonitorToCurrentImportDir();
         try {
             this.monitor.start();
+            this.isMonitorRunning = true;
         } catch (Exception e) {
             LOG.warn(e.getMessage(), e);
         }
@@ -153,27 +151,24 @@ public final class FileAdmin extends Observable implements Observer {
      * Stop monitoring the current import directory.
      */
     public void stopMonitor() {
+        if (!this.isMonitorRunning) {
+            return;
+        }
         LOG.debug("Stopping the directory monitor.");
         try {
             this.monitor.stop(0);
+            this.isMonitorRunning = false;
         } catch (Exception e) {
             LOG.warn(e.getMessage(), e);
         }
     }
 
     public void importAllRows() {
-        FileOperation fileImporter = new FileImporter(
+        FileOperation importAllOperation = new ImportAllOperation(
                 this.context,
                 this.transactionFileFilter,
                 this.textFileFilter);
-
-        for (final File file : this.files) {
-            try {
-                fileImporter.perform(file);
-            } catch (IOException e) {
-                LOG.warn(e.getMessage(), e);
-            }
-        }
+        importAllOperation.showWarningAndPerform(this.files);
         this.setChanged();
         this.notifyObservers();
     }
@@ -182,16 +177,12 @@ public final class FileAdmin extends Observable implements Observer {
         if (rowNumber >= this.files.size()) {
             return;
         }
-        final File file = this.files.get(rowNumber);
-        try {
-            FileOperation fileImporter = new FileImporter(
-                    this.context,
-                    this.transactionFileFilter,
-                    this.textFileFilter);
-            fileImporter.perform(file);
-        } catch (IOException e) {
-            LOG.warn(e.getMessage(), e);
-        }
+        FileOperation importOneOperation = new ImportOneOperation(
+                this.context,
+                this.transactionFileFilter,
+                this.textFileFilter);
+        importOneOperation.showWarningAndPerform(
+                Collections.singletonList(this.files.get(rowNumber)));
         this.setChanged();
         this.notifyObservers();
     }
@@ -200,26 +191,8 @@ public final class FileAdmin extends Observable implements Observer {
         if (this.files.isEmpty()) {
             return;
         }
-        if (this.showWarningBeforeDeletingAllFiles(this.files.size())) {
-            FileOperation fileDeleter = new FileDeleter();
-            for (final File file : this.files) {
-                try {
-                    fileDeleter.perform(file);
-                } catch (IOException e) {
-                    LOG.warn(e.getMessage(), e);
-                    final String errorMessage =
-                     this.localizable.getErrorMessageDeleteFile(file.getName());
-                    final Object errorLabel = new JLabel(errorMessage);
-                    JOptionPane.showMessageDialog(
-                            null, // no parent component
-                            errorLabel,
-                            null, // no title
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        } else {
-            LOG.info("Canceled deleting all files");
-        }
+        FileOperation deleteAllOperation = new DeleteAllOperation();
+        deleteAllOperation.showWarningAndPerform(this.files);
         this.setChanged();
         this.notifyObservers();
     }
@@ -228,83 +201,16 @@ public final class FileAdmin extends Observable implements Observer {
         if (rowNumber >= this.files.size()) {
             return;
         }
-        final File file = this.files.get(rowNumber);
-        if (this.showWarningBeforeDeletingOneFile(file)) {
-            try {
-                new FileDeleter().perform(file);
-            } catch (IOException e) {
-                LOG.warn("Could not delete file " + file.getAbsoluteFile());
-                final String errorMessage =
-                    this.localizable.getErrorMessageDeleteFile(file.getName());
-                final Object errorLabel = new JLabel(errorMessage);
-                JOptionPane.showMessageDialog(
-                        null, // no parent component
-                        errorLabel,
-                        null, // no title
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            LOG.info("Canceled deleting file " + file.getAbsoluteFile());
-        }
+        FileOperation deleteOneOperation = new DeleteOneOperation();
+        deleteOneOperation.showWarningAndPerform(Collections.singletonList(this.files.get(rowNumber)));
         this.setChanged();
         this.notifyObservers();
     }
 
-    private boolean showWarningBeforeDeletingOneFile(final File file) {
-        final String message =
-           this.localizable.getConfirmationMessageDeleteOneFile(file.getName());
-        final Object confirmationLabel = new JLabel(message);
-        final Image image = Helper.getIconImage();
-        Icon  icon  = null;
-        if (image != null) {
-            icon = new ImageIcon(image);
-        }
-        final Object[] options = {
-                this.localizable.getOptionDeleteFile(),
-                this.localizable.getOptionCancel()
-        };
-
-        final int choice = JOptionPane.showOptionDialog(
-                null, // no parent component
-                confirmationLabel,
-                null, // no title
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.WARNING_MESSAGE,
-                icon,
-                options,
-                options[1]);
-
-        return choice == 0;
-    }
-
-    private boolean showWarningBeforeDeletingAllFiles(final int size) {
-        final String message =
-            this.localizable.getConfirmationMessageDeleteAllFiles(size);
-        final Object confirmationLabel = new JLabel(message);
-        final Image image = Helper.getIconImage();
-        Icon  icon  = null;
-        if (image != null) {
-            icon = new ImageIcon(image);
-        }
-        final Object[] options = {
-                this.localizable.getOptionDeleteFile(),
-                this.localizable.getOptionCancel()
-        };
-
-        final int choice = JOptionPane.showOptionDialog(
-                null, // no parent component
-                confirmationLabel,
-                null, // no title
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.WARNING_MESSAGE,
-                icon,
-                options,
-                options[1]);
-
-        return choice == 0;
-    }
-
     private void setFileMonitorToCurrentImportDir() {
+        if (this.getBaseDirectory() == null) {
+            return;
+        }
         this.observer  = new FileAlterationObserver(
                 this.getBaseDirectory(),
                 this.readableFileFilter,

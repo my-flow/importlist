@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
@@ -41,7 +42,7 @@ import com.moneydance.modules.features.importlist.util.Settings;
 /**
  * @author Florian J. Breunig
  */
-final class FileImporter implements FileOperation {
+final class ImportOneOperation implements FileOperation {
 
     private final Preferences          prefs;
     private final Settings             settings;
@@ -53,9 +54,9 @@ final class FileImporter implements FileOperation {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-            LoggerFactory.getLogger(FileImporter.class);
+            LoggerFactory.getLogger(ImportOneOperation.class);
 
-    FileImporter(
+    ImportOneOperation(
             final FeatureModuleContext argContext,
             final FileFilter argTransactionFileFilter,
             final FileFilter argTextFileFilter) {
@@ -67,27 +68,34 @@ final class FileImporter implements FileOperation {
     }
 
     @Override
-    public void perform(final File file) {
+    public void showWarningAndPerform(final List<File> files) {
+        this.perform(files);
+    }
+
+    @Override
+    public void perform(final List<File> files) {
+        final File file = files.iterator().next();
+        Map<String, String> valuesMap = new HashMap<String, String>();
+        valuesMap.put("filename",  file.getAbsolutePath());
+
         String uriScheme = "";
         if (this.transactionFileFilter.accept(file)) {
             uriScheme = this.settings.getTransactionFileImportUriScheme();
         } else if (this.textFileFilter.accept(file)) {
             uriScheme = this.settings.getTextFileImportUriScheme();
+            valuesMap.put("accountno", this.getAccountNumberForFile(file));
         }
 
-        Map<String, String> valuesMap = new HashMap<String, String>();
-        valuesMap.put("filename",  file.getAbsolutePath());
-        valuesMap.put("accountno", this.getAccountNumberForFile(file));
-        StrSubstitutor sub = new StrSubstitutor(valuesMap);
-
+        final StrSubstitutor sub = new StrSubstitutor(valuesMap);
         final String resolvedUri = sub.replace(uriScheme);
 
         // Import the file by calling the URI
         this.context.showURL(resolvedUri);
     }
 
-    private String getAccountNumberForFile(final File file) {
-        final String fileName = FilenameUtils.removeExtension(file.getName());
+    private String getAccountNumberForFile(final File argFile) {
+        final String fileName = FilenameUtils.removeExtension(
+                argFile.getName());
 
         RootAccount rootAccount = this.context.getRootAccount();
 
@@ -105,7 +113,7 @@ final class FileImporter implements FileOperation {
             if (this.isEqual(accountName, fileName)) {
                 LOG.debug("Found matching account \""
                         + account.getFullAccountName()
-                        + "\" for file " + file.getName());
+                        + "\" for file " + argFile.getName());
                 accountNumber = String.valueOf(account.getAccountNum());
             }
         }
@@ -114,12 +122,8 @@ final class FileImporter implements FileOperation {
     }
 
     private boolean isEqual(final String first, final String second) {
-        final String string1 = this.simplifyComparableString(first);
-        final String string2 = this.simplifyComparableString(second);
+        final String string1 =  first.toUpperCase(this.prefs.getLocale());
+        final String string2 = second.toUpperCase(this.prefs.getLocale());
         return string1.contains(string2) || string2.contains(string1);
-    }
-
-    private String simplifyComparableString(final String string) {
-        return string.toUpperCase(this.prefs.getLocale());
     }
 }

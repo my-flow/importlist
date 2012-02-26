@@ -308,8 +308,7 @@ public final class ViewController implements HomePageView, Observer {
     }
 
 
-    private class ChooseBaseDirectoryActionListener
-        implements ActionListener {
+    private class ChooseBaseDirectoryActionListener implements ActionListener {
 
         @Override
         public void actionPerformed(final ActionEvent event) {

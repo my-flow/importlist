@@ -202,7 +202,8 @@ public final class FileAdmin extends Observable implements Observer {
             return;
         }
         FileOperation deleteOneOperation = new DeleteOneOperation();
-        deleteOneOperation.showWarningAndPerform(Collections.singletonList(this.files.get(rowNumber)));
+        deleteOneOperation.showWarningAndPerform(
+                Collections.singletonList(this.files.get(rowNumber)));
         this.setChanged();
         this.notifyObservers();
     }

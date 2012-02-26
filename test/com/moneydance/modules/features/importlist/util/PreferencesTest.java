@@ -95,8 +95,7 @@ public final class PreferencesTest {
 
     @Test
     public void testGetBaseDirectory() {
-        Assert.assertNotNull("base directory must not be null",
-                this.prefs.getBaseDirectory());
+        this.prefs.getBaseDirectory();
     }
 
     @Test

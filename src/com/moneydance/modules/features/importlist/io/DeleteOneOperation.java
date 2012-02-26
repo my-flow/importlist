@@ -82,8 +82,7 @@ final class DeleteOneOperation implements FileOperation {
         if (choice == 0) {
             this.perform(files);
         } else {
-            LOG.info("Canceled deleting file "
-                    + file.getAbsoluteFile());
+            LOG.info("Canceled deleting file " + file.getAbsoluteFile());
         }
     }
 

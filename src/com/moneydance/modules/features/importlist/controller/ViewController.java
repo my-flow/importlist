@@ -131,6 +131,11 @@ public final class ViewController implements HomePageView, Observer {
         // display a label iff no base directory has been chosen
         if (this.fileAdmin.getBaseDirectory() == null) {
             JButton chooserButton = this.directoryChooserFactory.getComponent();
+            chooserButton.setText(
+                    "<html><u>"
+                    + this.localizable.getDirectoryChooserTitle()
+                    + "</u></html>");
+
             this.viewport.setView(chooserButton);
             this.viewport.setMinimumSize(
                     new Dimension(

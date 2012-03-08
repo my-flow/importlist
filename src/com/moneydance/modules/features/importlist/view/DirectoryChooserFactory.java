@@ -24,8 +24,6 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Localizable;
 
 /**
  * @author Florian J. Breunig
@@ -33,7 +31,6 @@ import com.moneydance.modules.features.importlist.util.Localizable;
 public final class DirectoryChooserFactory implements ComponentFactory {
 
     private final ActionListener actionListener;
-    private       Localizable localizable;
     private       JButton chooserButton;
 
     public DirectoryChooserFactory(final ActionListener argActionListener) {
@@ -41,15 +38,10 @@ public final class DirectoryChooserFactory implements ComponentFactory {
     }
 
     private void init() {
-        this.localizable   = Helper.getLocalizable();
         this.chooserButton = new JButton();
         this.chooserButton.setHorizontalAlignment(SwingConstants.CENTER);
         this.chooserButton.setBorder(MoneydanceLAF.homePageBorder);
         this.chooserButton.setOpaque(false);
-        this.chooserButton.setText(
-                "<html><u>"
-                + this.localizable.getDirectoryChooserTitle()
-                + "</u></html>");
         this.chooserButton.addActionListener(this.actionListener);
     }
 
@@ -60,5 +52,4 @@ public final class DirectoryChooserFactory implements ComponentFactory {
         }
         return this.chooserButton;
     }
-
 }

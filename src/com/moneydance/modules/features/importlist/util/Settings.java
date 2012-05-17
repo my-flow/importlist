@@ -34,7 +34,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author Florian J. Breunig
  */
-public final class Settings {
+public enum Settings {
+
+    INSTANCE;
 
     /**
      * Static initialization of class-dependent logger.
@@ -42,64 +44,65 @@ public final class Settings {
     private static final Logger LOG =
             LoggerFactory.getLogger(Settings.class);
 
-    private final Configuration config;
+    private static final Configuration CONFIG;
 
     /**
      * The resource in the JAR file to read the settings from.
      */
     private static final String PROPERTIES_RESOURCE
-    = "com/moneydance/modules/features/importlist/resources/"
-            + "settings.properties";
+            = "com/moneydance/modules/features/importlist/resources/"
+              + "settings.properties";
 
-    Settings() {
+    static {
         final AbstractFileConfiguration abstractFileConfiguration =
                 new PropertiesConfiguration();
 
         try {
-            InputStream inputStream = Helper.getInputStreamFromResource(
-                    PROPERTIES_RESOURCE);
+            InputStream inputStream =
+                    Helper.INSTANCE.getInputStreamFromResource(
+                            PROPERTIES_RESOURCE);
             abstractFileConfiguration.load(inputStream);
         } catch (IllegalArgumentException e) {
             LOG.warn(e.getMessage(), e);
         } catch (ConfigurationException e) {
             LOG.warn(e.getMessage(), e);
         }
-        this.config = abstractFileConfiguration;
+        CONFIG = abstractFileConfiguration;
     }
 
     /**
      * @return The descriptive name of this extension.
      */
     public String getExtensionName() {
-        return this.config.getString("extension_name");
+        return CONFIG.getString("extension_name");
     }
 
     /**
      * @return The ID string for this extension.
      */
     public String getExtensionIdentifier() {
-        return this.config.getString("extension_identifier");
+        return CONFIG.getString("extension_identifier");
     }
 
     /**
      * @return The icon image that represents this extension.
      */
     public String getIconResource() {
-        return this.config.getString("icon_resource");
+        return CONFIG.getString("icon_resource");
     }
 
     /**
      * @return The resource that contains the configuration of log4j.
      */
     public String getLog4jPropertiesResource() {
-        return this.config.getString("log4j_properties_resource");
+        return CONFIG.getString("log4j_properties_resource");
     }
 
     /**
      * @return The resource in the JAR file to read the language strings from.
      */
     public String getLocalizableResource() {
-        return this.config.getString("localizable_resource");
+        return CONFIG.getString("localizable_resource");
     }
 
     /**
@@ -107,14 +110,14 @@ public final class Settings {
      * base directory.
      */
     public String getChooseBaseDirSuffix() {
-        return this.config.getString("choose_base_dir_suffix");
+        return CONFIG.getString("choose_base_dir_suffix");
     }
 
     /**
      * @return The scheme of the application event that imports a given file.
      */
     public String getTransactionFileImportUriScheme() {
-        return this.config.getString("transaction_file_import_uri_scheme");
+        return CONFIG.getString("transaction_file_import_uri_scheme");
     }
 
     /**
@@ -122,7 +125,7 @@ public final class Settings {
      * using the text file importer plugin.
      */
     public String getTextFileImportUriScheme() {
-        return this.config.getString("text_file_import_uri_scheme");
+        return CONFIG.getString("text_file_import_uri_scheme");
     }
 
     /**
@@ -130,7 +133,7 @@ public final class Settings {
      * scanner.
      */
     public int getMonitorInterval() {
-        return this.config.getInt("monitor_interval");
+        return CONFIG.getInt("monitor_interval");
     }
 
     /**
@@ -139,7 +142,7 @@ public final class Settings {
      */
     public String[] getTransactionFileExtensions() {
         String[] transactionFileExtensions =
-                this.config.getStringArray("transaction_file_extensions");
+                CONFIG.getStringArray("transaction_file_extensions");
         return transactionFileExtensions;
     }
 
@@ -149,7 +152,7 @@ public final class Settings {
      */
     public String[] getTextFileExtensions() {
         String[] textFileExtensions =
-                this.config.getStringArray("text_file_extensions");
+                CONFIG.getStringArray("text_file_extensions");
         return textFileExtensions;
     }
 
@@ -157,91 +160,91 @@ public final class Settings {
      * @return Maximum length of a filename displayed in an error message.
      */
     public int getMaxFilenameLength() {
-        return this.config.getInt("max_filename_length");
+        return CONFIG.getInt("max_filename_length");
     }
 
     /**
      * @return Unique descriptor of the "name" column.
      */
     public String getDescName() {
-        return this.config.getString("desc_name");
+        return CONFIG.getString("desc_name");
     }
 
     /**
      * @return Unique descriptor of the "modified" column.
      */
     public String getDescModified() {
-        return this.config.getString("desc_modified");
+        return CONFIG.getString("desc_modified");
     }
 
     /**
      * @return Unique descriptor of the "import" column.
      */
     public String getDescImport() {
-        return this.config.getString("desc_import");
+        return CONFIG.getString("desc_import");
     }
 
     /**
      * @return Unique descriptor of the "delete" column.
      */
     public String getDescDelete() {
-        return this.config.getString("desc_delete");
+        return CONFIG.getString("desc_delete");
     }
 
     /**
      * @return Indentation prefix for table header and values.
      */
     public String getIndentationPrefix() {
-        return this.config.getString("indentation_prefix");
+        return CONFIG.getString("indentation_prefix");
     }
 
     /**
      * @return Determines if the button columns can have different widths.
      */
     public boolean isButtonResizable() {
-        return this.config.getBoolean("button_resizable");
+        return CONFIG.getBoolean("button_resizable");
     }
 
     /**
      * @return Minimum width of all columns.
      */
     public int getMinColumnWidth() {
-        return this.config.getInt("min_column_width");
+        return CONFIG.getInt("min_column_width");
     }
 
     /**
      * @return Determines if reordering of the columns is allowed.
      */
     public boolean isReorderingAllowed() {
-        return this.config.getBoolean("reordering_allowed");
+        return CONFIG.getBoolean("reordering_allowed");
     }
 
     /**
      * @return Minimum width of the file table.
      */
     public int getMinimumTableWidth() {
-        return this.config.getInt("minimum_table_width");
+        return CONFIG.getInt("minimum_table_width");
     }
 
     /**
      * @return Minimum height of the file table.
      */
     public int getMinimumTableHeight() {
-        return this.config.getInt("minimum_table_height");
+        return CONFIG.getInt("minimum_table_height");
     }
 
     /**
      * @return Constant offset to determine the preferred table height.
      */
     public int getTableHeightOffset() {
-        return this.config.getInt("table_height_offset");
+        return CONFIG.getInt("table_height_offset");
     }
 
     /**
      * @return The default width of the columns
      */
     public int getColumnWidth() {
-        return this.config.getInt("column_width");
+        return CONFIG.getInt("column_width");
     }
 
     /**
@@ -249,7 +252,7 @@ public final class Settings {
      * found.
      */
     public int getPreferredEmptyMessageWidth() {
-        return this.config.getInt("preferred_empty_message_width");
+        return CONFIG.getInt("preferred_empty_message_width");
     }
 
     /**
@@ -257,7 +260,7 @@ public final class Settings {
      * found.
      */
     public int getPreferredEmptyMessageHeight() {
-        return this.config.getInt("preferred_empty_message_height");
+        return CONFIG.getInt("preferred_empty_message_height");
     }
 
     /**
@@ -266,7 +269,7 @@ public final class Settings {
      * @return The maximum length of each line.
      */
     public int getMessageFilenameLineMaxLength() {
-        return this.config.getInt("message_filename_line_max_length");
+        return CONFIG.getInt("message_filename_line_max_length");
     }
 
     /**
@@ -274,7 +277,7 @@ public final class Settings {
      * settings, e.g. 2007r5.
      */
     public int getLengthOfVersionDigits() {
-        return this.config.getInt("length_of_version_digits");
+        return CONFIG.getInt("length_of_version_digits");
     }
 
     /**
@@ -282,28 +285,28 @@ public final class Settings {
      * homepage views.
      */
     public int getVersionWithOpaqueHomepageView() {
-        return this.config.getInt("version_with_opaque_homepage_view");
+        return CONFIG.getInt("version_with_opaque_homepage_view");
     }
 
     /**
      * @return The default foreground color.
      */
     public int getColorValueFgDef() {
-        return this.config.getInt("color_value_fg_def");
+        return CONFIG.getInt("color_value_fg_def");
     }
 
     /**
      * @return The default background color.
      */
     public int getColorValueBgDef() {
-        return this.config.getInt("color_value_bg_def");
+        return CONFIG.getInt("color_value_bg_def");
     }
 
     /**
      * @return Default alternative background color.
      */
     public int getColorValueBgAltDef() {
-        return this.config.getInt("color_value_bg_alt_def");
+        return CONFIG.getInt("color_value_bg_alt_def");
     }
 
     /**
@@ -311,34 +314,34 @@ public final class Settings {
      * the font size.
      */
     public double getFactorRowHeightHeader() {
-        return this.config.getDouble("factor_row_height_header");
+        return CONFIG.getDouble("factor_row_height_header");
     }
 
     /**
      * @return The height of a table row by adding this value to the font size.
      */
     public double getSummandRowHeightBody() {
-        return this.config.getDouble("summand_row_height_body");
+        return CONFIG.getDouble("summand_row_height_body");
     }
 
     /**
      * @return Keyboard shortcut to import files.
      */
     public String getKeyboardShortcutImport() {
-        return this.config.getString("keyboard_shortcut_import");
+        return CONFIG.getString("keyboard_shortcut_import");
     }
 
     /**
      * @return Keyboard shortcut to delete files.
      */
     public String getKeyboardShortcutDelete() {
-        return this.config.getString("keyboard_shortcut_delete");
+        return CONFIG.getString("keyboard_shortcut_delete");
     }
 
     /**
      * @return Tracking code for Google Analytics (aka "utmac").
      */
     public String getTrackingCode() {
-        return this.config.getString("tracking_code");
+        return CONFIG.getString("tracking_code");
     }
 }

@@ -51,9 +51,9 @@ public final class FileTableModel extends AbstractTableModel {
 
     public FileTableModel(final List<File> argFiles) {
         Validate.notNull(argFiles, "argFiles must not be null");
-        this.prefs       = Helper.getPreferences();
-        this.settings    = Helper.getSettings();
-        this.localizable = Helper.getLocalizable();
+        this.prefs       = Helper.INSTANCE.getPreferences();
+        this.settings    = Helper.INSTANCE.getSettings();
+        this.localizable = Helper.INSTANCE.getLocalizable();
         // ESCA-JAVA0256: argFiles is readonly by design
         this.files       = argFiles;
     }

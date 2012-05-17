@@ -57,7 +57,7 @@ final class HeaderRenderer implements TableCellRenderer {
                 "argDefaultHeaderTableCellRenderer must not be null");
         this.colorSchemeHelper              = argColorSchemeHelper;
         this.defaultHeaderTableCellRenderer = argDefaultHeaderTableCellRenderer;
-        this.prefs                          = Helper.getPreferences();
+        this.prefs                          = Helper.INSTANCE.getPreferences();
     }
 
     // ESCA-JAVA0138: abstract method from interface TableCellRenderer

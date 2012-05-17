@@ -43,7 +43,7 @@ public final class FileTableRowSorter extends TableRowSorter<TableModel> {
      */
     public FileTableRowSorter(final TableModel tableModel) {
         super(tableModel);
-        this.settings = Helper.getSettings();
+        this.settings = Helper.INSTANCE.getSettings();
     }
 
     @Override

@@ -48,7 +48,7 @@ final class DeleteAllOperation implements FileOperation {
     private final Localizable   localizable;
 
     DeleteAllOperation() {
-        this.localizable = Helper.getLocalizable();
+        this.localizable = Helper.INSTANCE.getLocalizable();
     }
 
     @Override
@@ -57,7 +57,7 @@ final class DeleteAllOperation implements FileOperation {
                 this.localizable.getConfirmationMessageDeleteAllFiles(
                         files.size());
         final Object confirmationLabel = new JLabel(message);
-        final Image image = Helper.getIconImage();
+        final Image image = Helper.INSTANCE.getIconImage();
         Icon  icon  = null;
         if (image != null) {
             icon = new ImageIcon(image);

@@ -64,8 +64,8 @@ public final class ColumnFactory {
             final CustomDateFormat argDateFormatter,
             final DateFormat argTimeFormatter) {
         Validate.notNull(fileAdmin, "fileAdmin must not be null");
-        final Preferences prefs    = Helper.getPreferences();
-        final Settings    settings = Helper.getSettings();
+        final Preferences prefs    = Helper.INSTANCE.getPreferences();
+        final Settings    settings = Helper.INSTANCE.getSettings();
 
         this.evenColorSchemeHelper = new EvenColorSchemeHelper(
                 foreground,

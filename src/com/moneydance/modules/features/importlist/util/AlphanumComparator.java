@@ -23,7 +23,6 @@ package com.moneydance.modules.features.importlist.util;
  *
  */
 
-import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -32,14 +31,12 @@ import java.util.Comparator;
  *
  * @author Daniel Migowski, Andre Bogus, David Koelle, and Florian J. Breunig.
  */
-public final class AlphanumComparator
-implements Comparator<String>, Serializable {
+public enum AlphanumComparator implements Comparator<String> {
 
     /**
      * Alphanum comparator instance.
      */
-    public static final Comparator<String> ALPHANUM
-    = new AlphanumComparator();
+    ALPHANUM;
 
     /**
      * Serialization.

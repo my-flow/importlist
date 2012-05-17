@@ -35,7 +35,7 @@ public final class LocalizableTest {
     @Before
     public void setUp() {
         new StubContextFactory();
-        this.localizable = new Localizable();
+        this.localizable = Localizable.INSTANCE;
         this.localizable.update(null, Boolean.TRUE);
     }
 

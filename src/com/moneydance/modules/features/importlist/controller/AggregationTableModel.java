@@ -42,9 +42,9 @@ public final class AggregationTableModel extends AbstractTableModel {
     private final transient Localizable localizable;
 
     public AggregationTableModel() {
-        this.prefs       = Helper.getPreferences();
-        this.settings    = Helper.getSettings();
-        this.localizable = Helper.getLocalizable();
+        this.prefs       = Helper.INSTANCE.getPreferences();
+        this.settings    = Helper.INSTANCE.getSettings();
+        this.localizable = Helper.INSTANCE.getLocalizable();
     }
 
     @Override

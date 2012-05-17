@@ -44,7 +44,7 @@ final class Tracker {
     Tracker(final String argFullVersion,
             final int argBuild,
             final String trackingCode) {
-        this.prefs       = Helper.getPreferences();
+        this.prefs       = Helper.INSTANCE.getPreferences();
         this.fullVersion = argFullVersion;
         this.build       = String.valueOf(argBuild);
 

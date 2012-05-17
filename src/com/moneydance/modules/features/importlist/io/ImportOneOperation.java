@@ -60,8 +60,8 @@ final class ImportOneOperation implements FileOperation {
             final FeatureModuleContext argContext,
             final FileFilter argTransactionFileFilter,
             final FileFilter argTextFileFilter) {
-        this.prefs                  = Helper.getPreferences();
-        this.settings               = Helper.getSettings();
+        this.prefs                  = Helper.INSTANCE.getPreferences();
+        this.settings               = Helper.INSTANCE.getSettings();
         this.context                = argContext;
         this.transactionFileFilter  = argTransactionFileFilter;
         this.textFileFilter         = argTextFileFilter;

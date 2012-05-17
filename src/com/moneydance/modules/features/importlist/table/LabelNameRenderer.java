@@ -39,7 +39,7 @@ class LabelNameRenderer extends DefaultTableCellRenderer {
 
     LabelNameRenderer(final ColorSchemeHelper argColorSchemeHelper) {
         this.colorSchemeHelper = argColorSchemeHelper;
-        this.settings          = Helper.getSettings();
+        this.settings          = Helper.INSTANCE.getSettings();
     }
 
     // ESCA-JAVA0138: abstract method from interface TableCellRenderer

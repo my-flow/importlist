@@ -49,7 +49,7 @@ final class DeleteOneOperation implements FileOperation {
     private final Localizable localizable;
 
     DeleteOneOperation() {
-        this.localizable = Helper.getLocalizable();
+        this.localizable = Helper.INSTANCE.getLocalizable();
     }
 
     @Override
@@ -59,7 +59,7 @@ final class DeleteOneOperation implements FileOperation {
                 this.localizable.getConfirmationMessageDeleteOneFile(
                         file.getName());
         final Object confirmationLabel = new JLabel(message);
-        final Image image = Helper.getIconImage();
+        final Image image = Helper.INSTANCE.getIconImage();
         Icon  icon  = null;
         if (image != null) {
             icon = new ImageIcon(image);

@@ -33,16 +33,18 @@ import org.apache.commons.lang3.text.WordUtils;
  *
  * @author Florian J. Breunig
  */
-public final class Localizable implements Observer {
+public enum Localizable implements Observer {
+
+    INSTANCE;
 
     private final Preferences     prefs;
     private final Settings        settings;
     private       ResourceBundle  resourceBundle;
 
     Localizable() {
-        this.prefs    = Helper.getPreferences();
+        this.prefs    = Helper.INSTANCE.getPreferences();
         this.prefs.addObserver(this);
-        this.settings = Helper.getSettings();
+        this.settings = Helper.INSTANCE.getSettings();
         this.resourceBundle = ResourceBundle.getBundle(
                 this.settings.getLocalizableResource(),
                 this.prefs.getLocale());

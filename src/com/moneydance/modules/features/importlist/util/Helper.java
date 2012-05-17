@@ -35,52 +35,38 @@ import org.slf4j.LoggerFactory;
  *
  * @author Florian J. Breunig
  */
-public final class Helper {
+public enum Helper {
+
+    /**
+     * Helper instance.
+     */
+    INSTANCE;
 
     /**
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG = LoggerFactory.getLogger(Helper.class);
 
-    private static Preferences prefs;
-    private static Settings    settings;
-    private static Localizable localizable;
+    private Preferences prefs;
 
-    /**
-     * Restrictive constructor.
-     */
-    private Helper() {
-        // Prevents this class from being instantiated from the outside.
-    }
-
-    public static Preferences getPreferences() {
+    public Preferences getPreferences() {
         synchronized (Helper.class) {
-            if (prefs == null) {
-                prefs = new Preferences();
+            if (this.prefs == null) {
+                this.prefs = new Preferences();
             }
         }
-        return prefs;
+        return this.prefs;
     }
 
-    public static Settings getSettings() {
-        synchronized (Helper.class) {
-            if (settings == null) {
-                settings = new Settings();
-            }
-        }
-        return settings;
+    public Settings getSettings() {
+        return Settings.INSTANCE;
     }
 
-    public static Localizable getLocalizable() {
-        synchronized (Helper.class) {
-            if (localizable == null) {
-                localizable = new Localizable();
-            }
-        }
-        return localizable;
+    public Localizable getLocalizable() {
+        return Localizable.INSTANCE;
     }
 
-    public static void loadLoggerConfiguration() {
+    public void loadLoggerConfiguration() {
         boolean rootIsConfigured = org.apache.log4j.Logger
                 .getRootLogger().getAllAppenders().hasMoreElements();
         if (rootIsConfigured) {
@@ -90,8 +76,8 @@ public final class Helper {
 
         final Properties properties = new Properties();
         try {
-            InputStream inputStream = getInputStreamFromResource(
-                    getSettings().getLog4jPropertiesResource());
+            InputStream inputStream = this.getInputStreamFromResource(
+                    this.getSettings().getLog4jPropertiesResource());
             properties.load(inputStream);
         }  catch (IllegalArgumentException e) {
             e.printStackTrace(System.err);
@@ -101,7 +87,7 @@ public final class Helper {
         PropertyConfigurator.configure(properties);
     }
 
-    public static InputStream getInputStreamFromResource(
+    public InputStream getInputStreamFromResource(
             final String resource) {
         ClassLoader cloader     = Helper.class.getClassLoader();
         InputStream inputStream = cloader.getResourceAsStream(resource);
@@ -110,13 +96,14 @@ public final class Helper {
         return inputStream;
     }
 
-    public static Image getIconImage() {
+    public Image getIconImage() {
         Image image = null;
         try {
-            LOG.debug("Loading icon " + settings.getIconResource()
+            LOG.debug("Loading icon " + this.getSettings().getIconResource()
                     + " from resource.");
-            InputStream inputStream = Helper.getInputStreamFromResource(
-                    getSettings().getIconResource());
+            InputStream inputStream =
+                    Helper.INSTANCE.getInputStreamFromResource(
+                            this.getSettings().getIconResource());
             image = ImageIO.read(inputStream);
         } catch (IllegalArgumentException e) {
             LOG.warn(e.getMessage(), e);

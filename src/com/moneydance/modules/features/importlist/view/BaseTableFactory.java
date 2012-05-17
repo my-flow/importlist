@@ -59,9 +59,9 @@ public final class BaseTableFactory implements ComponentFactory {
     }
 
     private void init() {
-        this.prefs       = Helper.getPreferences();
-        this.settings    = Helper.getSettings();
-        this.localizable = Helper.getLocalizable();
+        this.prefs       = Helper.INSTANCE.getPreferences();
+        this.settings    = Helper.INSTANCE.getSettings();
+        this.localizable = Helper.INSTANCE.getLocalizable();
 
         this.table = new JTable(this.tableModel);
         this.table.setOpaque(false);

@@ -52,7 +52,7 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
         this.colorSchemeHelper = argColorSchemeHelper;
         this.setDateFormatter(argDateFormatter);
         this.setTimeFormatter(argTimeFormatter);
-        this.settings          = Helper.getSettings();
+        this.settings          = Helper.INSTANCE.getSettings();
     }
 
     // ESCA-JAVA0138: abstract method from interface TableCellRenderer

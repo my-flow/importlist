@@ -76,9 +76,9 @@ public final class ViewController implements HomePageView, Observer {
             final String baseDirectory,
             final FeatureModuleContext context,
             final int build) {
-        this.prefs       = Helper.getPreferences();
-        this.settings    = Helper.getSettings();
-        this.localizable = Helper.getLocalizable();
+        this.prefs       = Helper.INSTANCE.getPreferences();
+        this.settings    = Helper.INSTANCE.getSettings();
+        this.localizable = Helper.INSTANCE.getLocalizable();
         this.fileAdmin   = new FileAdmin(baseDirectory, context);
         this.fileAdmin.addObserver(this);
         this.tracker     = new Tracker(

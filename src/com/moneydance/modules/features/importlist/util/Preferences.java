@@ -59,7 +59,7 @@ public final class Preferences extends Observable {
      * instance of this class.
      */
     Preferences() {
-        this.settings           = new Settings();
+        this.settings           = Helper.INSTANCE.getSettings();
         this.columnWidths       = new StreamTable();
         this.columnOrderDefault = new StreamTable();
         this.columnOrderDefault.put("0", this.settings.getDescName());

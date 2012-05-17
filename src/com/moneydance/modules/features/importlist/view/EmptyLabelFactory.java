@@ -34,7 +34,7 @@ public final class EmptyLabelFactory implements ComponentFactory {
     private JLabel emptyLabel;
 
     private void init() {
-        this.prefs      = Helper.getPreferences();
+        this.prefs      = Helper.INSTANCE.getPreferences();
         this.emptyLabel = new JLabel();
         this.emptyLabel.setHorizontalAlignment(SwingConstants.CENTER);
         this.emptyLabel.setBorder(MoneydanceLAF.homePageBorder);

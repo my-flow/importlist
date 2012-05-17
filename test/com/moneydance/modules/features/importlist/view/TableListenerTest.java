@@ -59,7 +59,7 @@ public final class TableListenerTest {
                 new FileTableRowSorter(this.table.getModel());
         final List<RowSorter.SortKey> sortKeys =
                 new ArrayList<RowSorter.SortKey>();
-        sortKeys.add(Helper.getPreferences().getSortKey());
+        sortKeys.add(Helper.INSTANCE.getPreferences().getSortKey());
         rowSorter.setSortKeys(sortKeys);
         rowSorter.addRowSorterListener(this.tableListener);
         this.table.setRowSorter(rowSorter);
@@ -75,7 +75,7 @@ public final class TableListenerTest {
                 new FileTableRowSorter(this.table.getModel());
         final List<RowSorter.SortKey> sortKeys =
                 new ArrayList<RowSorter.SortKey>();
-        sortKeys.add(Helper.getPreferences().getSortKey());
+        sortKeys.add(Helper.INSTANCE.getPreferences().getSortKey());
         rowSorter.setSortKeys(sortKeys);
         rowSorter.addRowSorterListener(this.tableListener);
         this.table.setRowSorter(rowSorter);

@@ -60,8 +60,8 @@ final class DirectoryChooser {
     DirectoryChooser(final String argBaseDirectory) {
         this.validDirFilter = new ValidDirFilter();
 
-        this.prefs       = Helper.getPreferences();
-        this.localizable = Helper.getLocalizable();
+        this.prefs       = Helper.INSTANCE.getPreferences();
+        this.localizable = Helper.INSTANCE.getLocalizable();
         if (argBaseDirectory != null) {
             this.prefs.setBaseDirectory(argBaseDirectory);
         }

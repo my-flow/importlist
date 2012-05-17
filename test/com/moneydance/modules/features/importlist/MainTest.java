@@ -70,7 +70,7 @@ public final class MainTest {
     @Test
     public void testInvokeString() {
         this.main.invoke("");
-        this.main.invoke(Helper.getSettings().getChooseBaseDirSuffix());
+        this.main.invoke(Helper.INSTANCE.getSettings().getChooseBaseDirSuffix());
     }
 
     @Test

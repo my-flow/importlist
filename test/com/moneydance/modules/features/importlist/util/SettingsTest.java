@@ -32,7 +32,7 @@ public final class SettingsTest {
 
     @Before
     public void setUp() {
-        this.settings = new Settings();
+        this.settings = Settings.INSTANCE;
     }
 
     @Test

@@ -57,7 +57,7 @@ implements TableColumnModelListener, RowSorterListener {
     private int lastTo;
 
     TableListener(final JTable argTable) {
-        this.prefs = Helper.getPreferences();
+        this.prefs = Helper.INSTANCE.getPreferences();
         this.table = argTable;
     }
 

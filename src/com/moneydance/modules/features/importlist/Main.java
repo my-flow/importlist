@@ -40,7 +40,7 @@ import com.moneydance.modules.features.importlist.util.Settings;
 public final class Main extends FeatureModule implements Observer {
 
     static {
-        Helper.loadLoggerConfiguration();
+        Helper.INSTANCE.loadLoggerConfiguration();
     }
 
     /**
@@ -58,8 +58,8 @@ public final class Main extends FeatureModule implements Observer {
      */
     public Main() {
         LOG.info("Initializing extension in Moneydance's application context.");
-        this.prefs    = Helper.getPreferences();
-        this.settings = Helper.getSettings();
+        this.prefs    = Helper.INSTANCE.getPreferences();
+        this.settings = Helper.INSTANCE.getSettings();
     }
 
     @Override
@@ -91,7 +91,7 @@ public final class Main extends FeatureModule implements Observer {
 
     @Override
     public Image getIconImage() {
-        return Helper.getIconImage();
+        return Helper.INSTANCE.getIconImage();
     }
 
     @Override

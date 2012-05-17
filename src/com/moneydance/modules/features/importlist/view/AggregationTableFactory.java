@@ -51,8 +51,8 @@ public final class AggregationTableFactory implements ComponentFactory {
     }
 
     private void init() {
-        this.prefs       = Helper.getPreferences();
-        this.settings    = Helper.getSettings();
+        this.prefs       = Helper.INSTANCE.getPreferences();
+        this.settings    = Helper.INSTANCE.getSettings();
 
         this.table = new JTable(this.tableModel);
         this.table.setOpaque(false);

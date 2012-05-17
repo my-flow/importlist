@@ -30,36 +30,37 @@ public final class HelperTest {
     @Test
     public void testGetPreferences() {
         Assert.assertNotNull("preferences must not be null",
-                Helper.getPreferences());
+                Helper.INSTANCE.getPreferences());
     }
 
     @Test
     public void testGetSettings() {
-        Assert.assertNotNull("settings must not be null", Helper.getSettings());
+        Assert.assertNotNull("settings must not be null",
+                Helper.INSTANCE.getSettings());
     }
 
     @Test
     public void testGetLocalizable() {
         Assert.assertNotNull("localizable must not be null",
-                Helper.getLocalizable());
+                Helper.INSTANCE.getLocalizable());
     }
 
     @Test
     public void testLoadLoggerConfiguration() {
-        Helper.loadLoggerConfiguration();
+        Helper.INSTANCE.loadLoggerConfiguration();
     }
 
     @Test
     public void testGetInputStreamFromResource() {
         Assert.assertNotNull("input stream from resource must not be null",
-                Helper.getInputStreamFromResource(
-                        Helper.getSettings().getLog4jPropertiesResource()));
+                Helper.INSTANCE.getInputStreamFromResource(
+                        Helper.INSTANCE.getSettings().getLog4jPropertiesResource()));
     }
 
     @Test
     public void testGetIconImage() {
         Assert.assertNotNull("icon image must not be null",
-                Helper.getIconImage());
+                Helper.INSTANCE.getIconImage());
     }
 
 }

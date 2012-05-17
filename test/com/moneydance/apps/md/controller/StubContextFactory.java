@@ -41,7 +41,7 @@ public final class StubContextFactory {
 
     public StubContextFactory() {
         this.context       = new StubContext(this.featureModule);
-        Helper.getPreferences().setContext(this.getContext());
+        Helper.INSTANCE.getPreferences().setContext(this.getContext());
     }
 
     public StubContextFactory(final FeatureModule argFeatureModule) {

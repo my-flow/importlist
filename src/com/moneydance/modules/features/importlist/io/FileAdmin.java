@@ -69,7 +69,7 @@ public final class FileAdmin extends Observable implements Observer {
             final FeatureModuleContext argContext) {
         this.context          = argContext;
         this.directoryChooser = new DirectoryChooser(baseDirectory);
-        Settings settings = Helper.getSettings();
+        Settings settings = Helper.INSTANCE.getSettings();
         this.transactionFileFilter = new SuffixFileFilter(
                 settings.getTransactionFileExtensions(),
                 IOCase.INSENSITIVE);

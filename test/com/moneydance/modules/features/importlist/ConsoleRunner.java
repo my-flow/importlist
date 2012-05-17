@@ -39,7 +39,7 @@ import com.moneydance.modules.features.importlist.util.Helper;
 final class ConsoleRunner {
 
     static {
-        Helper.loadLoggerConfiguration();
+        Helper.INSTANCE.loadLoggerConfiguration();
     }
 
     /**

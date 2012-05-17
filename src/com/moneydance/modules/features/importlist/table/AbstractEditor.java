@@ -62,7 +62,7 @@ public abstract class AbstractEditor extends DefaultCellEditor {
         Validate.notNull(
                 argButtonRenderer,
                 "argButtonRenderer must not be null");
-        this.settings       = Helper.getSettings();
+        this.settings       = Helper.INSTANCE.getSettings();
         this.fileAdmin      = argFileAdmin;
         this.buttonRenderer = argButtonRenderer;
     }

@@ -18,6 +18,7 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -43,7 +44,12 @@ final class DeleteAllEditor extends AbstractEditor {
         return new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent actionEvent) {
-                DeleteAllEditor.this.getFileAdmin().deleteAllRows();
+                EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        DeleteAllEditor.this.getFileAdmin().deleteAllRows();
+                    }
+                });
             }
         };
     }

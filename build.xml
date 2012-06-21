@@ -25,21 +25,21 @@
 
   <path id="compile.classpath">
         <pathelement path="${lib}/moneydance.jar"/>
-        <pathelement path="${lib}/commons-io-2.1.jar"/>
+        <pathelement path="${lib}/commons-io-2.4.jar"/>
         <pathelement path="${lib}/commons-lang-2.6.jar"/>
         <pathelement path="${lib}/commons-lang3-3.1.jar"/>
         <pathelement path="${lib}/commons-configuration-1.8.jar"/>
-        <pathelement path="${lib}/log4j-1.2.16.jar"/>
+        <pathelement path="${lib}/log4j-1.2.17.jar"/>
         <pathelement path="${lib}/JGoogleAnalyticsTracker-1.2.0.jar"/>
-        <pathelement path="${lib}/slf4j-api-1.6.4.jar"/>
-        <pathelement path="${lib}/slf4j-log4j12-1.6.4.jar"/>
+        <pathelement path="${lib}/slf4j-api-1.6.6.jar"/>
+        <pathelement path="${lib}/slf4j-log4j12-1.6.6.jar"/>
   </path>
 
   <path id="test.classpath">
     <pathelement path="${lib}/moneydance.jar"/>
     <pathelement path="${lib}/commons-collections-3.2.1.jar"/>
     <pathelement path="${lib}/commons-configuration-1.8.jar"/>
-    <pathelement path="${lib}/commons-io-2.1.jar"/>
+    <pathelement path="${lib}/commons-io-2.4.jar"/>
     <pathelement path="${lib}/commons-lang-2.6.jar"/>
     <pathelement path="${lib}/commons-lang3-3.1.jar"/>
     <pathelement path="${lib}/commons-logging-1.1.1.jar"/>
@@ -48,9 +48,9 @@
     <pathelement path="${lib}/jmockit-coverage.jar"/>
     <pathelement path="${lib}/jmockit.jar"/>
     <pathelement path="${lib}/junit-4.10.jar"/>
-    <pathelement path="${lib}/log4j-1.2.16.jar"/>
-    <pathelement path="${lib}/slf4j-api-1.6.4.jar"/>
-    <pathelement path="${lib}/slf4j-log4j12-1.6.4.jar"/>
+    <pathelement path="${lib}/log4j-1.2.17.jar"/>
+    <pathelement path="${lib}/slf4j-api-1.6.6.jar"/>
+    <pathelement path="${lib}/slf4j-log4j12-1.6.6.jar"/>
     <pathelement path="${build}"/>
   </path>
 
@@ -187,16 +187,16 @@
 
     <jar jarfile="${build}/external-libs.jar">
         <zipgroupfileset dir="${lib}">
-            <include name="commons-io-2.1.jar"/>
+            <include name="commons-io-2.4.jar"/>
             <include name="commons-lang-2.6.jar"/>
             <include name="commons-lang3-3.1.jar"/>
             <include name="commons-configuration-1.8.jar"/>
             <include name="commons-logging-1.1.1.jar"/>
             <include name="commons-collections-3.2.1.jar"/>
-            <include name="log4j-1.2.16.jar"/>
+            <include name="log4j-1.2.17.jar"/>
             <include name="JGoogleAnalyticsTracker-1.2.0.jar"/>
-            <include name="slf4j-api-1.6.4.jar"/>
-            <include name="slf4j-log4j12-1.6.4.jar"/>
+            <include name="slf4j-api-1.6.6.jar"/>
+            <include name="slf4j-log4j12-1.6.6.jar"/>
         </zipgroupfileset>
     </jar>
 
@@ -280,7 +280,7 @@
       <link href="http://www.dmurph.com/jgoogleanalyticstracker/"/>
       <link href="http://www.slf4j.org/apidocs/"/>
       <link href="http://commons.apache.org/configuration/apidocs/"/>
-      <link href="http://commons.apache.org/io/api-2.1/"/>
+      <link href="http://commons.apache.org/io/api-2.4/"/>
       <link href="http://commons.apache.org/lang/api-3.1/"/>
       <link href="http://commons.apache.org/lang/api-2.6/"/>
       <link href="http://logging.apache.org/log4j/1.2/apidocs/"/>

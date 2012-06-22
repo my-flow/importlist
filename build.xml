@@ -110,6 +110,8 @@
     <junit printsummary="yes" haltonfailure="yes" fork="yes">
       <classpath refid="test.classpath"/>
       <test name="com.moneydance.modules.features.importlist.AllTests"/>
+      <sysproperty key="jmockit-coverage-excludes"
+                   value=".*AllTests|.*Stub.*"/>
       <sysproperty key="jmockit-coverage-outputDir"
                    value="${docs}/coverage-report"/>
     </junit>

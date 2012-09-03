@@ -20,7 +20,6 @@ package com.moneydance.modules.features.importlist.io;
 
 import java.awt.Image;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import javax.swing.Icon;
@@ -89,11 +88,12 @@ final class DeleteOneOperation implements FileOperation {
     @Override
     public void perform(final List<File> files) {
         final File file = files.iterator().next();
+        // ESCA-JAVA0166: IOException, SecurityException
         try {
             LOG.info("Deleting file " + file.getAbsoluteFile());
             FileUtils.forceDelete(file);
-        } catch (IOException e) {
-            LOG.warn("Could not delete file " + file.getAbsoluteFile());
+        } catch (Exception e) {
+            LOG.warn(e.getMessage(), e);
             final String errorMessage =
                     this.localizable.getErrorMessageDeleteFile(file.getName());
             final Object errorLabel = new JLabel(errorMessage);

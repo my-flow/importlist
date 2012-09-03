@@ -26,20 +26,24 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
-import org.apache.commons.io.filefilter.AbstractFileFilter;
-import org.apache.commons.io.filefilter.AndFileFilter;
 import org.apache.commons.io.filefilter.CanReadFileFilter;
-import org.apache.commons.io.filefilter.OrFileFilter;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Settings;
 
 /**
@@ -54,11 +58,13 @@ public final class FileAdmin extends Observable implements Observer {
      */
     private static final Logger LOG = LoggerFactory.getLogger(FileAdmin.class);
 
+    private final Localizable               localizable;
     private final FeatureModuleContext      context;
-    private final DirectoryChooser          directoryChooser;
-    private final AbstractFileFilter        transactionFileFilter;
-    private final AbstractFileFilter        textFileFilter;
-    private final AbstractFileFilter        readableFileFilter;
+    private final AbstractDirectoryChooser  directoryChooser;
+    private final DirectoryValidator        directoryValidator;
+    private final IOFileFilter              transactionFileFilter;
+    private final IOFileFilter              textFileFilter;
+    private final IOFileFilter              readableFileFilter;
     private final TransactionFileListener   listener;
     private final FileAlterationMonitor     monitor;
     private final List<File>                files;
@@ -67,8 +73,14 @@ public final class FileAdmin extends Observable implements Observer {
 
     public FileAdmin(final String baseDirectory,
             final FeatureModuleContext argContext) {
-        this.context          = argContext;
-        this.directoryChooser = new DirectoryChooser(baseDirectory);
+        this.localizable = Helper.INSTANCE.getLocalizable();
+        this.context = argContext;
+        if (SystemUtils.IS_OS_MAC) {
+            this.directoryChooser = new MacOSDirectoryChooser(baseDirectory);
+        } else {
+            this.directoryChooser = new DefaultDirectoryChooser(baseDirectory);
+        }
+        this.directoryValidator = DirectoryValidator.INSTANCE;
         Settings settings = Helper.INSTANCE.getSettings();
         this.transactionFileFilter = new SuffixFileFilter(
                 settings.getTransactionFileExtensions(),
@@ -76,9 +88,9 @@ public final class FileAdmin extends Observable implements Observer {
         this.textFileFilter = new SuffixFileFilter(
                 settings.getTextFileExtensions(),
                 IOCase.INSENSITIVE);
-        this.readableFileFilter = new AndFileFilter(
+        this.readableFileFilter = FileFilterUtils.and(
                 CanReadFileFilter.CAN_READ,
-                new OrFileFilter(
+                FileFilterUtils.or(
                         this.transactionFileFilter,
                         this.textFileFilter));
 
@@ -98,6 +110,30 @@ public final class FileAdmin extends Observable implements Observer {
         this.startMonitor();
         this.setChanged();
         this.notifyObservers();
+    }
+
+    public void checkValidBaseDirectory() {
+        final File baseDirectory = this.getBaseDirectory();
+
+        if (baseDirectory == null) {
+            return;
+        }
+
+        if (!this.directoryValidator.checkValidDirectory(baseDirectory)) {
+            LOG.warn("Could not open directory "
+                    + baseDirectory.getAbsolutePath());
+            final String errorMessage
+                    = this.localizable.getErrorMessageBaseDirectory(
+                            baseDirectory.getName());
+            final Object errorLabel = new JLabel(errorMessage);
+            JOptionPane.showMessageDialog(
+                    null, // no parent component
+                    errorLabel,
+                    null, // no title
+                    JOptionPane.ERROR_MESSAGE);
+
+            this.directoryChooser.reset();
+        }
     }
 
     public List<File> getFiles() {
@@ -139,6 +175,7 @@ public final class FileAdmin extends Observable implements Observer {
         }
         LOG.debug("Starting the directory monitor.");
         this.setFileMonitorToCurrentImportDir();
+        // ESCA-JAVA0166:
         try {
             this.monitor.start();
             this.isMonitorRunning = true;
@@ -155,6 +192,7 @@ public final class FileAdmin extends Observable implements Observer {
             return;
         }
         LOG.debug("Stopping the directory monitor.");
+        // ESCA-JAVA0166:
         try {
             this.monitor.stop(0);
             this.isMonitorRunning = false;
@@ -212,7 +250,7 @@ public final class FileAdmin extends Observable implements Observer {
         if (this.getBaseDirectory() == null) {
             return;
         }
-        this.observer  = new FileAlterationObserver(
+        this.observer = new FileAlterationObserver(
                 this.getBaseDirectory(),
                 this.readableFileFilter,
                 IOCase.SYSTEM);

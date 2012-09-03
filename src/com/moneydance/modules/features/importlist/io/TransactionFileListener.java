@@ -39,8 +39,8 @@ extends Observable implements FileAlterationListener {
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG =
-        LoggerFactory.getLogger(TransactionFileListener.class);
+    private static final Logger LOG
+        = LoggerFactory.getLogger(TransactionFileListener.class);
 
     @Override
     public void onStart(final FileAlterationObserver observer) {

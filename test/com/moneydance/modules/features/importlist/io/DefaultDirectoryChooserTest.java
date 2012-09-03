@@ -18,24 +18,25 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import junit.framework.Assert;
+
+import org.junit.Test;
 
 /**
  * @author Florian J. Breunig
  */
-@RunWith(Suite.class)
-@SuiteClasses({
-    DeleteAllOperationTest.class,
-    DeleteOneOperationTest.class,
-    DirectoryValidatorTest.class,
-    FileAdminTest.class,
-    ImportAllOperationTest.class,
-    ImportOneOperationTest.class,
-    MacDirectoryChooserTest.class,
-    TransactionFileListenerTest.class,
-    DefaultDirectoryChooserTest.class })
-public final class AllTests {
+public final class DefaultDirectoryChooserTest {
 
+    @Test
+    public void testGetBaseDirectory() {
+        AbstractDirectoryChooser directoryChooser = new DefaultDirectoryChooser(".");
+        Assert.assertNotNull("base directory must not be null",
+                directoryChooser.getBaseDirectory());
+    }
+
+    @Test
+    public void testChooseBaseDirectory() {
+        AbstractDirectoryChooser directoryChooser = new DefaultDirectoryChooser(null);
+        directoryChooser.chooseBaseDirectory();
+    }
 }

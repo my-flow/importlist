@@ -25,18 +25,18 @@ import org.junit.Test;
 /**
  * @author Florian J. Breunig
  */
-public final class DirectoryChooserTest {
+public final class MacDirectoryChooserTest {
 
     @Test
     public void testGetBaseDirectory() {
-        DirectoryChooser directoryChooser = new DirectoryChooser(".");
+        AbstractDirectoryChooser directoryChooser = new MacOSDirectoryChooser(".");
         Assert.assertNotNull("base directory must not be null",
                 directoryChooser.getBaseDirectory());
     }
 
     @Test
     public void testChooseBaseDirectory() {
-        DirectoryChooser directoryChooser = new DirectoryChooser(null);
+        AbstractDirectoryChooser directoryChooser = new MacOSDirectoryChooser(null);
         directoryChooser.chooseBaseDirectory();
     }
 }

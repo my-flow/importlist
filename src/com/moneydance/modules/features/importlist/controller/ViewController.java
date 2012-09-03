@@ -127,6 +127,7 @@ public final class ViewController implements HomePageView, Observer {
         }
 
         this.prefs.reload();
+        this.fileAdmin.checkValidBaseDirectory();
 
         // display a label iff no base directory has been chosen
         if (this.fileAdmin.getBaseDirectory() == null) {

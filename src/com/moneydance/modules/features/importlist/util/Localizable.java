@@ -137,6 +137,22 @@ public enum Localizable implements Observer {
     }
 
     /**
+     * @param baseDirectory The base directory which could not be opened.
+     * @return Error message to be displayed if the base directory could not be
+     * opened.
+     */
+    public String getErrorMessageBaseDirectory(final String baseDirectory) {
+        final String templateString = this.getResourceBundle().getString(
+        "error_message_base_directory");
+
+        Map<String, String> valuesMap = new HashMap<String, String>();
+        valuesMap.put("import.dir",  this.getMarkupFilename(baseDirectory));
+        StrSubstitutor sub = new StrSubstitutor(valuesMap);
+
+        return sub.replace(templateString);
+    }
+
+    /**
      * @param filename The name of the file that is to be deleted.
      * @return Confirmation message to be displayed before a file will be
      *  deleted.

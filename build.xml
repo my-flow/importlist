@@ -23,6 +23,9 @@
   <taskdef resource="checkstyletask.properties"
     classpath="${lib}/checkstyle-5.5-all.jar"/>
 
+  <taskdef resource="proguard/ant/task.properties"
+         classpath="${lib}/proguard-4.8.jar" />
+
   <path id="compile.classpath">
         <pathelement path="${lib}/moneydance.jar"/>
         <pathelement path="${lib}/commons-io-2.4.jar"/>
@@ -235,6 +238,15 @@
         <exclude name="META-INF/**/*"/>
       </zipfileset>
     </jar>
+
+    <move file="${jar.file}" tofile="${build}/importlist.jar"/>
+    
+    <proguard configuration="proguard.cfg" forceprocessing="true">
+        <injar  location="${build}/importlist.jar" />
+        <outjar location="${build}/proguard-importlist.jar" />
+    </proguard>
+
+    <move file="${build}/proguard-importlist.jar" tofile="${jar.file}"/>
 
     <antcall target="sign" />
 

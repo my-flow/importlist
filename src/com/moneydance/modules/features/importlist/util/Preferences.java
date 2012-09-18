@@ -91,6 +91,9 @@ public final class Preferences extends Observable {
     }
 
     public void setAllWritablePreferencesToNull() {
+        this.getUserPreferences().setSetting(
+                "importlist.first_run",
+                (String) null);
         this.setBaseDirectory(null);
         this.getUserPreferences().setSetting(
                 "importlist.column_widths",
@@ -100,6 +103,18 @@ public final class Preferences extends Observable {
         this.getUserPreferences().setSetting(
                 "importlist.sort_order",
                 (StreamTable) null);
+    }
+
+    public void setFirstRun(final boolean firstRun) {
+        this.getUserPreferences().setSetting(
+                "importlist.first_run",
+                firstRun);
+    }
+
+    public boolean isFirstRun() {
+        return this.getUserPreferences().getBoolSetting(
+                "importlist.first_run",
+                true);
     }
 
     public String getFullVersion() {

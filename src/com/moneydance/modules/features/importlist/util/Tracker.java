@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.controller;
+package com.moneydance.modules.features.importlist.util;
 
 import java.net.Authenticator;
 import java.net.InetSocketAddress;
@@ -24,48 +24,47 @@ import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.SocketAddress;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.dmurph.tracking.AnalyticsConfigData;
 import com.dmurph.tracking.JGoogleAnalyticsTracker;
 import com.dmurph.tracking.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Preferences;
 
 /**
  * @author Florian J. Breunig
  */
-final class Tracker {
+public final class Tracker {
 
     private final Preferences prefs;
     private final String fullVersion;
     private final String build;
 
     private final JGoogleAnalyticsTracker analyticsTracker;
+    private static final Logger LOG = LoggerFactory.getLogger(Tracker.class);
 
-    Tracker(final String argFullVersion,
-            final int argBuild,
-            final String trackingCode) {
-        this.prefs       = Helper.INSTANCE.getPreferences();
-        this.fullVersion = argFullVersion;
-        this.build       = String.valueOf(argBuild);
+    Tracker(final int argBuild) {
+        this.prefs          = Helper.INSTANCE.getPreferences();
+        this.fullVersion    = "Moneydance " + this.prefs.getFullVersion();
+        this.build          = "Import List v" + String.valueOf(argBuild);
 
         JGoogleAnalyticsTracker.setProxy(this.getProxy());
-        AnalyticsConfigData config = new AnalyticsConfigData(trackingCode);
+        Settings settings = Helper.INSTANCE.getSettings();
+        AnalyticsConfigData config = new AnalyticsConfigData(
+                settings.getTrackingCode());
         this.analyticsTracker = new JGoogleAnalyticsTracker(
                 config,
                 GoogleAnalyticsVersion.V_4_7_2);
     }
 
-    void track(final String eventName) {
-        final String trackVersion = "Moneydance " + this.fullVersion;
-        final String trackBuild   = "Import List v" + this.build;
-
-        this.analyticsTracker.trackEvent(trackVersion, eventName, trackBuild);
+    public void track(final EventName eventName) {
+        LOG.debug("trackEvent");
+        this.analyticsTracker.trackEvent(
+                this.fullVersion,
+                eventName.toString(),
+                this.build);
     }
 
-    /**
-     * @return The proxy server that the extension use to establish
-     * a connection.
-     */
     private Proxy getProxy() {
         if (!this.prefs.useProxy()) {
             return Proxy.NO_PROXY;
@@ -91,5 +90,28 @@ final class Tracker {
             });
         }
         return new Proxy(proxyType, socketAddress);
+    }
+
+    /**
+     * @author Florian J. Breunig
+     */
+    public enum EventName {
+
+        INSTALL(Helper.INSTANCE.getSettings().getEventActionInstall()),
+
+        DISPLAY(Helper.INSTANCE.getSettings().getEventActionDisplay()),
+
+        UNINSTALL(Helper.INSTANCE.getSettings().getEventActionUninstall());
+
+        private final String eventString;
+
+        private EventName(final String argEventString) {
+            this.eventString = argEventString;
+        }
+
+        @Override
+        public String toString() {
+            return this.eventString;
+        }
     }
 }

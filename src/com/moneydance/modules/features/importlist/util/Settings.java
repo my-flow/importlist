@@ -344,4 +344,25 @@ public enum Settings {
     public String getTrackingCode() {
         return CONFIG.getString("tracking_code");
     }
+
+    /**
+     * @return Event action for installation
+     */
+    public String getEventActionInstall() {
+        return CONFIG.getString("event_action_install");
+    }
+
+    /**
+     * @return Event action for display
+     */
+    public String getEventActionDisplay() {
+        return CONFIG.getString("event_action_display");
+    }
+
+    /**
+     * @return Event action for removal
+     */
+    public String getEventActionUninstall() {
+        return CONFIG.getString("event_action_uninstall");
+    }
 }

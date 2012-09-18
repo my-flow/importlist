@@ -41,6 +41,7 @@ import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
+import com.moneydance.modules.features.importlist.util.Tracker;
 import com.moneydance.modules.features.importlist.view.AggregationTableFactory;
 import com.moneydance.modules.features.importlist.view.BaseTableFactory;
 import com.moneydance.modules.features.importlist.view.ComponentFactory;
@@ -75,16 +76,13 @@ public final class ViewController implements HomePageView, Observer {
     public ViewController(
             final String baseDirectory,
             final FeatureModuleContext context,
-            final int build) {
+            final Tracker argTracker) {
         this.prefs       = Helper.INSTANCE.getPreferences();
         this.settings    = Helper.INSTANCE.getSettings();
         this.localizable = Helper.INSTANCE.getLocalizable();
         this.fileAdmin   = new FileAdmin(baseDirectory, context);
         this.fileAdmin.addObserver(this);
-        this.tracker     = new Tracker(
-                this.prefs.getFullVersion(),
-                build,
-                this.settings.getTrackingCode());
+        this.tracker     = argTracker;
     }
 
 
@@ -116,7 +114,7 @@ public final class ViewController implements HomePageView, Observer {
         this.refresh();
         this.fileAdmin.startMonitor();
 
-        this.tracker.track("Display");
+        this.tracker.track(Tracker.EventName.DISPLAY);
     }
 
 

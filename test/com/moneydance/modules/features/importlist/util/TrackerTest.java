@@ -16,10 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moneydance.modules.features.importlist.controller;
+package com.moneydance.modules.features.importlist.util;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.moneydance.modules.features.importlist.util.Tracker;
 
 /**
  * @author Florian J. Breunig
@@ -30,12 +32,12 @@ public final class TrackerTest {
 
     @Before
     public void setUp() {
-        this.tracker = new Tracker("2010r1", 0, "tracking code");
+        this.tracker = new Tracker(0);
     }
 
     @Test
     public void testTrack() {
-        this.tracker.track("event");
+        this.tracker.track(Tracker.EventName.INSTALL);
     }
 
 }

@@ -31,7 +31,8 @@ import org.junit.runners.Suite.SuiteClasses;
     SettingsTest.class,
     PreferencesTest.class,
     LocalizableTest.class,
-    HelperTest.class })
+    HelperTest.class,
+    TrackerTest.class })
 public final class AllTests {
 
 }

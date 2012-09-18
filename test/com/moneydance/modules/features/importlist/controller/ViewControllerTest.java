@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.util.Helper;
 
 /**
  * @author Florian J. Breunig
@@ -37,7 +38,7 @@ public final class ViewControllerTest {
         this.viewController = new ViewController(
                 null,
                 new StubContextFactory().getContext(),
-                0);
+                Helper.INSTANCE.getTracker(0));
     }
 
     @Test

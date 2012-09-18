@@ -49,6 +49,8 @@ public enum Helper {
 
     private Preferences prefs;
 
+    private Tracker tracker;
+
     public Preferences getPreferences() {
         synchronized (Helper.class) {
             if (this.prefs == null) {
@@ -64,6 +66,15 @@ public enum Helper {
 
     public Localizable getLocalizable() {
         return Localizable.INSTANCE;
+    }
+
+    public Tracker getTracker(final int build) {
+        synchronized (Helper.class) {
+            if (this.tracker == null) {
+                this.tracker = new Tracker(build);
+            }
+        }
+        return this.tracker;
     }
 
     public void loadLoggerConfiguration() {

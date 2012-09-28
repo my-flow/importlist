@@ -93,7 +93,10 @@
   </target>
 
 
-  <target name="test" depends="compile">
+  <target name="test" depends="compile"
+      description="Executes JUnit's test suite and generates an HTML report
+using JMockit Coverage.">
+
     <javac source="1.6"
            target="1.6"
            srcdir="${test}"
@@ -121,8 +124,7 @@
   </target>
 
 
-  <!-- Generate a password-protected key pair -->
-  <target name="genkeys">
+  <target name="genkeys" description="Generates a passphrase-protected key pair.">
     <java classpathref="sign.classpath"
           classname="com.moneydance.admin.KeyAdmin">
       <arg value="genkey"/>
@@ -132,9 +134,9 @@
   </target>
 
 
-  <!-- Create a compressed file for the audition process. The zip file contains
-       all files required to build and deploy a new version. -->
-  <target name="audit" depends="init">
+  <target name="audit" depends="init" description="Creates a compressed file
+for the audition process. The zip file contains all files required to build
+and deploy a new version.">
 
     <!-- Extract build version from descriptor -->
     <loadfile srcfile="${descriptor.file}" property="build.version">
@@ -182,8 +184,7 @@
   </target>
 
 
-  <!-- Build a new version. -->
-  <target name="importlist" depends="compile">
+  <target name="importlist" depends="compile" description="Builds a new version.">
 
     <manifestclasspath property="jar.classpath"
                        jarfile="${jar.file}">
@@ -253,8 +254,9 @@
   </target>
 
 
-  <!-- Sign an MXT file with a private key that must already exist. -->
-  <target name="sign" if="privkeyfile.present">
+  <target name="sign" if="privkeyfile.present" description="Signs an MXT
+file with a private key that must already exist.">
+
     <java classpathref="sign.classpath"
           classname="com.moneydance.admin.KeyAdmin">
       <arg value="signextjar"/>
@@ -268,8 +270,9 @@
   </target>
 
 
-  <!-- Create Javadoc files with references to external documentations -->
-  <target name="javadoc">
+  <target name="javadoc" description="Creates Javadoc documentation with
+references to external documentations.">
+
     <delete>
       <fileset dir="${docs}/api" includes="**/*"/>
     </delete>

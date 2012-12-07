@@ -41,6 +41,6 @@ Documentation
 
 License
 -------
-Copyright 2011-2012 [Florian J. Breunig](http://www.my-flow.com). Import List is 
+Copyright 2011-2013 [Florian J. Breunig](http://www.my-flow.com). Import List is 
 released under the [GNU General Public License]
 (http://www.gnu.org/licenses/gpl.html).

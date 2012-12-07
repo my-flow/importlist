@@ -17,11 +17,13 @@
       value="${src}/com/moneydance/modules/features/importlist/meta_info.dict"/>
   <property name="jar.file"
       value="${dist}/importlist.mxt"/>
+  <property name="boot.classpath"
+      value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar" />
 
   <available file="${privkeyfile}" property="privkeyfile.present"/>
 
   <taskdef resource="checkstyletask.properties"
-    classpath="${lib}/checkstyle-5.5-all.jar"/>
+    classpath="${lib}/checkstyle-5.6-all.jar"/>
 
   <taskdef resource="proguard/ant/task.properties"
          classpath="${lib}/proguard-4.8.jar" />
@@ -31,17 +33,17 @@
         <pathelement path="${lib}/commons-io-2.4.jar"/>
         <pathelement path="${lib}/commons-lang-2.6.jar"/>
         <pathelement path="${lib}/commons-lang3-3.1.jar"/>
-        <pathelement path="${lib}/commons-configuration-1.8.jar"/>
+        <pathelement path="${lib}/commons-configuration-1.9.jar"/>
         <pathelement path="${lib}/log4j-1.2.17.jar"/>
         <pathelement path="${lib}/JGoogleAnalyticsTracker-1.2.0.jar"/>
-        <pathelement path="${lib}/slf4j-api-1.6.6.jar"/>
-        <pathelement path="${lib}/slf4j-log4j12-1.6.6.jar"/>
+        <pathelement path="${lib}/slf4j-api-1.7.2.jar"/>
+        <pathelement path="${lib}/slf4j-log4j12-1.7.2.jar"/>
   </path>
 
   <path id="test.classpath">
     <pathelement path="${lib}/moneydance.jar"/>
     <pathelement path="${lib}/commons-collections-3.2.1.jar"/>
-    <pathelement path="${lib}/commons-configuration-1.8.jar"/>
+    <pathelement path="${lib}/commons-configuration-1.9.jar"/>
     <pathelement path="${lib}/commons-io-2.4.jar"/>
     <pathelement path="${lib}/commons-lang-2.6.jar"/>
     <pathelement path="${lib}/commons-lang3-3.1.jar"/>
@@ -50,10 +52,10 @@
     <pathelement path="${lib}/jmockit-coverage-htmlfull.jar"/>
     <pathelement path="${lib}/jmockit-coverage.jar"/>
     <pathelement path="${lib}/jmockit.jar"/>
-    <pathelement path="${lib}/junit-4.10.jar"/>
+    <pathelement path="${lib}/junit-4.11.jar"/>
     <pathelement path="${lib}/log4j-1.2.17.jar"/>
-    <pathelement path="${lib}/slf4j-api-1.6.6.jar"/>
-    <pathelement path="${lib}/slf4j-log4j12-1.6.6.jar"/>
+    <pathelement path="${lib}/slf4j-api-1.7.2.jar"/>
+    <pathelement path="${lib}/slf4j-log4j12-1.7.2.jar"/>
     <pathelement path="${build}"/>
   </path>
 
@@ -105,7 +107,8 @@ using JMockit Coverage.">
            optimize="${optimize}"
            classpathref="test.classpath"
            includeantruntime="true"
-           includes="com/moneydance/modules/features/importlist/**"/>
+           includes="com/moneydance/modules/features/importlist/**"
+  	       bootclasspath="${boot.classpath}"/>
 
     <copy todir="${build}">
       <fileset dir="${src}" includes="
@@ -180,7 +183,8 @@ and deploy a new version.">
 	           optimize="${optimize}"
 	           classpathref="compile.classpath"
 	           includeantruntime="true"
-	           includes="com/moneydance/modules/features/importlist/**"/>
+	           includes="com/moneydance/modules/features/importlist/**"
+	           bootclasspath="${boot.classpath}"/>
   </target>
 
 
@@ -196,13 +200,13 @@ and deploy a new version.">
             <include name="commons-io-2.4.jar"/>
             <include name="commons-lang-2.6.jar"/>
             <include name="commons-lang3-3.1.jar"/>
-            <include name="commons-configuration-1.8.jar"/>
+            <include name="commons-configuration-1.9.jar"/>
             <include name="commons-logging-1.1.1.jar"/>
             <include name="commons-collections-3.2.1.jar"/>
             <include name="log4j-1.2.17.jar"/>
             <include name="JGoogleAnalyticsTracker-1.2.0.jar"/>
-            <include name="slf4j-api-1.6.6.jar"/>
-            <include name="slf4j-log4j12-1.6.6.jar"/>
+            <include name="slf4j-api-1.7.2.jar"/>
+            <include name="slf4j-log4j12-1.7.2.jar"/>
         </zipgroupfileset>
     </jar>
 

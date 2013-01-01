@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -44,18 +44,18 @@ final class ImportAllOperation implements FileOperation {
     }
 
     @Override
-    public void showWarningAndPerform(final List<File> files) {
-        this.perform(files);
+    public void showWarningAndExecute(final List<File> files) {
+        this.execute(files);
     }
 
     @Override
-    public void perform(final List<File> files) {
+    public void execute(final List<File> files) {
         FileOperation importOneOperation = new ImportOneOperation(
                 this.context,
                 this.transactionFileFilter,
                 this.textFileFilter);
         for (final File file : files) {
-            importOneOperation.perform(Collections.singletonList(file));
+            importOneOperation.execute(Collections.singletonList(file));
         }
     }
 }

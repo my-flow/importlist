@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,13 +18,15 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import java.awt.Color;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import javax.swing.table.DefaultTableCellRenderer;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,67 +56,57 @@ public final class ColumnFactoryTest {
 
     @Test
     public void testGetHeaderRenderer() {
-        Assert.assertNotNull("header renderer must not be null",
-                this.columnFactory.getHeaderRenderer());
+        assertThat(this.columnFactory.getHeaderRenderer(), notNullValue());
     }
 
     @Test
     public void testGetLabelNameOneRenderer() {
-        Assert.assertNotNull("label name one renderer must not be null",
-                this.columnFactory.getLabelNameOneRenderer());
+        assertThat(this.columnFactory.getLabelNameOneRenderer(), notNullValue());
     }
 
     @Test
     public void testGetLabelNameAllRenderer() {
-        Assert.assertNotNull("label name all renderer must not be null",
-                this.columnFactory.getLabelNameAllRenderer());
+        assertThat(this.columnFactory.getLabelNameAllRenderer(), notNullValue());
     }
 
     @Test
     public void testGetLabelModifiedOneRenderer() {
-        Assert.assertNotNull("label modified one renderer must not be null",
-                this.columnFactory.getLabelModifiedOneRenderer());
+        assertThat(this.columnFactory.getLabelModifiedOneRenderer(), notNullValue());
     }
 
     @Test
     public void testGetLabelModifiedAllRenderer() {
-        Assert.assertNotNull(this.columnFactory.getLabelModifiedAllRenderer());
+        assertThat(this.columnFactory.getLabelModifiedAllRenderer(), notNullValue());
     }
 
     @Test
     public void testGetButtonOneRenderer() {
-        Assert.assertNotNull("button one renderer must not be null",
-                this.columnFactory.getButtonOneRenderer());
+        assertThat(this.columnFactory.getButtonOneRenderer(), notNullValue());
     }
 
     @Test
     public void testGetButtonAllRenderer() {
-        Assert.assertNotNull("button all renderer must not be null",
-                this.columnFactory.getButtonAllRenderer());
+        assertThat(this.columnFactory.getButtonAllRenderer(), notNullValue());
     }
 
     @Test
     public void testGetImportOneEditor() {
-        Assert.assertNotNull("import one editor must not be null",
-                this.columnFactory.getImportOneEditor());
+        assertThat(this.columnFactory.getImportOneEditor(), notNullValue());
     }
 
     @Test
     public void testGetImportAllEditor() {
-        Assert.assertNotNull("import all editor must not be null",
-                this.columnFactory.getImportAllEditor());
+        assertThat(this.columnFactory.getImportAllEditor(), notNullValue());
     }
 
     @Test
     public void testGetDeleteOneEditor() {
-        Assert.assertNotNull("delete one editor must not be null",
-                this.columnFactory.getDeleteOneEditor());
+        assertThat(this.columnFactory.getDeleteOneEditor(), notNullValue());
     }
 
     @Test
     public void testGetDeleteAllEditor() {
-        Assert.assertNotNull("delete all editor must not be null",
-                this.columnFactory.getDeleteAllEditor());
+        assertThat(this.columnFactory.getDeleteAllEditor(), notNullValue());
     }
 
     @Test

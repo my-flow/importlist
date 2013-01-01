@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -31,8 +31,8 @@ import org.junit.runners.Suite.SuiteClasses;
     com.moneydance.modules.features.importlist.io.AllTests.class,
     com.moneydance.modules.features.importlist.table.AllTests.class,
     com.moneydance.modules.features.importlist.util.AllTests.class,
-    com.moneydance.modules.features.importlist.view.AllTests.class,
+    com.moneydance.modules.features.importlist.presentation.AllTests.class,
     com.moneydance.modules.features.importlist.controller.AllTests.class })
 public final class AllTests {
-
+    // no test cases
 }

@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ import com.moneydance.modules.features.importlist.util.Settings;
 
 /**
  * This class provides a <code>TableModel</code> implementation for a given
- * <code>List</code> of <code>File</code>s. It takes care of the formatting and
+ * <code>List</code> of <code>File</code>s. It takes care of formatting and
  * caching of its table values. The first two columns represent the name of the
  * file and the date of its last modification, the last two columns represent
  * the action buttons to import and delete the file, respectively.
@@ -36,7 +36,7 @@ import com.moneydance.modules.features.importlist.util.Settings;
  */
 public final class AggregationTableModel extends AbstractTableModel {
 
-    private static final long serialVersionUID = 3552703741263935211L;
+    private static final long serialVersionUID = 1L;
     private final transient Preferences prefs;
     private final transient Settings settings;
     private final transient Localizable localizable;
@@ -68,8 +68,8 @@ public final class AggregationTableModel extends AbstractTableModel {
         if (this.settings.getDescDelete().equals(columnName)) {
             return this.localizable.getLabelDeleteAllButton();
         }
-        throw new IllegalArgumentException(
-                "Could not find value for row " + row + ", column " + column);
+        throw new IllegalArgumentException(String.format(
+                "Could not find value for row %d, column %d", row, column));
     }
 
     /**

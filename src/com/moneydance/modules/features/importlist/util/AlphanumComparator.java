@@ -1,4 +1,3 @@
-package com.moneydance.modules.features.importlist.util;
 /*
  * The Alphanum Algorithm is an improved sorting algorithm for strings
  * containing numbers.  Instead of sorting numbers in ASCII order like
@@ -23,6 +22,8 @@ package com.moneydance.modules.features.importlist.util;
  *
  */
 
+package com.moneydance.modules.features.importlist.util;
+
 import java.util.Comparator;
 
 /**
@@ -41,7 +42,7 @@ public enum AlphanumComparator implements Comparator<String> {
     /**
      * Serialization.
      */
-    private static final long serialVersionUID = -6479933364695408622L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The lowest ASCII symbol representing a digit.

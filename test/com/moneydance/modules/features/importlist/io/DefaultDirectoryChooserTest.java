@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import junit.framework.Assert;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
@@ -29,14 +30,15 @@ public final class DefaultDirectoryChooserTest {
 
     @Test
     public void testGetBaseDirectory() {
-        AbstractDirectoryChooser directoryChooser = new DefaultDirectoryChooser(".");
-        Assert.assertNotNull("base directory must not be null",
-                directoryChooser.getBaseDirectory());
+        AbstractDirectoryChooser directoryChooser = new DefaultDirectoryChooser(
+                ".");
+        assertThat(directoryChooser.getBaseDirectory(), notNullValue());
     }
 
     @Test
     public void testChooseBaseDirectory() {
-        AbstractDirectoryChooser directoryChooser = new DefaultDirectoryChooser(null);
+        AbstractDirectoryChooser directoryChooser = new DefaultDirectoryChooser(
+                null);
         directoryChooser.chooseBaseDirectory();
     }
 }

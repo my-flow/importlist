@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,11 +18,14 @@
 
 package com.moneydance.modules.features.importlist.controller;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,16 +58,11 @@ public final class FileTableModelTest {
 
     @Test
     public void testGetColumnClassInt() {
-        Assert.assertNotNull("column class must not be null",
-                this.emptyModel.getColumnClass(0));
-        Assert.assertNotNull("column class must not be null",
-                this.emptyModel.getColumnClass(1));
-        Assert.assertNotNull("column class must not be null",
-                this.emptyModel.getColumnClass(2));
-        Assert.assertNotNull("column class must not be null",
-                this.emptyModel.getColumnClass(3));
-        Assert.assertNull("column class must be null",
-                this.emptyModel.getColumnClass(5));
+        assertThat(this.emptyModel.getColumnClass(0), notNullValue());
+        assertThat(this.emptyModel.getColumnClass(1), notNullValue());
+        assertThat(this.emptyModel.getColumnClass(2), notNullValue());
+        assertThat(this.emptyModel.getColumnClass(3), notNullValue());
+        assertThat(this.emptyModel.getColumnClass(5), nullValue());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -74,32 +72,25 @@ public final class FileTableModelTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetValueAtForFullModel() {
-        Assert.assertNotNull("value for full model must not be null",
-                this.fullModel.getValueAt(0,  0));
-        Assert.assertNotNull("value for full model must not be null",
-                this.fullModel.getValueAt(0,  1));
-        Assert.assertNotNull("value for full model must not be null",
-                this.fullModel.getValueAt(0,  2));
-        Assert.assertNotNull("value for full model must not be null",
-                this.fullModel.getValueAt(0,  3));
+        assertThat(this.fullModel.getValueAt(0,  0), notNullValue());
+        assertThat(this.fullModel.getValueAt(0,  1), notNullValue());
+        assertThat(this.fullModel.getValueAt(0,  2), notNullValue());
+        assertThat(this.fullModel.getValueAt(0,  3), notNullValue());
         this.fullModel.getValueAt(0,  4); // throw an expected exception
     }
 
     @Test
     public void testGetColumnCount() {
-        Assert.assertEquals("column count must be equal to 4", 4,
-                this.emptyModel.getColumnCount());
+        assertThat(this.emptyModel.getColumnCount(), is(4));
     }
 
     @Test
     public void testGetColumnNameInt() {
-        Assert.assertNotNull("column must have a name",
-                this.emptyModel.getColumnName(0));
+        assertThat(this.emptyModel.getColumnName(0), notNullValue());
     }
 
     @Test
     public void testGetRowCount() {
-        Assert.assertTrue("row count must be equal to or greater than zero",
-                this.emptyModel.getRowCount() >= 0);
+        assertThat(this.emptyModel.getRowCount() >= 0, is(true));
     }
 }

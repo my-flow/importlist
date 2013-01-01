@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,11 +18,12 @@
 
 package com.moneydance.modules.features.importlist.io;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
-
-import junit.framework.Assert;
 
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.junit.Before;
@@ -49,65 +50,56 @@ public final class TransactionFileListenerTest implements Observer {
 
     @Test
     public void testOnStart() {
-        Assert.assertFalse("there must be no changes after starting the "
-                + "listener", this.listener.hasChanged());
+        assertThat(this.listener.hasChanged(), is(false));
     }
 
     @Test
     public void testOnFileCreate() {
         this.listener.onFileCreate(this.file);
-        Assert.assertTrue("there must be changes after creating a file",
-                this.listener.hasChanged());
+        assertThat(this.listener.hasChanged(), is(true));
     }
 
     @Test
     public void testOnFileChange() {
         this.listener.onFileChange(this.file);
-        Assert.assertTrue("there must be changes after changing a file",
-                this.listener.hasChanged());
+        assertThat(this.listener.hasChanged(), is(true));
     }
 
     @Test
     public void testOnFileDelete() {
         this.listener.onFileDelete(this.file);
-        Assert.assertTrue("there must be changes after deleting a file",
-                this.listener.hasChanged());
+        assertThat(this.listener.hasChanged(), is(true));
     }
 
     @Test
     public void testOnStopAfterIdle() {
         this.listener.onStop(this.fileAlterationObserver);
-        Assert.assertFalse("there must be no changes after no action",
-                this.observerWasNotified);
+        assertThat(this.observerWasNotified, is(false));
     }
 
     @Test
     public void testOnStopAfterChange() {
         this.listener.onFileDelete(this.file);
         this.listener.onStop(this.fileAlterationObserver);
-        Assert.assertTrue("there must be changes after deleting a file",
-                this.observerWasNotified);
+        assertThat(this.observerWasNotified, is(true));
     }
 
     @Test
     public void testOnDirectoryChange() {
         this.listener.onDirectoryChange(this.file);
-        Assert.assertFalse("there must be no changes after changing a "
-                + "directory", this.listener.hasChanged());
+        assertThat(this.listener.hasChanged(), is(false));
     }
 
     @Test
     public void testOnDirectoryCreate() {
         this.listener.onDirectoryCreate(this.file);
-        Assert.assertFalse("there must be no changes after creating a "
-                + "directory", this.listener.hasChanged());
+        assertThat(this.listener.hasChanged(), is(false));
     }
 
     @Test
     public void testOnDirectoryDelete() {
         this.listener.onDirectoryDelete(this.file);
-        Assert.assertFalse("there must be no changes after deleting a "
-                + "directory", this.listener.hasChanged());
+        assertThat(this.listener.hasChanged(), is(false));
     }
 
     @Override

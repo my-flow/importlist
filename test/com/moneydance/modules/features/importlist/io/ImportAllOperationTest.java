@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -53,12 +53,12 @@ public final class ImportAllOperationTest {
     }
 
     @Test
-    public void testShowWarningAndPerform() {
-        this.fileOperation.showWarningAndPerform(this.files);
+    public void testShowWarningAndExecute() {
+        this.fileOperation.showWarningAndExecute(this.files);
     }
 
     @Test
-    public void testPerform() {
-        this.fileOperation.perform(this.files);
+    public void testExecute() {
+        this.fileOperation.execute(this.files);
     }
 }

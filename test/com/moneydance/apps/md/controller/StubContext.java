@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,9 +20,8 @@ package com.moneydance.apps.md.controller;
 
 import java.awt.Image;
 import java.io.File;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.moneydance.apps.md.extensionapi.AccountEditor;
 import com.moneydance.apps.md.model.RootAccount;
@@ -42,15 +41,20 @@ public final class StubContext extends Main {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-            LoggerFactory.getLogger(StubContext.class);
+            Logger.getLogger(StubContext.class.getName());
 
     private final FeatureModule   featureModule;
     private       RootAccount     rootAccount;
     private       UserPreferences userPreferences;
 
     StubContext(final FeatureModule argFeatureModule) {
-        this.featureModule = argFeatureModule;
-    }
+       this.featureModule = argFeatureModule;
+       try {
+           this.initializeApp();
+       } catch (Exception e) {
+           LOG.log(Level.WARNING, e.getMessage(), e);
+       }
+   }
 
     public void setRootAccount(final RootAccount argRootAccount) {
         this.rootAccount = argRootAccount;
@@ -79,8 +83,10 @@ public final class StubContext extends Main {
             if (theIdx >= 0) {
                 suffix = url.substring(theIdx + 1);
             }
-            LOG.debug("Stub context forwards received URL " + suffix
-                    + " to module " + this.featureModule);
+            LOG.config(String.format(
+                    "Stub context forwards received URL %s to module %s",
+                    suffix,
+                    this.featureModule));
             this.featureModule.invoke(suffix);
         }
     }
@@ -91,16 +97,20 @@ public final class StubContext extends Main {
             final String parameters,
             final Image buttonImage,
             final String buttonText) {
-        LOG.debug("Stub context ignores registered feature " + buttonText
-                + " of module " + module);
+        LOG.config(String.format(
+                "Stub context ignores registered feature %s of module %s",
+                buttonText,
+                module));
     }
 
     @Override
     public void registerHomePageView(
             final FeatureModule module,
             final HomePageView view) {
-        LOG.debug("Stub context ignores registered homepage view " + view
-                + " of module " + module);
+        LOG.config(String.format(
+                "Stub context ignores registered homepage view %s of module %s",
+                view,
+                module));
     }
 
     @Override
@@ -108,8 +118,10 @@ public final class StubContext extends Main {
             final FeatureModule module,
             final int accountType,
             final AccountEditor editor) {
-        LOG.debug("Stub context ignores registered account editor " + editor
-                + " of module " + module);
+        LOG.config(String.format(
+                "Stub context ignores registered account editor %s of module %s",
+                editor,
+                module));
     }
 
     @Override
@@ -117,8 +129,9 @@ public final class StubContext extends Main {
         if (this.userPreferences == null) {
             final File preferencesFile = Common.getPreferencesFile();
             this.userPreferences       = new UserPreferences(preferencesFile);
-            LOG.debug("Stub context returns user preferences from file "
-                    + preferencesFile.getAbsolutePath());
+            LOG.config(String.format(
+                    "Stub context returns user preferences from file %s",
+                    preferencesFile.getAbsolutePath()));
         }
         return this.userPreferences;
     }

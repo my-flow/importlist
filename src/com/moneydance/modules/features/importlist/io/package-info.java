@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@
  */
 
 /**
- * Deals with operations on the file system.
+ * Deals with I/O operations on the file system such as choosing a base
+ * directory or importing a file.
  */
 package com.moneydance.modules.features.importlist.io;

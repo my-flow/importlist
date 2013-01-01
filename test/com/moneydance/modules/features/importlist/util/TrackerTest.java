@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,9 @@ public final class TrackerTest {
 
     @Test
     public void testTrack() {
-        this.tracker.track(Tracker.EventName.INSTALL);
+        for (Tracker.EventName eventName : Tracker.EventName.values()) {
+            this.tracker.track(eventName);
+        }
     }
 
 }

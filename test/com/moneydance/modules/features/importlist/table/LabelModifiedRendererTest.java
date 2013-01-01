@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,18 +18,18 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JTable;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import com.moneydance.modules.features.importlist.view.OddColorSchemeHelper;
 import com.moneydance.util.CustomDateFormat;
 
 /**
@@ -51,37 +51,36 @@ public final class LabelModifiedRendererTest {
     }
 
     @Test
-    public void
-    testGetTableCellRendererComponentJTableObjectBooleanBooleanIntInt() {
-        Assert.assertNotNull(
-                "component must not be null",
+    public void testGetTableCellRendererComponent() {
+        assertThat(
                 this.labelModifiedRenderer.getTableCellRendererComponent(
                         new JTable(),
                         null, // null value
                         false,
                         false,
                         0,
-                        0));
+                        0),
+                notNullValue());
 
-        Assert.assertNotNull(
-                "component must not be null",
+        assertThat(
                 this.labelModifiedRenderer.getTableCellRendererComponent(
                         new JTable(),
                         new Date(), // date value
                         false,
                         false,
                         0,
-                        0));
+                        0),
+                 notNullValue());
 
-        Assert.assertNotNull(
-                "component must not be null",
+        assertThat(
                 this.labelModifiedRenderer.getTableCellRendererComponent(
                         new JTable(),
                         "", // string value
                         false,
                         false,
                         0,
-                        0));
+                        0),
+                notNullValue());
     }
 
     @Test

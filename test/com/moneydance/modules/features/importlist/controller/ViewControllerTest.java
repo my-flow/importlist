@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,9 @@
 
 package com.moneydance.modules.features.importlist.controller;
 
-import junit.framework.Assert;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,16 +49,9 @@ public final class ViewControllerTest {
     }
 
     @Test
-    public void testUpdate() {
-        this.viewController.update(null, null);
-    }
-
-    @Test
     public void testGetGUIView() {
-        Assert.assertNotNull("GUI must not be null",
-                this.viewController.getGUIView(null));
-        Assert.assertNotNull("GUI must not be null", // second call
-                this.viewController.getGUIView(null));
+        assertThat(this.viewController.getGUIView(null), notNullValue());
+        assertThat(this.viewController.getGUIView(null), notNullValue()); // second call
     }
 
     @Test
@@ -76,14 +71,12 @@ public final class ViewControllerTest {
 
     @Test
     public void testGetID() {
-        Assert.assertNotNull("id must not be null",
-                this.viewController.getID());
+        assertThat(this.viewController.getID(), notNullValue());
     }
 
     @Test
     public void testToString() {
-        Assert.assertNotNull("extension name must not be null",
-                this.viewController.toString());
+        assertThat(this.viewController.toString(), notNullValue());
     }
 
     @Test
@@ -108,11 +101,9 @@ public final class ViewControllerTest {
     @Test
     public void testIsDirty() {
         this.viewController.setDirty(true);
-        Assert.assertTrue("view must be dirty",
-                this.viewController.isDirty());
+        assertThat(this.viewController.isDirty(), is(true));
 
         this.viewController.setDirty(false);
-        Assert.assertFalse("view must not be dirty",
-                this.viewController.isDirty());
+        assertThat(this.viewController.isDirty(), is(false));
     }
 }

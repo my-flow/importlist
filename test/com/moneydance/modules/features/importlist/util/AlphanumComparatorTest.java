@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,9 +18,11 @@
 
 package com.moneydance.modules.features.importlist.util;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.util.Comparator;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,18 +43,16 @@ public final class AlphanumComparatorTest {
         String string1 = "start123-10";
         String string2 = "start123-2";
         int compare = this.alphanum.compare(string1, string2);
-        Assert.assertEquals(1, compare);
+        assertThat(compare, is(1));
 
         string1 = "start134start";
         string2 = "start123start";
         compare = this.alphanum.compare(string1, string2);
-        Assert.assertEquals("compare result must be greater than zero",
-                1, compare);
+        assertThat(compare, is(1));
 
         string1 = "startabc";
         string2 = "startabc";
         compare = this.alphanum.compare(string1, string2);
-        Assert.assertTrue("compare result equal to zero",
-                compare == 0);
+        assertThat(compare, is(0));
     }
 }

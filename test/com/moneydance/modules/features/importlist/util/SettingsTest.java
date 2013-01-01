@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,9 @@
 
 package com.moneydance.modules.features.importlist.util;
 
-import junit.framework.Assert;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,223 +39,196 @@ public final class SettingsTest {
 
     @Test
     public void testGetExtensionName() {
-        Assert.assertNotNull("extension name must not be null",
-                this.settings.getExtensionName());
+        assertThat(this.settings.getExtensionName(), notNullValue());
     }
 
     @Test
     public void testGetExtensionIdentifier() {
-        Assert.assertNotNull("extension identifier must not be null",
-                this.settings.getExtensionIdentifier());
+        assertThat(this.settings.getExtensionIdentifier(), notNullValue());
     }
 
     @Test
     public void testGetIconResource() {
-        Assert.assertNotNull("icon resource must not be null",
-                this.settings.getIconResource());
-    }
-
-    @Test
-    public void testGetLog4jPropertiesResource() {
-        Assert.assertNotNull("log4j properties resource must not be null",
-                this.settings.getLog4jPropertiesResource());
+        assertThat(this.settings.getIconResource(), notNullValue());
     }
 
     @Test
     public void testGetLocalizableResource() {
-        Assert.assertNotNull("localizable resource must not be null",
-                this.settings.getLocalizableResource());
+        assertThat(this.settings.getLocalizableResource(), notNullValue());
     }
 
     @Test
     public void testGetChooseBaseDirSuffix() {
-        Assert.assertNotNull("choose basedir suffix must not be null",
-                this.settings.getChooseBaseDirSuffix());
+        assertThat(this.settings.getChooseBaseDirSuffix(), notNullValue());
     }
 
     @Test
     public void testGetTransactionFileImportUriScheme() {
-        Assert.assertNotNull("transaction file import uri scheme must not be "
-                + "null", this.settings.getTransactionFileImportUriScheme());
+        assertThat(this.settings.getTransactionFileImportUriScheme(), notNullValue());
     }
 
     @Test
     public void testGetTextFileImportUriScheme() {
-        Assert.assertNotNull("text file import uri scheme must not be  null",
-                this.settings.getTextFileImportUriScheme());
+        assertThat(this.settings.getTextFileImportUriScheme(), notNullValue());
     }
 
     @Test
     public void testGetMonitorIntervall() {
-        Assert.assertNotNull("monitor interval must not be  null",
-                this.settings.getMonitorInterval());
+        assertThat(this.settings.getMonitorInterval(), notNullValue());
     }
 
     @Test
     public void testGetTransactionFileExtensions() {
-        Assert.assertNotNull("transaction file extension must not be  null",
-                this.settings.getTransactionFileExtensions());
+        assertThat(this.settings.getTransactionFileExtensions(), notNullValue());
     }
 
     @Test
     public void testGetTextFileExtensions() {
-        Assert.assertNotNull("text file extension must not be  null",
-                this.settings.getTextFileExtensions());
+        assertThat(this.settings.getTextFileExtensions(), notNullValue());
     }
 
     @Test
     public void testGetMaxFilenameLength() {
-        Assert.assertNotNull("max filename length must not be  null",
-                this.settings.getMaxFilenameLength());
+        assertThat(this.settings.getMaxFilenameLength(), notNullValue());
     }
 
     @Test
     public void testGetDescName() {
-        Assert.assertNotNull("desc name must not be  null",
-                this.settings.getDescName());
+        assertThat(this.settings.getDescName(), notNullValue());
     }
 
     @Test
     public void testGetDescModified() {
-        Assert.assertNotNull("desc modified must not be  null",
-                this.settings.getDescModified());
+        assertThat(this.settings.getDescModified(), notNullValue());
     }
 
     @Test
     public void testGetDescImport() {
-        Assert.assertNotNull("desc import must not be  null",
-                this.settings.getDescImport());
+        assertThat(this.settings.getDescImport(), notNullValue());
     }
 
     @Test
     public void testGetDescDelete() {
-        Assert.assertNotNull("desc delete must not be  null",
-                this.settings.getDescDelete());
+        assertThat(this.settings.getDescDelete(), notNullValue());
     }
 
     @Test
     public void testGetIndentationPrefix() {
-        Assert.assertNotNull("indentation prefix must not be null",
-                this.settings.getIndentationPrefix());
+        assertThat(this.settings.getIndentationPrefix(), notNullValue());
     }
 
     @Test
     public void testIsButtonResizable() {
-        Assert.assertNotNull("button resizable must not be null",
-                this.settings.isButtonResizable());
+        assertThat(this.settings.isButtonResizable(), notNullValue());
     }
 
     @Test
     public void testGetMinColumnWidth() {
-        Assert.assertNotNull("min column width must not be null",
-                this.settings.getMinColumnWidth());
+        assertThat(this.settings.getMinColumnWidth() >= 0, is(true));
     }
 
     @Test
     public void testIsReorderingAllowed() {
-        Assert.assertNotNull("reordering allowed must not be null",
-                this.settings.isReorderingAllowed());
+        assertThat(this.settings.isReorderingAllowed(), notNullValue());
     }
 
     @Test
     public void testGetMinimumTableWidth() {
-        Assert.assertNotNull("minimum table width must not be null",
-                this.settings.getMinimumTableWidth());
+        assertThat(this.settings.getMinimumTableWidth() >= 0, notNullValue());
     }
 
     @Test
     public void testGetMinimumTableHeight() {
-        Assert.assertNotNull("minimum table height must not be null",
-                this.settings.getMinimumTableHeight());
+        assertThat(this.settings.getMinimumTableHeight() >= 0, is(true));
     }
 
     @Test
     public void testGetTableHeightOffset() {
-        Assert.assertNotNull("table height offset must not be null",
-                this.settings.getTableHeightOffset());
+        assertThat(this.settings.getTableHeightOffset() >= 0, is(true));
     }
 
     @Test
     public void testGetColumnWidth() {
-        Assert.assertNotNull("column width must not be null",
-                this.settings.getColumnWidth());
+        assertThat(this.settings.getColumnWidth() >= 0, is(true));
     }
 
     @Test
     public void testGetPreferredEmptyMessageWidth() {
-        Assert.assertNotNull("preferred empty message width must not be null",
-                this.settings.getPreferredEmptyMessageWidth());
+        assertThat(this.settings.getPreferredEmptyMessageWidth() >= 0, is(true));
     }
 
     @Test
     public void testGetPreferredEmptyMessageHeight() {
-        Assert.assertNotNull("preferred empty message height must not be null",
-                this.settings.getPreferredEmptyMessageHeight());
+        assertThat(this.settings.getPreferredEmptyMessageHeight() >= 0, is(true));
     }
 
     @Test
     public void testGetMessageFilenameLineMaxLength() {
-        Assert.assertNotNull("message filename line max length must not be "
-                + "null", this.settings.getMessageFilenameLineMaxLength());
+        assertThat(this.settings.getMessageFilenameLineMaxLength() >= 0, is(true));
     }
 
     @Test
     public void testGetLengthOfVersionDigits() {
-        Assert.assertNotNull("length of version digits must not be null",
-                this.settings.getLengthOfVersionDigits());
+        assertThat(this.settings.getLengthOfVersionDigits() >= 0, is(true));
     }
 
     @Test
     public void testGetVersionWithOpaqueHomepageView() {
-        Assert.assertNotNull("version with opaque homepage view must not be "
-                + "null", this.settings.getVersionWithOpaqueHomepageView());
+        assertThat(this.settings.getVersionWithOpaqueHomepageView() >= 0, is(true));
     }
 
     @Test
     public void testGetColorValueFgDef() {
-        Assert.assertNotNull("color value fg def must not be null",
-                this.settings.getColorValueFgDef());
+        assertThat(this.settings.getColorValueFgDef(), notNullValue());
     }
 
     @Test
     public void testGetColorValueBgDef() {
-        Assert.assertNotNull("color value bg def must not be null",
-                this.settings.getColorValueBgDef());
+        assertThat(this.settings.getColorValueBgDef(), notNullValue());
     }
 
     @Test
     public void testGetColorValueBgAltDef() {
-        Assert.assertNotNull("color value bg alt def must not be null",
-                this.settings.getColorValueBgAltDef());
+        assertThat(this.settings.getColorValueBgAltDef(), notNullValue());
     }
 
     @Test
     public void testGetFactorRowHeightHeader() {
-        Assert.assertNotNull("factor row height header must not be null",
-                this.settings.getFactorRowHeightHeader());
+        assertThat(this.settings.getFactorRowHeightHeader() >= 0, is(true));
     }
 
     @Test
     public void testGetSummandRowHeightBody() {
-        Assert.assertNotNull("summand row height body must not be null",
-                this.settings.getSummandRowHeightBody());
+        assertThat(this.settings.getSummandRowHeightBody() >= 0, is(true));
     }
 
     @Test
     public void testGetKeyboardShortcutImport() {
-        Assert.assertNotNull("keyboard shortcut import must not be null",
-                this.settings.getKeyboardShortcutImport());
+        assertThat(this.settings.getKeyboardShortcutImport(), notNullValue());
     }
 
     @Test
     public void testGetKeyboardShortcutDelete() {
-        Assert.assertNotNull("keyboard shortcut delete must not be null",
-                this.settings.getKeyboardShortcutDelete());
+        assertThat(this.settings.getKeyboardShortcutDelete(), notNullValue());
     }
 
     @Test
     public void testGetTrackingCode() {
-        Assert.assertNotNull("tracking code must not be null",
-                this.settings.getTrackingCode());
+        assertThat(this.settings.getTrackingCode(), notNullValue());
+    }
+
+    @Test
+    public void testGetEventActionInstall() {
+        assertThat(this.settings.getEventActionInstall(), notNullValue());
+    }
+
+    @Test
+    public void testGetEventActionDisplay() {
+        assertThat(this.settings.getEventActionDisplay(), notNullValue());
+    }
+
+    @Test
+    public void testGetEventActionUninstall() {
+        assertThat(this.settings.getEventActionUninstall(), notNullValue());
     }
 }

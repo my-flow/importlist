@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@
 
 package com.moneydance.modules.features.importlist;
 
-import junit.framework.Assert;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -58,19 +59,19 @@ public final class MainTest {
 
     @Test
     public void testGetName() {
-        Assert.assertNotNull("name must not be null", this.main.getName());
+        assertThat(this.main.getName(), notNullValue());
     }
 
     @Test
     public void testGetIconImage() {
-        Assert.assertNotNull("icon image must not be null",
-                this.main.getIconImage());
+        assertThat(this.main.getIconImage(), notNullValue());
     }
 
     @Test
     public void testInvokeString() {
         this.main.invoke("");
-        this.main.invoke(Helper.INSTANCE.getSettings().getChooseBaseDirSuffix());
+        this.main.invoke(
+                Helper.INSTANCE.getSettings().getChooseBaseDirSuffix());
     }
 
     @Test
@@ -85,7 +86,6 @@ public final class MainTest {
 
     @Test
     public void testGetHomePageView() {
-        Assert.assertNotNull("homepage view must not be null",
-                this.main.getHomePageView());
+        assertThat(this.main.getHomePageView(), notNullValue());
     }
 }

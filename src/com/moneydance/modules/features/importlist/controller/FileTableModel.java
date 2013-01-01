@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -43,14 +43,14 @@ import com.moneydance.modules.features.importlist.util.Settings;
  */
 public final class FileTableModel extends AbstractTableModel {
 
-    private static final long serialVersionUID = 3552703741263935211L;
+    private static final long serialVersionUID = 1L;
     private final transient Preferences prefs;
     private final transient Settings    settings;
     private final transient Localizable localizable;
     private final           List<File>  files;
 
     public FileTableModel(final List<File> argFiles) {
-        Validate.notNull(argFiles, "argFiles must not be null");
+        Validate.notNull(argFiles, "files must not be null"); //$NON-NLS-1$
         this.prefs       = Helper.INSTANCE.getPreferences();
         this.settings    = Helper.INSTANCE.getSettings();
         this.localizable = Helper.INSTANCE.getLocalizable();
@@ -81,8 +81,8 @@ public final class FileTableModel extends AbstractTableModel {
     public Object getValueAt(final int row, final int column) {
         if (row >= this.files.size()) {
             this.fireTableDataChanged();
-            throw new IllegalArgumentException("Could not find value for row "
-                    + row + ", column " + column);
+            throw new IllegalArgumentException(String.format(
+                    "Could not find value for row %d, column %d", row, column));
         }
         String columnName = this.getColumnName(column);
 
@@ -100,8 +100,8 @@ public final class FileTableModel extends AbstractTableModel {
         if (this.settings.getDescDelete().equals(columnName)) {
             return this.localizable.getLabelDeleteOneButton();
         }
-        throw new IllegalArgumentException(
-                "Could not find value for row " + row + ", column " + column);
+        throw new IllegalArgumentException(String.format(
+                "Could not find value for row %d, column %d", row, column));
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,14 +21,17 @@ package com.moneydance.modules.features.importlist.util;
 import java.awt.Image;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.log4j.PropertyConfigurator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import com.moneydance.apps.md.controller.FeatureModuleContext;
 
 /**
  * This helper class provides public convenience methods.
@@ -45,20 +48,24 @@ public enum Helper {
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG = LoggerFactory.getLogger(Helper.class);
+    private static final Logger LOG = Logger.getLogger(Helper.class.getName());
 
-    private Preferences prefs;
+    private final HelperObservable observable;
+    private       Preferences prefs;
+    private       Tracker tracker;
 
-    private Tracker tracker;
+    private Helper() {
+        this.observable = new HelperObservable();
+    }
 
     public Preferences getPreferences() {
-        synchronized (Helper.class) {
-            if (this.prefs == null) {
-                this.prefs = new Preferences();
-            }
-        }
-        return this.prefs;
-    }
+       synchronized (Helper.class) {
+           if (this.prefs == null) {
+               this.prefs = new Preferences();
+           }
+       }
+       return this.prefs;
+   }
 
     public Settings getSettings() {
         return Settings.INSTANCE;
@@ -77,50 +84,70 @@ public enum Helper {
         return this.tracker;
     }
 
-    public void loadLoggerConfiguration() {
-        boolean rootIsConfigured = org.apache.log4j.Logger
-                .getRootLogger().getAllAppenders().hasMoreElements();
-        if (rootIsConfigured) {
-            // do not overwrite any existing configurations
-            return;
-        }
+    public void addObserver(final Observer o) {
+        this.observable.addObserver(o);
+    }
 
-        final Properties properties = new Properties();
+    public void setChanged() {
+        this.observable.setChanged();
+    }
+
+    public void notifyObservers(final Object arg) {
+        this.observable.notifyObservers(arg);
+    }
+
+    public void setContext(final FeatureModuleContext context) {
+        this.getPreferences().setContext(context);
+        this.getLocalizable().setContext(context);
+    }
+
+    public void loadLoggerConfiguration() {
         try {
-            InputStream inputStream = this.getInputStreamFromResource(
-                    this.getSettings().getLog4jPropertiesResource());
-            properties.load(inputStream);
-        }  catch (IllegalArgumentException e) {
+            InputStream inputStream = getInputStreamFromResource(
+                    getSettings().getLoggingPropertiesResource());
+            LogManager.getLogManager().readConfiguration(inputStream);
+
+        } catch (SecurityException e) {
             e.printStackTrace(System.err);
         } catch (IOException e) {
             e.printStackTrace(System.err);
         }
-        PropertyConfigurator.configure(properties);
     }
 
     public InputStream getInputStreamFromResource(
             final String resource) {
         ClassLoader cloader     = Helper.class.getClassLoader();
         InputStream inputStream = cloader.getResourceAsStream(resource);
-        Validate.notNull(inputStream, "Resource " + resource
-                + " was not found.");
+        Validate.notNull(inputStream, "Resource %s was not found.", resource);
         return inputStream;
     }
 
     public Image getIconImage() {
         Image image = null;
         try {
-            LOG.debug("Loading icon " + this.getSettings().getIconResource()
-                    + " from resource.");
+            LOG.config(String.format(
+                    "Loading icon %s from resource.",
+                    getSettings().getIconResource()));
             InputStream inputStream =
                     Helper.INSTANCE.getInputStreamFromResource(
-                            this.getSettings().getIconResource());
+                            getSettings().getIconResource());
             image = ImageIO.read(inputStream);
         } catch (IllegalArgumentException e) {
-            LOG.warn(e.getMessage(), e);
+            LOG.log(Level.WARNING, e.getMessage(), e);
         } catch (IOException e) {
-            LOG.warn(e.getMessage(), e);
+            LOG.log(Level.WARNING, e.getMessage(), e);
         }
         return image;
+    }
+
+
+    /**
+     * @author Florian J. Breunig
+     */
+    private final class HelperObservable extends Observable {
+        @Override
+        public synchronized void setChanged() { // increase visiblity
+            super.setChanged();
+        }
     }
 }

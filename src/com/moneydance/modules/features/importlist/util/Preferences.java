@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,13 +24,12 @@ import java.awt.Toolkit;
 import java.text.DateFormat;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.Observable;
 
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.UIManager;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.controller.UserPreferences;
@@ -40,12 +39,11 @@ import com.moneydance.util.StreamTable;
 /**
  * This preferences class contains the values the user can control in the
  * application. It serves as a facade abstracting Moneydance's
- * <code>UserPreferences</code> (received from the
- * <code>FeatureModuleContext</code>).
+ * <code>UserPreferences</code>.
  *
  * @author Florian J. Breunig
  */
-public final class Preferences extends Observable {
+public final class Preferences {
 
     private         UserPreferences userPreferences;
     private final   Settings        settings;
@@ -70,11 +68,6 @@ public final class Preferences extends Observable {
         this.sortOrderDefault.put("0", SortOrder.ASCENDING.toString());
     }
 
-    public void reload() {
-        this.setChanged();
-        this.notifyObservers(Boolean.TRUE);
-    }
-
     public void setContext(final FeatureModuleContext context) {
         this.userPreferences = ((com.moneydance.apps.md.controller.Main)
                 context).getPreferences();
@@ -82,8 +75,8 @@ public final class Preferences extends Observable {
 
     private UserPreferences getUserPreferences() {
         if (this.userPreferences == null) {
-            this.setChanged();
-            this.notifyObservers(Boolean.FALSE);
+            Helper.INSTANCE.setChanged();
+            Helper.INSTANCE.notifyObservers(Boolean.FALSE);
             Validate.notNull(this.userPreferences,
                     "user preferences not initialized");
         }
@@ -118,9 +111,7 @@ public final class Preferences extends Observable {
     }
 
     public String getFullVersion() {
-        final String fullString = this.getUserPreferences().getSetting(
-                "current_version", "0");
-        return fullString;
+        return this.getUserPreferences().getSetting("current_version", "0");
     }
 
     public int getMajorVersion() {
@@ -146,7 +137,7 @@ public final class Preferences extends Observable {
                 baseDirectory);
     }
 
-    public boolean useProxy() {
+    public boolean hasProxy() {
         return this.getUserPreferences().getBoolSetting(
                 UserPreferences.NET_USE_PROXY,
                 false);
@@ -163,7 +154,7 @@ public final class Preferences extends Observable {
                 0);
     }
 
-    public boolean needProxyAuthentication() {
+    public boolean hasProxyAuthentication() {
         return this.getUserPreferences().getBoolSetting(
                 UserPreferences.NET_AUTH_PROXY,
                 false);

@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,17 +18,17 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import java.awt.Color;
 import java.awt.event.ActionListener;
-
-import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
-import com.moneydance.modules.features.importlist.view.OddColorSchemeHelper;
 
 /**
  * @author Florian J. Breunig
@@ -52,14 +52,12 @@ public final class ImportOneEditorTest {
     public void testGetActionListener() {
         ActionListener actionListener =
                 this.importOneEditor.getActionListener(0);
-        Assert.assertNotNull("action listener must not be null",
-                actionListener);
+        assertThat(actionListener, notNullValue());
         actionListener.actionPerformed(null);
     }
 
     @Test
     public void testGetKeyStroke() {
-        Assert.assertNotNull("key stroke must not be null",
-                this.importOneEditor.getKeyStroke());
+        assertThat(this.importOneEditor.getKeyStroke(), notNullValue());
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -32,27 +32,25 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.TableCellRenderer;
 
-import org.apache.commons.lang.Validate;
-
-import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
+import org.apache.commons.lang3.Validate;
 
 /**
  * @author Florian J. Breunig
  */
-class ButtonRenderer implements TableCellRenderer {
+final class ButtonRenderer implements TableCellRenderer {
 
     private final ColorSchemeHelper colorSchemeHelper;
 
     ButtonRenderer(final ColorSchemeHelper argColorSchemeHelper) {
         Validate.notNull(
                 argColorSchemeHelper,
-                "argColorSchemeHelper must not be null");
+                "color scheme helper must not be null");
         this.colorSchemeHelper = argColorSchemeHelper;
     }
 
     // ESCA-JAVA0138: abstract method from interface TableCellRenderer
     @Override
-    public final Component getTableCellRendererComponent(
+    public Component getTableCellRendererComponent(
             final JTable table,
             final Object value,
             final boolean isSelected,
@@ -63,7 +61,7 @@ class ButtonRenderer implements TableCellRenderer {
                 table, value, hasFocus, hasFocus, row, column);
     }
 
-    final AbstractButton getTableCellRendererButton(
+    AbstractButton getTableCellRendererButton(
             final JTable table,
             final Object value,
             final boolean isSelected,

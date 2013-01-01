@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,10 @@
 
 package com.moneydance.modules.features.importlist.controller;
 
-import junit.framework.Assert;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,39 +50,31 @@ public final class AggregationTableModelTest {
 
     @Test
     public void testGetColumnClassInt() {
-        Assert.assertNotNull("column class must not be null",
-                this.aggregationTableModel.getColumnClass(0));
+        assertThat(this.aggregationTableModel.getColumnClass(0), notNullValue());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetValueAt() {
-        Assert.assertNull("value for model must be null",
-                this.aggregationTableModel.getValueAt(0,  0));
-        Assert.assertNull("value for model must be null",
-                this.aggregationTableModel.getValueAt(0,  1));
-        Assert.assertNotNull("value for model must not be null",
-                this.aggregationTableModel.getValueAt(0,  2));
-        Assert.assertNotNull("value for model must not be null",
-                this.aggregationTableModel.getValueAt(0,  3));
+        assertThat(this.aggregationTableModel.getValueAt(0,  0), nullValue());
+        assertThat(this.aggregationTableModel.getValueAt(0,  1), nullValue());
+        assertThat(this.aggregationTableModel.getValueAt(0,  2), notNullValue());
+        assertThat(this.aggregationTableModel.getValueAt(0,  3), notNullValue());
         this.aggregationTableModel.getValueAt(0,  4);
         // throw an expected exception
     }
 
     @Test
     public void testGetColumnCount() {
-        Assert.assertEquals("column count must be equal to 4", 4,
-                this.aggregationTableModel.getColumnCount());
+        assertThat(this.aggregationTableModel.getColumnCount(), is(4));
     }
 
     @Test
     public void testGetColumnNameInt() {
-        Assert.assertNotNull("column must have a name",
-                this.aggregationTableModel.getColumnName(0));
+        assertThat(this.aggregationTableModel.getColumnName(0), notNullValue());
     }
 
     @Test
     public void testGetRowCount() {
-        Assert.assertTrue("row count must be equal to 1",
-                this.aggregationTableModel.getRowCount() == 1);
+        assertThat(this.aggregationTableModel.getRowCount(), is(1));
     }
 }

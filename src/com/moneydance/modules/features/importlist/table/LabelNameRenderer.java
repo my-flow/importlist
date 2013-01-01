@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,14 +25,13 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Settings;
-import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
 
 /**
  * @author Florian J. Breunig
  */
-class LabelNameRenderer extends DefaultTableCellRenderer {
+final class LabelNameRenderer extends DefaultTableCellRenderer {
 
-    private static final long serialVersionUID = 7553393304980261323L;
+    private static final long serialVersionUID = 1L;
     private final transient ColorSchemeHelper colorSchemeHelper;
     private final transient Settings settings;
 
@@ -44,7 +43,7 @@ class LabelNameRenderer extends DefaultTableCellRenderer {
 
     // ESCA-JAVA0138: abstract method from interface TableCellRenderer
     @Override
-    public final Component getTableCellRendererComponent(
+    public Component getTableCellRendererComponent(
             final JTable table,
             final Object value,
             final boolean isSelected,
@@ -55,7 +54,8 @@ class LabelNameRenderer extends DefaultTableCellRenderer {
         this.colorSchemeHelper.applyColorScheme(this, row);
         String label = null;
         if (value != null) {
-            label = this.settings.getIndentationPrefix() + value.toString();
+            label = String.format("%s%s",
+                    this.settings.getIndentationPrefix(), value);
         }
         super.getTableCellRendererComponent(
                 table,

@@ -17,8 +17,6 @@
       value="${src}/com/moneydance/modules/features/importlist/meta_info.dict"/>
   <property name="jar.file"
       value="${dist}/importlist.mxt"/>
-  <property name="boot.classpath"
-      value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar" />
 
   <available file="${privkeyfile}" property="privkeyfile.present"/>
 
@@ -26,7 +24,7 @@
     classpath="${lib}/checkstyle-5.6-all.jar"/>
 
   <taskdef resource="proguard/ant/task.properties"
-         classpath="${lib}/proguard-4.8.jar" />
+         classpath="${lib}/proguard-4.9.jar" />
 
   <path id="compile.classpath">
         <pathelement path="${lib}/moneydance.jar"/>
@@ -34,10 +32,8 @@
         <pathelement path="${lib}/commons-lang-2.6.jar"/>
         <pathelement path="${lib}/commons-lang3-3.1.jar"/>
         <pathelement path="${lib}/commons-configuration-1.9.jar"/>
-        <pathelement path="${lib}/log4j-1.2.17.jar"/>
         <pathelement path="${lib}/JGoogleAnalyticsTracker-1.2.0.jar"/>
-        <pathelement path="${lib}/slf4j-api-1.7.2.jar"/>
-        <pathelement path="${lib}/slf4j-log4j12-1.7.2.jar"/>
+        <pathelement path="${lib}/slf4j-api-1.7.5.jar"/>
   </path>
 
   <path id="test.classpath">
@@ -47,15 +43,13 @@
     <pathelement path="${lib}/commons-io-2.4.jar"/>
     <pathelement path="${lib}/commons-lang-2.6.jar"/>
     <pathelement path="${lib}/commons-lang3-3.1.jar"/>
-    <pathelement path="${lib}/commons-logging-1.1.1.jar"/>
+    <pathelement path="${lib}/commons-logging-1.1.2.jar"/>
     <pathelement path="${lib}/JGoogleAnalyticsTracker-1.2.0.jar"/>
-    <pathelement path="${lib}/jmockit-coverage-htmlfull.jar"/>
     <pathelement path="${lib}/jmockit-coverage.jar"/>
     <pathelement path="${lib}/jmockit.jar"/>
     <pathelement path="${lib}/junit-4.11.jar"/>
-    <pathelement path="${lib}/log4j-1.2.17.jar"/>
-    <pathelement path="${lib}/slf4j-api-1.7.2.jar"/>
-    <pathelement path="${lib}/slf4j-log4j12-1.7.2.jar"/>
+    <pathelement path="${lib}/slf4j-api-1.7.5.jar"/>
+    <pathelement path="${lib}/slf4j-simple-1.7.5.jar"/>
     <pathelement path="${build}"/>
   </path>
 
@@ -120,7 +114,7 @@ using JMockit Coverage.">
       <classpath refid="test.classpath"/>
       <test name="com.moneydance.modules.features.importlist.AllTests"/>
       <sysproperty key="jmockit-coverage-excludes"
-                   value=".*AllTests|.*Stub.*"/>
+                   value=".*AllTests|.*Stub.*|.*Mock.*"/>
       <sysproperty key="jmockit-coverage-outputDir"
                    value="${docs}/coverage-report"/>
     </junit>
@@ -201,12 +195,11 @@ and deploy a new version.">
             <include name="commons-lang-2.6.jar"/>
             <include name="commons-lang3-3.1.jar"/>
             <include name="commons-configuration-1.9.jar"/>
-            <include name="commons-logging-1.1.1.jar"/>
+            <include name="commons-logging-1.1.2.jar"/>
             <include name="commons-collections-3.2.1.jar"/>
-            <include name="log4j-1.2.17.jar"/>
             <include name="JGoogleAnalyticsTracker-1.2.0.jar"/>
-            <include name="slf4j-api-1.7.2.jar"/>
-            <include name="slf4j-log4j12-1.7.2.jar"/>
+            <include name="slf4j-api-1.7.5.jar"/>
+            <include name="slf4j-nop-1.7.5.jar"/>
         </zipgroupfileset>
     </jar>
 
@@ -304,7 +297,6 @@ references to external documentations.">
       <link href="http://commons.apache.org/io/api-2.4/"/>
       <link href="http://commons.apache.org/lang/api-3.1/"/>
       <link href="http://commons.apache.org/lang/api-2.6/"/>
-      <link href="http://logging.apache.org/log4j/1.2/apidocs/"/>
       <link href="http://commons.apache.org/logging/apidocs/"/>
       <footer><![CDATA[
       	<a href="https://github.com/my-flow/importlist">

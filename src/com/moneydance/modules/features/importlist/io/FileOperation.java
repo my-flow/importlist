@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,10 +23,12 @@ import java.util.List;
 
 
 /**
+ * A command that can be executed on the file system.
+ *
  * @author Florian J. Breunig
  */
 interface FileOperation {
 
-    void showWarningAndPerform(final List<File> files);
-    void perform(final List<File> files);
+    void showWarningAndExecute(final List<File> files);
+    void execute(final List<File> files);
 }

@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -42,7 +42,7 @@ import com.moneydance.modules.features.importlist.util.Settings;
  */
 public abstract class AbstractEditor extends DefaultCellEditor {
 
-    private static final long serialVersionUID = -2042274086341185241L;
+    private static final long serialVersionUID = 1L;
     private final transient Settings        settings;
     private final transient FileAdmin       fileAdmin;
     private final transient ButtonRenderer  buttonRenderer;
@@ -52,16 +52,16 @@ public abstract class AbstractEditor extends DefaultCellEditor {
 
     public abstract KeyStroke getKeyStroke();
 
-    AbstractEditor(
+    protected AbstractEditor(
             final FileAdmin argFileAdmin,
             final ButtonRenderer argButtonRenderer) {
         super(new JCheckBox());
         Validate.notNull(
                 argFileAdmin,
-                "argFileAdmin must not be null");
+                "file admin must not be null"); //$NON-NLS-1$
         Validate.notNull(
                 argButtonRenderer,
-                "argButtonRenderer must not be null");
+                "button renderer must not be null");
         this.settings       = Helper.INSTANCE.getSettings();
         this.fileAdmin      = argFileAdmin;
         this.buttonRenderer = argButtonRenderer;
@@ -108,7 +108,7 @@ public abstract class AbstractEditor extends DefaultCellEditor {
         }
 
         final Action action = new AbstractAction() {
-            private static final long serialVersionUID = 947999658820121305L;
+            private static final long serialVersionUID = 1L;
 
             @Override
             public void actionPerformed(final ActionEvent actionEvent) {

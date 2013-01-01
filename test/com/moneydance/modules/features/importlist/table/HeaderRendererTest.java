@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,9 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import java.awt.Button;
 import java.awt.Color;
 import java.awt.Component;
@@ -26,11 +29,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
-
-import com.moneydance.modules.features.importlist.view.OddColorSchemeHelper;
 
 /**
  * @author Florian J. Breunig
@@ -46,15 +45,15 @@ public final class HeaderRendererTest {
                         Color.white),
                 new DefaultTableCellRenderer());
 
-        Assert.assertNotNull(
-                "component must not be null",
+        assertThat(
                 headerRenderer.getTableCellRendererComponent(
                         new JTable(),
                         null,
                         false,
                         false,
                         0,
-                        0));
+                        0),
+                notNullValue());
 
         headerRenderer = new HeaderRenderer(
                 new OddColorSchemeHelper(
@@ -63,15 +62,15 @@ public final class HeaderRendererTest {
                         Color.white),
                 new ComponentTableCellRenderer());
 
-        Assert.assertNotNull(
-                "component must not be null",
+        assertThat(
                 headerRenderer.getTableCellRendererComponent(
                         new JTable(),
                         null,
                         false,
                         false,
                         0,
-                        0));
+                        0),
+                notNullValue());
 
         headerRenderer = new HeaderRenderer(
                 new OddColorSchemeHelper(
@@ -80,18 +79,21 @@ public final class HeaderRendererTest {
                         Color.white),
                 new JTableCellRenderer());
 
-        Assert.assertNotNull(
-                "component must not be null",
+        assertThat(
                 headerRenderer.getTableCellRendererComponent(
                         new JTable(),
                         null,
                         false,
                         false,
                         0,
-                        0));
+                        0),
+                notNullValue());
     }
 
-    private static class ComponentTableCellRenderer
+    /**
+     * @author Florian J. Breunig
+     */
+    private static final class ComponentTableCellRenderer
         implements TableCellRenderer {
 
         @Override
@@ -106,7 +108,10 @@ public final class HeaderRendererTest {
         }
     }
 
-    private static class JTableCellRenderer
+    /**
+     * @author Florian J. Breunig
+     */
+    private static final class JTableCellRenderer
         implements TableCellRenderer {
 
         @Override

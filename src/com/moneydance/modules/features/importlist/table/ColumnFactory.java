@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,9 +29,6 @@ import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
-import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
-import com.moneydance.modules.features.importlist.view.EvenColorSchemeHelper;
-import com.moneydance.modules.features.importlist.view.OddColorSchemeHelper;
 import com.moneydance.util.CustomDateFormat;
 
 /**
@@ -63,7 +60,7 @@ public final class ColumnFactory {
             final TableCellRenderer defaultHeaderTableCellRenderer,
             final CustomDateFormat argDateFormatter,
             final DateFormat argTimeFormatter) {
-        Validate.notNull(fileAdmin, "fileAdmin must not be null");
+        Validate.notNull(fileAdmin, "file admin must not be null");
         final Preferences prefs    = Helper.INSTANCE.getPreferences();
         final Settings    settings = Helper.INSTANCE.getSettings();
 

@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,17 +18,16 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import java.awt.Color;
 
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
-
-import com.moneydance.modules.features.importlist.view.OddColorSchemeHelper;
 
 /**
  * @author Florian J. Breunig
@@ -47,26 +46,25 @@ public final class LabelNameRendererTest {
     }
 
     @Test
-    public void
-    testGetTableCellRendererComponentJTableObjectBooleanBooleanIntInt() {
-        Assert.assertNotNull(
-                "component must not be null",
+    public void testGetTableCellRendererComponent () {
+        assertThat(
                 this.labelNameRenderer.getTableCellRendererComponent(
                         new JTable(),
                         null, // null value
                         false,
                         false,
                         0,
-                        0));
+                        0),
+                notNullValue());
 
-        Assert.assertNotNull(
-                "component must not be null",
+        assertThat(
                 this.labelNameRenderer.getTableCellRendererComponent(
                         new JTable(),
                         "", // empty string value
                         false,
                         false,
                         0,
-                        0));
+                        0),
+                notNullValue());
     }
 }

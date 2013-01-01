@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -40,7 +40,7 @@ public final class DeleteOneOperationTest {
     }
 
     @Test
-    public void testPerform() {
+    public void testExecute() {
         try {
             this.deleteFile.createNewFile();
         } catch (IOException e) {
@@ -48,16 +48,16 @@ public final class DeleteOneOperationTest {
         }
 
         FileOperation fileOperation = new DeleteOneOperation();
-        fileOperation.perform(
+        fileOperation.execute(
                 Collections.singletonList(this.deleteFile));
 
         fileOperation = new DeleteOneOperation();
-        fileOperation.perform(
+        fileOperation.execute(
                 Collections.singletonList(this.incomeFile));
     }
 
     @Test
-    public void testShowWarningAndPerform() {
+    public void testShowWarningAndExecute() {
         try {
             this.deleteFile.createNewFile();
         } catch (IOException e) {
@@ -65,11 +65,11 @@ public final class DeleteOneOperationTest {
         }
 
         FileOperation fileOperation = new DeleteOneOperation();
-        fileOperation.showWarningAndPerform(
+        fileOperation.showWarningAndExecute(
                 Collections.singletonList(this.deleteFile));
 
         fileOperation = new DeleteOneOperation();
-        fileOperation.showWarningAndPerform(
+        fileOperation.showWarningAndExecute(
                 Collections.singletonList(this.incomeFile));
     }
 }

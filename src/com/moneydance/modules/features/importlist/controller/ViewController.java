@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -35,6 +35,12 @@ import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.presentation.AggregationTableFactory;
+import com.moneydance.modules.features.importlist.presentation.BaseTableFactory;
+import com.moneydance.modules.features.importlist.presentation.ComponentFactory;
+import com.moneydance.modules.features.importlist.presentation.DirectoryChooserButtonFactory;
+import com.moneydance.modules.features.importlist.presentation.EmptyLabelFactory;
+import com.moneydance.modules.features.importlist.presentation.SplitPaneFactory;
 import com.moneydance.modules.features.importlist.table.AbstractEditor;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
 import com.moneydance.modules.features.importlist.util.Helper;
@@ -42,35 +48,29 @@ import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 import com.moneydance.modules.features.importlist.util.Tracker;
-import com.moneydance.modules.features.importlist.view.AggregationTableFactory;
-import com.moneydance.modules.features.importlist.view.BaseTableFactory;
-import com.moneydance.modules.features.importlist.view.ComponentFactory;
-import com.moneydance.modules.features.importlist.view.DirectoryChooserFactory;
-import com.moneydance.modules.features.importlist.view.EmptyLabelFactory;
-import com.moneydance.modules.features.importlist.view.SplitPaneFactory;
 
 /**
  * The user interface that is displayed on the homepage.
  *
  * @author Florian J. Breunig
  */
-public final class ViewController implements HomePageView, Observer {
+public final class ViewController implements HomePageView {
 
-    private final Preferences               prefs;
-    private final Settings                  settings;
-    private final Localizable               localizable;
-    private final FileAdmin                 fileAdmin;
-    private final Tracker                   tracker;
-    private       boolean                   initialized;
-    private       ColumnFactory             columnFactory;
-    private       JViewport                 viewport;
-    private       DirectoryChooserFactory   directoryChooserFactory;
-    private       EmptyLabelFactory         emptyLabelFactory;
-    private       ComponentFactory          splitPaneFactory;
-    private       BaseTableFactory          baseTableFactory;
-    private       AbstractTableModel        baseTableModel;
-    private       AbstractTableModel        aggrTableModel;
-    private       boolean                   dirty;
+    private final Preferences           prefs;
+    private final Settings              settings;
+    private final Localizable           localizable;
+    private final FileAdmin             fileAdmin;
+    private final Tracker               tracker;
+    private       boolean               initialized;
+    private       ColumnFactory         columnFactory;
+    private       JViewport             viewport;
+    private       DirectoryChooserButtonFactory directoryChooserFactory;
+    private       EmptyLabelFactory     emptyLabelFactory;
+    private       ComponentFactory      splitPaneFactory;
+    private       BaseTableFactory      baseTableFactory;
+    private       AbstractTableModel    baseTableModel;
+    private       AbstractTableModel    aggrTableModel;
+    private       boolean               dirty;
 
 
     public ViewController(
@@ -81,7 +81,7 @@ public final class ViewController implements HomePageView, Observer {
         this.settings    = Helper.INSTANCE.getSettings();
         this.localizable = Helper.INSTANCE.getLocalizable();
         this.fileAdmin   = new FileAdmin(baseDirectory, context);
-        this.fileAdmin.addObserver(this);
+        this.fileAdmin.addObserver(new ViewControllerObserver());
         this.tracker     = argTracker;
     }
 
@@ -91,7 +91,7 @@ public final class ViewController implements HomePageView, Observer {
         this.viewport.setOpaque(false);
 
         ActionListener actionListener = new ChooseBaseDirectoryActionListener();
-        this.directoryChooserFactory = new DirectoryChooserFactory(
+        this.directoryChooserFactory = new DirectoryChooserButtonFactory(
                 actionListener);
         this.emptyLabelFactory       = new EmptyLabelFactory();
 
@@ -124,16 +124,17 @@ public final class ViewController implements HomePageView, Observer {
             return;
         }
 
-        this.prefs.reload();
+        Helper.INSTANCE.setChanged();
+        Helper.INSTANCE.notifyObservers(Boolean.TRUE);
+
         this.fileAdmin.checkValidBaseDirectory();
 
         // display a label iff no base directory has been chosen
         if (this.fileAdmin.getBaseDirectory() == null) {
             JButton chooserButton = this.directoryChooserFactory.getComponent();
-            chooserButton.setText(
-                    "<html><u>"
-                    + this.localizable.getDirectoryChooserTitle()
-                    + "</u></html>");
+            chooserButton.setText(String.format(
+                    "<html><u>%s</u></html>",
+                    this.localizable.getDirectoryChooserTitle()));
 
             this.viewport.setView(chooserButton);
             this.viewport.setMinimumSize(
@@ -221,13 +222,6 @@ public final class ViewController implements HomePageView, Observer {
 
 
     @Override
-    public void update(final Observable observable, final Object object) {
-        this.setDirty(true);
-        this.refresh();
-    }
-
-
-    @Override
     public JComponent getGUIView(final RootAccount rootAccount) {
         if (!this.initialized) {
             this.initialized = true;
@@ -311,8 +305,23 @@ public final class ViewController implements HomePageView, Observer {
         deleteAllEditor.registerKeyboardShortcut(this.viewport);
     }
 
+    /**
+     * @author Florian J. Breunig
+     */
+    private final class ViewControllerObserver
+    implements Observer {
+        @Override
+        public void update(final Observable observable, final Object object) {
+            setDirty(true);
+            refresh();
+        }
+    }
 
-    private class ChooseBaseDirectoryActionListener implements ActionListener {
+    /**
+     * @author Florian J. Breunig
+     */
+    private final class ChooseBaseDirectoryActionListener
+    implements ActionListener {
 
         @Override
         public void actionPerformed(final ActionEvent event) {

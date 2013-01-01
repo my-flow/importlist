@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,11 +24,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.model.Account;
@@ -54,7 +53,7 @@ final class ImportOneOperation implements FileOperation {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-            LoggerFactory.getLogger(ImportOneOperation.class);
+            Logger.getLogger(ImportOneOperation.class.getName());
 
     ImportOneOperation(
             final FeatureModuleContext argContext,
@@ -68,14 +67,14 @@ final class ImportOneOperation implements FileOperation {
     }
 
     @Override
-    public void showWarningAndPerform(final List<File> files) {
-        this.perform(files);
+    public void showWarningAndExecute(final List<File> files) {
+        this.execute(files);
     }
 
     @Override
-    public void perform(final List<File> files) {
+    public void execute(final List<File> files) {
         final File file = files.iterator().next();
-        Map<String, String> valuesMap = new HashMap<String, String>();
+        Map<String, String> valuesMap = new HashMap<String, String>(1);
         valuesMap.put("filename",  file.getAbsolutePath());
 
         String uriScheme = "";
@@ -100,9 +99,10 @@ final class ImportOneOperation implements FileOperation {
         RootAccount rootAccount = this.context.getRootAccount();
 
         String accountNumber = "-1";
-        Iterator<Account> iterator =
+
+        for (Iterator<Account> iterator =
                 AccountUtil.getAccountIterator(rootAccount);
-        while (iterator.hasNext()) {
+                iterator.hasNext();) {
             final Account account = iterator.next();
             if (!AcctFilter.NON_CATEGORY_FILTER.matches(account)
                     || rootAccount.equals(account)) {
@@ -111,9 +111,10 @@ final class ImportOneOperation implements FileOperation {
 
             final String accountName = account.getFullAccountName();
             if (this.isEqual(accountName, fileName)) {
-                LOG.debug("Found matching account \""
-                        + account.getFullAccountName()
-                        + "\" for file " + argFile.getName());
+                LOG.config(String.format(
+                        "Found matching account \"%s\" for file %s",
+                        account.getFullAccountName(),
+                        argFile.getName()));
                 accountNumber = String.valueOf(account.getAccountNum());
             }
         }

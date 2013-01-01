@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,40 +18,35 @@
 
 package com.moneydance.modules.features.importlist.io;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.io.File;
 
-import junit.framework.Assert;
-
-import org.junit.Before;
 import org.junit.Test;
 
-public class DirectoryValidatorTest {
+/**
+ * @author Florian J. Breunig
+ */
+public final class DirectoryValidatorTest {
 
-    @Before
-    public void setUp() throws Exception {
+    @Test
+    public void testIsValidDirectory() {
+        assertThat(DirectoryValidator.INSTANCE.isValidDirectory(new File(".")), is(true));
+        assertThat(DirectoryValidator.INSTANCE.isValidDirectory(null), is(false));
     }
 
     @Test
-    public void testCheckValidDirectory() {
-        Assert.assertTrue("directory must be valid",
-                DirectoryValidator.INSTANCE.checkValidDirectory(new File(".")));
-
-        Assert.assertFalse("directory must not be valid",
-                DirectoryValidator.INSTANCE.checkValidDirectory(null));
-}
-
-    @Test
     public void testAcceptFile() {
-        Assert.assertTrue("directory must be accepted",
-                DirectoryValidator.INSTANCE.accept(new File(".")));
+        assertThat(DirectoryValidator.INSTANCE.accept(new File(".")), is(true));
     }
 
     @Test
     public void testAcceptFileString() {
-        Assert.assertTrue("directory must be accepted",
+        assertThat(
                 DirectoryValidator.INSTANCE.accept(
                         new File("."),
-                        new File(".").getName()));
+                        new File(".").getName()),
+                is(true));
     }
-
 }

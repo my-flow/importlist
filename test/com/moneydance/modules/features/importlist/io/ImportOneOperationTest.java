@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -58,7 +58,7 @@ public final class ImportOneOperationTest {
     }
 
     @Test
-    public void testPerform() {
+    public void testExecute() {
         RootAccount fullRootAccount = new RootAccount(
                 this.currencyType,
                 this.currencyTable);
@@ -100,56 +100,56 @@ public final class ImportOneOperationTest {
                 context,
                 TrueFileFilter.TRUE,
                 FalseFileFilter.FALSE);
-        fileOperation.perform(Collections.singletonList(this.incomeFile));
+        fileOperation.execute(Collections.singletonList(this.incomeFile));
 
         fileOperation = new ImportOneOperation(
                 context,
                 TrueFileFilter.TRUE,
                 FalseFileFilter.FALSE);
-        fileOperation.perform(Collections.singletonList(this.creditcardFile));
+        fileOperation.execute(Collections.singletonList(this.creditcardFile));
 
         fileOperation = new ImportOneOperation(
                 context,
                 TrueFileFilter.TRUE,
                 FalseFileFilter.FALSE);
-        fileOperation.perform(Collections.singletonList(this.noCategoryFile));
+        fileOperation.execute(Collections.singletonList(this.noCategoryFile));
 
         context.setRootAccount(fullRootAccount);
         fileOperation = new ImportOneOperation(
                 context,
                 FalseFileFilter.FALSE,
                 TrueFileFilter.TRUE);
-        fileOperation.perform(Collections.singletonList(this.incomeFile));
+        fileOperation.execute(Collections.singletonList(this.incomeFile));
 
         fileOperation = new ImportOneOperation(
                 context,
                 FalseFileFilter.FALSE,
                 TrueFileFilter.TRUE);
-        fileOperation.perform(Collections.singletonList(this.creditcardFile));
+        fileOperation.execute(Collections.singletonList(this.creditcardFile));
 
         fileOperation = new ImportOneOperation(
                 context,
                 FalseFileFilter.FALSE,
                 TrueFileFilter.TRUE);
-        fileOperation.perform(Collections.singletonList(this.noCategoryFile));
+        fileOperation.execute(Collections.singletonList(this.noCategoryFile));
 
         context.setRootAccount(fullRootAccount);
         fileOperation = new ImportOneOperation(
                 context,
                 FalseFileFilter.FALSE,
                 FalseFileFilter.FALSE);
-        fileOperation.perform(Collections.singletonList(this.incomeFile));
+        fileOperation.execute(Collections.singletonList(this.incomeFile));
 
         fileOperation = new ImportOneOperation(
                 context,
                 FalseFileFilter.FALSE,
                 FalseFileFilter.FALSE);
-        fileOperation.perform(Collections.singletonList(this.creditcardFile));
+        fileOperation.execute(Collections.singletonList(this.creditcardFile));
 
         fileOperation = new ImportOneOperation(
                 context,
                 FalseFileFilter.FALSE,
                 FalseFileFilter.FALSE);
-        fileOperation.perform(Collections.singletonList(this.noCategoryFile));
+        fileOperation.execute(Collections.singletonList(this.noCategoryFile));
     }
 }

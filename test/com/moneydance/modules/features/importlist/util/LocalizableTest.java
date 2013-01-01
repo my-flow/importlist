@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,11 @@
 
 package com.moneydance.modules.features.importlist.util;
 
-import junit.framework.Assert;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
+import java.util.Observable;
+import java.util.Observer;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,111 +35,102 @@ import com.moneydance.apps.md.controller.StubContextFactory;
 public final class LocalizableTest {
 
     private Localizable localizable;
+    private StubContextFactory factory;
 
     @Before
     public void setUp() {
-        new StubContextFactory();
         this.localizable = Localizable.INSTANCE;
-        this.localizable.update(null, Boolean.TRUE);
+        this.factory = new StubContextFactory();
+        this.localizable.setContext(this.factory.getContext());
     }
 
-    @Test
-    public void testUpdate() {
-        this.localizable.update(null, Boolean.TRUE);
-        this.localizable.update(null, Boolean.FALSE);
+    public void testGetMoneydanceGUI() {
+        this.localizable = Localizable.INSTANCE;
+        Helper.INSTANCE.addObserver(new Observer() {
+            @Override
+            public void update(final Observable observable,
+                    final Object updateAll) {
+                LocalizableTest.this.localizable.setContext(LocalizableTest.this.factory.getContext());
+            }
+        });
+        assertThat(this.localizable.getHeaderValueImport(), notNullValue());
     }
 
     @Test
     public void testGetDirectoryChooserTitle() {
-        Assert.assertNotNull("directory chooser title must not be null",
-                this.localizable.getDirectoryChooserTitle());
+        assertThat(this.localizable.getDirectoryChooserTitle(), notNullValue());
     }
 
     @Test
     public void testGetHeaderValueName() {
-        Assert.assertNotNull("header value name must not be null",
-                this.localizable.getHeaderValueName());
+        assertThat(this.localizable.getHeaderValueName(), notNullValue());
     }
 
     @Test
     public void testGetHeaderValueModified() {
-        Assert.assertNotNull("header value modified must not be null",
-                this.localizable.getHeaderValueModified());
+        assertThat(this.localizable.getHeaderValueModified(), notNullValue());
     }
 
     @Test
     public void testGetHeaderValueImport() {
-        Assert.assertNotNull("header value import must not be null",
-                this.localizable.getHeaderValueImport());
+        assertThat(this.localizable.getHeaderValueImport(), notNullValue());
     }
 
     @Test
     public void testGetHeaderValueDelete() {
-        Assert.assertNotNull("header value delete must not be null",
-                this.localizable.getHeaderValueDelete());
+        assertThat(this.localizable.getHeaderValueDelete(), notNullValue());
     }
 
     @Test
     public void testGetLabelImportOneButton() {
-        Assert.assertNotNull("label import one button must not be null",
-                this.localizable.getLabelImportOneButton());
+        assertThat(this.localizable.getLabelImportOneButton(), notNullValue());
     }
 
     @Test
     public void testGetLabelImportAllButton() {
-        Assert.assertNotNull("label import all button must not be null",
-                this.localizable.getLabelImportAllButton());
+        assertThat(this.localizable.getLabelImportAllButton(), notNullValue());
     }
 
     @Test
     public void testGetLabelDeleteOneButton() {
-        Assert.assertNotNull("label delete one button must not be null",
-                this.localizable.getLabelDeleteOneButton());
+        assertThat(this.localizable.getLabelDeleteOneButton(), notNullValue());
     }
 
     @Test
     public void testGetLabelDeleteAllButton() {
-        Assert.assertNotNull("label delete all button must not be null",
-                this.localizable.getLabelDeleteAllButton());
+        assertThat(this.localizable.getLabelDeleteAllButton(), notNullValue());
     }
 
     @Test
     public void testGetConfirmationMessageDeleteOneFile() {
-        Assert.assertNotNull(
-                "confirmation message delete one file must not be null",
-                this.localizable.getConfirmationMessageDeleteOneFile(
-                        "file name"));
+        assertThat(
+                this.localizable.getConfirmationMessageDeleteOneFile("file name"),
+                notNullValue());
     }
 
     @Test
     public void testGetConfirmationMessageDeleteAllFiles() {
-        Assert.assertNotNull(
-                "confirmation message delete all files must not be null",
-                this.localizable.getConfirmationMessageDeleteAllFiles(2));
+        assertThat(this.localizable.getConfirmationMessageDeleteAllFiles(2), notNullValue());
     }
 
     @Test
     public void testGetErrorMessageDeleteFile() {
-        Assert.assertNotNull("error message delete file must not be null",
-                this.localizable.getErrorMessageDeleteFile("file name"));
+        assertThat(this.localizable.getErrorMessageDeleteFile("file name"), notNullValue());
     }
 
     @Test
     public void testGetOptionDeleteFile() {
-        Assert.assertNotNull("option delete file must not be null",
-                this.localizable.getOptionDeleteFile());
+        assertThat(this.localizable.getOptionDeleteFile(), notNullValue());
     }
 
     @Test
     public void testGetOptionCancel() {
-        Assert.assertNotNull("option cancel must not be null",
-                this.localizable.getOptionCancel());
+        assertThat(this.localizable.getOptionCancel(), notNullValue());
     }
 
     @Test
     public void testGetEmptyMessage() {
-        Assert.assertNotNull("empty message must not be null",
-                this.localizable.getEmptyMessage("base directory"));
+        assertThat(this.localizable.getEmptyMessage("base directory"), notNullValue());
     }
 
 }

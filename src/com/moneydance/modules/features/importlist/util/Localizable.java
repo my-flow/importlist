@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,12 +20,15 @@ package com.moneydance.modules.features.importlist.util;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.commons.lang3.text.WordUtils;
+
+import com.moneydance.apps.md.controller.FeatureModuleContext;
+import com.moneydance.apps.md.controller.Main;
+import com.moneydance.apps.md.view.gui.MoneydanceGUI;
 
 /**
  * This i18n class provides language-dependent strings such as labels and
@@ -33,35 +36,45 @@ import org.apache.commons.lang3.text.WordUtils;
  *
  * @author Florian J. Breunig
  */
-public enum Localizable implements Observer {
+public enum Localizable {
 
     INSTANCE;
 
-    private final Preferences     prefs;
-    private final Settings        settings;
-    private       ResourceBundle  resourceBundle;
+    private final Preferences       prefs;
+    private final Settings          settings;
+    private       ResourceBundle    resourceBundle;
+    private       MoneydanceGUI     mdGUI;
 
+    /**
+     * The constructor must be called exactly once before using the only
+     * instance of this class.
+     */
     Localizable() {
-        this.prefs    = Helper.INSTANCE.getPreferences();
-        this.prefs.addObserver(this);
+        this.prefs = Helper.INSTANCE.getPreferences();
         this.settings = Helper.INSTANCE.getSettings();
         this.resourceBundle = ResourceBundle.getBundle(
-                this.settings.getLocalizableResource(),
-                this.prefs.getLocale());
+              this.settings.getLocalizableResource(),
+              this.prefs.getLocale());
     }
 
-    @Override
-    public void update(final Observable observable, final Object updateAll) {
-        if (!Boolean.TRUE.equals(updateAll)) {
-            return;
-        }
+    public void setContext(final FeatureModuleContext context) {
         this.resourceBundle = ResourceBundle.getBundle(
                 this.settings.getLocalizableResource(),
                 this.prefs.getLocale());
+        // Using undocumented feature.
+        Main main = (Main) context;
+        if (main != null) {
+            this.mdGUI = (MoneydanceGUI) main.getUI();
+        }
     }
 
-    private ResourceBundle getResourceBundle() {
-        return this.resourceBundle;
+    private MoneydanceGUI getMoneydanceGUI() {
+        if (this.mdGUI == null) {
+            Helper.INSTANCE.setChanged();
+            Helper.INSTANCE.notifyObservers(Boolean.FALSE);
+            Validate.notNull(this.mdGUI, "Moneydance GUI not initialized");
+        }
+        return this.mdGUI;
     }
 
     /**
@@ -69,16 +82,17 @@ public enum Localizable implements Observer {
      * directory.
      */
     public String getDirectoryChooserTitle() {
-        return this.getResourceBundle().getString("directory_chooser_title");
+        return this.resourceBundle.getString("directory_chooser_title");
     }
 
     /**
      * @return Header of the "name" column.
      */
     public String getHeaderValueName() {
-        final String headerValueName =
-            this.getResourceBundle().getString("header_value_name");
-        return this.settings.getIndentationPrefix() + headerValueName;
+        final String headerValueName = this.getMoneydanceGUI().getStr("name");
+        return String.format("%s%s",
+                this.settings.getIndentationPrefix(),
+                headerValueName);
     }
 
     /**
@@ -86,8 +100,10 @@ public enum Localizable implements Observer {
      */
     public String getHeaderValueModified() {
         final String headerValueModified =
-            this.getResourceBundle().getString("header_value_modified");
-        return this.settings.getIndentationPrefix() + headerValueModified;
+            this.resourceBundle.getString("header_value_modified");
+        return String.format("%s%s",
+                this.settings.getIndentationPrefix(),
+                headerValueModified);
     }
 
     /**
@@ -95,8 +111,10 @@ public enum Localizable implements Observer {
      */
     public String getHeaderValueImport() {
         final String headerValueImport =
-            this.getResourceBundle().getString("header_value_import");
-        return this.settings.getIndentationPrefix() + headerValueImport;
+            this.resourceBundle.getString("header_value_import");
+        return String.format("%s%s",
+                this.settings.getIndentationPrefix(),
+                headerValueImport);
     }
 
     /**
@@ -104,36 +122,38 @@ public enum Localizable implements Observer {
      */
     public String getHeaderValueDelete() {
         final String headerValueDelete =
-            this.getResourceBundle().getString("header_value_delete");
-        return this.settings.getIndentationPrefix() + headerValueDelete;
+            this.resourceBundle.getString("header_value_delete");
+        return String.format("%s%s",
+                this.settings.getIndentationPrefix(),
+                headerValueDelete);
     }
 
     /**
      * @return Label of the "import" button.
      */
     public String getLabelImportOneButton() {
-        return this.getResourceBundle().getString("label_import_one_button");
+        return this.getMoneydanceGUI().getStr("import");
     }
 
     /**
      * @return Label of the "import all" button.
      */
     public String getLabelImportAllButton() {
-        return this.getResourceBundle().getString("label_import_all_button");
+        return this.resourceBundle.getString("label_import_all_button");
     }
 
     /**
      * @return Label of the "delete" button.
      */
     public String getLabelDeleteOneButton() {
-        return this.getResourceBundle().getString("label_delete_one_button");
+        return this.getMoneydanceGUI().getStr("delete");
     }
 
     /**
      * @return Label of the "delete all" button.
      */
     public String getLabelDeleteAllButton() {
-        return this.getResourceBundle().getString("label_delete_all_button");
+        return this.resourceBundle.getString("label_delete_all_button");
     }
 
     /**
@@ -142,10 +162,10 @@ public enum Localizable implements Observer {
      * opened.
      */
     public String getErrorMessageBaseDirectory(final String baseDirectory) {
-        final String templateString = this.getResourceBundle().getString(
+        final String templateString = this.resourceBundle.getString(
         "error_message_base_directory");
 
-        Map<String, String> valuesMap = new HashMap<String, String>();
+        Map<String, String> valuesMap = new HashMap<String, String>(1);
         valuesMap.put("import.dir",  this.getMarkupFilename(baseDirectory));
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
 
@@ -158,10 +178,10 @@ public enum Localizable implements Observer {
      *  deleted.
      */
     public String getConfirmationMessageDeleteOneFile(final String filename) {
-        final String templateString = this.getResourceBundle().getString(
+        final String templateString = this.resourceBundle.getString(
         "confirmation_message_delete_one_file");
 
-        Map<String, String> valuesMap = new HashMap<String, String>();
+        Map<String, String> valuesMap = new HashMap<String, String>(1);
         valuesMap.put("filename",  this.getMarkupFilename(filename));
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
 
@@ -174,10 +194,10 @@ public enum Localizable implements Observer {
      *  deleted.
      */
     public String getConfirmationMessageDeleteAllFiles(final int size) {
-        final String templateString = this.getResourceBundle().getString(
+        final String templateString = this.resourceBundle.getString(
         "confirmation_message_delete_all_files");
 
-        Map<String, String> valuesMap = new HashMap<String, String>();
+        Map<String, String> valuesMap = new HashMap<String, String>(1);
         valuesMap.put("no.files",  String.valueOf(size));
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
 
@@ -189,10 +209,10 @@ public enum Localizable implements Observer {
      * @return Error message to be displayed if a file cannot be deleted.
      */
     public String getErrorMessageDeleteFile(final String filename) {
-        final String templateString = this.getResourceBundle().getString(
+        final String templateString = this.resourceBundle.getString(
         "error_message_delete_file");
 
-        Map<String, String> valuesMap = new HashMap<String, String>();
+        Map<String, String> valuesMap = new HashMap<String, String>(1);
         valuesMap.put("filename",  this.getMarkupFilename(filename));
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
 
@@ -203,14 +223,14 @@ public enum Localizable implements Observer {
      * @return Delete button in confirmation message.
      */
     public String getOptionDeleteFile() {
-        return this.getResourceBundle().getString("option_delete_file");
+        return this.getMoneydanceGUI().getStr("delete");
     }
 
     /**
      * @return Cancel button in confirmation message.
      */
     public String getOptionCancel() {
-        return this.getResourceBundle().getString("option_cancel");
+        return this.getMoneydanceGUI().getStr("cancel");
     }
 
     /**
@@ -219,10 +239,10 @@ public enum Localizable implements Observer {
      * @return Message to display if the list of files is empty.
      */
     public String getEmptyMessage(final String baseDirectory) {
-        final String templateString = this.getResourceBundle().getString(
+        final String templateString = this.resourceBundle.getString(
         "empty_message");
 
-        Map<String, String> valuesMap = new HashMap<String, String>();
+        Map<String, String> valuesMap = new HashMap<String, String>(1);
         valuesMap.put("import.dir", baseDirectory);
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
 

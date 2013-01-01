@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,11 +20,10 @@ package com.moneydance.modules.features.importlist.io;
 
 import java.io.File;
 import java.util.Observable;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.monitor.FileAlterationListener;
 import org.apache.commons.io.monitor.FileAlterationObserver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This <code>FileAlterationListener</code> implementation is notified about
@@ -40,11 +39,11 @@ extends Observable implements FileAlterationListener {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG
-        = LoggerFactory.getLogger(TransactionFileListener.class);
+        = Logger.getLogger(TransactionFileListener.class.getName());
 
     @Override
     public void onStart(final FileAlterationObserver observer) {
-        LOG.debug("Checking the base directory for changes.");
+        LOG.config("Checking the base directory for changes."); //$NON-NLS-1$
         this.clearChanged();
     }
 
@@ -66,7 +65,7 @@ extends Observable implements FileAlterationListener {
     @Override
     public void onStop(final FileAlterationObserver observer) {
         if (this.hasChanged()) {
-            LOG.info("Base directory has changes.");
+            LOG.info("Base directory has changes."); //$NON-NLS-1$
             this.notifyObservers();
         }
     }

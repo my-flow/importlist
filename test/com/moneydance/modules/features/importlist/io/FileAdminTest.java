@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,9 +18,10 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import java.io.File;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
-import junit.framework.Assert;
+import java.io.File;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,9 +37,10 @@ public final class FileAdminTest {
 
     @Before
     public void setUp() {
-        String basedir = new File(".").getAbsolutePath()
-                + File.separator + "test"
-                + File.separator + "testfiles";
+        final String basedir = String.format("%s%s%s%s%s",
+                new File(".").getAbsolutePath(),
+                File.separator, "test",
+                File.separator, "testfiles");
         StubContextFactory factory = new StubContextFactory();
         this.fileAdmin = new FileAdmin(basedir, factory.getContext());
     }
@@ -50,20 +52,18 @@ public final class FileAdminTest {
 
     @Test
     public void testGetFiles() {
-        Assert.assertNotNull("file list must not be null",
-                this.fileAdmin.getFiles());
+        assertThat(this.fileAdmin.getFiles(), notNullValue());
     }
 
     @Test
     public void testReloadFiles() {
         this.fileAdmin.reloadFiles();
-        Assert.assertNotNull("file list must not be null",
-                this.fileAdmin.getFiles());
+        assertThat(this.fileAdmin.getFiles(), notNullValue());
     }
 
     @Test
     public void testGetBaseDirectory() {
-        Assert.assertNotNull(this.fileAdmin.getBaseDirectory());
+        assertThat(this.fileAdmin.getBaseDirectory(), notNullValue());
     }
 
     @Test

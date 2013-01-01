@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@
 
 package com.moneydance.modules.features.importlist.util;
 
-import junit.framework.Assert;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
@@ -29,38 +30,34 @@ public final class HelperTest {
 
     @Test
     public void testGetPreferences() {
-        Assert.assertNotNull("preferences must not be null",
-                Helper.INSTANCE.getPreferences());
+        assertThat(Helper.INSTANCE.getPreferences(), notNullValue());
     }
 
     @Test
     public void testGetSettings() {
-        Assert.assertNotNull("settings must not be null",
-                Helper.INSTANCE.getSettings());
+        assertThat(Helper.INSTANCE.getSettings(), notNullValue());
     }
 
     @Test
     public void testGetLocalizable() {
-        Assert.assertNotNull("localizable must not be null",
-                Helper.INSTANCE.getLocalizable());
+        assertThat(Helper.INSTANCE.getLocalizable(), notNullValue());
     }
 
     @Test
-    public void testLoadLoggerConfiguration() {
-        Helper.INSTANCE.loadLoggerConfiguration();
+    public void testGetTracker() {
+        assertThat(Helper.INSTANCE.getTracker(0), notNullValue());
     }
 
     @Test
     public void testGetInputStreamFromResource() {
-        Assert.assertNotNull("input stream from resource must not be null",
-                Helper.INSTANCE.getInputStreamFromResource(
-                        Helper.INSTANCE.getSettings().getLog4jPropertiesResource()));
+        assertThat(Helper.INSTANCE.getInputStreamFromResource(
+                        Helper.INSTANCE.getSettings().getIconResource()),
+                        notNullValue());
     }
 
     @Test
     public void testGetIconImage() {
-        Assert.assertNotNull("icon image must not be null",
-                Helper.INSTANCE.getIconImage());
+        assertThat(Helper.INSTANCE.getIconImage(), notNullValue());
     }
 
 }

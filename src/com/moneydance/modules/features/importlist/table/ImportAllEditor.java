@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ import com.moneydance.modules.features.importlist.io.FileAdmin;
  */
 final class ImportAllEditor extends AbstractEditor {
 
-    private static final long serialVersionUID = 4751449193678453647L;
+    private static final long serialVersionUID = 1L;
 
     ImportAllEditor(
             final FileAdmin fileAdmin,

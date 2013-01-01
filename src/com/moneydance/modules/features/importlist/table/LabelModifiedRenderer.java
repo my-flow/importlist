@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,6 @@ import org.apache.commons.lang3.Validate;
 
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Settings;
-import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
 import com.moneydance.util.CustomDateFormat;
 
 /**
@@ -37,7 +36,7 @@ import com.moneydance.util.CustomDateFormat;
  */
 final class LabelModifiedRenderer extends DefaultTableCellRenderer {
 
-    private static final long serialVersionUID = 7553393304980261323L;
+    private static final long serialVersionUID = 1L;
     private final transient ColorSchemeHelper colorSchemeHelper;
     private final transient Settings          settings;
     private       transient CustomDateFormat  dateFormatter;
@@ -48,7 +47,7 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
             final CustomDateFormat argDateFormatter,
             final DateFormat argTimeFormatter) {
         Validate.notNull(argColorSchemeHelper,
-                "argColorCchemeHelper must not be null");
+                "color scheme helper must not be null"); //$NON-NLS-1$
         this.colorSchemeHelper = argColorSchemeHelper;
         this.setDateFormatter(argDateFormatter);
         this.setTimeFormatter(argTimeFormatter);
@@ -70,10 +69,10 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
         String label = null;
         if (value instanceof Date) {
             final Date fileDate = (Date) value;
-            label = this.settings.getIndentationPrefix()
-            + this.dateFormatter.format(fileDate)
-            + " "
-            + this.timeFormatter.format(fileDate);
+            label = String.format("%s%s %s",
+                    this.settings.getIndentationPrefix(),
+                    this.dateFormatter.format(fileDate),
+                    this.timeFormatter.format(fileDate));
         }
 
         super.getTableCellRendererComponent(

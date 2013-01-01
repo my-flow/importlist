@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,10 +25,14 @@ import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 /**
- * This class provides the functionality to choose, access and reset the
- * extension's base directory. The base directory is the directory in the file
- * system to be monitored. Choosing/resetting the base directory is reflected in
- * the user's preferences (if there are any).
+ * This abstract class provides the functionality to choose, access, and reset
+ * the extension's base directory. The base directory is the directory in the
+ * file system to be monitored. Choosing/resetting the base directory is
+ * reflected in the user's preferences (if there are any).
+ *
+ * This class is abstract because the runtime environment requires access to
+ * the file system that is specific to the operating system and the runtime
+ * mode (sandboxed vs full access).
  *
  * @author Florian J. Breunig
  */
@@ -38,11 +42,10 @@ abstract class AbstractDirectoryChooser {
     private final Localizable localizable;
 
     /**
-     * @param argBaseDirectory
-     *            set the base directory when executed as a stand- alone
-     *            application
+     * @param argBaseDirectory set the base directory when executed as a
+     * stand-alone application
      */
-    AbstractDirectoryChooser(final String argBaseDirectory) {
+    protected AbstractDirectoryChooser(final String argBaseDirectory) {
         this.prefs = Helper.INSTANCE.getPreferences();
         this.localizable = Helper.INSTANCE.getLocalizable();
         if (argBaseDirectory != null) {

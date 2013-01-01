@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,14 +22,12 @@ import java.awt.Image;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Localizable;
@@ -43,7 +41,7 @@ final class DeleteAllOperation implements FileOperation {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-            LoggerFactory.getLogger(DeleteAllOperation.class);
+            Logger.getLogger(DeleteAllOperation.class.getName());
 
     private final Localizable   localizable;
 
@@ -52,7 +50,7 @@ final class DeleteAllOperation implements FileOperation {
     }
 
     @Override
-    public void showWarningAndPerform(final List<File> files) {
+    public void showWarningAndExecute(final List<File> files) {
         final String message =
                 this.localizable.getConfirmationMessageDeleteAllFiles(
                         files.size());
@@ -78,17 +76,17 @@ final class DeleteAllOperation implements FileOperation {
                 options[1]);
 
         if (choice == 0) {
-            this.perform(files);
+            this.execute(files);
         } else {
             LOG.info("Canceled deleting all files");
         }
     }
 
     @Override
-    public void perform(final List<File> files) {
+    public void execute(final List<File> files) {
         FileOperation deleteOneOperation = new DeleteOneOperation();
         for (final File file : files) {
-            deleteOneOperation.perform(Collections.singletonList(file));
+            deleteOneOperation.execute(Collections.singletonList(file));
         }
     }
 }

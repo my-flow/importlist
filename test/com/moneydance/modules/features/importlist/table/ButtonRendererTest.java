@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,9 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -25,11 +28,8 @@ import java.awt.event.MouseListener;
 import javax.swing.AbstractButton;
 import javax.swing.JTable;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.moneydance.modules.features.importlist.view.OddColorSchemeHelper;
 
 /**
  * @author Florian J. Breunig
@@ -49,15 +49,15 @@ public final class ButtonRendererTest {
 
     @Test
     public void testGetTableCellRendererComponent() {
-        Assert.assertNotNull(
-                "component must not be null",
+        assertThat(
                 this.buttonRenderer.getTableCellRendererComponent(
                         new JTable(),
                         null,
                         false,
                         false,
                         0,
-                        0));
+                        0),
+                notNullValue());
     }
 
     @Test
@@ -69,12 +69,12 @@ public final class ButtonRendererTest {
                 false,
                 1,
                 0);
-        Assert.assertNotNull("component must not be null", button);
+        assertThat(button, notNullValue());
 
         button.setForeground(Color.white);
         button.setBackground(Color.white);
         MouseListener[] mouseListeners = button.getMouseListeners();
-        Assert.assertNotNull("listeners must not be empty", mouseListeners);
+        assertThat(mouseListeners, notNullValue());
         MouseListener mouseListener = mouseListeners[1];
         MouseEvent mouseEvent = new MouseEvent(button, 0, 0, 0, 0, 0, 0, false);
         mouseListener.mousePressed(mouseEvent);

@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -28,11 +28,10 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.view.ColorSchemeHelper;
 
 /**
  * This decorator class sets header-specific attributes to a
@@ -51,7 +50,7 @@ final class HeaderRenderer implements TableCellRenderer {
             final TableCellRenderer argDefaultHeaderTableCellRenderer) {
         Validate.notNull(
                 argColorSchemeHelper,
-                "argColorSchemeHelper must not be null");
+                "argColorSchemeHelper must not be null"); //$NON-NLS-1$
         Validate.notNull(
                 argDefaultHeaderTableCellRenderer,
                 "argDefaultHeaderTableCellRenderer must not be null");

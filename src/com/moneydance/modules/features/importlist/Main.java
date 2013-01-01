@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,9 +21,7 @@ package com.moneydance.modules.features.importlist;
 import java.awt.Image;
 import java.util.Observable;
 import java.util.Observer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.view.HomePageView;
@@ -44,19 +42,19 @@ public final class Main extends FeatureModule implements Observer {
         Helper.INSTANCE.loadLoggerConfiguration();
     }
 
-    /**
+   /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = Logger.getLogger(Main.class.getName());
 
-    private final           Preferences  prefs;
-    private final           Settings     settings;
-    private                 Tracker      tracker;
-    private String          baseDirectory;
-    private ViewController  viewController;
+    private final   Preferences     prefs;
+    private final   Settings        settings;
+    private         Tracker         tracker;
+    private         String          baseDirectory;
+    private         ViewController  viewController;
 
     /**
-     * Standard constructor must be available in the Moneydance context.
+     * Public standard constructor must be available in the Moneydance context.
      */
     public Main() {
         LOG.info("Initializing extension in Moneydance's application context.");
@@ -66,12 +64,12 @@ public final class Main extends FeatureModule implements Observer {
 
     @Override
     public void init() {
-        this.prefs.addObserver(this);
+        Helper.INSTANCE.addObserver(this);
         this.tracker  = Helper.INSTANCE.getTracker(this.getBuild());
 
         if (this.prefs.isFirstRun()) {
             this.prefs.setFirstRun(false);
-            LOG.debug("Install");
+            LOG.config("Install");
             this.tracker.track(Tracker.EventName.INSTALL);
         }
 
@@ -81,11 +79,11 @@ public final class Main extends FeatureModule implements Observer {
                 this.tracker);
 
         // register this module's homepage view
-        LOG.debug("Registering homepage view");
+        LOG.config("Registering homepage view");
         this.getContext().registerHomePageView(this, this.viewController);
 
         // register this module to be invoked via the application toolbar
-        LOG.debug("Registering toolbar feature");
+        LOG.config("Registering toolbar feature");
         this.getContext().registerFeature(
                 this,
                 this.settings.getChooseBaseDirSuffix(),
@@ -113,12 +111,12 @@ public final class Main extends FeatureModule implements Observer {
     @Override
     public void update(final Observable observable, final Object updateAll) {
         LOG.info("Reloading context from underlying framework.");
-        this.prefs.setContext(this.getContext());
+        Helper.INSTANCE.setContext(this.getContext());
     }
 
     @Override
     public void unload() {
-        LOG.info("Unloading extension.");
+        LOG.info("Unloading extension."); //$NON-NLS-1$
         this.tracker.track(Tracker.EventName.UNINSTALL);
         this.viewController.setActive(false);
         this.cleanup();

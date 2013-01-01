@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,6 +21,8 @@ package com.moneydance.modules.features.importlist.io;
 import java.awt.Image;
 import java.io.File;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -28,8 +30,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Localizable;
@@ -43,7 +43,7 @@ final class DeleteOneOperation implements FileOperation {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-            LoggerFactory.getLogger(DeleteOneOperation.class);
+            Logger.getLogger(DeleteOneOperation.class.getName());
 
     private final Localizable localizable;
 
@@ -52,7 +52,7 @@ final class DeleteOneOperation implements FileOperation {
     }
 
     @Override
-    public void showWarningAndPerform(final List<File> files) {
+    public void showWarningAndExecute(final List<File> files) {
         final File file = files.iterator().next();
         final String message =
                 this.localizable.getConfirmationMessageDeleteOneFile(
@@ -79,21 +79,23 @@ final class DeleteOneOperation implements FileOperation {
                 options[1]);
 
         if (choice == 0) {
-            this.perform(files);
+            this.execute(files);
         } else {
-            LOG.info("Canceled deleting file " + file.getAbsoluteFile());
+            LOG.info(String.format(
+                    "Canceled deleting file %s",
+                    file.getAbsoluteFile()));
         }
     }
 
     @Override
-    public void perform(final List<File> files) {
+    public void execute(final List<File> files) {
         final File file = files.iterator().next();
         // ESCA-JAVA0166: IOException, SecurityException
         try {
-            LOG.info("Deleting file " + file.getAbsoluteFile());
+            LOG.info(String.format("Deleting file %s", file.getAbsoluteFile()));
             FileUtils.forceDelete(file);
-        } catch (Exception e) {
-            LOG.warn(e.getMessage(), e);
+        } catch (Exception e) { // $codepro.audit.disable caughtExceptions
+            LOG.log(Level.WARNING, e.getMessage(), e);
             final String errorMessage =
                     this.localizable.getErrorMessageDeleteFile(file.getName());
             final Object errorLabel = new JLabel(errorMessage);

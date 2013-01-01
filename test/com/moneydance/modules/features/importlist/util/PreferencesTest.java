@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,14 +18,16 @@
 
 package com.moneydance.modules.features.importlist.util;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import java.util.Hashtable;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
-
-import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,36 +40,29 @@ import com.moneydance.apps.md.controller.StubContextFactory;
 public final class PreferencesTest {
 
     private Preferences prefs;
+    private StubContextFactory factory;
 
     @Before
     public void setUp() {
         this.prefs = new Preferences();
-        StubContextFactory factory = new StubContextFactory();
-        this.prefs.setContext(factory.getContext());
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void testGetUserPreferences() {
-        this.prefs = new Preferences();
-        this.prefs.addObserver(new PreferencesObserver());
-        this.prefs.getLocale();
-
-        this.prefs = new Preferences();
-        this.prefs.getLocale();
-    }
-
-    private final class PreferencesObserver implements Observer {
-        @Override
-        public void update(final Observable observable,
-                final Object updateAll) {
-            StubContextFactory factory = new StubContextFactory();
-            PreferencesTest.this.prefs.setContext(factory.getContext());
-        }
+        this.factory = new StubContextFactory();
+        this.prefs.setContext(this.factory.getContext());
     }
 
     @Test
-    public void testReload() {
-        this.prefs.reload();
+    public void testGetUserPreferences() {
+        this.prefs = new Preferences();
+        Helper.INSTANCE.addObserver(new Observer() {
+            @Override
+            public void update(final Observable observable,
+                    final Object updateAll) {
+                PreferencesTest.this.prefs.setContext(PreferencesTest.this.factory.getContext());
+            }
+        });
+        this.prefs.getLocale();
+
+        this.prefs = new Preferences();
+        this.prefs.getLocale();
     }
 
     @Test
@@ -76,21 +71,30 @@ public final class PreferencesTest {
     }
 
     @Test
+    public void testSetFirstRun() {
+        final boolean firstRun = false;
+        this.prefs.setFirstRun(firstRun);
+        assertThat(this.prefs.isFirstRun(), is(firstRun));
+    }
+
+    @Test
+    public void testIsFirstRun() {
+        this.prefs.isFirstRun();
+    }
+
+    @Test
     public void testGetFullVersion() {
-        Assert.assertNotNull("full version must not be null",
-                this.prefs.getFullVersion());
+        assertThat(this.prefs.getFullVersion(), notNullValue());
     }
 
     @Test
     public void testGetMajorVersion() {
-        Assert.assertTrue("major version must be greater than zero",
-                this.prefs.getMajorVersion() > 0);
+        assertThat(this.prefs.getMajorVersion() > 0, is(true));
     }
 
     @Test
     public void testGetLocale() {
-        Assert.assertNotNull("locale must not be null",
-                this.prefs.getLocale());
+        assertThat(this.prefs.getLocale(), notNullValue());
     }
 
     @Test
@@ -102,19 +106,17 @@ public final class PreferencesTest {
     public void testSetBaseDirectory() {
         String userHome = System.getProperty("user.home");
         this.prefs.setBaseDirectory(userHome);
-        Assert.assertEquals("base directory must be equal to set value",
-                userHome, this.prefs.getBaseDirectory());
+        assertThat(this.prefs.getBaseDirectory(), is(userHome));
     }
 
     @Test
-    public void testUseProxy() {
-        this.prefs.useProxy();
+    public void testHasProxy() {
+        this.prefs.hasProxy();
     }
 
     @Test
     public void testGetProxyHost() {
-        Assert.assertNotNull("proxy host must not be null",
-                this.prefs.getProxyHost());
+        assertThat(this.prefs.getProxyHost(), notNullValue());
     }
 
     @Test
@@ -123,49 +125,42 @@ public final class PreferencesTest {
     }
 
     @Test
-    public void testNeedProxyAuthentication() {
-        this.prefs.needProxyAuthentication();
+    public void testHasProxyAuthentication() {
+        this.prefs.hasProxyAuthentication();
     }
 
     @Test
     public void testGetProxyUsername() {
-        Assert.assertNotNull("proxy username host must not be null",
-                this.prefs.getProxyUsername());
+        assertThat(this.prefs.getProxyUsername(), notNullValue());
     }
 
     @Test
     public void testGetProxyPassword() {
-        Assert.assertNotNull("proxy password host must not be null",
-                this.prefs.getProxyPassword());
+        assertThat(this.prefs.getProxyPassword(), notNullValue());
     }
 
     @Test
     public void testSetColumnWidths() {
         int columnWidth = 1;
         this.prefs.setColumnWidths(0,  columnWidth);
-        Assert.assertEquals("column width must be equal to set value",
-                columnWidth,
-                this.prefs.getColumnWidths(0));
+        assertThat(this.prefs.getColumnWidths(0), is(columnWidth));
     }
 
     @Test
     public void testGetColumnWidths() {
-        Assert.assertTrue("column width must be greater than zero",
-                this.prefs.getColumnWidths(0) > 0);
+        assertThat(this.prefs.getColumnWidths(0) > 0, is(true));
     }
 
     @Test
     public void testSetColumnNames() {
         this.prefs.setColumnNames(null);
-        this.prefs.setColumnNames(new Hashtable<String, String>());
+        this.prefs.setColumnNames(new Hashtable<String, String>(0));
     }
 
     @Test
     public void testGetColumnName() {
-        Assert.assertNotNull("column name must not be null",
-                this.prefs.getColumnName(0));
-        Assert.assertNotNull("column name must not be null",
-                this.prefs.getColumnName(1));
+        assertThat(this.prefs.getColumnName(0), notNullValue());
+        assertThat(this.prefs.getColumnName(1), notNullValue());
     }
 
     @Test
@@ -173,100 +168,83 @@ public final class PreferencesTest {
         RowSorter.SortKey sortKey =
                 new RowSorter.SortKey(0, SortOrder.ASCENDING);
         this.prefs.setSortKey(sortKey);
-        Assert.assertEquals("sortkey must be equal to set value",
-                sortKey, this.prefs.getSortKey());
+        assertThat(this.prefs.getSortKey(), is(sortKey));
     }
 
     @Test
     public void testGetSortKey() {
-        Assert.assertNotNull("sort key must not be null",
-                this.prefs.getSortKey());
+        assertThat(this.prefs.getSortKey(), notNullValue());
     }
 
     @Test
     public void testGetColumnCount() {
-        Assert.assertTrue("column count must be greater than zero",
-                this.prefs.getColumnCount() > 0);
-        Assert.assertTrue("column count must be greater than zero",
-                this.prefs.getColumnCount() > 0);
+        assertThat(this.prefs.getColumnCount() > 0, is(true));
+        assertThat(this.prefs.getColumnCount() > 0, is(true));
     }
 
     @Test
     public void testGetDateFormatter() {
-        Assert.assertNotNull("date formatter must not be null",
-                this.prefs.getDateFormatter());
+        assertThat(this.prefs.getDateFormatter(), notNullValue());
     }
 
     @Test
     public void testGetTimeFormatter() {
-        Assert.assertNotNull("time formatter must not be null",
-                this.prefs.getTimeFormatter());
+        assertThat(this.prefs.getTimeFormatter(), notNullValue());
     }
 
     @Test
     public void testGetPreferredTableWidth() {
-        Assert.assertTrue("preferred table width must be greater than zero",
-                this.prefs.getPreferredTableWidth() > 0);
+        assertThat(this.prefs.getPreferredTableWidth() > 0, is(true));
     }
 
     @Test
     public void testGetPreferredTableHeight() {
-        Assert.assertTrue("preferred table height must be greater than zero",
-                this.prefs.getPreferredTableHeight(0) > 0);
+        assertThat(this.prefs.getPreferredTableHeight(0) > 0, is(true));
     }
 
     @Test
     public void testGetMaximumTableWidth() {
-        Assert.assertTrue("maximum table width must be greater than zero",
-                this.prefs.getMaximumTableWidth() > 0);
+        assertThat(this.prefs.getMaximumTableWidth() > 0, is(true));
     }
 
     @Test
     public void testGetMaximumTableHeight() {
-        Assert.assertTrue("maximum table height must be greater than zero",
-                this.prefs.getMaximumTableHeight() > 0);
+        assertThat(this.prefs.getMaximumTableHeight() > 0, is(true));
     }
 
     @Test
     public void testGetForeground() {
-        Assert.assertNotNull("foreground color must not be null",
-                this.prefs.getForeground());
+        assertThat(this.prefs.getForeground(), notNullValue());
     }
 
     @Test
     public void testGetBackground() {
-        Assert.assertNotNull("background color must not be null",
-                this.prefs.getBackground());
+        assertThat(this.prefs.getBackground(), notNullValue());
     }
 
     @Test
     public void testGetBackgroundAlt() {
-        Assert.assertNotNull("alternative background color must not be null",
-                this.prefs.getBackgroundAlt());
+        assertThat(this.prefs.getBackgroundAlt(), notNullValue());
     }
 
     @Test
     public void testGetHeaderFont() {
-        Assert.assertNotNull("header font must not be null",
-                this.prefs.getHeaderFont());
+        assertThat(this.prefs.getHeaderFont(), notNullValue());
     }
 
     @Test
     public void testGetBodyFont() {
-        Assert.assertNotNull("body font must not be null",
-                this.prefs.getBodyFont());
+        assertThat(this.prefs.getBodyFont(), notNullValue());
     }
 
     @Test
     public void testGetHeaderRowHeight() {
-        Assert.assertTrue("header row height must be greater than zero",
-                this.prefs.getHeaderRowHeight() > 0);
+        assertThat(this.prefs.getHeaderRowHeight() > 0, is(true));
     }
 
     @Test
     public void testGetBodyRowHeight() {
-        Assert.assertTrue("body row height must be greater than zero",
-                this.prefs.getBodyRowHeight() > 0);
+        assertThat(this.prefs.getBodyRowHeight() > 0, is(true));
     }
 
 }

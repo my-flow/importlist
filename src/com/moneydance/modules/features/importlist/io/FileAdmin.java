@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -38,8 +40,6 @@ import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.commons.lang3.SystemUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.modules.features.importlist.util.Helper;
@@ -56,7 +56,8 @@ public final class FileAdmin extends Observable implements Observer {
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG = LoggerFactory.getLogger(FileAdmin.class);
+    private static final Logger LOG =
+            Logger.getLogger(FileAdmin.class.getName());
 
     private final Localizable               localizable;
     private final FeatureModuleContext      context;
@@ -119,9 +120,10 @@ public final class FileAdmin extends Observable implements Observer {
             return;
         }
 
-        if (!this.directoryValidator.checkValidDirectory(baseDirectory)) {
-            LOG.warn("Could not open directory "
-                    + baseDirectory.getAbsolutePath());
+        if (!this.directoryValidator.isValidDirectory(baseDirectory)) {
+            LOG.warning(String.format(
+                    "Could not open directory %s",
+                    baseDirectory.getAbsolutePath()));
             final String errorMessage
                     = this.localizable.getErrorMessageBaseDirectory(
                             baseDirectory.getName());
@@ -140,16 +142,18 @@ public final class FileAdmin extends Observable implements Observer {
         return Collections.unmodifiableList(this.files);
     }
 
-    public synchronized void reloadFiles() {
-        this.files.clear();
-        try {
-            final Collection<File> collection = FileUtils.listFiles(
-                    this.getBaseDirectory(),
-                    this.readableFileFilter,
-                    null); // ignore subdirectories
-            this.files.addAll(collection);
-        } catch (IllegalArgumentException e) {
-            LOG.warn(e.getMessage(), e);
+    public void reloadFiles() {
+        synchronized (FileAdmin.class) {
+            this.files.clear();
+            try {
+                final Collection<File> collection = FileUtils.listFiles(
+                        this.getBaseDirectory(),
+                        this.readableFileFilter,
+                        null); // ignore subdirectories
+                this.files.addAll(collection);
+            } catch (IllegalArgumentException e) {
+                LOG.log(Level.WARNING, e.getMessage(), e);
+            }
         }
     }
 
@@ -173,14 +177,14 @@ public final class FileAdmin extends Observable implements Observer {
         if (this.getBaseDirectory() == null) {
             return;
         }
-        LOG.debug("Starting the directory monitor.");
+        LOG.config("Starting the directory monitor.");
         this.setFileMonitorToCurrentImportDir();
         // ESCA-JAVA0166:
         try {
             this.monitor.start();
             this.isMonitorRunning = true;
-        } catch (Exception e) {
-            LOG.warn(e.getMessage(), e);
+        } catch (Exception e) { // $codepro.audit.disable caughtExceptions
+            LOG.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -191,13 +195,13 @@ public final class FileAdmin extends Observable implements Observer {
         if (!this.isMonitorRunning) {
             return;
         }
-        LOG.debug("Stopping the directory monitor.");
+        LOG.config("Stopping the directory monitor.");
         // ESCA-JAVA0166:
         try {
             this.monitor.stop(0);
             this.isMonitorRunning = false;
-        } catch (Exception e) {
-            LOG.warn(e.getMessage(), e);
+        } catch (Exception e) { // $codepro.audit.disable caughtExceptions
+            LOG.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -206,7 +210,7 @@ public final class FileAdmin extends Observable implements Observer {
                 this.context,
                 this.transactionFileFilter,
                 this.textFileFilter);
-        importAllOperation.showWarningAndPerform(this.files);
+        importAllOperation.showWarningAndExecute(this.files);
         this.setChanged();
         this.notifyObservers();
     }
@@ -219,7 +223,7 @@ public final class FileAdmin extends Observable implements Observer {
                 this.context,
                 this.transactionFileFilter,
                 this.textFileFilter);
-        importOneOperation.showWarningAndPerform(
+        importOneOperation.showWarningAndExecute(
                 Collections.singletonList(this.files.get(rowNumber)));
         this.setChanged();
         this.notifyObservers();
@@ -230,7 +234,7 @@ public final class FileAdmin extends Observable implements Observer {
             return;
         }
         FileOperation deleteAllOperation = new DeleteAllOperation();
-        deleteAllOperation.showWarningAndPerform(this.files);
+        deleteAllOperation.showWarningAndExecute(this.files);
         this.setChanged();
         this.notifyObservers();
     }
@@ -240,7 +244,7 @@ public final class FileAdmin extends Observable implements Observer {
             return;
         }
         FileOperation deleteOneOperation = new DeleteOneOperation();
-        deleteOneOperation.showWarningAndPerform(
+        deleteOneOperation.showWarningAndExecute(
                 Collections.singletonList(this.files.get(rowNumber)));
         this.setChanged();
         this.notifyObservers();

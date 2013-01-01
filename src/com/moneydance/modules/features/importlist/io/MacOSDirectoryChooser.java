@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,13 +21,16 @@ package com.moneydance.modules.features.importlist.io;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
+ * An implementation strategy specific to Mac OS that presents a file dialog
+ * in a sandboxed runtime environment.
+ *
  * @author Florian J. Breunig
  */
 final class MacOSDirectoryChooser extends AbstractDirectoryChooser {
@@ -36,7 +39,7 @@ final class MacOSDirectoryChooser extends AbstractDirectoryChooser {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-            LoggerFactory.getLogger(MacOSDirectoryChooser.class);
+            Logger.getLogger(MacOSDirectoryChooser.class.getName());
 
     /**
      * @param argBaseDirectory set the base directory when executed as a stand-
@@ -60,7 +63,7 @@ final class MacOSDirectoryChooser extends AbstractDirectoryChooser {
             fileDialog.setDirectory(
                     FileUtils.getUserDirectory().getAbsolutePath());
         } catch (SecurityException e) {
-            LOG.warn(e.getMessage(), e);
+            LOG.log(Level.WARNING, e.getMessage(), e);
         }
 
         if (this.getBaseDirectory() != null) {
@@ -81,6 +84,8 @@ final class MacOSDirectoryChooser extends AbstractDirectoryChooser {
                 fileDialog.getDirectory(),
                 fileDialog.getFile()).getAbsolutePath());
 
-        LOG.info("Base directory is " + this.getPrefs().getBaseDirectory());
+        LOG.info(String.format(
+                "Base directory is %s",
+                this.getPrefs().getBaseDirectory()));
     }
 }

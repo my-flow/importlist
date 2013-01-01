@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,15 +23,15 @@ import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.SocketAddress;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 import com.dmurph.tracking.AnalyticsConfigData;
 import com.dmurph.tracking.JGoogleAnalyticsTracker;
 import com.dmurph.tracking.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
 
 /**
+ * A facade for dispatching Google Analytics tracking information.
+ *
  * @author Florian J. Breunig
  */
 public final class Tracker {
@@ -41,15 +41,19 @@ public final class Tracker {
     private final String build;
 
     private final JGoogleAnalyticsTracker analyticsTracker;
-    private static final Logger LOG = LoggerFactory.getLogger(Tracker.class);
+    private static final Logger LOG = Logger.getLogger(Tracker.class.getName());
 
     Tracker(final int argBuild) {
+        Settings settings = Helper.INSTANCE.getSettings();
+
         this.prefs          = Helper.INSTANCE.getPreferences();
-        this.fullVersion    = "Moneydance " + this.prefs.getFullVersion();
-        this.build          = "Import List v" + String.valueOf(argBuild);
+        this.fullVersion    = String.format("Moneydance %s",
+                this.prefs.getFullVersion());
+        this.build          = String.format("%s v%d",
+                settings.getExtensionName(),
+                argBuild);
 
         JGoogleAnalyticsTracker.setProxy(this.getProxy());
-        Settings settings = Helper.INSTANCE.getSettings();
         AnalyticsConfigData config = new AnalyticsConfigData(
                 settings.getTrackingCode());
         this.analyticsTracker = new JGoogleAnalyticsTracker(
@@ -58,7 +62,7 @@ public final class Tracker {
     }
 
     public void track(final EventName eventName) {
-        LOG.debug("trackEvent");
+        LOG.config("trackEvent");
         this.analyticsTracker.trackEvent(
                 this.fullVersion,
                 eventName.toString(),
@@ -66,7 +70,7 @@ public final class Tracker {
     }
 
     private Proxy getProxy() {
-        if (!this.prefs.useProxy()) {
+        if (!this.prefs.hasProxy()) {
             return Proxy.NO_PROXY;
         }
 
@@ -74,7 +78,7 @@ public final class Tracker {
                 this.prefs.getProxyHost(),
                 this.prefs.getProxyPort());
 
-        boolean authProxy = this.prefs.needProxyAuthentication();
+        boolean authProxy = this.prefs.hasProxyAuthentication();
 
         Proxy.Type proxyType = Proxy.Type.HTTP;
 
@@ -93,6 +97,8 @@ public final class Tracker {
     }
 
     /**
+     * An application-specific event that can be tracked.
+     *
      * @author Florian J. Breunig
      */
     public enum EventName {

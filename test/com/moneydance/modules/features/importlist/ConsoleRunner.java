@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,15 +18,15 @@
 
 package com.moneydance.modules.features.importlist;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.util.UiUtil;
 
 
 /**
@@ -46,7 +46,7 @@ final class ConsoleRunner {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-            LoggerFactory.getLogger(ConsoleRunner.class);
+            Logger.getLogger(ConsoleRunner.class.getName());
 
     /**
      * Restrictive constructor.
@@ -66,7 +66,7 @@ final class ConsoleRunner {
 
         for (String arg : args) {
             if ("-d".equals(arg)) {
-                LOG.warn("debugging...");
+                LOG.warning("debugging...");
                 com.moneydance.apps.md.controller.Main.DEBUG = true;
                 continue;
             }
@@ -75,13 +75,13 @@ final class ConsoleRunner {
                         "-basedirectory=".length());
                 continue;
             }
-            LOG.warn("ignoring argument: " + arg);
+            LOG.warning(String.format("ignoring argument: %s", arg));
         }
 
         // Schedule a job for the event-dispatching thread:
         // creating and showing this application's GUI.
         final String argBaseDirectory = baseDirectory;
-        SwingUtilities.invokeLater(new Runnable() {
+        UiUtil.runOnUIThread(new Runnable() {
             @Override
             public void run() {
                 createAndShowGUI(argBaseDirectory);
@@ -102,15 +102,19 @@ final class ConsoleRunner {
         factory.init();
         main.init();
 
-        final JFrame frame = new JFrame(main.getDisplayName());
-        final JComponent guiView = main.getHomePageView().getGUIView(null);
-        frame.setContentPane(guiView);
-        frame.setMinimumSize(guiView.getMinimumSize());
-        frame.setPreferredSize(guiView.getPreferredSize());
-        frame.setMaximumSize(guiView.getMaximumSize());
-        frame.setSize(frame.getPreferredSize());
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        try {
+            final JFrame frame = new JFrame(main.getDisplayName());
+            final JComponent guiView = main.getHomePageView().getGUIView(null);
+            frame.setContentPane(guiView);
+            frame.setMinimumSize(guiView.getMinimumSize());
+            frame.setPreferredSize(guiView.getPreferredSize());
+            frame.setMaximumSize(guiView.getMaximumSize());
+            frame.setSize(frame.getPreferredSize());
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        } catch (Exception e) {
+            LOG.log(Level.WARNING, e.getMessage(), e);
+        }
     }
 }

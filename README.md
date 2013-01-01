@@ -5,7 +5,7 @@ Import List is an open-source extension for [Moneydance®]
 (http://www.moneydance.com) monitoring a given directory for transaction files 
 to import. For more information on where to download and how to install the 
 extension please visit the [project page]
-(http://my-flow.github.com/importlist/).
+(http://my-flow.github.io/importlist/).
 
 Build Prerequisites
 -------------------
@@ -31,13 +31,13 @@ After the build process has succeeded, the resulting extension file
 
 Documentation
 -------------
-* [Import List API](http://my-flow.github.com/importlist/docs/api/)
+* [Import List API](http://my-flow.github.io/importlist/docs/api/)
 * [CheckStyle Audit]
-(http://my-flow.github.com/importlist/docs/checkstyle-report/)
+(http://my-flow.github.io/importlist/docs/checkstyle-report/)
 * [JMockit Coverage Report]
-(http://my-flow.github.com/importlist/docs/coverage-report/)
+(http://my-flow.github.io/importlist/docs/coverage-report/)
 * [PMD report]
-(http://my-flow.github.com/importlist/docs/pmd-report/pmd-report.html)
+(http://my-flow.github.io/importlist/docs/pmd-report/pmd-report.html)
 
 License
 -------

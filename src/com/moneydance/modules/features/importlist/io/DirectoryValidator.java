@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,15 +19,15 @@
 package com.moneydance.modules.features.importlist.io;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.filefilter.CanReadFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * @author Florian J. Breunig, Florian.Breunig@my-flow.com
+ * @author Florian J. Breunig
  */
 enum DirectoryValidator implements IOFileFilter {
 
@@ -40,9 +40,9 @@ enum DirectoryValidator implements IOFileFilter {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-            LoggerFactory.getLogger(DirectoryValidator.class);
+            Logger.getLogger(DirectoryValidator.class.getName());
 
-    boolean checkValidDirectory(final File file) {
+    boolean isValidDirectory(final File file) {
         if (file == null) {
             return false;
         }
@@ -57,7 +57,7 @@ enum DirectoryValidator implements IOFileFilter {
                     CanReadFileFilter.CAN_READ,
                     FileFilterUtils.directoryFileFilter()).accept(file);
         } catch (SecurityException e) {
-            LOG.warn(e.getMessage(), e);
+            LOG.log(Level.WARNING, e.getMessage(), e);
             return false;
         }
     }

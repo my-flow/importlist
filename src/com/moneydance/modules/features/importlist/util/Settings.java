@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,18 +19,18 @@
 package com.moneydance.modules.features.importlist.util;
 
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.configuration.AbstractFileConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * This configuration class accesses all values that are read
- * from a settings file in plain text. The settings file cannot be
- * modified at runtime, so all <code>Settings</code> objects are immutable.
+ * This configuration enum accesses all values that are read from a settings
+ * file in plain text. The settings file is read-only, so the
+ * <code>Settings</code> enum is immutable.
  *
  * @author Florian J. Breunig
  */
@@ -42,7 +42,7 @@ public enum Settings {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-            LoggerFactory.getLogger(Settings.class);
+            Logger.getLogger(Settings.class.getName());
 
     private static final Configuration CONFIG;
 
@@ -63,9 +63,9 @@ public enum Settings {
                             PROPERTIES_RESOURCE);
             abstractFileConfiguration.load(inputStream);
         } catch (IllegalArgumentException e) {
-            LOG.warn(e.getMessage(), e);
+            LOG.log(Level.WARNING, e.getMessage(), e);
         } catch (ConfigurationException e) {
-            LOG.warn(e.getMessage(), e);
+            LOG.log(Level.WARNING, e.getMessage(), e);
         }
         CONFIG = abstractFileConfiguration;
     }
@@ -92,10 +92,10 @@ public enum Settings {
     }
 
     /**
-     * @return The resource that contains the configuration of log4j.
+     * @return The resource that contains the configuration of the logger.
      */
-    public String getLog4jPropertiesResource() {
-        return CONFIG.getString("log4j_properties_resource");
+    public String getLoggingPropertiesResource() {
+        return CONFIG.getString("logging_properties_resource");
     }
 
     /**
@@ -174,35 +174,35 @@ public enum Settings {
      * @return Unique descriptor of the "modified" column.
      */
     public String getDescModified() {
-        return CONFIG.getString("desc_modified");
+        return CONFIG.getString("desc_modified"); //$NON-NLS-1$
     }
 
     /**
      * @return Unique descriptor of the "import" column.
      */
     public String getDescImport() {
-        return CONFIG.getString("desc_import");
+        return CONFIG.getString("desc_import"); //$NON-NLS-1$
     }
 
     /**
      * @return Unique descriptor of the "delete" column.
      */
     public String getDescDelete() {
-        return CONFIG.getString("desc_delete");
+        return CONFIG.getString("desc_delete"); //$NON-NLS-1$
     }
 
     /**
      * @return Indentation prefix for table header and values.
      */
     public String getIndentationPrefix() {
-        return CONFIG.getString("indentation_prefix");
+        return CONFIG.getString("indentation_prefix"); //$NON-NLS-1$
     }
 
     /**
      * @return Determines if the button columns can have different widths.
      */
     public boolean isButtonResizable() {
-        return CONFIG.getBoolean("button_resizable");
+        return CONFIG.getBoolean("button_resizable"); //$NON-NLS-1$
     }
 
     /**

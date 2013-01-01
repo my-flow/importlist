@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,10 +18,14 @@
 
 package com.moneydance.apps.md.controller;
 
-import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
+import org.apache.commons.lang3.Validate;
+
+import com.moneydance.apps.md.model.Account;
+import com.moneydance.apps.md.model.CurrencyTable;
+import com.moneydance.apps.md.model.CurrencyType;
+import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.util.StreamTable;
 
@@ -34,20 +38,50 @@ public final class StubContextFactory {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-            LoggerFactory.getLogger(StubContextFactory.class);
+            Logger.getLogger(StubContextFactory.class.getName());
 
+    private final FeatureModule featureModule;
     private final StubContext   context;
-    private       FeatureModule featureModule = null;
 
     public StubContextFactory() {
-        this.context       = new StubContext(this.featureModule);
-        Helper.INSTANCE.getPreferences().setContext(this.getContext());
+        this.featureModule = null;
+        this.context = new StubContext(this.featureModule);
+        this.initContext();
     }
 
     public StubContextFactory(final FeatureModule argFeatureModule) {
         Validate.notNull(argFeatureModule, "featureModule must not be null");
         this.featureModule  = argFeatureModule;
-        this.context        = new StubContext(this.featureModule);
+        this.context = new StubContext(this.featureModule);
+        this.initContext();
+    }
+
+    private void initContext() {
+        CurrencyType currencyType = new CurrencyType(
+                -1,
+                "USD",
+                "Test Currency",
+                1.0D,
+                0,
+                "$",
+                "",
+                "USD",
+                CurrencyType.CURRTYPE_CURRENCY,
+                0,
+                null);
+
+        RootAccount rootAccount = new RootAccount(currencyType, new CurrencyTable());
+        try {
+            rootAccount.addSubAccount(Account.makeAccount(
+                    Account.ACCOUNT_TYPE_BANK,
+                    "stub account",
+                    currencyType,
+                    rootAccount));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.context.setRootAccount(rootAccount);
+        Helper.INSTANCE.setContext(this.context);
     }
 
     public void init() {

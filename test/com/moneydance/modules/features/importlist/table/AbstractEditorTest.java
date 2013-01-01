@@ -1,5 +1,5 @@
 /*
- * Import List - http://my-flow.github.com/importlist/
+ * Import List - http://my-flow.github.io/importlist/
  * Copyright (C) 2011-2013 Florian J. Breunig
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,10 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,14 +31,11 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
-import com.moneydance.modules.features.importlist.view.OddColorSchemeHelper;
 
 /**
  * @author Florian J. Breunig
@@ -63,29 +64,28 @@ public final class AbstractEditorTest {
 
     @Test
     public void testGetCellEditorValue() {
-        Assert.assertNull("cell editor value must be null",
-                this.nullStubEditor.getCellEditorValue());
+        assertThat(this.nullStubEditor.getCellEditorValue(), nullValue());
     }
 
     @Test
-    public void testGetTableCellEditorComponentJTableObjectBooleanIntInt() {
-        Assert.assertNotNull(
-                "component must not be null",
+    public void testGetTableCellEditorComponent() {
+        assertThat(
                 this.nullStubEditor.getTableCellEditorComponent(
                         new JTable(),
                         "",
                         false,
                         0,
-                        0));
+                        0),
+                notNullValue());
 
-        Assert.assertNotNull(
-                "component must not be null",
+        assertThat(
                 this.fullStubEditor.getTableCellEditorComponent(
                         new JTable(),
                         null,
                         true,
                         1,
-                        1));
+                        1),
+                notNullValue());
     }
 
     @Test
@@ -96,15 +96,18 @@ public final class AbstractEditorTest {
 
         this.fullStubEditor.registerKeyboardShortcut(label);
         final Object key = label.getActionMap().allKeys()[0];
-        Assert.assertNotNull("key in action map must not be null", key);
+        assertThat(key, notNullValue());
 
         final Action action = label.getActionMap().get(key);
-        Assert.assertNotNull("action value must not be null", action);
+        assertThat(action, notNullValue());
 
         action.actionPerformed(null);
     }
 
-    private static class NullStubEditor extends AbstractEditor {
+    /**
+     * @author Florian J. Breunig
+     */
+    private static final class NullStubEditor extends AbstractEditor {
 
         private static final long serialVersionUID = 5291937749895264108L;
 
@@ -126,7 +129,10 @@ public final class AbstractEditorTest {
     }
 
 
-    private static class FullStubEditor extends AbstractEditor {
+    /**
+     * @author Florian J. Breunig
+     */
+    private static final class FullStubEditor extends AbstractEditor {
 
         private static final long serialVersionUID = 5291937749895264108L;
 
@@ -146,7 +152,11 @@ public final class AbstractEditorTest {
             return new StubActionListener();
         }
 
-        private static class StubActionListener implements ActionListener {
+        /**
+         * @author Florian J. Breunig
+         */
+        private static final class StubActionListener
+        implements ActionListener {
 
             @Override
             public void actionPerformed(final ActionEvent actionEvent) {

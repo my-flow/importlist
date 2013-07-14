@@ -1,26 +1,24 @@
-/*
- * Import List - http://my-flow.github.io/importlist/
- * Copyright (C) 2011-2013 Florian J. Breunig
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+// Import List - http://my-flow.github.io/importlist/
+// Copyright (C) 2011-2013 Florian J. Breunig
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 package com.moneydance.modules.features.importlist.util;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.StrSubstitutor;
@@ -165,7 +163,8 @@ public enum Localizable {
         final String templateString = this.resourceBundle.getString(
         "error_message_base_directory");
 
-        Map<String, String> valuesMap = new HashMap<String, String>(1);
+        Map<String, String> valuesMap =
+                new ConcurrentHashMap<String, String>(1);
         valuesMap.put("import.dir",  this.getMarkupFilename(baseDirectory));
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
 
@@ -181,7 +180,8 @@ public enum Localizable {
         final String templateString = this.resourceBundle.getString(
         "confirmation_message_delete_one_file");
 
-        Map<String, String> valuesMap = new HashMap<String, String>(1);
+        Map<String, String> valuesMap =
+                new ConcurrentHashMap<String, String>(1);
         valuesMap.put("filename",  this.getMarkupFilename(filename));
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
 
@@ -197,7 +197,8 @@ public enum Localizable {
         final String templateString = this.resourceBundle.getString(
         "confirmation_message_delete_all_files");
 
-        Map<String, String> valuesMap = new HashMap<String, String>(1);
+        Map<String, String> valuesMap =
+                new ConcurrentHashMap<String, String>(1);
         valuesMap.put("no.files",  String.valueOf(size));
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
 
@@ -212,7 +213,8 @@ public enum Localizable {
         final String templateString = this.resourceBundle.getString(
         "error_message_delete_file");
 
-        Map<String, String> valuesMap = new HashMap<String, String>(1);
+        Map<String, String> valuesMap =
+                new ConcurrentHashMap<String, String>(1);
         valuesMap.put("filename",  this.getMarkupFilename(filename));
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
 
@@ -242,7 +244,8 @@ public enum Localizable {
         final String templateString = this.resourceBundle.getString(
         "empty_message");
 
-        Map<String, String> valuesMap = new HashMap<String, String>(1);
+        Map<String, String> valuesMap =
+                new ConcurrentHashMap<String, String>(1);
         valuesMap.put("import.dir", baseDirectory);
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
 

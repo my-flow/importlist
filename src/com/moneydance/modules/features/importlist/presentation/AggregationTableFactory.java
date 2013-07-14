@@ -1,20 +1,18 @@
-/*
- * Import List - http://my-flow.github.io/importlist/
- * Copyright (C) 2011-2013 Florian J. Breunig
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+// Import List - http://my-flow.github.io/importlist/
+// Copyright (C) 2011-2013 Florian J. Breunig
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 package com.moneydance.modules.features.importlist.presentation;
 
@@ -42,7 +40,6 @@ public final class AggregationTableFactory implements ComponentFactory {
     private JTable table;
     private final FileAdmin fileAdmin;
     private final TableModel tableModel;
-    private ColumnFactory columnFactory;
 
     public AggregationTableFactory(final TableModel argTableModel,
             final FileAdmin argFileAdmin) {
@@ -70,7 +67,7 @@ public final class AggregationTableFactory implements ComponentFactory {
         TableColumnModel aggrColumnModel = this.table.getColumnModel();
         JTableHeader tableHeader         = this.table.getTableHeader();
 
-        this.columnFactory = new ColumnFactory(
+        ColumnFactory columnFactory = new ColumnFactory(
                 this.fileAdmin,
                 this.prefs.getForeground(),
                 this.prefs.getBackground(),
@@ -85,7 +82,7 @@ public final class AggregationTableFactory implements ComponentFactory {
                 this.settings.getDescName());
         nameCol.setIdentifier(this.settings.getDescName());
         nameCol.setCellRenderer(
-                this.columnFactory.getLabelNameAllRenderer());
+                columnFactory.getLabelNameAllRenderer());
         nameCol.setMinWidth(this.settings.getMinColumnWidth());
         nameCol.setPreferredWidth(this.prefs.getColumnWidths(nameColNo));
 
@@ -95,7 +92,7 @@ public final class AggregationTableFactory implements ComponentFactory {
                 this.settings.getDescModified());
         modifiedCol.setIdentifier(this.settings.getDescModified());
         modifiedCol.setCellRenderer(
-                this.columnFactory.getLabelModifiedAllRenderer());
+                columnFactory.getLabelModifiedAllRenderer());
         modifiedCol.setMinWidth(this.settings.getMinColumnWidth());
         modifiedCol.setPreferredWidth(
                 this.prefs.getColumnWidths(modifiedColNo));
@@ -105,8 +102,8 @@ public final class AggregationTableFactory implements ComponentFactory {
         int importColNo = aggrColumnModel.getColumnIndex(
                 this.settings.getDescImport());
         importCol.setIdentifier(this.settings.getDescImport());
-        importCol.setCellRenderer(this.columnFactory.getButtonAllRenderer());
-        importCol.setCellEditor(this.columnFactory.getImportAllEditor());
+        importCol.setCellRenderer(columnFactory.getButtonAllRenderer());
+        importCol.setCellEditor(columnFactory.getImportAllEditor());
         importCol.setResizable(this.settings.isButtonResizable());
         importCol.setMinWidth(this.settings.getMinColumnWidth());
         importCol.setPreferredWidth(this.prefs.getColumnWidths(importColNo));
@@ -116,8 +113,8 @@ public final class AggregationTableFactory implements ComponentFactory {
         int deleteColNo = aggrColumnModel.getColumnIndex(
                 this.settings.getDescDelete());
         deleteCol.setIdentifier(this.settings.getDescDelete());
-        deleteCol.setCellRenderer(this.columnFactory.getButtonAllRenderer());
-        deleteCol.setCellEditor(this.columnFactory.getDeleteAllEditor());
+        deleteCol.setCellRenderer(columnFactory.getButtonAllRenderer());
+        deleteCol.setCellEditor(columnFactory.getDeleteAllEditor());
         deleteCol.setResizable(this.settings.isButtonResizable());
         deleteCol.setMinWidth(this.settings.getMinColumnWidth());
         deleteCol.setPreferredWidth(this.prefs.getColumnWidths(deleteColNo));

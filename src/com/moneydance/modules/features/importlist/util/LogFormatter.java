@@ -1,7 +1,18 @@
-/*
- * PayPal for Moneydance - http://my-flow.github.io/paypalformoneydance/
- * Copyright (C) 2013 Florian J. Breunig. All rights reserved.
- */
+// Import List - http://my-flow.github.io/importlist/
+// Copyright (C) 2011-2013 Florian J. Breunig
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 package com.moneydance.modules.features.importlist.util;
 import java.io.PrintWriter;
@@ -21,23 +32,23 @@ public final class LogFormatter extends Formatter {
 
     @Override
     public String format(final LogRecord record) {
-        final StringBuilder sb = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
 
-        sb.append(new Date(record.getMillis()))
-        .append(" ")
+        stringBuilder.append(new Date(record.getMillis()))
+        .append(' ')
         .append(record.getLevel().getLocalizedName())
         .append(": ")
         .append(this.formatMessage(record))
         .append(LINE_SEPARATOR);
 
         if (record.getThrown() != null) {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            record.getThrown().printStackTrace(pw);
-            pw.close();
-            sb.append(sw.toString());
+            StringWriter stringWriter = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(stringWriter);
+            record.getThrown().printStackTrace(printWriter);
+            printWriter.close();
+            stringBuilder.append(stringWriter.toString());
         }
 
-        return sb.toString();
+        return stringBuilder.toString();
     }
 }

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="5.6">
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/Main.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/controller/AggregationTableModel.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/controller/FileTableModel.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/controller/ViewController.java">
+<error line="36" severity="warning" message="Line is longer than 80 characters (found 87)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="39" severity="warning" message="Line is longer than 80 characters (found 93)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="40" severity="warning" message="Line is longer than 80 characters (found 81)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/controller/package-info.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/io/AbstractDirectoryChooser.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/io/DefaultDirectoryChooser.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/io/DeleteAllOperation.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/io/DeleteOneOperation.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/io/DirectoryValidator.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/io/FileAdmin.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/io/FileOperation.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/io/ImportAllOperation.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/io/ImportOneOperation.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/io/MacOSDirectoryChooser.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/io/TransactionFileListener.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/io/package-info.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/package-info.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/presentation/AggregationTableFactory.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/presentation/BaseTableFactory.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/presentation/ComponentFactory.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/presentation/DirectoryChooserButtonFactory.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/presentation/EmptyLabelFactory.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/presentation/FileTableRowSorter.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/presentation/JCustomScrollPane.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/presentation/JCustomSplitPane.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/presentation/SplitPaneFactory.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/presentation/TableListener.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/presentation/package-info.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/AbstractEditor.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/ButtonRenderer.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/ColorSchemeHelper.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/ColumnFactory.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/DeleteAllEditor.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/DeleteOneEditor.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/EvenColorSchemeHelper.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/HeaderRenderer.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/ImportAllEditor.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/ImportOneEditor.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/LabelModifiedRenderer.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/LabelNameRenderer.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/OddColorSchemeHelper.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/table/package-info.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/util/AlphanumComparator.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/util/Helper.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/util/Localizable.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/util/LogFormatter.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/util/Preferences.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/util/Settings.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/util/Tracker.java">
+</file>
+<file name="/Users/fbreunig/Workspace/importlist/master/src/com/moneydance/modules/features/importlist/util/package-info.java">
+</file>
+</checkstyle>

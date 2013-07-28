@@ -16,6 +16,14 @@
 
 package com.moneydance.modules.features.importlist.io;
 
+import com.moneydance.apps.md.controller.FeatureModuleContext;
+import com.moneydance.apps.md.model.Account;
+import com.moneydance.apps.md.model.AccountUtil;
+import com.moneydance.apps.md.model.AcctFilter;
+import com.moneydance.apps.md.model.RootAccount;
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Preferences;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.util.HashMap;
@@ -27,22 +35,12 @@ import java.util.logging.Logger;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 
-import com.moneydance.apps.md.controller.FeatureModuleContext;
-import com.moneydance.apps.md.model.Account;
-import com.moneydance.apps.md.model.AccountUtil;
-import com.moneydance.apps.md.model.AcctFilter;
-import com.moneydance.apps.md.model.RootAccount;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
-
 /**
  * @author Florian J. Breunig
  */
 final class ImportOneOperation implements FileOperation {
 
     private final Preferences          prefs;
-    private final Settings             settings;
     private final FeatureModuleContext context;
     private final FileFilter           transactionFileFilter;
     private final FileFilter           textFileFilter;
@@ -58,7 +56,6 @@ final class ImportOneOperation implements FileOperation {
             final FileFilter argTransactionFileFilter,
             final FileFilter argTextFileFilter) {
         this.prefs                  = Helper.INSTANCE.getPreferences();
-        this.settings               = Helper.INSTANCE.getSettings();
         this.context                = argContext;
         this.transactionFileFilter  = argTransactionFileFilter;
         this.textFileFilter         = argTextFileFilter;
@@ -77,9 +74,11 @@ final class ImportOneOperation implements FileOperation {
 
         String uriScheme = "";
         if (this.transactionFileFilter.accept(file)) {
-            uriScheme = this.settings.getTransactionFileImportUriScheme();
+            uriScheme = Helper.INSTANCE.getSettings()
+                    .getTransactionFileImportUriScheme();
         } else if (this.textFileFilter.accept(file)) {
-            uriScheme = this.settings.getTextFileImportUriScheme();
+            uriScheme = Helper.INSTANCE.getSettings()
+                    .getTextFileImportUriScheme();
             valuesMap.put("accountno", this.getAccountNumberForFile(file));
         }
 

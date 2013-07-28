@@ -16,6 +16,13 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
+import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.table.ColumnFactory;
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Localizable;
+import com.moneydance.modules.features.importlist.util.Preferences;
+import com.moneydance.modules.features.importlist.util.Settings;
+
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,38 +35,27 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import com.moneydance.modules.features.importlist.io.FileAdmin;
-import com.moneydance.modules.features.importlist.table.ColumnFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Localizable;
-import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
-
 /**
  * @author Florian J. Breunig
  */
 public final class BaseTableFactory implements ComponentFactory {
 
-    private final   TableModel      tableModel;
-    private final   FileAdmin       fileAdmin;
-    private         Preferences     prefs;
-    private         Settings        settings;
-    private         Localizable     localizable;
-    private         JTable          table;
-    private         ColumnFactory   columnFactory;
-    private         JScrollPane     scrollPane;
+    private final Settings        settings;
+    private final Preferences     prefs;
+    private final Localizable     localizable;
+    private final TableModel      tableModel;
+    private final FileAdmin       fileAdmin;
+    private final JTable          table;
+    private final ColumnFactory   columnFactory;
+    private final JScrollPane     scrollPane;
 
     public BaseTableFactory(final TableModel argTableModel,
             final FileAdmin argFileAdmin) {
         this.tableModel = argTableModel;
-        this.fileAdmin  = argFileAdmin;
-    }
-
-    private void init() {
-        this.prefs       = Helper.INSTANCE.getPreferences();
-        this.settings    = Helper.INSTANCE.getSettings();
+        this.fileAdmin = argFileAdmin;
+        this.settings = Helper.INSTANCE.getSettings();
+        this.prefs = Helper.INSTANCE.getPreferences();
         this.localizable = Helper.INSTANCE.getLocalizable();
-
         this.table = new JTable(this.tableModel);
         this.table.setOpaque(false);
         this.table.setShowGrid(false);
@@ -79,7 +75,7 @@ public final class BaseTableFactory implements ComponentFactory {
                 this.prefs.getBackgroundAlt(),
                 tableHeader.getDefaultRenderer(),
                 this.prefs.getDateFormatter(),
-                this.prefs.getTimeFormatter());
+                Preferences.getTimeFormatter());
 
         TableColumn nameCol = this.table.getColumn(
                 this.settings.getDescName());
@@ -159,14 +155,11 @@ public final class BaseTableFactory implements ComponentFactory {
 
     @Override
     public JScrollPane getComponent() {
-        if (this.table == null) {
-            this.init();
-        }
         this.table.setBackground(this.prefs.getBackground());
-        this.table.setFont(this.prefs.getBodyFont());
+        this.table.setFont(Preferences.getBodyFont());
         this.table.setRowHeight(this.prefs.getBodyRowHeight());
         this.columnFactory.setDateFormatter(this.prefs.getDateFormatter());
-        this.columnFactory.setTimeFormatter(this.prefs.getTimeFormatter());
+        this.columnFactory.setTimeFormatter(Preferences.getTimeFormatter());
         this.columnFactory.setForeground(this.prefs.getForeground());
         this.columnFactory.setBackground(this.prefs.getBackground());
         this.columnFactory.setBackgroundAlt(this.prefs.getBackgroundAlt());
@@ -195,20 +188,17 @@ public final class BaseTableFactory implements ComponentFactory {
         this.scrollPane.setPreferredSize(
                 new Dimension(
                         this.prefs.getPreferredTableWidth(),
-                                this.prefs.getPreferredTableHeight(
-                                        this.tableModel.getRowCount())));
+                        this.prefs.getPreferredTableHeight(
+                                this.tableModel.getRowCount())));
         this.scrollPane.setMaximumSize(
                 new Dimension(
-                        this.prefs.getMaximumTableWidth(),
-                        this.prefs.getMaximumTableHeight()));
+                        Preferences.getMaximumTableWidth(),
+                        Preferences.getMaximumTableHeight()));
 
         return this.scrollPane;
     }
 
     public ColumnFactory getColumnFactory() {
-        if (this.columnFactory == null) {
-            this.init();
-        }
         return this.columnFactory;
     }
 }

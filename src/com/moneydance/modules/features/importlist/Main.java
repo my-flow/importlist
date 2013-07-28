@@ -16,11 +16,6 @@
 
 package com.moneydance.modules.features.importlist;
 
-import java.awt.Image;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.logging.Logger;
-
 import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.modules.features.importlist.controller.ViewController;
@@ -29,6 +24,11 @@ import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 import com.moneydance.modules.features.importlist.util.Tracker;
 
+import java.awt.Image;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.logging.Logger;
+
 /**
  * The main class of the extension, instantiated by Moneydance's class loader.
  *
@@ -36,19 +36,19 @@ import com.moneydance.modules.features.importlist.util.Tracker;
  */
 public final class Main extends FeatureModule implements Observer {
 
-   /**
+    /**
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG = Logger.getLogger(Main.class.getName());
 
-    private final   Preferences     prefs;
-    private final   Settings        settings;
-    private         Tracker         tracker;
-    private         String          baseDirectory;
-    private         ViewController  viewController;
+    private final Preferences     prefs;
+    private final Settings       settings;
+    private       Tracker         tracker;
+    private       String          baseDirectory;
+    private       ViewController  viewController;
 
     static {
-        Helper.INSTANCE.loadLoggerConfiguration();
+        Helper.loadLoggerConfiguration();
     }
 
     /**
@@ -56,7 +56,7 @@ public final class Main extends FeatureModule implements Observer {
      */
     public Main() {
         LOG.info("Initializing extension in Moneydance's application context.");
-        this.prefs    = Helper.INSTANCE.getPreferences();
+        this.prefs = Helper.INSTANCE.getPreferences();
         this.settings = Helper.INSTANCE.getSettings();
     }
 
@@ -96,7 +96,7 @@ public final class Main extends FeatureModule implements Observer {
 
     @Override
     public Image getIconImage() {
-        return Helper.INSTANCE.getIconImage();
+        return this.settings.getIconImage();
     }
 
     @Override

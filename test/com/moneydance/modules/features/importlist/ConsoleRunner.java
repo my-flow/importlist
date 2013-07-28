@@ -16,15 +16,15 @@
 
 package com.moneydance.modules.features.importlist;
 
+import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.util.UiUtil;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-
-import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.util.UiUtil;
 
 
 /**

@@ -32,11 +32,6 @@ public final class HelperTest {
     }
 
     @Test
-    public void testGetSettings() {
-        assertThat(Helper.INSTANCE.getSettings(), notNullValue());
-    }
-
-    @Test
     public void testGetLocalizable() {
         assertThat(Helper.INSTANCE.getLocalizable(), notNullValue());
     }
@@ -48,14 +43,8 @@ public final class HelperTest {
 
     @Test
     public void testGetInputStreamFromResource() {
-        assertThat(Helper.INSTANCE.getInputStreamFromResource(
-                        Helper.INSTANCE.getSettings().getIconResource()),
-                        notNullValue());
+        assertThat(Helper.getInputStreamFromResource(
+                Helper.INSTANCE.getSettings().getLoggingPropertiesResource()),
+                notNullValue());
     }
-
-    @Test
-    public void testGetIconImage() {
-        assertThat(Helper.INSTANCE.getIconImage(), notNullValue());
-    }
-
 }

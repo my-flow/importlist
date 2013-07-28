@@ -61,12 +61,8 @@ public final class ButtonRendererTest {
     @Test
     public void testGetTableCellRendererButton() {
         AbstractButton button = this.buttonRenderer.getTableCellRendererButton(
-                new JTable(),
-                "", // empty string value
-                false,
-                false,
-                1,
-                0);
+                "",
+                1);
         assertThat(button, notNullValue());
 
         button.setForeground(Color.white);

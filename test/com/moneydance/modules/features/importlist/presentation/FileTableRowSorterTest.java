@@ -16,14 +16,13 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
+import com.moneydance.modules.features.importlist.controller.FileTableModel;
+
 import java.io.File;
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.moneydance.modules.features.importlist.controller.FileTableModel;
-
 
 /**
  * @author Florian J. Breunig

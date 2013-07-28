@@ -18,8 +18,7 @@ package com.moneydance.modules.features.importlist.presentation;
 
 import javax.swing.JViewport;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

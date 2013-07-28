@@ -16,6 +16,10 @@
 
 package com.moneydance.modules.features.importlist.io;
 
+import com.moneydance.apps.md.controller.FeatureModuleContext;
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Localizable;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,11 +42,6 @@ import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.commons.lang3.SystemUtils;
-
-import com.moneydance.apps.md.controller.FeatureModuleContext;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Localizable;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 /**
  * This core class coordinates and delegates operations on the file system.
@@ -80,12 +79,11 @@ public final class FileAdmin extends Observable implements Observer {
             this.directoryChooser = new DefaultDirectoryChooser(baseDirectory);
         }
         this.directoryValidator = DirectoryValidator.INSTANCE;
-        Settings settings = Helper.INSTANCE.getSettings();
         this.transactionFileFilter = new SuffixFileFilter(
-                settings.getTransactionFileExtensions(),
+                Helper.INSTANCE.getSettings().getTransactionFileExtensions(),
                 IOCase.INSENSITIVE);
         this.textFileFilter = new SuffixFileFilter(
-                settings.getTextFileExtensions(),
+                Helper.INSTANCE.getSettings().getTextFileExtensions(),
                 IOCase.INSENSITIVE);
         this.readableFileFilter = FileFilterUtils.and(
                 CanReadFileFilter.CAN_READ,
@@ -96,7 +94,7 @@ public final class FileAdmin extends Observable implements Observer {
         this.listener = new TransactionFileListener();
         this.listener.addObserver(this);
         this.monitor  = new FileAlterationMonitor(
-                settings.getMonitorInterval());
+                Helper.INSTANCE.getSettings().getMonitorInterval());
 
         this.files = Collections.synchronizedList(new ArrayList<File>());
     }
@@ -123,8 +121,8 @@ public final class FileAdmin extends Observable implements Observer {
                     "Could not open directory %s",
                     baseDirectory.getAbsolutePath()));
             final String errorMessage
-                    = this.localizable.getErrorMessageBaseDirectory(
-                            baseDirectory.getName());
+            = this.localizable.getErrorMessageBaseDirectory(
+                    baseDirectory.getName());
             final Object errorLabel = new JLabel(errorMessage);
             JOptionPane.showMessageDialog(
                     null, // no parent component

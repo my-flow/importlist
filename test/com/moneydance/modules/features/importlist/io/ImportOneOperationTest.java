@@ -16,13 +16,6 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import java.io.File;
-import java.util.Collections;
-
-import org.apache.commons.io.filefilter.FalseFileFilter;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.junit.Test;
-
 import com.moneydance.apps.md.controller.StubContext;
 import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.apps.md.model.Account;
@@ -32,6 +25,13 @@ import com.moneydance.apps.md.model.CurrencyTable;
 import com.moneydance.apps.md.model.CurrencyType;
 import com.moneydance.apps.md.model.IncomeAccount;
 import com.moneydance.apps.md.model.RootAccount;
+
+import java.io.File;
+import java.util.Collections;
+
+import org.apache.commons.io.filefilter.FalseFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.junit.Test;
 
 /**
  * @author Florian J. Breunig

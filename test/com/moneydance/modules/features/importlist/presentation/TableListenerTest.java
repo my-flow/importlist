@@ -16,6 +16,9 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
+import com.moneydance.modules.features.importlist.controller.FileTableModel;
+import com.moneydance.modules.features.importlist.util.Helper;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +30,6 @@ import javax.swing.table.TableModel;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.moneydance.modules.features.importlist.controller.FileTableModel;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 /**
  * @author Florian J. Breunig

@@ -16,6 +16,11 @@
 
 package com.moneydance.modules.features.importlist.util;
 
+import com.moneydance.apps.md.controller.FeatureModuleContext;
+import com.moneydance.apps.md.controller.UserPreferences;
+import com.moneydance.util.CustomDateFormat;
+import com.moneydance.util.StreamTable;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -29,26 +34,22 @@ import javax.swing.UIManager;
 
 import org.apache.commons.lang3.Validate;
 
-import com.moneydance.apps.md.controller.FeatureModuleContext;
-import com.moneydance.apps.md.controller.UserPreferences;
-import com.moneydance.util.CustomDateFormat;
-import com.moneydance.util.StreamTable;
-
 /**
  * This preferences class contains the values the user can control in the
  * application. It serves as a facade abstracting Moneydance's
- * <code>UserPreferences</code>.
+ * <code>UserPreferences</code> (received from the
+ * <code>FeatureModuleContext</code>).
  *
  * @author Florian J. Breunig
  */
 public final class Preferences {
 
-    private         UserPreferences userPreferences;
-    private final   Settings        settings;
-    private final   StreamTable     columnOrderDefault;
-    private final   StreamTable     sortOrderDefault;
-    private final   StreamTable     columnWidths;
-    private         StreamTable     columnOrder;
+    private final Settings        settings;
+    private       UserPreferences userPreferences;
+    private final StreamTable     columnOrderDefault;
+    private final StreamTable     sortOrderDefault;
+    private final StreamTable     columnWidths;
+    private       StreamTable     columnOrder;
 
     /**
      * The constructor must be called exactly once before using the only
@@ -115,7 +116,7 @@ public final class Preferences {
     public int getMajorVersion() {
         final String fullString = this.getFullVersion();
         final int endIndex = Math.min(
-                this.settings.getLengthOfVersionDigits(),
+                Helper.INSTANCE.getSettings().getLengthOfVersionDigits(),
                 fullString.length());
         String substring = fullString.substring(0, endIndex);
         return Integer.parseInt(substring);
@@ -183,7 +184,7 @@ public final class Preferences {
                 this.columnWidths);
         return streamTable.getInt(
                 Integer.toString(column),
-                this.settings.getColumnWidth());
+                Helper.INSTANCE.getSettings().getColumnWidth());
     }
 
     public void setColumnNames(final Hashtable<String, String> hashtable) {
@@ -236,7 +237,7 @@ public final class Preferences {
         return this.getUserPreferences().getShortDateFormatter();
     }
 
-    public DateFormat getTimeFormatter() {
+    public static DateFormat getTimeFormatter() {
         return DateFormat.getTimeInstance();
     }
 
@@ -254,14 +255,14 @@ public final class Preferences {
     public int getPreferredTableHeight(final int rowCount) {
         int fit = this.getHeaderRowHeight()
                 + rowCount * this.getBodyRowHeight();
-        int min = Math.min(this.getMaximumTableHeight(), fit);
+        int min = Math.min(Preferences.getMaximumTableHeight(), fit);
         return Math.max(this.settings.getMinimumTableHeight(), min);
     }
 
     /**
      * @return Maximum width of the file table.
      */
-    public int getMaximumTableWidth() {
+    public static int getMaximumTableWidth() {
         return (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth()
                 / (2 + 1);
     }
@@ -269,7 +270,7 @@ public final class Preferences {
     /**
      * @return Maximum height of the file table.
      */
-    public int getMaximumTableHeight() {
+    public static int getMaximumTableHeight() {
         return (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight()
                 / (2 + 1);
     }
@@ -304,24 +305,24 @@ public final class Preferences {
         return new Color(backgroundAltValue);
     }
 
-    public Font getHeaderFont() {
+    public static Font getHeaderFont() {
         final Font baseFont = UIManager.getFont("Label.font");
         return baseFont.deriveFont(Font.BOLD, baseFont.getSize2D() + 2.0F);
     }
 
-    public Font getBodyFont() {
+    public static Font getBodyFont() {
         return UIManager.getFont("Label.font");
     }
 
     public int getHeaderRowHeight() {
         return Math.round(
                 (float) this.settings.getFactorRowHeightHeader()
-                * this.getBodyFont().getSize2D());
+                * Preferences.getBodyFont().getSize2D());
     }
 
     public int getBodyRowHeight() {
         return Math.round(
                 (float) this.settings.getSummandRowHeightBody()
-                + this.getBodyFont().getSize2D());
+                + Preferences.getBodyFont().getSize2D());
     }
 }

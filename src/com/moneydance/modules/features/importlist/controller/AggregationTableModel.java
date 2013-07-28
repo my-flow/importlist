@@ -16,12 +16,12 @@
 
 package com.moneydance.modules.features.importlist.controller;
 
-import javax.swing.table.AbstractTableModel;
-
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
+
+import javax.swing.table.AbstractTableModel;
 
 /**
  * This class provides a <code>TableModel</code> implementation for a given
@@ -34,13 +34,13 @@ import com.moneydance.modules.features.importlist.util.Settings;
 public final class AggregationTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 1L;
-    private final transient Preferences prefs;
     private final transient Settings settings;
+    private final transient Preferences prefs;
     private final transient Localizable localizable;
 
     public AggregationTableModel() {
-        this.prefs       = Helper.INSTANCE.getPreferences();
         this.settings    = Helper.INSTANCE.getSettings();
+        this.prefs       = Helper.INSTANCE.getPreferences();
         this.localizable = Helper.INSTANCE.getLocalizable();
     }
 

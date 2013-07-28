@@ -16,12 +16,12 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
+
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 /**
  * @author Florian J. Breunig
@@ -44,7 +44,7 @@ public final class EmptyLabelFactory implements ComponentFactory {
             this.init();
         }
         this.emptyLabel.setBackground(this.prefs.getBackground());
-        this.emptyLabel.setFont(this.prefs.getBodyFont());
+        this.emptyLabel.setFont(Preferences.getBodyFont());
         return this.emptyLabel;
     }
 }

@@ -16,14 +16,14 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
+import com.moneydance.modules.features.importlist.util.AlphanumComparator;
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Settings;
+
 import java.util.Comparator;
 
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-
-import com.moneydance.modules.features.importlist.util.AlphanumComparator;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 
 /**
@@ -35,11 +35,10 @@ import com.moneydance.modules.features.importlist.util.Settings;
 final class FileTableRowSorter extends TableRowSorter<TableModel> {
 
     private final Settings settings;
-
     /**
      * @param tableModel The table model that is to be sorted
      */
-    public FileTableRowSorter(final TableModel tableModel) {
+    FileTableRowSorter(final TableModel tableModel) {
         super(tableModel);
         this.settings = Helper.INSTANCE.getSettings();
     }
@@ -48,7 +47,7 @@ final class FileTableRowSorter extends TableRowSorter<TableModel> {
     public boolean isSortable(final int column) {
         String columnName = this.getModel().getColumnName(column);
         return this.settings.getDescName().equals(columnName)
-        || this.settings.getDescModified().equals(columnName);
+                || this.settings.getDescModified().equals(columnName);
     }
 
     @Override

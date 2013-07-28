@@ -32,7 +32,7 @@ public final class SettingsTest {
 
     @Before
     public void setUp() {
-        this.settings = Settings.INSTANCE;
+        this.settings = Helper.INSTANCE.getSettings();
     }
 
     @Test
@@ -47,7 +47,7 @@ public final class SettingsTest {
 
     @Test
     public void testGetIconResource() {
-        assertThat(this.settings.getIconResource(), notNullValue());
+        assertThat(this.settings.getIconImage(), notNullValue());
     }
 
     @Test

@@ -16,6 +16,9 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Preferences;
+
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -28,9 +31,6 @@ import javax.swing.table.TableCellRenderer;
 
 import org.apache.commons.lang3.Validate;
 
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Preferences;
-
 /**
  * This decorator class sets header-specific attributes to a
  * <code>TableCellRenderer</code>.
@@ -40,7 +40,6 @@ import com.moneydance.modules.features.importlist.util.Preferences;
 final class HeaderRenderer implements TableCellRenderer {
 
     private final TableCellRenderer defaultHeaderTableCellRenderer;
-    private final Preferences       prefs;
     private final ColorSchemeHelper colorSchemeHelper;
 
     HeaderRenderer(
@@ -54,7 +53,6 @@ final class HeaderRenderer implements TableCellRenderer {
                 "argDefaultHeaderTableCellRenderer must not be null");
         this.colorSchemeHelper              = argColorSchemeHelper;
         this.defaultHeaderTableCellRenderer = argDefaultHeaderTableCellRenderer;
-        this.prefs                          = Helper.INSTANCE.getPreferences();
     }
 
     // ESCA-JAVA0138: abstract method from interface TableCellRenderer
@@ -67,8 +65,9 @@ final class HeaderRenderer implements TableCellRenderer {
             final int row,
             final int column) {
         Component component =
-            this.defaultHeaderTableCellRenderer.getTableCellRendererComponent(
-                    table, value, hasFocus, hasFocus, row, column);
+                this.defaultHeaderTableCellRenderer
+                .getTableCellRendererComponent(
+                        table, value, hasFocus, hasFocus, row, column);
         this.colorSchemeHelper.applyColorScheme(component, row);
 
         if (component instanceof JComponent) {
@@ -81,19 +80,19 @@ final class HeaderRenderer implements TableCellRenderer {
             }
         }
 
-        component.setFont(this.prefs.getHeaderFont());
+        component.setFont(Preferences.getHeaderFont());
         component.setSize(new Dimension(
                 component.getWidth(),
-                this.prefs.getHeaderRowHeight()));
+                Helper.INSTANCE.getPreferences().getHeaderRowHeight()));
         component.setMinimumSize(new Dimension(
                 component.getWidth(),
-                this.prefs.getHeaderRowHeight()));
+                Helper.INSTANCE.getPreferences().getHeaderRowHeight()));
         component.setPreferredSize(new Dimension(
                 component.getWidth(),
-                this.prefs.getHeaderRowHeight()));
+                Helper.INSTANCE.getPreferences().getHeaderRowHeight()));
         component.setMaximumSize(new Dimension(
                 component.getWidth(),
-                this.prefs.getHeaderRowHeight()));
+                Helper.INSTANCE.getPreferences().getHeaderRowHeight()));
 
         return component;
     }

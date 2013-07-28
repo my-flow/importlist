@@ -16,6 +16,11 @@
 
 package com.moneydance.modules.features.importlist.controller;
 
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Localizable;
+import com.moneydance.modules.features.importlist.util.Preferences;
+import com.moneydance.modules.features.importlist.util.Settings;
+
 import java.io.File;
 import java.util.Date;
 import java.util.List;
@@ -23,11 +28,6 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import org.apache.commons.lang3.Validate;
-
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Localizable;
-import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 
 /**
@@ -41,15 +41,15 @@ import com.moneydance.modules.features.importlist.util.Settings;
 public final class FileTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 1L;
+    private final transient Settings settings;
     private final transient Preferences prefs;
-    private final transient Settings    settings;
     private final transient Localizable localizable;
     private final           List<File>  files;
 
     public FileTableModel(final List<File> argFiles) {
         Validate.notNull(argFiles, "files must not be null"); //$NON-NLS-1$
-        this.prefs       = Helper.INSTANCE.getPreferences();
         this.settings    = Helper.INSTANCE.getSettings();
+        this.prefs       = Helper.INSTANCE.getPreferences();
         this.localizable = Helper.INSTANCE.getLocalizable();
         // ESCA-JAVA0256: argFiles is readonly by design
         this.files       = argFiles;

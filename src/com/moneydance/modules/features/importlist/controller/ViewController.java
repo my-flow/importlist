@@ -16,18 +16,6 @@
 
 package com.moneydance.modules.features.importlist.controller;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
-
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JViewport;
-import javax.swing.table.AbstractTableModel;
-
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.view.HomePageView;
@@ -47,6 +35,18 @@ import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 import com.moneydance.modules.features.importlist.util.Tracker;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JViewport;
+import javax.swing.table.AbstractTableModel;
+
 /**
  * The user interface that is displayed on the homepage.
  *
@@ -54,7 +54,6 @@ import com.moneydance.modules.features.importlist.util.Tracker;
  */
 public final class ViewController implements HomePageView {
 
-    private final Preferences           prefs;
     private final Settings              settings;
     private final Localizable           localizable;
     private final FileAdmin             fileAdmin;
@@ -75,7 +74,6 @@ public final class ViewController implements HomePageView {
             final String baseDirectory,
             final FeatureModuleContext context,
             final Tracker argTracker) {
-        this.prefs       = Helper.INSTANCE.getPreferences();
         this.settings    = Helper.INSTANCE.getSettings();
         this.localizable = Helper.INSTANCE.getLocalizable();
         this.fileAdmin   = new FileAdmin(baseDirectory, context);
@@ -192,13 +190,15 @@ public final class ViewController implements HomePageView {
                             this.settings.getMinimumTableHeight()));
             this.viewport.setPreferredSize(
                     new Dimension(
-                            this.prefs.getPreferredTableWidth(),
-                            this.prefs.getPreferredTableHeight(
+                            Helper.INSTANCE.getPreferences()
+                            .getPreferredTableWidth(),
+                            Helper.INSTANCE.getPreferences()
+                            .getPreferredTableHeight(
                                     this.baseTableModel.getRowCount())));
             this.viewport.setMaximumSize(
                     new Dimension(
-                            this.prefs.getMaximumTableWidth(),
-                            this.prefs.getMaximumTableHeight()));
+                            Preferences.getMaximumTableWidth(),
+                            Preferences.getMaximumTableHeight()));
             this.registerKeyboardShortcuts4One();
             return;
         }
@@ -284,22 +284,22 @@ public final class ViewController implements HomePageView {
 
     private void registerKeyboardShortcuts4One() {
         AbstractEditor importOneEditor =
-            this.columnFactory.getImportOneEditor();
+                this.columnFactory.getImportOneEditor();
         importOneEditor.registerKeyboardShortcut(this.viewport);
 
         AbstractEditor deleteOneEditor =
-            this.columnFactory.getDeleteOneEditor();
+                this.columnFactory.getDeleteOneEditor();
         deleteOneEditor.registerKeyboardShortcut(this.viewport);
     }
 
 
     private void registerKeyboardShortcuts4All() {
         AbstractEditor importAllEditor =
-            this.columnFactory.getImportAllEditor();
+                this.columnFactory.getImportAllEditor();
         importAllEditor.registerKeyboardShortcut(this.viewport);
 
         AbstractEditor deleteAllEditor =
-            this.columnFactory.getDeleteAllEditor();
+                this.columnFactory.getDeleteAllEditor();
         deleteAllEditor.registerKeyboardShortcut(this.viewport);
     }
 
@@ -310,8 +310,8 @@ public final class ViewController implements HomePageView {
     implements Observer {
         @Override
         public void update(final Observable observable, final Object object) {
-            setDirty(true);
-            refresh();
+            ViewController.this.setDirty(true);
+            ViewController.this.refresh();
         }
     }
 

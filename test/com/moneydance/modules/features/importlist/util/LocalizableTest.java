@@ -19,13 +19,10 @@ package com.moneydance.modules.features.importlist.util;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import java.util.Observable;
-import java.util.Observer;
+import com.moneydance.apps.md.controller.StubContextFactory;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.moneydance.apps.md.controller.StubContextFactory;
 
 /**
  * @author Florian J. Breunig
@@ -37,22 +34,7 @@ public final class LocalizableTest {
 
     @Before
     public void setUp() {
-        this.localizable = Localizable.INSTANCE;
-        this.factory = new StubContextFactory();
-        this.localizable.setContext(this.factory.getContext());
-    }
-
-    @Test
-    public void testGetMoneydanceGUI() {
-        this.localizable = Localizable.INSTANCE;
-        Helper.INSTANCE.addObserver(new Observer() {
-            @Override
-            public void update(final Observable observable,
-                    final Object updateAll) {
-                LocalizableTest.this.localizable.setContext(LocalizableTest.this.factory.getContext());
-            }
-        });
-        assertThat(this.localizable.getHeaderValueImport(), notNullValue());
+        this.localizable = Helper.INSTANCE.getLocalizable();
     }
 
     @Test

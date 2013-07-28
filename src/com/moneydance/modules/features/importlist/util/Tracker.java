@@ -16,16 +16,15 @@
 
 package com.moneydance.modules.features.importlist.util;
 
+import com.dmurph.tracking.AnalyticsConfigData;
+import com.dmurph.tracking.JGoogleAnalyticsTracker;
+import com.dmurph.tracking.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
+
 import java.net.Authenticator;
 import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.SocketAddress;
-import java.util.logging.Logger;
-
-import com.dmurph.tracking.AnalyticsConfigData;
-import com.dmurph.tracking.JGoogleAnalyticsTracker;
-import com.dmurph.tracking.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
 
 /**
  * A facade for dispatching Google Analytics tracking information.
@@ -34,49 +33,43 @@ import com.dmurph.tracking.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
  */
 public final class Tracker {
 
-    private final Preferences prefs;
     private final String fullVersion;
     private final String build;
 
     private final JGoogleAnalyticsTracker analyticsTracker;
-    private static final Logger LOG = Logger.getLogger(Tracker.class.getName());
 
-    Tracker(final int argBuild) {
-        Settings settings = Helper.INSTANCE.getSettings();
+    Tracker(final int argBuild,
+            final String argExtensionName,
+            final String argFullVersion,
+            final String argTrackingCode) {
+        this.fullVersion = String.format("Moneydance %s", argFullVersion);
+        this.build       = String.format("%s v%d", argExtensionName, argBuild);
 
-        this.prefs          = Helper.INSTANCE.getPreferences();
-        this.fullVersion    = String.format("Moneydance %s",
-                this.prefs.getFullVersion());
-        this.build          = String.format("%s v%d",
-                settings.getExtensionName(),
-                argBuild);
-
-        JGoogleAnalyticsTracker.setProxy(this.getProxy());
-        AnalyticsConfigData config = new AnalyticsConfigData(
-                settings.getTrackingCode());
+        JGoogleAnalyticsTracker.setProxy(Tracker.getProxy());
+        AnalyticsConfigData config = new AnalyticsConfigData(argTrackingCode);
         this.analyticsTracker = new JGoogleAnalyticsTracker(
                 config,
                 GoogleAnalyticsVersion.V_4_7_2);
     }
 
     public void track(final EventName eventName) {
-        LOG.config("trackEvent");
         this.analyticsTracker.trackEvent(
                 this.fullVersion,
                 eventName.toString(),
                 this.build);
     }
 
-    private Proxy getProxy() {
-        if (!this.prefs.hasProxy()) {
+    private static Proxy getProxy() {
+        final Preferences prefs = Helper.INSTANCE.getPreferences();
+        if (!prefs.hasProxy()) {
             return Proxy.NO_PROXY;
         }
 
         final SocketAddress socketAddress = new InetSocketAddress(
-                this.prefs.getProxyHost(),
-                this.prefs.getProxyPort());
+                prefs.getProxyHost(),
+                prefs.getProxyPort());
 
-        boolean authProxy = this.prefs.hasProxyAuthentication();
+        boolean authProxy = prefs.hasProxyAuthentication();
 
         Proxy.Type proxyType = Proxy.Type.HTTP;
 
@@ -86,8 +79,8 @@ public final class Tracker {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(
-                           Tracker.this.prefs.getProxyUsername(),
-                           Tracker.this.prefs.getProxyPassword().toCharArray());
+                            prefs.getProxyUsername(),
+                            prefs.getProxyPassword().toCharArray());
                 }
             });
         }
@@ -95,8 +88,6 @@ public final class Tracker {
     }
 
     /**
-     * An application-specific event that can be tracked.
-     *
      * @author Florian J. Breunig
      */
     public enum EventName {

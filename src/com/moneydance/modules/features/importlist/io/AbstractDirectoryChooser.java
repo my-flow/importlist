@@ -16,11 +16,11 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import java.io.File;
-
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
+
+import java.io.File;
 
 /**
  * This abstract class provides the functionality to choose, access, and reset

@@ -19,11 +19,11 @@ package com.moneydance.modules.features.importlist;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.modules.features.importlist.util.Helper;
+
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Florian J. Breunig

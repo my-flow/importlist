@@ -16,6 +16,9 @@
 
 package com.moneydance.modules.features.importlist.io;
 
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Localizable;
+
 import java.awt.Image;
 import java.io.File;
 import java.util.Collections;
@@ -26,9 +29,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Localizable;
 
 /**
  * @author Florian J. Breunig
@@ -41,7 +41,7 @@ final class DeleteAllOperation implements FileOperation {
     private static final Logger LOG =
             Logger.getLogger(DeleteAllOperation.class.getName());
 
-    private final Localizable   localizable;
+    private final Localizable localizable;
 
     DeleteAllOperation() {
         this.localizable = Helper.INSTANCE.getLocalizable();
@@ -53,7 +53,7 @@ final class DeleteAllOperation implements FileOperation {
                 this.localizable.getConfirmationMessageDeleteAllFiles(
                         files.size());
         final Object confirmationLabel = new JLabel(message);
-        final Image image = Helper.INSTANCE.getIconImage();
+        final Image image = Helper.INSTANCE.getSettings().getIconImage();
         Icon  icon  = null;
         if (image != null) {
             icon = new ImageIcon(image);

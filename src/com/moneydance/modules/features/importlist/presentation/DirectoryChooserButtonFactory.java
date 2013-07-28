@@ -16,12 +16,12 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
+import com.moneydance.apps.md.view.gui.MoneydanceLAF;
+
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
-
-import com.moneydance.apps.md.view.gui.MoneydanceLAF;
 
 /**
  * @author Florian J. Breunig

@@ -16,23 +16,19 @@
 
 package com.moneydance.modules.features.importlist.util;
 
-import java.awt.Image;
+import com.moneydance.apps.md.controller.FeatureModuleContext;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import javax.imageio.ImageIO;
-
 import org.apache.commons.lang3.Validate;
 
-import com.moneydance.apps.md.controller.FeatureModuleContext;
-
 /**
- * This helper class provides public convenience methods.
+ * This singleton provides public convenience methods.
  *
  * @author Florian J. Breunig
  */
@@ -49,34 +45,44 @@ public enum Helper {
     private static final Logger LOG = Logger.getLogger(Helper.class.getName());
 
     private final HelperObservable observable;
-    private       Preferences prefs;
+    private final Settings settings;
+    private final Preferences prefs;
+    private       Localizable localizable;
     private       Tracker tracker;
 
     private Helper() {
         this.observable = new HelperObservable();
+        this.settings   = new Settings();
+        this.prefs      = new Preferences();
+    }
+
+    public Settings getSettings() {
+        return this.settings;
     }
 
     public Preferences getPreferences() {
-       synchronized (Helper.class) {
-           if (this.prefs == null) {
-               this.prefs = new Preferences();
-           }
-       }
-       return this.prefs;
-   }
-
-    public Settings getSettings() {
-        return Settings.INSTANCE;
+        return this.prefs;
     }
 
     public Localizable getLocalizable() {
-        return Localizable.INSTANCE;
+        synchronized (Helper.class) {
+            if (this.localizable == null) {
+                this.localizable = new Localizable(
+                        this.settings.getLocalizableResource(),
+                        this.prefs.getLocale());
+            }
+        }
+        return this.localizable;
     }
 
     public Tracker getTracker(final int build) {
         synchronized (Helper.class) {
             if (this.tracker == null) {
-                this.tracker = new Tracker(build);
+                this.tracker = new Tracker(
+                        build,
+                        this.prefs.getFullVersion(),
+                        this.settings.getExtensionName(),
+                        this.settings.getTrackingCode());
             }
         }
         return this.tracker;
@@ -95,14 +101,14 @@ public enum Helper {
     }
 
     public void setContext(final FeatureModuleContext context) {
-        this.getPreferences().setContext(context);
-        this.getLocalizable().setContext(context);
+        this.prefs.setContext(context);
     }
 
-    public void loadLoggerConfiguration() {
+    public static void loadLoggerConfiguration() {
         try {
             InputStream inputStream = getInputStreamFromResource(
-                    getSettings().getLoggingPropertiesResource());
+                    Helper.INSTANCE.getSettings()
+                    .getLoggingPropertiesResource());
             LogManager.getLogManager().readConfiguration(inputStream);
 
         } catch (SecurityException e) {
@@ -112,32 +118,13 @@ public enum Helper {
         }
     }
 
-    public InputStream getInputStreamFromResource(
+    public static InputStream getInputStreamFromResource(
             final String resource) {
         ClassLoader cloader     = Helper.class.getClassLoader();
         InputStream inputStream = cloader.getResourceAsStream(resource);
         Validate.notNull(inputStream, "Resource %s was not found.", resource);
         return inputStream;
     }
-
-    public Image getIconImage() {
-        Image image = null;
-        try {
-            LOG.config(String.format(
-                    "Loading icon %s from resource.",
-                    getSettings().getIconResource()));
-            InputStream inputStream =
-                    Helper.INSTANCE.getInputStreamFromResource(
-                            getSettings().getIconResource());
-            image = ImageIO.read(inputStream);
-        } catch (IllegalArgumentException e) {
-            LOG.log(Level.WARNING, e.getMessage(), e);
-        } catch (IOException e) {
-            LOG.log(Level.WARNING, e.getMessage(), e);
-        }
-        return image;
-    }
-
 
     /**
      * @author Florian J. Breunig

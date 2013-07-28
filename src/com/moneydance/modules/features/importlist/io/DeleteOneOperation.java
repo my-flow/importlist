@@ -16,6 +16,9 @@
 
 package com.moneydance.modules.features.importlist.io;
 
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Localizable;
+
 import java.awt.Image;
 import java.io.File;
 import java.util.List;
@@ -28,9 +31,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
-
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Localizable;
 
 /**
  * @author Florian J. Breunig
@@ -56,7 +56,7 @@ final class DeleteOneOperation implements FileOperation {
                 this.localizable.getConfirmationMessageDeleteOneFile(
                         file.getName());
         final Object confirmationLabel = new JLabel(message);
-        final Image image = Helper.INSTANCE.getIconImage();
+        final Image image = Helper.INSTANCE.getSettings().getIconImage();
         Icon  icon  = null;
         if (image != null) {
             icon = new ImageIcon(image);

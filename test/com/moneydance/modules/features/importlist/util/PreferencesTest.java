@@ -20,6 +20,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import com.moneydance.apps.md.controller.StubContextFactory;
+
 import java.util.Hashtable;
 import java.util.Observable;
 import java.util.Observer;
@@ -29,8 +31,6 @@ import javax.swing.SortOrder;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.moneydance.apps.md.controller.StubContextFactory;
 
 /**
  * @author Florian J. Breunig

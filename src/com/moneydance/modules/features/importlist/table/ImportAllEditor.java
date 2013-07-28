@@ -16,12 +16,13 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.util.Helper;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.KeyStroke;
-
-import com.moneydance.modules.features.importlist.io.FileAdmin;
 
 /**
  * @author Florian J. Breunig
@@ -48,7 +49,7 @@ final class ImportAllEditor extends AbstractEditor {
 
     @Override
     public KeyStroke getKeyStroke() {
-        final String shortcut = this.getSettings().getKeyboardShortcutImport();
-        return KeyStroke.getKeyStroke(shortcut);
+        return KeyStroke.getKeyStroke(
+                Helper.INSTANCE.getSettings().getKeyboardShortcutImport());
     }
 }

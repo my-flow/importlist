@@ -16,6 +16,12 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
+import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.table.ColumnFactory;
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Preferences;
+import com.moneydance.modules.features.importlist.util.Settings;
+
 import java.awt.Dimension;
 
 import javax.swing.JTable;
@@ -24,32 +30,23 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import com.moneydance.modules.features.importlist.io.FileAdmin;
-import com.moneydance.modules.features.importlist.table.ColumnFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
-
 /**
  * @author Florian J. Breunig
  */
 public final class AggregationTableFactory implements ComponentFactory {
 
-    private Preferences prefs;
-    private Settings settings;
-    private JTable table;
+    private final Settings settings;
+    private final Preferences prefs;
     private final FileAdmin fileAdmin;
     private final TableModel tableModel;
+    private final JTable table;
 
     public AggregationTableFactory(final TableModel argTableModel,
             final FileAdmin argFileAdmin) {
+        this.settings   = Helper.INSTANCE.getSettings();
+        this.prefs      = Helper.INSTANCE.getPreferences();
         this.tableModel = argTableModel;
         this.fileAdmin  = argFileAdmin;
-    }
-
-    private void init() {
-        this.prefs       = Helper.INSTANCE.getPreferences();
-        this.settings    = Helper.INSTANCE.getSettings();
 
         this.table = new JTable(this.tableModel);
         this.table.setOpaque(false);
@@ -74,7 +71,7 @@ public final class AggregationTableFactory implements ComponentFactory {
                 this.prefs.getBackgroundAlt(),
                 tableHeader.getDefaultRenderer(),
                 this.prefs.getDateFormatter(),
-                this.prefs.getTimeFormatter());
+                Preferences.getTimeFormatter());
 
 
         TableColumn nameCol = this.table.getColumn(this.settings.getDescName());
@@ -122,11 +119,8 @@ public final class AggregationTableFactory implements ComponentFactory {
 
     @Override
     public JTable getComponent() {
-        if (this.table == null) {
-            this.init();
-        }
         this.table.setBackground(this.prefs.getBackground());
-        this.table.setFont(this.prefs.getBodyFont());
+        this.table.setFont(Preferences.getBodyFont());
         this.table.setRowHeight(
                 this.prefs.getBodyRowHeight()
                 + this.settings.getTableHeightOffset());
@@ -142,7 +136,7 @@ public final class AggregationTableFactory implements ComponentFactory {
                         + this.settings.getTableHeightOffset()));
         this.table.setMaximumSize(
                 new Dimension(
-                        this.prefs.getMaximumTableWidth(),
+                        Preferences.getMaximumTableWidth(),
                         this.prefs.getBodyRowHeight()
                         + this.settings.getTableHeightOffset()));
 

@@ -16,17 +16,13 @@
 
 package com.moneydance.modules.features.importlist.util;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.commons.lang3.text.WordUtils;
-
-import com.moneydance.apps.md.controller.FeatureModuleContext;
-import com.moneydance.apps.md.controller.Main;
-import com.moneydance.apps.md.view.gui.MoneydanceGUI;
 
 /**
  * This i18n class provides language-dependent strings such as labels and
@@ -34,45 +30,14 @@ import com.moneydance.apps.md.view.gui.MoneydanceGUI;
  *
  * @author Florian J. Breunig
  */
-public enum Localizable {
+public final class Localizable {
 
-    INSTANCE;
+    private final ResourceBundle resourceBundle;
 
-    private final Preferences       prefs;
-    private final Settings          settings;
-    private       ResourceBundle    resourceBundle;
-    private       MoneydanceGUI     mdGUI;
-
-    /**
-     * The constructor must be called exactly once before using the only
-     * instance of this class.
-     */
-    Localizable() {
-        this.prefs = Helper.INSTANCE.getPreferences();
-        this.settings = Helper.INSTANCE.getSettings();
+    Localizable(final String localizableResource, final Locale locale) {
         this.resourceBundle = ResourceBundle.getBundle(
-              this.settings.getLocalizableResource(),
-              this.prefs.getLocale());
-    }
-
-    public void setContext(final FeatureModuleContext context) {
-        this.resourceBundle = ResourceBundle.getBundle(
-                this.settings.getLocalizableResource(),
-                this.prefs.getLocale());
-        // Using undocumented feature.
-        Main main = (Main) context;
-        if (main != null) {
-            this.mdGUI = (MoneydanceGUI) main.getUI();
-        }
-    }
-
-    private MoneydanceGUI getMoneydanceGUI() {
-        if (this.mdGUI == null) {
-            Helper.INSTANCE.setChanged();
-            Helper.INSTANCE.notifyObservers(Boolean.FALSE);
-            Validate.notNull(this.mdGUI, "Moneydance GUI not initialized");
-        }
-        return this.mdGUI;
+                localizableResource,
+                locale);
     }
 
     /**
@@ -87,10 +52,10 @@ public enum Localizable {
      * @return Header of the "name" column.
      */
     public String getHeaderValueName() {
-        final String headerValueName = this.getMoneydanceGUI().getStr("name");
-        return String.format("%s%s",
-                this.settings.getIndentationPrefix(),
-                headerValueName);
+        final String headerValueName =
+                this.resourceBundle.getString("header_value_name");
+        return Helper.INSTANCE.getSettings().getIndentationPrefix()
+                + headerValueName;
     }
 
     /**
@@ -98,9 +63,9 @@ public enum Localizable {
      */
     public String getHeaderValueModified() {
         final String headerValueModified =
-            this.resourceBundle.getString("header_value_modified");
+                this.resourceBundle.getString("header_value_modified");
         return String.format("%s%s",
-                this.settings.getIndentationPrefix(),
+                Helper.INSTANCE.getSettings().getIndentationPrefix(),
                 headerValueModified);
     }
 
@@ -109,9 +74,9 @@ public enum Localizable {
      */
     public String getHeaderValueImport() {
         final String headerValueImport =
-            this.resourceBundle.getString("header_value_import");
+                this.resourceBundle.getString("header_value_import");
         return String.format("%s%s",
-                this.settings.getIndentationPrefix(),
+                Helper.INSTANCE.getSettings().getIndentationPrefix(),
                 headerValueImport);
     }
 
@@ -120,9 +85,9 @@ public enum Localizable {
      */
     public String getHeaderValueDelete() {
         final String headerValueDelete =
-            this.resourceBundle.getString("header_value_delete");
+                this.resourceBundle.getString("header_value_delete");
         return String.format("%s%s",
-                this.settings.getIndentationPrefix(),
+                Helper.INSTANCE.getSettings().getIndentationPrefix(),
                 headerValueDelete);
     }
 
@@ -130,7 +95,7 @@ public enum Localizable {
      * @return Label of the "import" button.
      */
     public String getLabelImportOneButton() {
-        return this.getMoneydanceGUI().getStr("import");
+        return this.resourceBundle.getString("label_import_one_button");
     }
 
     /**
@@ -144,7 +109,7 @@ public enum Localizable {
      * @return Label of the "delete" button.
      */
     public String getLabelDeleteOneButton() {
-        return this.getMoneydanceGUI().getStr("delete");
+        return this.resourceBundle.getString("label_delete_one_button");
     }
 
     /**
@@ -161,11 +126,11 @@ public enum Localizable {
      */
     public String getErrorMessageBaseDirectory(final String baseDirectory) {
         final String templateString = this.resourceBundle.getString(
-        "error_message_base_directory");
+                "error_message_base_directory");
 
         Map<String, String> valuesMap =
                 new ConcurrentHashMap<String, String>(1);
-        valuesMap.put("import.dir",  this.getMarkupFilename(baseDirectory));
+        valuesMap.put("import.dir",  getMarkupFilename(baseDirectory));
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
 
         return sub.replace(templateString);
@@ -178,11 +143,11 @@ public enum Localizable {
      */
     public String getConfirmationMessageDeleteOneFile(final String filename) {
         final String templateString = this.resourceBundle.getString(
-        "confirmation_message_delete_one_file");
+                "confirmation_message_delete_one_file");
 
         Map<String, String> valuesMap =
                 new ConcurrentHashMap<String, String>(1);
-        valuesMap.put("filename",  this.getMarkupFilename(filename));
+        valuesMap.put("filename",  getMarkupFilename(filename));
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
 
         return sub.replace(templateString);
@@ -195,7 +160,7 @@ public enum Localizable {
      */
     public String getConfirmationMessageDeleteAllFiles(final int size) {
         final String templateString = this.resourceBundle.getString(
-        "confirmation_message_delete_all_files");
+                "confirmation_message_delete_all_files");
 
         Map<String, String> valuesMap =
                 new ConcurrentHashMap<String, String>(1);
@@ -211,11 +176,11 @@ public enum Localizable {
      */
     public String getErrorMessageDeleteFile(final String filename) {
         final String templateString = this.resourceBundle.getString(
-        "error_message_delete_file");
+                "error_message_delete_file");
 
         Map<String, String> valuesMap =
                 new ConcurrentHashMap<String, String>(1);
-        valuesMap.put("filename",  this.getMarkupFilename(filename));
+        valuesMap.put("filename",  getMarkupFilename(filename));
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
 
         return sub.replace(templateString);
@@ -225,14 +190,14 @@ public enum Localizable {
      * @return Delete button in confirmation message.
      */
     public String getOptionDeleteFile() {
-        return this.getMoneydanceGUI().getStr("delete");
+        return this.resourceBundle.getString("option_delete_file");
     }
 
     /**
      * @return Cancel button in confirmation message.
      */
     public String getOptionCancel() {
-        return this.getMoneydanceGUI().getStr("cancel");
+        return this.resourceBundle.getString("option_cancel");
     }
 
     /**
@@ -242,7 +207,7 @@ public enum Localizable {
      */
     public String getEmptyMessage(final String baseDirectory) {
         final String templateString = this.resourceBundle.getString(
-        "empty_message");
+                "empty_message");
 
         Map<String, String> valuesMap =
                 new ConcurrentHashMap<String, String>(1);
@@ -252,8 +217,10 @@ public enum Localizable {
         return sub.replace(templateString);
     }
 
-    private String getMarkupFilename(final String filename) {
-        int length = this.settings.getMessageFilenameLineMaxLength();
-        return WordUtils.wrap(filename, length, "<br>", /*wrapLongWords*/ true);
+    private static String getMarkupFilename(final String filename) {
+        return WordUtils.wrap(
+                filename,
+                Helper.INSTANCE.getSettings().getMessageFilenameLineMaxLength(),
+                "<br>", /*wrapLongWords*/ true);
     }
 }

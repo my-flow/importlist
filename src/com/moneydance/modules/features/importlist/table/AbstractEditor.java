@@ -16,6 +16,8 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import com.moneydance.modules.features.importlist.io.FileAdmin;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,17 +33,12 @@ import javax.swing.KeyStroke;
 
 import org.apache.commons.lang3.Validate;
 
-import com.moneydance.modules.features.importlist.io.FileAdmin;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Settings;
-
 /**
  * @author Florian J. Breunig
  */
 public abstract class AbstractEditor extends DefaultCellEditor {
 
     private static final long serialVersionUID = 1L;
-    private final transient Settings        settings;
     private final transient FileAdmin       fileAdmin;
     private final transient ButtonRenderer  buttonRenderer;
     private                 String          label;
@@ -60,13 +57,8 @@ public abstract class AbstractEditor extends DefaultCellEditor {
         Validate.notNull(
                 argButtonRenderer,
                 "button renderer must not be null");
-        this.settings       = Helper.INSTANCE.getSettings();
         this.fileAdmin      = argFileAdmin;
         this.buttonRenderer = argButtonRenderer;
-    }
-
-    protected final Settings getSettings() {
-        return this.settings;
     }
 
     protected final FileAdmin getFileAdmin() {
@@ -90,7 +82,7 @@ public abstract class AbstractEditor extends DefaultCellEditor {
         }
 
         AbstractButton button = this.buttonRenderer.getTableCellRendererButton(
-                table, value, isSelected, isSelected, row, column);
+                value, row);
         ActionListener actionListener = this.getActionListener(
                 table.convertRowIndexToModel(row));
         button.addActionListener(actionListener);

@@ -16,14 +16,14 @@
 
 package com.moneydance.modules.features.importlist.io;
 
+import com.moneydance.apps.md.controller.StubContextFactory;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.moneydance.apps.md.controller.StubContextFactory;
 
 /**
  * @author Florian J. Breunig

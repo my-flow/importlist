@@ -16,12 +16,12 @@
 
 package com.moneydance.modules.features.importlist.io;
 
+import com.moneydance.apps.md.controller.FeatureModuleContext;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Collections;
 import java.util.List;
-
-import com.moneydance.apps.md.controller.FeatureModuleContext;
 
 /**
  * @author Florian J. Breunig

@@ -16,6 +16,9 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.util.CustomDateFormat;
+
 import java.awt.Component;
 import java.text.DateFormat;
 import java.util.Date;
@@ -25,10 +28,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.commons.lang3.Validate;
 
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Settings;
-import com.moneydance.util.CustomDateFormat;
-
 /**
  * @author Florian J. Breunig
  */
@@ -36,7 +35,6 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 1L;
     private final transient ColorSchemeHelper colorSchemeHelper;
-    private final transient Settings          settings;
     private       transient CustomDateFormat  dateFormatter;
     private                 DateFormat        timeFormatter;
 
@@ -49,7 +47,6 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
         this.colorSchemeHelper = argColorSchemeHelper;
         this.setDateFormatter(argDateFormatter);
         this.setTimeFormatter(argTimeFormatter);
-        this.settings          = Helper.INSTANCE.getSettings();
     }
 
     // ESCA-JAVA0138: abstract method from interface TableCellRenderer
@@ -68,7 +65,7 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
         if (value instanceof Date) {
             final Date fileDate = (Date) value;
             label = String.format("%s%s %s",
-                    this.settings.getIndentationPrefix(),
+                    Helper.INSTANCE.getSettings().getIndentationPrefix(),
                     this.dateFormatter.format(fileDate),
                     this.timeFormatter.format(fileDate));
         }

@@ -56,16 +56,12 @@ final class ButtonRenderer implements TableCellRenderer {
             final int row,
             final int column) {
         return this.getTableCellRendererButton(
-                table, value, hasFocus, hasFocus, row, column);
+                value, row);
     }
 
     AbstractButton getTableCellRendererButton(
-            final JTable table,
             final Object value,
-            final boolean isSelected,
-            final boolean hasFocus,
-            final int row,
-            final int column) {
+            final int row) {
         JButton button = new JButton();
         button.setOpaque(false);
         this.colorSchemeHelper.applyColorScheme(button, row);

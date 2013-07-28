@@ -16,11 +16,11 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
+import com.moneydance.apps.md.view.gui.MoneydanceLAF;
+
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.border.EmptyBorder;
-
-import com.moneydance.apps.md.view.gui.MoneydanceLAF;
 
 /**
  * @author Florian J. Breunig

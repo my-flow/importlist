@@ -16,6 +16,9 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.util.Preferences;
+
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
@@ -27,9 +30,6 @@ import javax.swing.event.RowSorterEvent;
 import javax.swing.event.RowSorterListener;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
-
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Preferences;
 
 /**
  * This <code>EventListener</code> is notified upon rearrangement, resorting,

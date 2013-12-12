@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang3.Validate;
 
@@ -39,21 +38,15 @@ public enum Helper {
      */
     INSTANCE;
 
-    /**
-     * Static initialization of class-dependent logger.
-     */
-    private static final Logger LOG = Logger.getLogger(Helper.class.getName());
-
     private final HelperObservable observable;
     private final Settings settings;
-    private final Preferences prefs;
+    private       Preferences prefs;
     private       Localizable localizable;
     private       Tracker tracker;
 
     private Helper() {
         this.observable = new HelperObservable();
         this.settings   = new Settings();
-        this.prefs      = new Preferences();
     }
 
     public Settings getSettings() {
@@ -61,6 +54,11 @@ public enum Helper {
     }
 
     public Preferences getPreferences() {
+        synchronized (Helper.class) {
+            if (this.prefs == null) {
+                this.prefs = new Preferences();
+            }
+        }
         return this.prefs;
     }
 

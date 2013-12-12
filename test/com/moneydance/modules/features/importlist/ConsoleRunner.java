@@ -43,7 +43,7 @@ final class ConsoleRunner {
             Logger.getLogger(ConsoleRunner.class.getName());
 
     static {
-        Helper.INSTANCE.loadLoggerConfiguration();
+        Helper.loadLoggerConfiguration();
     }
 
     /**

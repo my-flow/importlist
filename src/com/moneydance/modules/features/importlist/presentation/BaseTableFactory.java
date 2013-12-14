@@ -44,7 +44,6 @@ public final class BaseTableFactory implements ComponentFactory {
     private final Preferences     prefs;
     private final Localizable     localizable;
     private final TableModel      tableModel;
-    private final FileAdmin       fileAdmin;
     private final JTable          table;
     private final ColumnFactory   columnFactory;
     private final JScrollPane     scrollPane;
@@ -52,7 +51,6 @@ public final class BaseTableFactory implements ComponentFactory {
     public BaseTableFactory(final TableModel argTableModel,
             final FileAdmin argFileAdmin) {
         this.tableModel = argTableModel;
-        this.fileAdmin = argFileAdmin;
         this.settings = Helper.INSTANCE.getSettings();
         this.prefs = Helper.INSTANCE.getPreferences();
         this.localizable = Helper.INSTANCE.getLocalizable();
@@ -69,7 +67,7 @@ public final class BaseTableFactory implements ComponentFactory {
         TableColumnModel baseColumnModel = this.table.getColumnModel();
 
         this.columnFactory = new ColumnFactory(
-                this.fileAdmin,
+                argFileAdmin,
                 this.prefs.getForeground(),
                 this.prefs.getBackground(),
                 this.prefs.getBackgroundAlt(),

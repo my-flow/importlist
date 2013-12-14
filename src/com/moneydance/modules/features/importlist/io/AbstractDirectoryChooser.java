@@ -24,14 +24,10 @@ import java.io.File;
 
 /**
  * This abstract class provides the functionality to choose, access, and reset
- * the extension's base directory. The base directory is the directory in the
- * file system to be monitored. Choosing/resetting the base directory is
- * reflected in the user's preferences (if there are any).
- *
+ * the extension's base directory.
  * This class is abstract because the runtime environment requires access to
  * the file system that is specific to the operating system and the runtime
  * mode (sandboxed vs full access).
- *
  * @author Florian J. Breunig
  */
 abstract class AbstractDirectoryChooser {

@@ -25,7 +25,7 @@
 
   <taskdef name="pmd"
     classname="net.sourceforge.pmd.ant.PMDTask"
-    classpath="lib/pmd-5.0.5.jar;lib/jaxen-1.1.1.jar;lib/asm-3.2.jar"/>
+    classpath="lib/pmd-5.0.5.jar;lib/jaxen-1.1.1.jar;lib/asm-3.2.jar;lib/commons-io-2.4.jar"/>
 
   <taskdef resource="proguard/ant/task.properties"
          classpath="${lib}/proguard-4.10.jar" />
@@ -152,7 +152,7 @@ using JMockit Coverage.">
       <classpath refid="test.classpath"/>
       <test name="com.moneydance.modules.features.importlist.AllTests"/>
       <sysproperty key="jmockit-coverage-excludes"
-                   value=".*AllTests|.*Stub.*|.*Mock.*"/>
+                   value=".*AllTests|.*Stub.*|.*Mock.*|.*ConsoleRunner.*"/>
       <sysproperty key="jmockit-coverage-outputDir"
                    value="${docs}/coverage-report"/>
     </junit>

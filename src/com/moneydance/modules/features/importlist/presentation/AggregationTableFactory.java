@@ -37,18 +37,14 @@ public final class AggregationTableFactory implements ComponentFactory {
 
     private final Settings settings;
     private final Preferences prefs;
-    private final FileAdmin fileAdmin;
-    private final TableModel tableModel;
     private final JTable table;
 
     public AggregationTableFactory(final TableModel argTableModel,
             final FileAdmin argFileAdmin) {
         this.settings   = Helper.INSTANCE.getSettings();
         this.prefs      = Helper.INSTANCE.getPreferences();
-        this.tableModel = argTableModel;
-        this.fileAdmin  = argFileAdmin;
 
-        this.table = new JTable(this.tableModel);
+        this.table = new JTable(argTableModel);
         this.table.setOpaque(false);
         this.table.setShowGrid(false);
         this.table.setShowVerticalLines(false);
@@ -65,7 +61,7 @@ public final class AggregationTableFactory implements ComponentFactory {
         JTableHeader tableHeader         = this.table.getTableHeader();
 
         ColumnFactory columnFactory = new ColumnFactory(
-                this.fileAdmin,
+                argFileAdmin,
                 this.prefs.getForeground(),
                 this.prefs.getBackground(),
                 this.prefs.getBackgroundAlt(),

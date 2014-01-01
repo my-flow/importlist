@@ -1,5 +1,5 @@
 // Import List - http://my-flow.github.io/importlist/
-// Copyright (C) 2011-2013 Florian J. Breunig
+// Copyright (C) 2011-2014 Florian J. Breunig
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -44,8 +44,8 @@ public final class LabelModifiedRendererTest {
                         Color.white,
                         Color.white,
                         Color.white),
-                new CustomDateFormat(""),
-                new SimpleDateFormat());
+                        new CustomDateFormat(""),
+                        new SimpleDateFormat());
     }
 
     @Test
@@ -58,7 +58,7 @@ public final class LabelModifiedRendererTest {
                         false,
                         0,
                         0),
-                notNullValue());
+                        notNullValue());
 
         assertThat(
                 this.labelModifiedRenderer.getTableCellRendererComponent(
@@ -68,7 +68,7 @@ public final class LabelModifiedRendererTest {
                         false,
                         0,
                         0),
-                 notNullValue());
+                        notNullValue());
 
         assertThat(
                 this.labelModifiedRenderer.getTableCellRendererComponent(
@@ -78,7 +78,7 @@ public final class LabelModifiedRendererTest {
                         false,
                         0,
                         0),
-                notNullValue());
+                        notNullValue());
     }
 
     @Test

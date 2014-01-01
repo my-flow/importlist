@@ -1,5 +1,5 @@
 // Import List - http://my-flow.github.io/importlist/
-// Copyright (C) 2011-2013 Florian J. Breunig
+// Copyright (C) 2011-2014 Florian J. Breunig
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
 
         if (this.getBaseDirectory() != null) {
             final File parentDirectory =
-                   this.getBaseDirectory().getParentFile();
+                    this.getBaseDirectory().getParentFile();
             fileChooser.setCurrentDirectory(parentDirectory);
         }
 

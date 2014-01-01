@@ -1,5 +1,5 @@
 // Import List - http://my-flow.github.io/importlist/
-// Copyright (C) 2011-2013 Florian J. Breunig
+// Copyright (C) 2011-2014 Florian J. Breunig
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ public final class HeaderRendererTest {
                         Color.white,
                         Color.white,
                         Color.white),
-                new DefaultTableCellRenderer());
+                        new DefaultTableCellRenderer());
 
         assertThat(
                 headerRenderer.getTableCellRendererComponent(
@@ -51,14 +51,14 @@ public final class HeaderRendererTest {
                         false,
                         0,
                         0),
-                notNullValue());
+                        notNullValue());
 
         headerRenderer = new HeaderRenderer(
                 new OddColorSchemeHelper(
                         Color.white,
                         Color.white,
                         Color.white),
-                new ComponentTableCellRenderer());
+                        new ComponentTableCellRenderer());
 
         assertThat(
                 headerRenderer.getTableCellRendererComponent(
@@ -68,14 +68,14 @@ public final class HeaderRendererTest {
                         false,
                         0,
                         0),
-                notNullValue());
+                        notNullValue());
 
         headerRenderer = new HeaderRenderer(
                 new OddColorSchemeHelper(
                         Color.white,
                         Color.white,
                         Color.white),
-                new JTableCellRenderer());
+                        new JTableCellRenderer());
 
         assertThat(
                 headerRenderer.getTableCellRendererComponent(
@@ -85,14 +85,14 @@ public final class HeaderRendererTest {
                         false,
                         0,
                         0),
-                notNullValue());
+                        notNullValue());
     }
 
     /**
      * @author Florian J. Breunig
      */
     private static final class ComponentTableCellRenderer
-        implements TableCellRenderer {
+    implements TableCellRenderer {
 
         @Override
         public Component getTableCellRendererComponent(
@@ -110,7 +110,7 @@ public final class HeaderRendererTest {
      * @author Florian J. Breunig
      */
     private static final class JTableCellRenderer
-        implements TableCellRenderer {
+    implements TableCellRenderer {
 
         @Override
         public Component getTableCellRendererComponent(

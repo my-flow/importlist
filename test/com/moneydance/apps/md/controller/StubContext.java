@@ -1,5 +1,5 @@
 // Import List - http://my-flow.github.io/importlist/
-// Copyright (C) 2011-2013 Florian J. Breunig
+// Copyright (C) 2011-2014 Florian J. Breunig
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -46,14 +46,14 @@ public final class StubContext extends Main {
     private       UserPreferences userPreferences;
 
     StubContext(final FeatureModule argFeatureModule) {
-       super();
-       this.featureModule = argFeatureModule;
-       try {
-           this.initializeApp();
-       } catch (Exception e) {
-           LOG.log(Level.WARNING, e.getMessage(), e);
-       }
-   }
+        super();
+        this.featureModule = argFeatureModule;
+        try {
+            this.initializeApp();
+        } catch (Exception e) {
+            LOG.log(Level.WARNING, e.getMessage(), e);
+        }
+    }
 
     public void setRootAccount(final RootAccount argRootAccount) {
         this.rootAccount = argRootAccount;

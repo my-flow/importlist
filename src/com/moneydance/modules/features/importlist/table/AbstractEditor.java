@@ -1,5 +1,5 @@
 // Import List - http://my-flow.github.io/importlist/
-// Copyright (C) 2011-2013 Florian J. Breunig
+// Copyright (C) 2011-2014 Florian J. Breunig
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -103,7 +103,7 @@ public abstract class AbstractEditor extends DefaultCellEditor {
             @Override
             public void actionPerformed(final ActionEvent actionEvent) {
                 ActionListener actionListener =
-                    AbstractEditor.this.getActionListener(0);
+                        AbstractEditor.this.getActionListener(0);
                 actionListener.actionPerformed(actionEvent);
             }
         };

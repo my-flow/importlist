@@ -1,5 +1,5 @@
 // Import List - http://my-flow.github.io/importlist/
-// Copyright (C) 2011-2013 Florian J. Breunig
+// Copyright (C) 2011-2014 Florian J. Breunig
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -187,7 +187,7 @@ public final class PreferencesTest {
 
     @Test
     public void testGetTimeFormatter() {
-        assertThat(this.prefs.getTimeFormatter(), notNullValue());
+        assertThat(Preferences.getTimeFormatter(), notNullValue());
     }
 
     @Test
@@ -202,12 +202,12 @@ public final class PreferencesTest {
 
     @Test
     public void testGetMaximumTableWidth() {
-        assertThat(this.prefs.getMaximumTableWidth() > 0, is(true));
+        assertThat(Preferences.getMaximumTableWidth() > 0, is(true));
     }
 
     @Test
     public void testGetMaximumTableHeight() {
-        assertThat(this.prefs.getMaximumTableHeight() > 0, is(true));
+        assertThat(Preferences.getMaximumTableHeight() > 0, is(true));
     }
 
     @Test
@@ -227,12 +227,12 @@ public final class PreferencesTest {
 
     @Test
     public void testGetHeaderFont() {
-        assertThat(this.prefs.getHeaderFont(), notNullValue());
+        assertThat(Preferences.getHeaderFont(), notNullValue());
     }
 
     @Test
     public void testGetBodyFont() {
-        assertThat(this.prefs.getBodyFont(), notNullValue());
+        assertThat(Preferences.getBodyFont(), notNullValue());
     }
 
     @Test

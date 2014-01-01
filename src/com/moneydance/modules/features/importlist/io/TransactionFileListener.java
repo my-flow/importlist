@@ -1,5 +1,5 @@
 // Import List - http://my-flow.github.io/importlist/
-// Copyright (C) 2011-2013 Florian J. Breunig
+// Copyright (C) 2011-2014 Florian J. Breunig
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ extends Observable implements FileAlterationListener {
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG
-        = Logger.getLogger(TransactionFileListener.class.getName());
+    = Logger.getLogger(TransactionFileListener.class.getName());
 
     @Override
     public void onStart(final FileAlterationObserver observer) {

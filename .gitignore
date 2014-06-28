@@ -9,12 +9,8 @@
 *.out
 
 # project specific
-bin
-docs/api
-docs/checkstyle-report
-docs/coverage-report
-docs/pmd-report
-dist
+docs/*
+target
 logs
-src/priv_key
-src/pub_key
+src/main/config/priv_key
+src/main/config/pub_key

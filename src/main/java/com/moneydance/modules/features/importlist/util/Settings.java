@@ -40,9 +40,7 @@ public final class Settings {
     /**
      * The resource in the JAR file to read the settings from.
      */
-    private static final String PROPERTIES_RESOURCE
-    = "com/moneydance/modules/features/importlist/resources/"
-            + "settings.properties";
+    private static final String PROPERTIES_RESOURCE = "settings.properties";
 
     private final Configuration config;
 

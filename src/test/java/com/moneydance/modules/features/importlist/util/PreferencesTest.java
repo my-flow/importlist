@@ -16,11 +16,10 @@
 
 package com.moneydance.modules.features.importlist.util;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.anything;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-
-import com.moneydance.apps.md.controller.StubContextFactory;
 
 import java.util.Hashtable;
 import java.util.Observable;
@@ -31,6 +30,8 @@ import javax.swing.SortOrder;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.moneydance.apps.md.controller.StubContextFactory;
 
 /**
  * @author Florian J. Breunig
@@ -72,7 +73,7 @@ public final class PreferencesTest {
     public void testSetFirstRun() {
         final boolean firstRun = false;
         this.prefs.setFirstRun(firstRun);
-        assertThat(this.prefs.isFirstRun(), is(firstRun));
+        assertThat(this.prefs.isFirstRun(), equalTo(firstRun));
     }
 
     @Test
@@ -87,7 +88,7 @@ public final class PreferencesTest {
 
     @Test
     public void testGetMajorVersion() {
-        assertThat(this.prefs.getMajorVersion() > 0, is(true));
+        assertThat(this.prefs.getMajorVersion() >= 0, equalTo(true));
     }
 
     @Test
@@ -104,7 +105,7 @@ public final class PreferencesTest {
     public void testSetBaseDirectory() {
         String userHome = System.getProperty("user.home");
         this.prefs.setBaseDirectory(userHome);
-        assertThat(this.prefs.getBaseDirectory(), is(userHome));
+        assertThat(this.prefs.getBaseDirectory(), equalTo(userHome));
     }
 
     @Test
@@ -114,7 +115,7 @@ public final class PreferencesTest {
 
     @Test
     public void testGetProxyHost() {
-        assertThat(this.prefs.getProxyHost(), notNullValue());
+        assertThat(this.prefs.getProxyHost(), anything());
     }
 
     @Test
@@ -129,24 +130,24 @@ public final class PreferencesTest {
 
     @Test
     public void testGetProxyUsername() {
-        assertThat(this.prefs.getProxyUsername(), notNullValue());
+        assertThat(this.prefs.getProxyUsername(), anything());
     }
 
     @Test
     public void testGetProxyPassword() {
-        assertThat(this.prefs.getProxyPassword(), notNullValue());
+        assertThat(this.prefs.getProxyPassword(), anything());
     }
 
     @Test
     public void testSetColumnWidths() {
         int columnWidth = 1;
         this.prefs.setColumnWidths(0,  columnWidth);
-        assertThat(this.prefs.getColumnWidths(0), is(columnWidth));
+        assertThat(this.prefs.getColumnWidths(0), equalTo(columnWidth));
     }
 
     @Test
     public void testGetColumnWidths() {
-        assertThat(this.prefs.getColumnWidths(0) > 0, is(true));
+        assertThat(this.prefs.getColumnWidths(0) > 0, equalTo(true));
     }
 
     @Test
@@ -166,7 +167,7 @@ public final class PreferencesTest {
         RowSorter.SortKey sortKey =
                 new RowSorter.SortKey(0, SortOrder.ASCENDING);
         this.prefs.setSortKey(sortKey);
-        assertThat(this.prefs.getSortKey(), is(sortKey));
+        assertThat(this.prefs.getSortKey(), equalTo(sortKey));
     }
 
     @Test
@@ -176,8 +177,8 @@ public final class PreferencesTest {
 
     @Test
     public void testGetColumnCount() {
-        assertThat(this.prefs.getColumnCount() > 0, is(true));
-        assertThat(this.prefs.getColumnCount() > 0, is(true));
+        assertThat(this.prefs.getColumnCount() > 0, equalTo(true));
+        assertThat(this.prefs.getColumnCount() > 0, equalTo(true));
     }
 
     @Test
@@ -192,22 +193,22 @@ public final class PreferencesTest {
 
     @Test
     public void testGetPreferredTableWidth() {
-        assertThat(this.prefs.getPreferredTableWidth() > 0, is(true));
+        assertThat(this.prefs.getPreferredTableWidth() > 0, equalTo(true));
     }
 
     @Test
     public void testGetPreferredTableHeight() {
-        assertThat(this.prefs.getPreferredTableHeight(0) > 0, is(true));
+        assertThat(this.prefs.getPreferredTableHeight(0) > 0, equalTo(true));
     }
 
     @Test
     public void testGetMaximumTableWidth() {
-        assertThat(Preferences.getMaximumTableWidth() > 0, is(true));
+        assertThat(Preferences.getMaximumTableWidth() > 0, equalTo(true));
     }
 
     @Test
     public void testGetMaximumTableHeight() {
-        assertThat(Preferences.getMaximumTableHeight() > 0, is(true));
+        assertThat(Preferences.getMaximumTableHeight() > 0, equalTo(true));
     }
 
     @Test
@@ -237,12 +238,12 @@ public final class PreferencesTest {
 
     @Test
     public void testGetHeaderRowHeight() {
-        assertThat(this.prefs.getHeaderRowHeight() > 0, is(true));
+        assertThat(this.prefs.getHeaderRowHeight() > 0, equalTo(true));
     }
 
     @Test
     public void testGetBodyRowHeight() {
-        assertThat(this.prefs.getBodyRowHeight() > 0, is(true));
+        assertThat(this.prefs.getBodyRowHeight() > 0, equalTo(true));
     }
 
 }

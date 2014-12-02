@@ -16,14 +16,14 @@
 
 package com.moneydance.apps.md.controller;
 
-import com.moneydance.apps.md.extensionapi.AccountEditor;
-import com.moneydance.apps.md.model.RootAccount;
-import com.moneydance.apps.md.view.HomePageView;
-
 import java.awt.Image;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.moneydance.apps.md.extensionapi.AccountEditor;
+import com.moneydance.apps.md.model.RootAccount;
+import com.moneydance.apps.md.view.HomePageView;
 
 /**
  * This test stub simulates a context in stand-alone mode. It provides canned
@@ -44,12 +44,18 @@ public final class StubContext extends Main {
     private final FeatureModule   featureModule;
     private       RootAccount     rootAccount;
     private       UserPreferences userPreferences;
+    private static boolean        isInitialized;
 
     StubContext(final FeatureModule argFeatureModule) {
         super();
         this.featureModule = argFeatureModule;
         try {
-            this.initializeApp();
+            if (!isInitialized) {
+                this.initializeApp();
+                isInitialized = true;
+            }
+        } catch (Error e) {
+            LOG.log(Level.SEVERE, e.getMessage(), e);
         } catch (Exception e) {
             LOG.log(Level.WARNING, e.getMessage(), e);
         }

@@ -16,22 +16,23 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.apps.md.controller.StubContext;
-import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.apps.md.model.Account;
-import com.moneydance.apps.md.model.BankAccount;
-import com.moneydance.apps.md.model.CreditCardAccount;
-import com.moneydance.apps.md.model.CurrencyTable;
-import com.moneydance.apps.md.model.CurrencyType;
-import com.moneydance.apps.md.model.IncomeAccount;
-import com.moneydance.apps.md.model.RootAccount;
-
 import java.io.File;
 import java.util.Collections;
 
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.junit.Test;
+
+import com.moneydance.apps.md.controller.StubContext;
+import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.apps.md.model.Account;
+import com.moneydance.apps.md.model.AccountBook;
+import com.moneydance.apps.md.model.BankAccount;
+import com.moneydance.apps.md.model.CreditCardAccount;
+import com.moneydance.apps.md.model.CurrencyTable;
+import com.moneydance.apps.md.model.CurrencyType;
+import com.moneydance.apps.md.model.IncomeAccount;
+import com.moneydance.apps.md.model.RootAccount;
 
 /**
  * @author Florian J. Breunig
@@ -57,7 +58,9 @@ public final class ImportOneOperationTest {
 
     @Test
     public void testExecute() {
+        AccountBook accountBook = AccountBook.fakeAccountBook();
         RootAccount fullRootAccount = new RootAccount(
+                accountBook,
                 this.currencyType,
                 this.currencyTable);
         Account incomeAccount = new IncomeAccount(

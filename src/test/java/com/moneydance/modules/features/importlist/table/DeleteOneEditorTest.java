@@ -19,14 +19,15 @@ package com.moneydance.modules.features.importlist.table;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.io.FileAdmin;
-
 import java.awt.Color;
 import java.awt.event.ActionListener;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.util.Helper;
 
 /**
  * @author Florian J. Breunig
@@ -37,6 +38,7 @@ public final class DeleteOneEditorTest {
 
     @Before
     public void setUp() {
+        Helper.INSTANCE.getPreferences();
         StubContextFactory factory = new StubContextFactory();
         this.deleteOneEditor = new DeleteOneEditor(
                 new FileAdmin(null, factory.getContext()),

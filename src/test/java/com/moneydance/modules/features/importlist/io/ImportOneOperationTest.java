@@ -33,6 +33,7 @@ import com.moneydance.apps.md.model.CurrencyTable;
 import com.moneydance.apps.md.model.CurrencyType;
 import com.moneydance.apps.md.model.IncomeAccount;
 import com.moneydance.apps.md.model.RootAccount;
+import com.moneydance.modules.features.importlist.util.Helper;
 
 /**
  * @author Florian J. Breunig
@@ -47,6 +48,7 @@ public final class ImportOneOperationTest {
     private final CurrencyType  currencyType;
 
     public ImportOneOperationTest() {
+        Helper.INSTANCE.getPreferences();
         this.incomeFile     = new File("mybank.csv");
         this.creditcardFile = new File("credit.csv");
         this.noCategoryFile = new File("nocategory.csv");

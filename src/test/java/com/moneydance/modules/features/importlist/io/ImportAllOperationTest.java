@@ -16,9 +16,6 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.apps.md.controller.StubContext;
-import com.moneydance.apps.md.controller.StubContextFactory;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +24,10 @@ import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.moneydance.apps.md.controller.StubContext;
+import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.Main;
 
 /**
  * @author Florian J. Breunig
@@ -38,7 +39,10 @@ public final class ImportAllOperationTest {
 
     @Before
     public void setUp() {
-        final StubContextFactory factory = new StubContextFactory();
+        Main main = new Main();
+        final StubContextFactory factory = new StubContextFactory(main);
+        factory.init();
+        main.init();
         StubContext context = factory.getContext();
 
         this.files = new ArrayList<File>();

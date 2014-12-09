@@ -1,4 +1,5 @@
-Import List
+Import List [![Build Status](https://travis-ci.org/my-flow/importlist.svg?branch=master)]
+(https://travis-ci.org/my-flow/importlist)
 ===========
 
 Import List is an open-source extension for [Moneydance®]

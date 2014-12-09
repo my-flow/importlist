@@ -27,7 +27,7 @@ import org.junit.Test;
 
 import com.moneydance.apps.md.controller.StubContext;
 import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.Main;
+import com.moneydance.modules.features.importlist.util.Helper;
 
 /**
  * @author Florian J. Breunig
@@ -39,10 +39,8 @@ public final class ImportAllOperationTest {
 
     @Before
     public void setUp() {
-        Main main = new Main();
-        final StubContextFactory factory = new StubContextFactory(main);
-        factory.init();
-        main.init();
+        Helper.INSTANCE.getPreferences();
+        final StubContextFactory factory = new StubContextFactory();
         StubContext context = factory.getContext();
 
         this.files = new ArrayList<File>();

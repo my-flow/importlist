@@ -43,6 +43,7 @@ public final class PreferencesTest {
 
     @Before
     public void setUp() {
+        Helper.INSTANCE.getPreferences();
         this.prefs = new Preferences();
         this.factory = new StubContextFactory();
         this.prefs.setContext(this.factory.getContext());
@@ -55,7 +56,8 @@ public final class PreferencesTest {
             @Override
             public void update(final Observable observable,
                     final Object updateAll) {
-                PreferencesTest.this.prefs.setContext(PreferencesTest.this.factory.getContext());
+                PreferencesTest.this.prefs.setContext(
+                        PreferencesTest.this.factory.getContext());
             }
         });
         this.prefs.getLocale();

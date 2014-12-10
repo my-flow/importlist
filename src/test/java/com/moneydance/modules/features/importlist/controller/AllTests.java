@@ -27,7 +27,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
     AggregationTableModelTest.class,
     FileTableModelTest.class,
-    ViewControllerTest.class })
+    ViewControllerTest.class
+})
 public final class AllTests {
     // no test cases
 }

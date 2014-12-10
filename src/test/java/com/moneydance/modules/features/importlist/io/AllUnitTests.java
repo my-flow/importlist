@@ -28,7 +28,8 @@ import org.junit.runners.Suite.SuiteClasses;
     DirectoryValidatorTest.class,
     ImportAllOperationTest.class,
     ImportOneOperationTest.class,
-    TransactionFileListenerTest.class })
+    TransactionFileListenerTest.class
+})
 public final class AllUnitTests {
     // no test cases
 }

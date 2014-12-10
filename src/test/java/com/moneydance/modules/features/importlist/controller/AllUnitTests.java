@@ -26,7 +26,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
     AggregationTableModelTest.class,
-    FileTableModelTest.class })
+    FileTableModelTest.class
+})
 public final class AllUnitTests {
     // no test cases
 }

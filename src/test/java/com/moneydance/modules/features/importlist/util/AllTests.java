@@ -31,7 +31,8 @@ import org.junit.runners.Suite.SuiteClasses;
     LocalizableTest.class,
     LogFormatterTest.class,
     HelperTest.class,
-    TrackerTest.class })
+    TrackerTest.class
+})
 public final class AllTests {
     // no test cases
 }

@@ -27,11 +27,11 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
     AlphanumComparatorTest.class,
     SettingsTest.class,
-    PreferencesTest.class,
     LocalizableTest.class,
     LogFormatterTest.class,
     HelperTest.class,
-    TrackerTest.class })
+    TrackerTest.class
+})
 public final class AllUnitTests {
     // no test cases
 }

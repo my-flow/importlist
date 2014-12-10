@@ -25,15 +25,14 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-    AggregationTableFactoryTest.class,
-    BaseTableFactoryTest.class,
     DirectoryChooserButtonFactoryTest.class,
     EmptyLabelFactoryTest.class,
     FileTableRowSorterTest.class,
     JCustomScrollPaneTest.class,
     JCustomSplitPaneTest.class,
     SplitPaneFactoryTest.class,
-    TableListenerTest.class })
+    TableListenerTest.class
+})
 public final class AllUnitTests {
     // no test cases
 }

@@ -231,7 +231,11 @@
       <fileset dir="${resources}" includes="*"/>
     </copy>
 
-    <junit printsummary="yes" haltonfailure="yes" fork="yes">
+    <junit printsummary="yes"
+           haltonfailure="yes"
+           showoutput="true"
+           enabletestlistenerevents="true" 
+           fork="yes">
       <classpath refid="test.classpath"/>
       <test name="com.moneydance.modules.features.importlist.AllUnitTests"/>
       <sysproperty key="jmockit-coverage-excludes"

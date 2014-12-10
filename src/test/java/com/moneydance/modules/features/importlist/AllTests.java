@@ -30,7 +30,8 @@ import org.junit.runners.Suite.SuiteClasses;
     com.moneydance.modules.features.importlist.table.AllTests.class,
     com.moneydance.modules.features.importlist.util.AllTests.class,
     com.moneydance.modules.features.importlist.presentation.AllTests.class,
-    com.moneydance.modules.features.importlist.controller.AllTests.class })
+    com.moneydance.modules.features.importlist.controller.AllTests.class
+})
 public final class AllTests {
     // no test cases
 }

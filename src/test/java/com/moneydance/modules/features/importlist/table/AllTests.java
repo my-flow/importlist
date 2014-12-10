@@ -36,7 +36,8 @@ import org.junit.runners.Suite.SuiteClasses;
     ImportOneEditorTest.class,
     LabelModifiedRendererTest.class,
     LabelNameRendererTest.class,
-    OddColorSchemeHelperTest.class })
+    OddColorSchemeHelperTest.class
+})
 public final class AllTests {
     // no test cases
 }

@@ -33,7 +33,8 @@ import org.junit.runners.Suite.SuiteClasses;
     ImportAllOperationTest.class,
     ImportOneOperationTest.class,
     MacDirectoryChooserTest.class,
-    TransactionFileListenerTest.class })
+    TransactionFileListenerTest.class
+})
 public final class AllTests {
     // no test cases
 }

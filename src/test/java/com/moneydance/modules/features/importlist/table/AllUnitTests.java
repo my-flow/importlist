@@ -30,13 +30,11 @@ import org.junit.runners.Suite.SuiteClasses;
     ColumnFactoryTest.class,
     DeleteAllEditorTest.class,
     DeleteOneEditorTest.class,
-    EvenColorSchemeHelperTest.class,
-    HeaderRendererTest.class,
     ImportAllEditorTest.class,
     ImportOneEditorTest.class,
     LabelModifiedRendererTest.class,
     LabelNameRendererTest.class,
-    OddColorSchemeHelperTest.class })
+})
 public final class AllUnitTests {
     // no test cases
 }

@@ -20,11 +20,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.util.Helper;
 
 /**
  * @author Florian J. Breunig
@@ -35,6 +35,8 @@ public final class ViewControllerTest {
 
     @Before
     public void setUp() {
+        Helper.INSTANCE.getPreferences();
+        new StubContextFactory();
         this.viewController = new ViewController(
                 null,
                 new StubContextFactory().getContext(),

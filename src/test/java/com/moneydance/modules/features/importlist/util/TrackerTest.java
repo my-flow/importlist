@@ -19,6 +19,8 @@ package com.moneydance.modules.features.importlist.util;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.moneydance.apps.md.controller.StubContextFactory;
+
 /**
  * @author Florian J. Breunig
  */
@@ -28,6 +30,8 @@ public final class TrackerTest {
 
     @Before
     public void setUp() {
+        Helper.INSTANCE.getPreferences();
+        new StubContextFactory();
         this.tracker = new Tracker(0, "extension name", "full version",
                 "tracking code");
     }

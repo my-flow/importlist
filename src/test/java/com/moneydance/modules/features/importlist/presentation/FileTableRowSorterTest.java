@@ -16,13 +16,15 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
-import com.moneydance.modules.features.importlist.controller.FileTableModel;
-
 import java.io.File;
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.controller.FileTableModel;
+import com.moneydance.modules.features.importlist.util.Helper;
 
 /**
  * @author Florian J. Breunig
@@ -33,6 +35,8 @@ public final class FileTableRowSorterTest {
 
     @Before
     public void setUp() {
+        Helper.INSTANCE.getPreferences();
+        new StubContextFactory();
         this.fileTableRowSorter = new FileTableRowSorter(
                 new FileTableModel(new ArrayList<File>()));
     }

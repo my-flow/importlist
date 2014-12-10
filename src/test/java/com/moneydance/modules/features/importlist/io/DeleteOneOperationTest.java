@@ -24,6 +24,9 @@ import java.util.Collections;
 
 import org.junit.Test;
 
+import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.util.Helper;
+
 /**
  * @author Florian J. Breunig
  */
@@ -33,6 +36,8 @@ public final class DeleteOneOperationTest {
     private final File deleteFile;
 
     public DeleteOneOperationTest() {
+        Helper.INSTANCE.getPreferences();
+        new StubContextFactory();
         this.incomeFile = new File("mybank.csv");
         this.deleteFile = new File("deleteme.csv");
     }

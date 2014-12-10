@@ -22,6 +22,9 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.util.Helper;
+
 /**
  * @author Florian J. Breunig
  */
@@ -31,6 +34,8 @@ public final class EmptyLabelFactoryTest {
 
     @Before
     public void setUp() {
+        Helper.INSTANCE.getPreferences();
+        new StubContextFactory();
         this.emptyLabelFactory = new EmptyLabelFactory();
     }
 

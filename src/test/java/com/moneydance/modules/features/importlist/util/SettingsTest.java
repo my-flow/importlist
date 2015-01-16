@@ -46,7 +46,7 @@ public final class SettingsTest {
     }
 
     @Test
-    public void testGetIconResource() {
+    public void testGetIconImage() {
         assertThat(this.settings.getIconImage(), notNullValue());
     }
 
@@ -62,7 +62,8 @@ public final class SettingsTest {
 
     @Test
     public void testGetTransactionFileImportUriScheme() {
-        assertThat(this.settings.getTransactionFileImportUriScheme(), notNullValue());
+        assertThat(this.settings.getTransactionFileImportUriScheme(),
+                notNullValue());
     }
 
     @Test
@@ -77,7 +78,8 @@ public final class SettingsTest {
 
     @Test
     public void testGetTransactionFileExtensions() {
-        assertThat(this.settings.getTransactionFileExtensions(), notNullValue());
+        assertThat(this.settings.getTransactionFileExtensions(),
+                notNullValue());
     }
 
     @Test
@@ -163,31 +165,6 @@ public final class SettingsTest {
     @Test
     public void testGetMessageFilenameLineMaxLength() {
         assertThat(this.settings.getMessageFilenameLineMaxLength() >= 0, is(true));
-    }
-
-    @Test
-    public void testGetLengthOfVersionDigits() {
-        assertThat(this.settings.getLengthOfVersionDigits() >= 0, is(true));
-    }
-
-    @Test
-    public void testGetVersionWithOpaqueHomepageView() {
-        assertThat(this.settings.getVersionWithOpaqueHomepageView() >= 0, is(true));
-    }
-
-    @Test
-    public void testGetColorValueFgDef() {
-        assertThat(this.settings.getColorValueFgDef(), notNullValue());
-    }
-
-    @Test
-    public void testGetColorValueBgDef() {
-        assertThat(this.settings.getColorValueBgDef(), notNullValue());
-    }
-
-    @Test
-    public void testGetColorValueBgAltDef() {
-        assertThat(this.settings.getColorValueBgAltDef(), notNullValue());
     }
 
     @Test

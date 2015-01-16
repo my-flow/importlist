@@ -29,12 +29,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 final class LabelNameRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 1L;
-    private final transient ColorSchemeHelper colorSchemeHelper;
-
-
-    LabelNameRenderer(final ColorSchemeHelper argColorSchemeHelper) {
-        this.colorSchemeHelper = argColorSchemeHelper;
-    }
 
     // ESCA-JAVA0138: abstract method from interface TableCellRenderer
     @Override
@@ -46,7 +40,6 @@ final class LabelNameRenderer extends DefaultTableCellRenderer {
             final int row,
             final int column) {
         this.setOpaque(false);
-        this.colorSchemeHelper.applyColorScheme(this, row);
         String label = null;
         if (value != null) {
             label = String.format("%s%s", Helper.INSTANCE.getSettings()

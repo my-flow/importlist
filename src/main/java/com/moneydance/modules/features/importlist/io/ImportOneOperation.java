@@ -16,11 +16,10 @@
 
 package com.moneydance.modules.features.importlist.io;
 
+import com.infinitekind.moneydance.model.Account;
+import com.infinitekind.moneydance.model.AccountUtil;
+import com.infinitekind.moneydance.model.AcctFilter;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
-import com.moneydance.apps.md.model.Account;
-import com.moneydance.apps.md.model.AccountUtil;
-import com.moneydance.apps.md.model.AcctFilter;
-import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
@@ -93,7 +92,8 @@ final class ImportOneOperation implements FileOperation {
         final String fileName = FilenameUtils.removeExtension(
                 argFile.getName());
 
-        RootAccount rootAccount = this.context.getRootAccount();
+        Account rootAccount =
+                this.context.getCurrentAccountBook().getRootAccount();
 
         String accountNumber = "-1";
 

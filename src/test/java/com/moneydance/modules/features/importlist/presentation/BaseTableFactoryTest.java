@@ -19,15 +19,15 @@ package com.moneydance.modules.features.importlist.presentation;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import javax.swing.table.TableModel;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.modules.features.importlist.controller.AggregationTableModel;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.util.Helper;
+
+import javax.swing.table.TableModel;
+
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Florian J. Breunig
@@ -42,7 +42,9 @@ public final class BaseTableFactoryTest {
         StubContextFactory factory = new StubContextFactory();
         FileAdmin fileAdmin     = new FileAdmin(null, factory.getContext());
         TableModel tableModel   = new AggregationTableModel();
-        this.tableFactory = new BaseTableFactory(tableModel, fileAdmin);
+        this.tableFactory = new BaseTableFactory(
+                tableModel,
+                fileAdmin);
     }
 
     @Test

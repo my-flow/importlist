@@ -17,34 +17,29 @@
 package com.moneydance.modules.features.importlist.presentation;
 
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Preferences;
+
+import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import javax.swing.JPanel;
 
 /**
  * @author Florian J. Breunig
  */
 public final class EmptyLabelFactory implements ComponentFactory {
 
-    private Preferences prefs;
-    private JLabel emptyLabel;
+    private final JPanel emptyPanel;
 
-    private void init() {
-        this.prefs      = Helper.INSTANCE.getPreferences();
-        this.emptyLabel = new JLabel();
-        this.emptyLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        this.emptyLabel.setBorder(MoneydanceLAF.homePageBorder);
+    public EmptyLabelFactory(final String text) {
+        JLabel emptyLabel = new JLabel(text);
+
+        this.emptyPanel = new JPanel(new GridBagLayout());
+        this.emptyPanel.add(emptyLabel);
+        this.emptyPanel.setBorder(MoneydanceLAF.homePageBorder);
     }
 
     @Override
-    public JLabel getComponent() {
-        if (this.emptyLabel == null) {
-            this.init();
-        }
-        this.emptyLabel.setBackground(this.prefs.getBackground());
-        this.emptyLabel.setFont(Preferences.getBodyFont());
-        return this.emptyLabel;
+    public JPanel getComponent() {
+        return this.emptyPanel;
     }
 }

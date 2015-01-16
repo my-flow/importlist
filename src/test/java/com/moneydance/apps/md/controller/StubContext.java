@@ -21,8 +21,8 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.infinitekind.moneydance.model.AccountBook;
 import com.moneydance.apps.md.extensionapi.AccountEditor;
-import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.view.HomePageView;
 
 /**
@@ -42,7 +42,7 @@ public final class StubContext extends Main {
             Logger.getLogger(StubContext.class.getName());
 
     private final FeatureModule   featureModule;
-    private       RootAccount     rootAccount;
+    private       AccountBook     accountBook;
     private       UserPreferences userPreferences;
     private static boolean        isInitialized;
 
@@ -61,13 +61,13 @@ public final class StubContext extends Main {
         }
     }
 
-    public void setRootAccount(final RootAccount argRootAccount) {
-        this.rootAccount = argRootAccount;
+    public void setAccountBook(final AccountBook argAccountBook) {
+        this.accountBook = argAccountBook;
     }
 
     @Override
-    public RootAccount getRootAccount() {
-        return this.rootAccount;
+    public AccountBook getCurrentAccountBook() {
+        return this.accountBook;
     }
 
     @Override

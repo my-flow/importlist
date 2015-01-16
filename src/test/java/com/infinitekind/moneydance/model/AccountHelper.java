@@ -1,5 +1,5 @@
 // Import List - http://my-flow.github.io/importlist/
-// Copyright (C) 2011-2015 Florian J. Breunig
+// Copyright (C) 2011-2014 Florian J. Breunig
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,24 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-package com.moneydance.modules.features.importlist.table;
+package com.infinitekind.moneydance.model;
 
-import java.awt.Color;
-import java.awt.Component;
+public final class AccountHelper {
 
-/**
- * This template class defines the abstract methods required to apply a color
- * scheme to the components of the GUI framework.
- *
- * @author Florian J. Breunig
- */
-interface ColorSchemeHelper {
-
-    void applyColorScheme(final Component component, final int row);
-
-    void setForeground(final Color argForeground);
-
-    void setBackground(final Color argBackground);
-
-    void setBackgroundAlt(final Color argBackgroundAlt);
+    public static void addSubAccount(
+            final Account parent,
+            final Account subaccount
+            ) {
+        parent.addSubAccount(subaccount);
+    }
 }

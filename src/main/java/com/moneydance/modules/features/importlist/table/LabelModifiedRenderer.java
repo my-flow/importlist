@@ -16,8 +16,8 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import com.infinitekind.util.CustomDateFormat;
 import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.util.CustomDateFormat;
 
 import java.awt.Component;
 import java.text.DateFormat;
@@ -34,17 +34,12 @@ import org.apache.commons.lang3.Validate;
 final class LabelModifiedRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 1L;
-    private final transient ColorSchemeHelper colorSchemeHelper;
     private       transient CustomDateFormat  dateFormatter;
     private                 DateFormat        timeFormatter;
 
     LabelModifiedRenderer(
-            final ColorSchemeHelper argColorSchemeHelper,
             final CustomDateFormat argDateFormatter,
             final DateFormat argTimeFormatter) {
-        Validate.notNull(argColorSchemeHelper,
-                "color scheme helper must not be null"); //$NON-NLS-1$
-        this.colorSchemeHelper = argColorSchemeHelper;
         this.setDateFormatter(argDateFormatter);
         this.setTimeFormatter(argTimeFormatter);
     }
@@ -60,7 +55,6 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
             final int column) {
 
         this.setOpaque(false);
-        this.colorSchemeHelper.applyColorScheme(this, row);
         String label = null;
         if (value instanceof Date) {
             final Date fileDate = (Date) value;

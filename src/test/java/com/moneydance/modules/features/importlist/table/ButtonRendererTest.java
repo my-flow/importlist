@@ -38,11 +38,7 @@ public final class ButtonRendererTest {
 
     @Before
     public void setUp() {
-        this.buttonRenderer = new ButtonRenderer(
-                new OddColorSchemeHelper(
-                        Color.white,
-                        Color.white,
-                        Color.white));
+        this.buttonRenderer = new ButtonRenderer();
     }
 
     @Test

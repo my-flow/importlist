@@ -19,7 +19,11 @@ package com.moneydance.modules.features.importlist.table;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import java.awt.Color;
+import com.infinitekind.util.CustomDateFormat;
+import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.util.Helper;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -27,11 +31,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.io.FileAdmin;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.util.CustomDateFormat;
 
 /**
  * @author Florian J. Breunig
@@ -46,9 +45,6 @@ public final class ColumnFactoryTest {
         StubContextFactory factory = new StubContextFactory();
         this.columnFactory = new ColumnFactory(
                 new FileAdmin(null, factory.getContext()),
-                Color.white,
-                Color.white,
-                Color.white,
                 new DefaultTableCellRenderer(),
                 new CustomDateFormat(""),
                 new SimpleDateFormat());
@@ -107,21 +103,6 @@ public final class ColumnFactoryTest {
     @Test
     public void testGetDeleteAllEditor() {
         assertThat(this.columnFactory.getDeleteAllEditor(), notNullValue());
-    }
-
-    @Test
-    public void testSetForeground() {
-        this.columnFactory.setForeground(Color.BLACK);
-    }
-
-    @Test
-    public void testSetBackground() {
-        this.columnFactory.setBackground(Color.BLACK);
-    }
-
-    @Test
-    public void testSetBackgroundAlt() {
-        this.columnFactory.setBackgroundAlt(Color.BLACK);
     }
 
     @Test

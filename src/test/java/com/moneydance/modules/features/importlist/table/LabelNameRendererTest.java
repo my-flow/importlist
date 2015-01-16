@@ -19,8 +19,6 @@ package com.moneydance.modules.features.importlist.table;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import java.awt.Color;
-
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
@@ -36,15 +34,11 @@ public final class LabelNameRendererTest {
 
     @Before
     public void setUp() {
-        this.labelNameRenderer = new LabelNameRenderer(
-                new OddColorSchemeHelper(
-                        Color.white,
-                        Color.white,
-                        Color.white));
+        this.labelNameRenderer = new LabelNameRenderer();
     }
 
     @Test
-    public void testGetTableCellRendererComponent () {
+    public void testGetTableCellRendererComponent() {
         assertThat(
                 this.labelNameRenderer.getTableCellRendererComponent(
                         new JTable(),

@@ -31,7 +31,7 @@ public final class DirectoryChooserButtonFactoryTest {
 
     @Before
     public void setUp() {
-        this.directoryChooserFactory = new DirectoryChooserButtonFactory(null);
+        this.directoryChooserFactory = new DirectoryChooserButtonFactory("stub text", null);
     }
 
     @Test

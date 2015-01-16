@@ -19,14 +19,16 @@ package com.moneydance.modules.features.importlist.table;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import com.moneydance.apps.md.controller.StubContextFactory;
+
 import java.awt.Button;
-import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -34,14 +36,17 @@ import org.junit.Test;
  */
 public final class HeaderRendererTest {
 
+    private StubContextFactory factory;
+
+    @Before
+    public void setUp() {
+        this.factory = new StubContextFactory();
+    }
+
     @Test
     public void testGetTableCellRendererComponent() {
         TableCellRenderer headerRenderer = new HeaderRenderer(
-                new OddColorSchemeHelper(
-                        Color.white,
-                        Color.white,
-                        Color.white),
-                        new DefaultTableCellRenderer());
+                new DefaultTableCellRenderer());
 
         assertThat(
                 headerRenderer.getTableCellRendererComponent(
@@ -54,11 +59,7 @@ public final class HeaderRendererTest {
                         notNullValue());
 
         headerRenderer = new HeaderRenderer(
-                new OddColorSchemeHelper(
-                        Color.white,
-                        Color.white,
-                        Color.white),
-                        new ComponentTableCellRenderer());
+                new ComponentTableCellRenderer());
 
         assertThat(
                 headerRenderer.getTableCellRendererComponent(
@@ -71,11 +72,7 @@ public final class HeaderRendererTest {
                         notNullValue());
 
         headerRenderer = new HeaderRenderer(
-                new OddColorSchemeHelper(
-                        Color.white,
-                        Color.white,
-                        Color.white),
-                        new JTableCellRenderer());
+                new JTableCellRenderer());
 
         assertThat(
                 headerRenderer.getTableCellRendererComponent(

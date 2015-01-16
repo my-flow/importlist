@@ -30,21 +30,10 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.TableCellRenderer;
 
-import org.apache.commons.lang3.Validate;
-
 /**
  * @author Florian J. Breunig
  */
 final class ButtonRenderer implements TableCellRenderer {
-
-    private final ColorSchemeHelper colorSchemeHelper;
-
-    ButtonRenderer(final ColorSchemeHelper argColorSchemeHelper) {
-        Validate.notNull(
-                argColorSchemeHelper,
-                "color scheme helper must not be null");
-        this.colorSchemeHelper = argColorSchemeHelper;
-    }
 
     // ESCA-JAVA0138: abstract method from interface TableCellRenderer
     @Override
@@ -64,17 +53,10 @@ final class ButtonRenderer implements TableCellRenderer {
             final int row) {
         JButton button = new JButton();
         button.setOpaque(false);
-        this.colorSchemeHelper.applyColorScheme(button, row);
         Border border = BorderFactory.createEtchedBorder(
                 EtchedBorder.LOWERED,
                 button.getBackground().brighter(),
                 button.getBackground().darker());
-        if (row % 2 == 0) {
-            border = BorderFactory.createEtchedBorder(
-                    EtchedBorder.RAISED,
-                    button.getBackground().darker(),
-                    button.getBackground().brighter());
-        }
         button.setBorder(border);
 
         if (value != null) {

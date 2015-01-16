@@ -16,12 +16,9 @@
 
 package com.moneydance.modules.features.importlist.table;
 
+import com.infinitekind.util.CustomDateFormat;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.util.CustomDateFormat;
 
-import java.awt.Color;
 import java.text.DateFormat;
 
 import javax.swing.table.TableCellRenderer;
@@ -35,8 +32,6 @@ import org.apache.commons.lang3.Validate;
  */
 public final class ColumnFactory {
 
-    private final ColorSchemeHelper     evenColorSchemeHelper;
-    private final ColorSchemeHelper     oddColorSchemeHelper;
     private final TableCellRenderer     headerRenderer;
     private final TableCellRenderer     labelNameOneRenderer;
     private final TableCellRenderer     labelNameAllRenderer;
@@ -51,51 +46,23 @@ public final class ColumnFactory {
 
     public ColumnFactory(
             final FileAdmin fileAdmin,
-            final Color foreground,
-            final Color background,
-            final Color backgroundAlt,
             final TableCellRenderer defaultHeaderTableCellRenderer,
             final CustomDateFormat argDateFormatter,
             final DateFormat argTimeFormatter) {
         Validate.notNull(fileAdmin, "file admin must not be null");
-        final Preferences prefs    = Helper.INSTANCE.getPreferences();
-
-        this.evenColorSchemeHelper = new EvenColorSchemeHelper(
-                foreground,
-                background,
-                backgroundAlt);
-        this.oddColorSchemeHelper  = new OddColorSchemeHelper(
-                foreground,
-                background,
-                backgroundAlt);
-
-        ColorSchemeHelper defaultColorSchemeHelper = this.evenColorSchemeHelper;
-        ColorSchemeHelper customColorSchemeHelper  = this.oddColorSchemeHelper;
-        int opaqueVersion = Helper.INSTANCE.getSettings()
-                .getVersionWithOpaqueHomepageView();
-        if (prefs.getMajorVersion() >= opaqueVersion) {
-            defaultColorSchemeHelper = this.oddColorSchemeHelper;
-        }
 
         this.headerRenderer           = new HeaderRenderer(
-                defaultColorSchemeHelper,
                 defaultHeaderTableCellRenderer);
-        this.labelNameOneRenderer     = new LabelNameRenderer(
-                defaultColorSchemeHelper);
-        this.labelNameAllRenderer     = new LabelNameRenderer(
-                customColorSchemeHelper);
+        this.labelNameOneRenderer     = new LabelNameRenderer();
+        this.labelNameAllRenderer     = new LabelNameRenderer();
         this.labelModifiedOneRenderer = new LabelModifiedRenderer(
-                defaultColorSchemeHelper,
                 argDateFormatter,
                 argTimeFormatter);
         this.labelModifiedAllRenderer = new LabelModifiedRenderer(
-                customColorSchemeHelper,
                 argDateFormatter,
                 argTimeFormatter);
-        this.buttonOneRenderer        = new ButtonRenderer(
-                defaultColorSchemeHelper);
-        this.buttonAllRenderer        = new ButtonRenderer(
-                customColorSchemeHelper);
+        this.buttonOneRenderer        = new ButtonRenderer();
+        this.buttonAllRenderer        = new ButtonRenderer();
         this.importOneEditor          = new ImportOneEditor(
                 fileAdmin,
                 this.buttonOneRenderer);
@@ -152,21 +119,6 @@ public final class ColumnFactory {
 
     public AbstractEditor getDeleteAllEditor() {
         return this.deleteAllEditor;
-    }
-
-    public void setForeground(final Color foreground) {
-        this.evenColorSchemeHelper.setForeground(foreground);
-        this.oddColorSchemeHelper.setForeground(foreground);
-    }
-
-    public void setBackground(final Color background) {
-        this.evenColorSchemeHelper.setBackground(background);
-        this.oddColorSchemeHelper.setBackground(background);
-    }
-
-    public void setBackgroundAlt(final Color backgroundAlt) {
-        this.evenColorSchemeHelper.setBackgroundAlt(backgroundAlt);
-        this.oddColorSchemeHelper.setBackgroundAlt(backgroundAlt);
     }
 
     public void setDateFormatter(final CustomDateFormat argDateFormatter) {

@@ -19,11 +19,11 @@ package com.moneydance.modules.features.importlist.presentation;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.modules.features.importlist.util.Helper;
+
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Florian J. Breunig
@@ -36,7 +36,7 @@ public final class EmptyLabelFactoryTest {
     public void setUp() {
         Helper.INSTANCE.getPreferences();
         new StubContextFactory();
-        this.emptyLabelFactory = new EmptyLabelFactory();
+        this.emptyLabelFactory = new EmptyLabelFactory("stub text");
     }
 
     @Test

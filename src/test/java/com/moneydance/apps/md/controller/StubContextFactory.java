@@ -16,17 +16,16 @@
 
 package com.moneydance.apps.md.controller;
 
+import com.infinitekind.moneydance.model.Account;
+import com.infinitekind.moneydance.model.AccountBook;
+import com.infinitekind.moneydance.model.AccountHelper;
+import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.util.StreamTable;
+
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.Validate;
-
-import com.moneydance.apps.md.model.Account;
-import com.moneydance.apps.md.model.AccountBook;
-import com.moneydance.apps.md.model.CurrencyTable;
-import com.moneydance.apps.md.model.CurrencyType;
-import com.moneydance.apps.md.model.RootAccount;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.util.StreamTable;
 
 /**
  * @author Florian J. Breunig
@@ -56,32 +55,21 @@ public final class StubContextFactory {
     }
 
     private void initContext() {
-        CurrencyType currencyType = new CurrencyType(
-                -1,
-                "USD",
-                "Test Currency",
-                1.0D,
-                0,
-                "$",
-                "",
-                "USD",
-                CurrencyType.CURRTYPE_CURRENCY,
-                0,
-                null);
-
         AccountBook accountBook = AccountBook.fakeAccountBook();
-        RootAccount rootAccount = new RootAccount(accountBook, currencyType,
-                new CurrencyTable());
+        accountBook.initializeAccounts(new Account(accountBook));
+
         try {
-            rootAccount.addSubAccount(Account.makeAccount(
-                    Account.ACCOUNT_TYPE_BANK,
-                    "stub account",
-                    currencyType,
-                    rootAccount));
+            AccountHelper.addSubAccount(
+                    accountBook.getRootAccount(),
+                    Account.makeAccount(
+                            accountBook,
+                            Account.AccountType.BANK,
+                            accountBook.getRootAccount()));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.log(Level.SEVERE, e.getMessage(), e);
         }
-        this.context.setRootAccount(rootAccount);
+
+        this.context.setAccountBook(accountBook);
         Helper.INSTANCE.setContext(this.context);
     }
 

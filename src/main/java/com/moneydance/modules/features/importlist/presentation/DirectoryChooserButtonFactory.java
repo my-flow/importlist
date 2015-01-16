@@ -18,37 +18,33 @@ package com.moneydance.modules.features.importlist.presentation;
 
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
+import javax.swing.JPanel;
 
 /**
  * @author Florian J. Breunig
  */
 public final class DirectoryChooserButtonFactory implements ComponentFactory {
 
-    private final ActionListener actionListener;
-    private       JButton chooserButton;
+    private final JPanel panel;
 
     public DirectoryChooserButtonFactory(
+            final String text,
             final ActionListener argActionListener) {
-        this.actionListener = argActionListener;
-    }
+        JButton chooserButton = new JButton(text);
+        chooserButton.setBorderPainted(false);
+        chooserButton.addActionListener(argActionListener);
 
-    private void init() {
-        this.chooserButton = new JButton();
-        this.chooserButton.setHorizontalAlignment(SwingConstants.CENTER);
-        this.chooserButton.setBorder(MoneydanceLAF.homePageBorder);
-        this.chooserButton.setOpaque(false);
-        this.chooserButton.addActionListener(this.actionListener);
+        this.panel = new JPanel(new BorderLayout());
+        this.panel.add(chooserButton);
+        this.panel.setBorder(MoneydanceLAF.homePageBorder);
     }
 
     @Override
-    public JButton getComponent() {
-        if (this.chooserButton == null) {
-            this.init();
-        }
-        return this.chooserButton;
+    public JPanel getComponent() {
+        return this.panel;
     }
 }

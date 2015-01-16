@@ -39,7 +39,8 @@ public final class AggregationTableFactory implements ComponentFactory {
     private final Preferences prefs;
     private final JTable table;
 
-    public AggregationTableFactory(final TableModel argTableModel,
+    public AggregationTableFactory(
+            final TableModel argTableModel,
             final FileAdmin argFileAdmin) {
         this.settings   = Helper.INSTANCE.getSettings();
         this.prefs      = Helper.INSTANCE.getPreferences();
@@ -62,9 +63,6 @@ public final class AggregationTableFactory implements ComponentFactory {
 
         ColumnFactory columnFactory = new ColumnFactory(
                 argFileAdmin,
-                this.prefs.getForeground(),
-                this.prefs.getBackground(),
-                this.prefs.getBackgroundAlt(),
                 tableHeader.getDefaultRenderer(),
                 this.prefs.getDateFormatter(),
                 Preferences.getTimeFormatter());
@@ -115,8 +113,6 @@ public final class AggregationTableFactory implements ComponentFactory {
 
     @Override
     public JTable getComponent() {
-        this.table.setBackground(this.prefs.getBackground());
-        this.table.setFont(Preferences.getBodyFont());
         this.table.setRowHeight(
                 this.prefs.getBodyRowHeight()
                 + this.settings.getTableHeightOffset());

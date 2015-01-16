@@ -40,18 +40,11 @@ import org.apache.commons.lang3.Validate;
 final class HeaderRenderer implements TableCellRenderer {
 
     private final TableCellRenderer defaultHeaderTableCellRenderer;
-    private final ColorSchemeHelper colorSchemeHelper;
 
-    HeaderRenderer(
-            final ColorSchemeHelper argColorSchemeHelper,
-            final TableCellRenderer argDefaultHeaderTableCellRenderer) {
-        Validate.notNull(
-                argColorSchemeHelper,
-                "argColorSchemeHelper must not be null"); //$NON-NLS-1$
+    HeaderRenderer(final TableCellRenderer argDefaultHeaderTableCellRenderer) {
         Validate.notNull(
                 argDefaultHeaderTableCellRenderer,
                 "argDefaultHeaderTableCellRenderer must not be null");
-        this.colorSchemeHelper              = argColorSchemeHelper;
         this.defaultHeaderTableCellRenderer = argDefaultHeaderTableCellRenderer;
     }
 
@@ -68,11 +61,10 @@ final class HeaderRenderer implements TableCellRenderer {
                 this.defaultHeaderTableCellRenderer
                 .getTableCellRendererComponent(
                         table, value, hasFocus, hasFocus, row, column);
-        this.colorSchemeHelper.applyColorScheme(component, row);
-
         if (component instanceof JComponent) {
             JComponent jComponent = (JComponent) component;
             jComponent.setBorder(new EmptyBorder(1, 1, 1, 1));
+            jComponent.setOpaque(false);
 
             if (jComponent instanceof JLabel) {
                 JLabel jLabel = (JLabel) jComponent;
@@ -81,6 +73,8 @@ final class HeaderRenderer implements TableCellRenderer {
         }
 
         component.setFont(Preferences.getHeaderFont());
+        component.setForeground(Preferences.getHeaderForeground());
+
         component.setSize(new Dimension(
                 component.getWidth(),
                 Helper.INSTANCE.getPreferences().getHeaderRowHeight()));

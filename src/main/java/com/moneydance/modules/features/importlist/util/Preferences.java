@@ -16,10 +16,10 @@
 
 package com.moneydance.modules.features.importlist.util;
 
+import com.infinitekind.util.CustomDateFormat;
+import com.infinitekind.util.StreamTable;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.controller.UserPreferences;
-import com.moneydance.util.CustomDateFormat;
-import com.moneydance.util.StreamTable;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -111,15 +111,6 @@ public final class Preferences {
 
     public String getFullVersion() {
         return this.getUserPreferences().getSetting("current_version", "0");
-    }
-
-    public int getMajorVersion() {
-        final String fullString = this.getFullVersion();
-        final int endIndex = Math.min(
-                Helper.INSTANCE.getSettings().getLengthOfVersionDigits(),
-                fullString.length());
-        String substring = fullString.substring(0, endIndex);
-        return Integer.parseInt(substring);
     }
 
     public Locale getLocale() {
@@ -275,43 +266,13 @@ public final class Preferences {
                 / (2 + 1);
     }
 
-    /**
-     * @return Default foreground color.
-     */
-    public Color getForeground() {
-        int foregroundValue = this.getUserPreferences().getIntSetting(
-                UserPreferences.GUI_HOMEPG_FG,
-                this.settings.getColorValueFgDef());
-        return new Color(foregroundValue);
-    }
-
-    /**
-     * @return Default background color.
-     */
-    public Color getBackground() {
-        int backgroundValue = this.getUserPreferences().getIntSetting(
-                UserPreferences.GUI_HOMEPG_BG,
-                this.settings.getColorValueBgDef());
-        return new Color(backgroundValue);
-    }
-
-    /**
-     * @return Default alternative background color.
-     */
-    public Color getBackgroundAlt() {
-        int backgroundAltValue = this.getUserPreferences().getIntSetting(
-                "gui.home_alt_bg",
-                this.settings.getColorValueBgAltDef());
-        return new Color(backgroundAltValue);
-    }
-
     public static Font getHeaderFont() {
         final Font baseFont = UIManager.getFont("Label.font");
-        return baseFont.deriveFont(Font.BOLD, baseFont.getSize2D() + 2.0F);
+        return baseFont.deriveFont(Font.PLAIN, baseFont.getSize2D() + 2.0F);
     }
 
-    public static Font getBodyFont() {
-        return UIManager.getFont("Label.font");
+    public static Color getHeaderForeground() {
+        return UIManager.getColor("Label.disabledForeground");
     }
 
     public int getHeaderRowHeight() {
@@ -324,5 +285,9 @@ public final class Preferences {
         return Math.round(
                 (float) this.settings.getSummandRowHeightBody()
                 + Preferences.getBodyFont().getSize2D());
+    }
+
+    private static Font getBodyFont() {
+        return UIManager.getFont("Label.font");
     }
 }

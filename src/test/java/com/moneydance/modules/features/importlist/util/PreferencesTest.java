@@ -21,6 +21,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import com.moneydance.apps.md.controller.StubContextFactory;
+
 import java.util.Hashtable;
 import java.util.Observable;
 import java.util.Observer;
@@ -30,8 +32,6 @@ import javax.swing.SortOrder;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.moneydance.apps.md.controller.StubContextFactory;
 
 /**
  * @author Florian J. Breunig
@@ -89,11 +89,6 @@ public final class PreferencesTest {
     }
 
     @Test
-    public void testGetMajorVersion() {
-        assertThat(this.prefs.getMajorVersion() >= 0, equalTo(true));
-    }
-
-    @Test
     public void testGetLocale() {
         assertThat(this.prefs.getLocale(), notNullValue());
     }
@@ -122,7 +117,7 @@ public final class PreferencesTest {
 
     @Test
     public void testGetProxyPort() {
-        this.prefs.getProxyPort();
+        assertThat(this.prefs.getProxyPort(), anything());
     }
 
     @Test
@@ -214,28 +209,8 @@ public final class PreferencesTest {
     }
 
     @Test
-    public void testGetForeground() {
-        assertThat(this.prefs.getForeground(), notNullValue());
-    }
-
-    @Test
-    public void testGetBackground() {
-        assertThat(this.prefs.getBackground(), notNullValue());
-    }
-
-    @Test
-    public void testGetBackgroundAlt() {
-        assertThat(this.prefs.getBackgroundAlt(), notNullValue());
-    }
-
-    @Test
     public void testGetHeaderFont() {
         assertThat(Preferences.getHeaderFont(), notNullValue());
-    }
-
-    @Test
-    public void testGetBodyFont() {
-        assertThat(Preferences.getBodyFont(), notNullValue());
     }
 
     @Test

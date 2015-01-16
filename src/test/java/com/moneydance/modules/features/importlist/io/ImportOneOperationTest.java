@@ -16,24 +16,19 @@
 
 package com.moneydance.modules.features.importlist.io;
 
+import com.infinitekind.moneydance.model.Account;
+import com.infinitekind.moneydance.model.AccountBook;
+import com.infinitekind.moneydance.model.AccountHelper;
+import com.moneydance.apps.md.controller.StubContext;
+import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.util.Helper;
+
 import java.io.File;
 import java.util.Collections;
 
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.junit.Test;
-
-import com.moneydance.apps.md.controller.StubContext;
-import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.apps.md.model.Account;
-import com.moneydance.apps.md.model.AccountBook;
-import com.moneydance.apps.md.model.BankAccount;
-import com.moneydance.apps.md.model.CreditCardAccount;
-import com.moneydance.apps.md.model.CurrencyTable;
-import com.moneydance.apps.md.model.CurrencyType;
-import com.moneydance.apps.md.model.IncomeAccount;
-import com.moneydance.apps.md.model.RootAccount;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 /**
  * @author Florian J. Breunig
@@ -44,61 +39,28 @@ public final class ImportOneOperationTest {
     private final File creditcardFile;
     private final File noCategoryFile;
 
-    private final CurrencyTable currencyTable;
-    private final CurrencyType  currencyType;
-
     public ImportOneOperationTest() {
         Helper.INSTANCE.getPreferences();
         this.incomeFile     = new File("mybank.csv");
         this.creditcardFile = new File("credit.csv");
         this.noCategoryFile = new File("nocategory.csv");
-
-        this.currencyTable  = new CurrencyTable();
-        this.currencyType   = new CurrencyType(0, "", "", 0, 0, "", "", "", 0,
-                0, this.currencyTable);
     }
 
     @Test
     public void testExecute() {
         AccountBook accountBook = AccountBook.fakeAccountBook();
-        RootAccount fullRootAccount = new RootAccount(
-                accountBook,
-                this.currencyType,
-                this.currencyTable);
-        Account incomeAccount = new IncomeAccount(
-                "Income",
-                1,
-                this.currencyType,
-                null,
-                null,
-                fullRootAccount);
-        fullRootAccount.addSubAccount(incomeAccount);
-        Account bankAccount = new BankAccount(
-                "Bank",
-                1,
-                this.currencyType,
-                null,
-                null,
-                fullRootAccount,
-                0);
-        fullRootAccount.addSubAccount(bankAccount);
 
-        Account creditcardAccount = new CreditCardAccount(
-                "Credit Card",
-                1,
-                this.currencyType,
-                null,
-                null,
-                fullRootAccount,
-                0);
-        fullRootAccount.addSubAccount(creditcardAccount);
+        Account fullRootAccount = new Account(accountBook);
+        Account account = new Account(accountBook);
+        AccountHelper.addSubAccount(fullRootAccount, account);
+        accountBook.initializeAccounts(fullRootAccount);
 
         final StubContextFactory factory = new StubContextFactory();
         StubContext context = factory.getContext();
 
         FileOperation fileOperation = null;
 
-        context.setRootAccount(fullRootAccount);
+        context.setAccountBook(accountBook);
         fileOperation = new ImportOneOperation(
                 context,
                 TrueFileFilter.TRUE,
@@ -117,7 +79,6 @@ public final class ImportOneOperationTest {
                 FalseFileFilter.FALSE);
         fileOperation.execute(Collections.singletonList(this.noCategoryFile));
 
-        context.setRootAccount(fullRootAccount);
         fileOperation = new ImportOneOperation(
                 context,
                 FalseFileFilter.FALSE,
@@ -136,7 +97,6 @@ public final class ImportOneOperationTest {
                 TrueFileFilter.TRUE);
         fileOperation.execute(Collections.singletonList(this.noCategoryFile));
 
-        context.setRootAccount(fullRootAccount);
         fileOperation = new ImportOneOperation(
                 context,
                 FalseFileFilter.FALSE,

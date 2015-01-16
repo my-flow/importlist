@@ -16,8 +16,8 @@
 
 package com.moneydance.modules.features.importlist.controller;
 
+import com.infinitekind.moneydance.model.AccountBook;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
-import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
@@ -41,9 +41,7 @@ import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JViewport;
 import javax.swing.table.AbstractTableModel;
 
@@ -61,8 +59,6 @@ public final class ViewController implements HomePageView {
     private       boolean               initialized;
     private       ColumnFactory         columnFactory;
     private       JViewport             viewport;
-    private       DirectoryChooserButtonFactory directoryChooserFactory;
-    private       EmptyLabelFactory     emptyLabelFactory;
     private       ComponentFactory      splitPaneFactory;
     private       BaseTableFactory      baseTableFactory;
     private       AbstractTableModel    baseTableModel;
@@ -72,11 +68,11 @@ public final class ViewController implements HomePageView {
 
     public ViewController(
             final String baseDirectory,
-            final FeatureModuleContext context,
+            final FeatureModuleContext argContext,
             final Tracker argTracker) {
         this.settings    = Helper.INSTANCE.getSettings();
         this.localizable = Helper.INSTANCE.getLocalizable();
-        this.fileAdmin   = new FileAdmin(baseDirectory, context);
+        this.fileAdmin   = new FileAdmin(baseDirectory, argContext);
         this.fileAdmin.addObserver(new ViewControllerObserver());
         this.tracker     = argTracker;
     }
@@ -85,11 +81,6 @@ public final class ViewController implements HomePageView {
     private void init() {
         this.viewport = new JViewport();
         this.viewport.setOpaque(false);
-
-        ActionListener actionListener = new ChooseBaseDirectoryActionListener();
-        this.directoryChooserFactory = new DirectoryChooserButtonFactory(
-                actionListener);
-        this.emptyLabelFactory       = new EmptyLabelFactory();
 
         this.baseTableModel   = new FileTableModel(this.fileAdmin.getFiles());
         this.baseTableFactory = new BaseTableFactory(
@@ -127,12 +118,16 @@ public final class ViewController implements HomePageView {
 
         // display a label iff no base directory has been chosen
         if (this.fileAdmin.getBaseDirectory() == null) {
-            JButton chooserButton = this.directoryChooserFactory.getComponent();
-            chooserButton.setText(String.format(
-                    "<html><u>%s</u></html>",
-                    this.localizable.getDirectoryChooserTitle()));
+            DirectoryChooserButtonFactory directoryChooserFactory =
+                    new DirectoryChooserButtonFactory(
+                            String.format(
+                                    "<html><u>%s</u></html>",
+                                    this.localizable.getDirectoryChooserTitle()
+                                    ),
+                                    new ChooseBaseDirectoryActionListener()
+                            );
 
-            this.viewport.setView(chooserButton);
+            this.viewport.setView(directoryChooserFactory.getComponent());
             this.viewport.setMinimumSize(
                     new Dimension(
                             this.settings.getPreferredEmptyMessageWidth(),
@@ -157,12 +152,13 @@ public final class ViewController implements HomePageView {
 
         // display a label iff there are no files in the list
         if (this.baseTableModel.getRowCount() == 0) {
-            String emptyMessage = this.localizable.getEmptyMessage(
-                    this.fileAdmin.getBaseDirectory().getAbsolutePath());
-            JLabel emptyLabel = this.emptyLabelFactory.getComponent();
-            emptyLabel.setText(emptyMessage);
+            EmptyLabelFactory emptyLabelFactory = new EmptyLabelFactory(
+                    this.localizable.getEmptyMessage(
+                            this.fileAdmin.getBaseDirectory().getAbsolutePath()
+                            )
+                    );
 
-            this.viewport.setView(emptyLabel);
+            this.viewport.setView(emptyLabelFactory.getComponent());
             this.viewport.setMinimumSize(
                     new Dimension(
                             this.settings.getPreferredEmptyMessageWidth(),
@@ -220,7 +216,7 @@ public final class ViewController implements HomePageView {
 
 
     @Override
-    public JComponent getGUIView(final RootAccount rootAccount) {
+    public JComponent getGUIView(final AccountBook accountBook) {
         if (!this.initialized) {
             this.initialized = true;
             this.init();

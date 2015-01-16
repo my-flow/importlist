@@ -19,9 +19,8 @@ package com.moneydance.modules.features.importlist.table;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import com.moneydance.util.CustomDateFormat;
+import com.infinitekind.util.CustomDateFormat;
 
-import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -40,12 +39,8 @@ public final class LabelModifiedRendererTest {
     @Before
     public void setUp() {
         this.labelModifiedRenderer = new LabelModifiedRenderer(
-                new OddColorSchemeHelper(
-                        Color.white,
-                        Color.white,
-                        Color.white),
-                        new CustomDateFormat(""),
-                        new SimpleDateFormat());
+                new CustomDateFormat(""),
+                new SimpleDateFormat());
     }
 
     @Test

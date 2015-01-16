@@ -48,7 +48,8 @@ public final class BaseTableFactory implements ComponentFactory {
     private final ColumnFactory   columnFactory;
     private final JScrollPane     scrollPane;
 
-    public BaseTableFactory(final TableModel argTableModel,
+    public BaseTableFactory(
+            final TableModel argTableModel,
             final FileAdmin argFileAdmin) {
         this.tableModel = argTableModel;
         this.settings = Helper.INSTANCE.getSettings();
@@ -64,13 +65,11 @@ public final class BaseTableFactory implements ComponentFactory {
         this.table.setRowSelectionAllowed(false);
         this.table.setCellSelectionEnabled(false);
         JTableHeader tableHeader         = this.table.getTableHeader();
+        tableHeader.setOpaque(false);
         TableColumnModel baseColumnModel = this.table.getColumnModel();
 
         this.columnFactory = new ColumnFactory(
                 argFileAdmin,
-                this.prefs.getForeground(),
-                this.prefs.getBackground(),
-                this.prefs.getBackgroundAlt(),
                 tableHeader.getDefaultRenderer(),
                 this.prefs.getDateFormatter(),
                 Preferences.getTimeFormatter());
@@ -153,14 +152,9 @@ public final class BaseTableFactory implements ComponentFactory {
 
     @Override
     public JScrollPane getComponent() {
-        this.table.setBackground(this.prefs.getBackground());
-        this.table.setFont(Preferences.getBodyFont());
         this.table.setRowHeight(this.prefs.getBodyRowHeight());
         this.columnFactory.setDateFormatter(this.prefs.getDateFormatter());
         this.columnFactory.setTimeFormatter(Preferences.getTimeFormatter());
-        this.columnFactory.setForeground(this.prefs.getForeground());
-        this.columnFactory.setBackground(this.prefs.getBackground());
-        this.columnFactory.setBackgroundAlt(this.prefs.getBackgroundAlt());
 
         TableColumn nameCol = this.table.getColumn(
                 this.settings.getDescName());
@@ -178,7 +172,6 @@ public final class BaseTableFactory implements ComponentFactory {
 
         this.scrollPane.setViewportView(this.table);
 
-        this.scrollPane.setBackground(this.prefs.getBackground());
         this.scrollPane.setMinimumSize(
                 new Dimension(
                         this.settings.getMinimumTableWidth(),

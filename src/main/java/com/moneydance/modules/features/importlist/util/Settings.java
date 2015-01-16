@@ -80,13 +80,6 @@ public final class Settings {
     }
 
     /**
-     * @return The help image.
-     */
-    public Image getHelpImage() {
-        return getImage(this.config.getString("help_resource")); //$NON-NLS-1$
-    }
-
-    /**
      * @return The resource that contains the configuration of the logger.
      */
     public String getLoggingPropertiesResource() {
@@ -272,44 +265,6 @@ public final class Settings {
     public int getMessageFilenameLineMaxLength() {
         return this.config.getInt(
                 "message_filename_line_max_length"); //$NON-NLS-1$
-    }
-
-    /**
-     * @return The length of the version substring extracted from the user's
-     * settings, e.g. 2007r5.
-     */
-    public int getLengthOfVersionDigits() {
-        return this.config.getInt("length_of_version_digits"); //$NON-NLS-1$
-    }
-
-    /**
-     * @return The version of Moneydance that uses an opaque background for its
-     * homepage views.
-     */
-    public int getVersionWithOpaqueHomepageView() {
-        return this.config.getInt(
-                "version_with_opaque_homepage_view"); //$NON-NLS-1$
-    }
-
-    /**
-     * @return The default foreground color.
-     */
-    public int getColorValueFgDef() {
-        return this.config.getInt("color_value_fg_def"); //$NON-NLS-1$
-    }
-
-    /**
-     * @return The default background color.
-     */
-    public int getColorValueBgDef() {
-        return this.config.getInt("color_value_bg_def"); //$NON-NLS-1$
-    }
-
-    /**
-     * @return Default alternative background color.
-     */
-    public int getColorValueBgAltDef() {
-        return this.config.getInt("color_value_bg_alt_def"); //$NON-NLS-1$
     }
 
     /**

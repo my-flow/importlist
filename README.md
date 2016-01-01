@@ -13,8 +13,7 @@ extension please visit the [project page]
 ## Building the extension
 1. `git clone git@github.com:my-flow/importlist.git` creates a copy of the 
 repository.
-2. `ant importlist` compiles the extension (and signs it if an applicable key 
-pair is found).
+2. `ant build` compiles the extension.
 
 ## Signing the extension
 1. `ant genkeys` generates a passphrase-protected key pair.
@@ -22,7 +21,7 @@ pair is found).
 
 ## Running the extension
 After the build process has succeeded, the resulting extension file 
-`dist/importlist.mxt` can be added to Moneydance®.
+`target/importlist.mxt` can be added to Moneydance®.
 
 ## Documentation
 * [Import List API](http://my-flow.github.io/importlist/docs/api/)

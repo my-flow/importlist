@@ -34,6 +34,6 @@ After the build process has succeeded, the resulting extension file
 (http://my-flow.github.io/importlist/docs/pmd-report/pmd-report.html)
 
 ## License
-Copyright 2011-2015 [Florian J. Breunig](http://www.my-flow.com). Import List is
+Copyright 2011-2016 [Florian J. Breunig](http://www.my-flow.com). Import List is
 released under the [GNU General Public License]
 (http://www.gnu.org/licenses/gpl.html).

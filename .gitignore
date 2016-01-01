@@ -9,6 +9,7 @@
 *.out
 
 # project specific
+.ant-targets-build.xml
 docs/*
 target
 logs

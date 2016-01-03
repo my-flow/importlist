@@ -41,7 +41,9 @@
             <pathelement path="${lib}/commons-lang-2.6.jar"/>
             <pathelement path="${lib}/commons-lang3-3.4.jar"/>
             <pathelement path="${lib}/commons-configuration-1.10.jar"/>
-            <pathelement path="${lib}/JGoogleAnalyticsTracker-1.2.0.jar"/>
+            <pathelement path="${lib}/google-analytics-java-importlist-1.1.2.jar"/>
+            <pathelement path="${lib}/httpclient-importlist-4.3.jar"/>
+            <pathelement path="${lib}/httpcore-importlist-4.3.jar"/>
             <pathelement path="${lib}/slf4j-api-1.7.13.jar"/>
       </path>
 
@@ -58,13 +60,15 @@
         <pathelement path="${lib}/commons-lang-2.6.jar"/>
         <pathelement path="${lib}/commons-lang3-3.4.jar"/>
         <pathelement path="${lib}/commons-logging-1.2.jar"/>
-        <pathelement path="${lib}/JGoogleAnalyticsTracker-1.2.0.jar"/>
+        <pathelement path="${lib}/google-analytics-java-importlist-1.1.2.jar"/>
+        <pathelement path="${lib}/httpclient-importlist-4.3.jar"/>
+        <pathelement path="${lib}/httpcore-importlist-4.3.jar"/>
         <pathelement path="${lib}/java-hamcrest-2.0.0.0.jar"/>
         <pathelement path="${lib}/jmockit-coverage-1.5.jar"/>
         <pathelement path="${lib}/jmockit-1.5.jar"/>
         <pathelement path="${lib}/junit-4.12.jar"/>
         <pathelement path="${lib}/slf4j-api-1.7.13.jar"/>
-        <pathelement path="${lib}/slf4j-simple-1.7.13.jar"/>
+        <pathelement path="${lib}/slf4j-nop-1.7.13.jar"/>
         <pathelement path="${build}"/>
       </path>
 
@@ -96,6 +100,126 @@
           description="Wipe the slate clean, to be used before starting the build process.">
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
+  </target>
+
+
+  <target name="gendeps"
+          depends="-init"
+          description="Generates custom dependencies.">
+
+      <antcall target="-genhttp">
+          <param name="dep.name" value="httpcore"/>
+      </antcall>
+
+      <antcall target="-genhttp">
+          <param name="dep.name" value="httpclient"/>
+      </antcall>
+
+      <antcall target="-genanalytics"/>
+  </target>
+
+
+  <target name="-genhttp" depends="-init">
+
+    <!-- Clone tagged version from GitHub repository -->
+    <exec executable="git">
+        <arg line="clone -b 4.3 --single-branch git@github.com:apache/${dep.name}.git --depth=1 ${dist}/${dep.name}"/>
+    </exec>
+
+    <!-- Replace default httpcore dependency by generated patch (only applies to httpclient) -->
+    <property name="httpcore.jar" location="${lib}/httpcore-importlist-4.3.jar"/>
+    <property name="replacevalue" value="&lt;artifactId&gt;httpcore&lt;/artifactId&gt;
+        &lt;scope&gt;system&lt;/scope&gt;
+        &lt;systemPath&gt;${httpcore.jar}&lt;/systemPath&gt;"/>
+    <replace file="${dist}/${dep.name}/${dep.name}/pom.xml" value="${replacevalue}">
+      <replacetoken>&lt;artifactId&gt;httpcore&lt;/artifactId&gt;
+      &lt;scope&gt;compile&lt;/scope&gt;</replacetoken>
+    </replace>
+
+    <!-- Rename folders in order to match new package names -->
+    <mkdir dir="${dist}/${dep.name}/${dep.name}/src/main/java/com/moneydance/modules/features/importlist"/>
+    <mkdir dir="${dist}/${dep.name}/${dep.name}/src/main/java-deprecated/com/moneydance/modules/features/importlist"/>
+    <mkdir dir="${dist}/${dep.name}/${dep.name}/src/main/resources/com/moneydance/modules/features/importlist"/>
+    <mkdir dir="${dist}/${dep.name}/${dep.name}/src/test/java/com/moneydance/modules/features/importlist"/>
+    <move file="${dist}/${dep.name}/${dep.name}/src/main/java/org/apache"            tofile="${dist}/${dep.name}/${dep.name}/src/main/java/com/moneydance/modules/features/importlist"/>
+    <move file="${dist}/${dep.name}/${dep.name}/src/main/java-deprecated/org/apache" tofile="${dist}/${dep.name}/${dep.name}/src/main/java-deprecated/com/moneydance/modules/features/importlist"/>
+    <move file="${dist}/${dep.name}/${dep.name}/src/main/resources/org/apache"       tofile="${dist}/${dep.name}/${dep.name}/src/main/resources/com/moneydance/modules/features/importlist"/>
+    <move file="${dist}/${dep.name}/${dep.name}/src/test/java/org/apache"            tofile="${dist}/${dep.name}/${dep.name}/src/test/java/com/moneydance/modules/features/importlist"/>
+
+    <!-- Search and replace Java source files -->
+    <replace dir="${dist}/${dep.name}/${dep.name}/src">
+        <include name="**/*.java"/>
+        <replacetoken>org.apache.http</replacetoken>
+        <replacevalue>com.moneydance.modules.features.importlist.apache.http</replacevalue>
+    </replace>
+
+    <!-- Generate new JAR file -->
+    <exec executable="mvn">
+        <arg line="package -f ${dist}/${dep.name}/${dep.name}/pom.xml -Dmaven.javadoc.skip=true"/>
+    </exec>
+    <copy file="${dist}/${dep.name}/${dep.name}/target/${dep.name}-4.3.jar"
+          tofile="${lib}/${dep.name}-importlist-4.3.jar"/>
+  </target>
+
+
+  <target name="-genanalytics" depends="-init">
+
+    <!-- Clone tagged version from GitHub repository -->
+	<exec executable="git">
+	    <arg line="clone -b google-analytics-java-1.1.2 --single-branch git@github.com:brsanthu/google-analytics-java.git --depth=1 ${dist}/google-analytics-java"/>
+    </exec>
+
+    <!-- Replace httpcore/httpclient dependencies by generated patches -->
+    <property name="httpcore.jar"   location="${lib}/httpcore-importlist-4.3.jar"/>
+    <property name="httpclient.jar" location="${lib}/httpclient-importlist-4.3.jar"/>
+    <property name="replacevalue" value="
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+        &lt;artifactId&gt;httpcore&lt;/artifactId&gt;
+        &lt;version&gt;4.3&lt;/version&gt;
+        &lt;scope&gt;system&lt;/scope&gt;
+        &lt;systemPath&gt;${httpcore.jar}&lt;/systemPath&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+        &lt;artifactId&gt;httpclient&lt;/artifactId&gt;
+        &lt;version&gt;${httpclient-version}&lt;/version&gt;
+        &lt;scope&gt;system&lt;/scope&gt;
+        &lt;systemPath&gt;${httpclient.jar}&lt;/systemPath&gt;
+        &lt;exclusions&gt;
+            &lt;exclusion&gt;
+                &lt;artifactId&gt;commons-logging&lt;/artifactId&gt;
+                &lt;groupId&gt;commons-logging&lt;/groupId&gt;
+            &lt;/exclusion&gt;
+        &lt;/exclusions&gt;
+    &lt;/dependency&gt;"/>
+    <replace file="${dist}/google-analytics-java/pom.xml" value="${replacevalue}">
+      <replacetoken>&lt;dependency&gt;
+			&lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+			&lt;artifactId&gt;httpclient&lt;/artifactId&gt;
+			&lt;version&gt;${httpclient-version}&lt;/version&gt;
+			&lt;exclusions&gt;
+				&lt;exclusion&gt;
+					&lt;artifactId&gt;commons-logging&lt;/artifactId&gt;
+					&lt;groupId&gt;commons-logging&lt;/groupId&gt;
+				&lt;/exclusion&gt;
+			&lt;/exclusions&gt;
+		&lt;/dependency&gt;</replacetoken>
+    </replace>
+
+    <!-- Search and replace Java source files -->
+    <replace dir="${dist}/google-analytics-java/src">
+        <include name="**/*.java"/>
+        <replacetoken>org.apache.http</replacetoken>
+        <replacevalue>com.moneydance.modules.features.importlist.apache.http</replacevalue>
+    </replace>
+
+    <!-- Generate new JAR file -->
+    <exec executable="mvn">
+        <arg line="package -f ${dist}/google-analytics-java/pom.xml -Dmaven.javadoc.skip=true"/>
+    </exec>
+    <copy file="${dist}/google-analytics-java/target/google-analytics-java-1.1.2.jar"
+          tofile="${lib}/google-analytics-java-importlist-1.1.2.jar"/>
   </target>
 
 
@@ -138,7 +262,9 @@
             <include name="commons-lang3-3.4.jar"/>
             <include name="commons-configuration-1.10.jar"/>
             <include name="commons-logging-1.2.jar"/>
-            <include name="JGoogleAnalyticsTracker-1.2.0.jar"/>
+            <include name="google-analytics-java-importlist-1.1.2.jar"/>
+            <include name="httpclient-importlist-4.3.jar"/>
+            <include name="httpcore-importlist-4.3.jar"/>
             <include name="slf4j-api-1.7.13.jar"/>
             <include name="slf4j-nop-1.7.13.jar"/>
         </zipgroupfileset>
@@ -285,7 +411,7 @@
       <doctitle><![CDATA[<h1>Import List for Moneydance</h1>]]></doctitle>
       <link href="https://docs.oracle.com/javase/7/docs/api/"/>
       <link href="http://moneydance.com/dev/apidoc/"/>
-      <link href="http://www.dmurph.com/jgoogleanalyticstracker/"/>
+      <link href="https://brsanthu.github.io/google-analytics-java/javadocs/"/>
       <link href="http://www.slf4j.org/apidocs/"/>
       <link href="http://commons.apache.org/configuration/apidocs/"/>
       <link href="https://commons.apache.org/proper/commons-io/javadocs/api-2.4/"/>

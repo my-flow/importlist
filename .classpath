@@ -4,11 +4,6 @@
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="src" path="src/test/resources"/>
-	<classpathentry kind="lib" path="lib/JGoogleAnalyticsTracker-1.2.0.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://www.dmurph.com/jgoogleanalyticstracker/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/"/>
@@ -48,6 +43,9 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/slf4j-simple-1.7.13.jar"/>
 	<classpathentry kind="lib" path="lib/java-hamcrest-2.0.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/google-analytics-java-importlist-1.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient-importlist-4.3.jar"/>
+	<classpathentry kind="lib" path="lib/httpcore-importlist-4.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
 	<classpathentry kind="output" path="target/classes"/>

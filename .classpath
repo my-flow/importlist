@@ -43,9 +43,13 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/slf4j-simple-1.7.13.jar"/>
 	<classpathentry kind="lib" path="lib/java-hamcrest-2.0.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/google-analytics-java-importlist-1.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/httpclient-importlist-4.3.jar"/>
-	<classpathentry kind="lib" path="lib/httpcore-importlist-4.3.jar"/>
+	<classpathentry kind="lib" path="lib/google-analytics-java-1.1.2.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="https://brsanthu.github.io/google-analytics-java/javadocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/httpclient-4.3.jar"/>
+	<classpathentry kind="lib" path="lib/httpcore-4.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
 	<classpathentry kind="output" path="target/classes"/>

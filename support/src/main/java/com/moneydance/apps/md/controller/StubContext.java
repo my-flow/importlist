@@ -46,16 +46,14 @@ public final class StubContext extends Main {
     @Nullable private final FeatureModule featureModule;
     @Nullable private AccountBook accountBook;
     @Nullable private UserPreferences userPreferences;
-    private static boolean isInitialized;
 
     @SuppressWarnings("nullness")
     StubContext(@Nullable final FeatureModule argFeatureModule) {
         super();
         this.featureModule = argFeatureModule;
         try {
-            if (!isInitialized) {
+            if (!this.isInitialized()) {
                 this.initializeApp();
-                isInitialized = true;
             }
         } catch (Error e) {
             final String message = e.getMessage();

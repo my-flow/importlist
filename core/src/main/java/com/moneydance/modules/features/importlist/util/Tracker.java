@@ -42,7 +42,7 @@ public final class Tracker {
             final String argFullVersion,
             final String argTrackingCode) {
         this.fullVersion = String.format("Moneydance %s", argFullVersion);
-        this.build       = String.format("%s v%d", argExtensionName, argBuild);
+        this.build = String.format("%s v%d", argExtensionName, argBuild);
 
         Settings settings = Helper.INSTANCE.getSettings();
         boolean enabled = StringUtils.isNotEmpty(settings.getTrackingCode());
@@ -58,15 +58,7 @@ public final class Tracker {
             if (prefs.hasProxyAuthentication()) {
                 config.setProxyUserName(prefs.getProxyUsername());
                 config.setProxyPassword(prefs.getProxyPassword());
-                Authenticator.setDefault(new Authenticator() {
-                    @Override
-                    protected PasswordAuthentication
-                    getPasswordAuthentication() {
-                        return new PasswordAuthentication(
-                                prefs.getProxyUsername(),
-                                prefs.getProxyPassword().toCharArray());
-                    }
-                });
+                Authenticator.setDefault(new PasswordAuthenticator(prefs));
             }
         }
         this.analyticsTracker = new GoogleAnalytics(config, argTrackingCode);
@@ -101,6 +93,25 @@ public final class Tracker {
         @Override
         public String toString() {
             return this.eventString;
+        }
+    }
+
+    /**
+     * @author Florian J. Breunig
+     */
+    private static final class PasswordAuthenticator extends Authenticator {
+
+        private final Preferences preferences;
+
+        public PasswordAuthenticator(final Preferences prefs) {
+            this.preferences = prefs;
+        }
+
+        @Override
+        protected PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication(
+                    this.preferences.getProxyUsername(),
+                    this.preferences.getProxyPassword().toCharArray());
         }
     }
 }

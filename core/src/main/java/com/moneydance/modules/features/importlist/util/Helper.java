@@ -130,7 +130,7 @@ public enum Helper {
     /**
      * @author Florian J. Breunig
      */
-    private final class HelperObservable extends Observable {
+    private static final class HelperObservable extends Observable {
         @Override
         public synchronized void setChanged() { // increase visiblity
             super.setChanged();

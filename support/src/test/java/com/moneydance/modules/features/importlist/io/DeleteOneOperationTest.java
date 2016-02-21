@@ -16,6 +16,7 @@
 
 package com.moneydance.modules.features.importlist.io;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -45,7 +46,7 @@ public final class DeleteOneOperationTest {
     @Test
     public void testExecute() {
         try {
-            this.deleteFile.createNewFile();
+            assertTrue(this.deleteFile.createNewFile());
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -62,7 +63,7 @@ public final class DeleteOneOperationTest {
     @Test
     public void testShowWarningAndExecute() {
         try {
-            this.deleteFile.createNewFile();
+            assertTrue(this.deleteFile.createNewFile());
         } catch (IOException e) {
             fail(e.getMessage());
         }

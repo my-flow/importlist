@@ -27,6 +27,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
+
 /**
  * This configuration class accesses all values that are read
  * from a settings file in plain text. The settings file cannot be

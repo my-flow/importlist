@@ -49,7 +49,7 @@ public enum AlphanumComparator implements Comparator<String> {
     /**
      * Restrictive constructor.
      */
-    private AlphanumComparator() {
+    AlphanumComparator() {
         // Prevents this class from being instantiated from the outside.
     }
 

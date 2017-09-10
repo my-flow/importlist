@@ -6,12 +6,13 @@ apply plugin: 'com.github.johnrengelman.shadow'
 dependencies {
     compile(':moneydance:')
     compile('com.brsanthu:google-analytics-java:1.1.2')
-    compile('commons-io:commons-io:2.4')
-    compile('org.apache.commons:commons-lang3:3.4')
+    compile('commons-io:commons-io:2.5')
+    compile('org.apache.commons:commons-lang3:3.6')
     compile('commons-configuration:commons-configuration:1.10')
-    compile('org.slf4j:slf4j-api:1.7.13')
+    compile('org.slf4j:slf4j-api:1.7.25')
+    compile('org.slf4j:slf4j-nop:1.7.25')
     compile('commons-logging:commons-logging:1.2')
-    compile('org.checkerframework:checker:1.9.11')
+    compile('org.checkerframework:checker:2.2.0')
 }
 
 jar {
@@ -33,15 +34,15 @@ shadowJar {
 
     dependencies {
         include dependency('commons-lang:commons-lang:2.6')
-        include dependency('org.apache.commons:commons-lang3:3.4')
-        include dependency('commons-io:commons-io:2.4')
+        include dependency('org.apache.commons:commons-lang3:3.6')
+        include dependency('commons-io:commons-io:2.5')
         include dependency('commons-configuration:commons-configuration:1.10')
         include dependency('org.apache.httpcomponents:httpcore:4.3')
         include dependency('org.apache.httpcomponents:httpclient:4.3')
         include dependency('commons-logging:commons-logging:1.2')
         include dependency('com.brsanthu:google-analytics-java:1.1.2')
-        include dependency('org.slf4j:slf4j-api:1.7.13')
-        include dependency('org.slf4j:slf4j-nop:1.7.13')
+        include dependency('org.slf4j:slf4j-api:1.7.25')
+        include dependency('org.slf4j:slf4j-nop:1.7.25')
     }
     relocate 'org.apache.http', 'com.moneydance.modules.features.importlist.apache.http'
 }

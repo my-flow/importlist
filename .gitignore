@@ -16,6 +16,8 @@ config/pub_key
 # gradle
 .gradle
 build/
+core/out/
+support/out/
 gradle-app.setting
 !gradle-wrapper.jar
 .gradletasknamecache

@@ -12,7 +12,7 @@ extension please visit the [project page]
 ## Building the extension
 1. `git clone git@github.com:my-flow/importlist.git` creates a copy of the
 repository.
-2. `./gradlew dist` produces the distributable.
+2. `./gradlew core:assemble` produces the distributable.
 
 ## Signing the extension
 1. `./gradlew genKeys` generates a passphrase-protected key pair.

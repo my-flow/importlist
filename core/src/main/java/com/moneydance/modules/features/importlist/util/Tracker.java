@@ -103,7 +103,7 @@ public final class Tracker {
 
         private final Preferences preferences;
 
-        public PasswordAuthenticator(final Preferences prefs) {
+        PasswordAuthenticator(final Preferences prefs) {
             this.preferences = prefs;
         }
 

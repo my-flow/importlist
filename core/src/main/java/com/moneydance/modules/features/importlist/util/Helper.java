@@ -47,7 +47,7 @@ public enum Helper {
     @Nullable private Localizable localizable;
     @Nullable private Tracker tracker;
 
-    private Helper() {
+    Helper() {
         this.observable = new HelperObservable();
         this.settings   = new Settings();
     }

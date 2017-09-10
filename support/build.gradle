@@ -8,7 +8,7 @@ dependencies {
     testCompile('junit:junit:4.12')
 
     testRuntime('org.jmockit:jmockit-coverage:1.21')
-    testRuntime('org.slf4j:slf4j-simple:1.7.13')
+    testRuntime('org.slf4j:slf4j-simple:1.7.25')
 }
 
 mainClassName = 'com.moneydance.modules.features.importlist.ConsoleRunner'

@@ -95,7 +95,7 @@ final class ConsoleRunner {
      * reside.
      */
     @SuppressWarnings("nullness")
-    private static void createAndShowGUI(@Nullable final String baseDirectory) {
+    static void createAndShowGUI(@Nullable final String baseDirectory) {
         final Main main = new Main();
         main.setBaseDirectory(baseDirectory);
         final StubContextFactory factory = new StubContextFactory(main);

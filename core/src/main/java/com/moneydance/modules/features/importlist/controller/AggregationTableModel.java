@@ -79,13 +79,8 @@ public final class AggregationTableModel extends AbstractTableModel {
     @Override
     public boolean isCellEditable(final int row, final int column) {
         String columnName = this.getColumnName(column);
-        if (this.settings.getDescImport().equals(columnName)) {
-            return true;
-        }
-        if (this.settings.getDescDelete().equals(columnName)) {
-            return true;
-        }
-        return false;
+        return this.settings.getDescImport().equals(columnName)
+                || this.settings.getDescDelete().equals(columnName);
     }
 
     @Override

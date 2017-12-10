@@ -73,11 +73,7 @@ public final class FileAdmin extends Observable implements Observer {
             final FeatureModuleContext argContext) {
         this.localizable = Helper.INSTANCE.getLocalizable();
         this.context = argContext;
-        if (SystemUtils.IS_OS_MAC) {
-            this.directoryChooser = new MacOSDirectoryChooser(baseDirectory);
-        } else {
-            this.directoryChooser = new DefaultDirectoryChooser(baseDirectory);
-        }
+        this.directoryChooser = new DefaultDirectoryChooser(baseDirectory);
         this.directoryValidator = DirectoryValidator.INSTANCE;
         this.transactionFileFilter = new SuffixFileFilter(
                 Helper.INSTANCE.getSettings().getTransactionFileExtensions(),

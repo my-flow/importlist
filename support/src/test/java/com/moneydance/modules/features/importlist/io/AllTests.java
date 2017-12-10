@@ -32,7 +32,6 @@ import org.junit.runners.Suite.SuiteClasses;
     FileAdminTest.class,
     ImportAllOperationTest.class,
     ImportOneOperationTest.class,
-    MacDirectoryChooserTest.class,
     TransactionFileListenerTest.class
 })
 public final class AllTests {

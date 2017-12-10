@@ -23,8 +23,6 @@ import java.text.DateFormat;
 
 import javax.swing.table.TableCellRenderer;
 
-import org.apache.commons.lang3.Validate;
-
 /**
  * This factory provides unified access to the required renderer classes.
  *
@@ -49,7 +47,6 @@ public final class ColumnFactory {
             final TableCellRenderer defaultHeaderTableCellRenderer,
             final CustomDateFormat argDateFormatter,
             final DateFormat argTimeFormatter) {
-        Validate.notNull(fileAdmin, "file admin must not be null");
 
         this.headerRenderer           = new HeaderRenderer(
                 defaultHeaderTableCellRenderer);

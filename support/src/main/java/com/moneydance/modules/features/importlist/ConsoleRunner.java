@@ -23,9 +23,10 @@ import com.moneydance.util.UiUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JComponent;
+import javax.annotation.Nullable;
 import javax.swing.JFrame;
-
+import javax.swing.JComponent;
+import javax.swing.WindowConstants;
 
 /**
  * This class is used to run the extension as a stand-alone application from
@@ -93,7 +94,8 @@ final class ConsoleRunner {
      * @param baseDirectory The base directory where the transaction files
      * reside.
      */
-    private static void createAndShowGUI(final String baseDirectory) {
+    @SuppressWarnings("nullness")
+    private static void createAndShowGUI(@Nullable final String baseDirectory) {
         final Main main = new Main();
         main.setBaseDirectory(baseDirectory);
         final StubContextFactory factory = new StubContextFactory(main);
@@ -110,9 +112,12 @@ final class ConsoleRunner {
             frame.setSize(frame.getPreferredSize());
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         } catch (Exception e) {
-            LOG.log(Level.WARNING, e.getMessage(), e);
+            final String message = e.getMessage();
+            if (message != null) {
+                LOG.log(Level.WARNING, message, e);
+            }
         }
     }
 }

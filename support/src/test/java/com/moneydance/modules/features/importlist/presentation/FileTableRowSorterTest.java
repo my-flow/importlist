@@ -49,10 +49,13 @@ public final class FileTableRowSorterTest {
     }
 
     @Test
-    public void testGetComparatorInt() {
+    public void testGetComparatorIntExpected() {
         this.fileTableRowSorter.getComparator(0);
         this.fileTableRowSorter.getComparator(1);
-        this.fileTableRowSorter.getComparator(2);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetComparatorIntUnexpected() {
+        this.fileTableRowSorter.getComparator(2);
+    }
 }

@@ -53,11 +53,14 @@ final class FileTableRowSorter extends TableRowSorter<TableModel> {
     @Override
     public Comparator<?> getComparator(final int column) {
         final String columnName  = this.getModel().getColumnName(column);
-        Comparator<?> comparator = null;
+        Comparator<?> comparator;
         if (this.settings.getDescName().equals(columnName)) {
             comparator = AlphanumComparator.ALPHANUM;
         } else if (this.settings.getDescModified().equals(columnName)) {
             comparator = super.getComparator(column);
+        } else {
+            throw new IllegalArgumentException(String.format(
+                    "Could not find comparator for column %d", column));
         }
         return comparator;
     }

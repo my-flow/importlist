@@ -27,8 +27,6 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.apache.commons.lang3.Validate;
-
 
 /**
  * This class provides a <code>TableModel</code> implementation for a given
@@ -47,7 +45,6 @@ public final class FileTableModel extends AbstractTableModel {
     private final           List<File>  files;
 
     public FileTableModel(final List<File> argFiles) {
-        Validate.notNull(argFiles, "files must not be null"); //$NON-NLS-1$
         this.settings    = Helper.INSTANCE.getSettings();
         this.prefs       = Helper.INSTANCE.getPreferences();
         this.localizable = Helper.INSTANCE.getLocalizable();
@@ -57,7 +54,7 @@ public final class FileTableModel extends AbstractTableModel {
 
     @Override
     public Class<?> getColumnClass(final int columnIndex) {
-        String columnName = this.getColumnName(columnIndex);
+        final String columnName = this.getColumnName(columnIndex);
 
         if (this.settings.getDescName().equals(columnName)) {
             return String.class;
@@ -71,7 +68,8 @@ public final class FileTableModel extends AbstractTableModel {
         if (this.settings.getDescDelete().equals(columnName)) {
             return String.class;
         }
-        return null;
+        throw new IllegalArgumentException(String.format(
+                "Could not find column name for index %d", columnIndex));
     }
 
     @Override

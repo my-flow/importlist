@@ -26,11 +26,14 @@ import java.util.logging.LogManager;
 
 import org.apache.commons.lang3.Validate;
 
+import javax.annotation.Nullable;
+
 /**
  * This singleton provides public convenience methods.
  *
  * @author Florian J. Breunig
  */
+@SuppressWarnings("nullness")
 public enum Helper {
 
     /**
@@ -40,9 +43,9 @@ public enum Helper {
 
     private final HelperObservable observable;
     private final Settings settings;
-    private       Preferences prefs;
-    private       Localizable localizable;
-    private       Tracker tracker;
+    @Nullable private Preferences prefs;
+    @Nullable private Localizable localizable;
+    @Nullable private Tracker tracker;
 
     private Helper() {
         this.observable = new HelperObservable();

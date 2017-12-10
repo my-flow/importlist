@@ -24,6 +24,7 @@ import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 import com.moneydance.modules.features.importlist.util.Tracker;
 
+import javax.annotation.Nullable;
 import java.awt.Image;
 import java.util.Observable;
 import java.util.Observer;
@@ -34,6 +35,7 @@ import java.util.logging.Logger;
  *
  * @author Florian J. Breunig
  */
+@SuppressWarnings("nullness")
 public final class Main extends FeatureModule implements Observer {
 
     /**
@@ -41,11 +43,11 @@ public final class Main extends FeatureModule implements Observer {
      */
     private static final Logger LOG = Logger.getLogger(Main.class.getName());
 
-    private final Preferences     prefs;
-    private final Settings       settings;
-    private       Tracker         tracker;
-    private       String          baseDirectory;
-    private       ViewController  viewController;
+    private final Preferences prefs;
+    private final Settings settings;
+    @Nullable private Tracker tracker;
+    @Nullable private String baseDirectory;
+    @Nullable private ViewController viewController;
 
     static {
         Helper.loadLoggerConfiguration();

@@ -22,6 +22,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.annotation.Nullable;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -69,12 +70,14 @@ final class ButtonRenderer implements TableCellRenderer {
     private static MouseListener getMouseListener(final AbstractButton button) {
         return new MouseAdapter() {
             private boolean wasOpaque;
-            private Color foreground;
-            private Color background;
+            @Nullable private Color foreground;
+            @Nullable private Color background;
 
             @Override
+            @SuppressWarnings("nullness")
             public void mousePressed(final MouseEvent mouseevent) {
                 this.wasOpaque  = button.isOpaque();
+
                 this.foreground = button.getForeground();
                 this.background = button.getBackground();
 
@@ -95,7 +98,11 @@ final class ButtonRenderer implements TableCellRenderer {
             @Override
             public void mouseReleased(final MouseEvent mouseevent) {
                 button.setOpaque(this.wasOpaque);
+
+                assert this.foreground != null : "@AssumeAssertion(nullness)";
                 button.setForeground(this.foreground);
+
+                assert this.background != null : "@AssumeAssertion(nullness)";
                 button.setBackground(this.background);
             }
         };

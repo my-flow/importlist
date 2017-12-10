@@ -20,6 +20,7 @@ import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
+import javax.annotation.Nullable;
 import java.io.File;
 
 /**
@@ -49,7 +50,7 @@ abstract class AbstractDirectoryChooser {
 
     abstract void chooseBaseDirectory();
 
-    final File getBaseDirectory() {
+    @Nullable final File getBaseDirectory() {
         if (this.prefs.getBaseDirectory() == null) {
             return null;
         }

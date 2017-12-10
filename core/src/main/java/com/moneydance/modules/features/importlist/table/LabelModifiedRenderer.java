@@ -26,26 +26,24 @@ import java.util.Date;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import org.apache.commons.lang3.Validate;
-
 /**
  * @author Florian J. Breunig
  */
 final class LabelModifiedRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 1L;
-    private       transient CustomDateFormat  dateFormatter;
-    private                 DateFormat        timeFormatter;
+    private transient CustomDateFormat  dateFormatter;
+    private           DateFormat        timeFormatter;
 
     LabelModifiedRenderer(
             final CustomDateFormat argDateFormatter,
             final DateFormat argTimeFormatter) {
-        this.setDateFormatter(argDateFormatter);
-        this.setTimeFormatter(argTimeFormatter);
+        this.dateFormatter = argDateFormatter;
+        this.timeFormatter = argTimeFormatter;
     }
 
-    // ESCA-JAVA0138: abstract method from interface TableCellRenderer
     @Override
+    @SuppressWarnings("nullness")
     public Component getTableCellRendererComponent(
             final JTable table,
             final Object value,
@@ -76,12 +74,10 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
     }
 
     void setDateFormatter(final CustomDateFormat argDateFormatter) {
-        Validate.notNull(argDateFormatter, "argDateFormatter must not be null");
         this.dateFormatter = argDateFormatter;
     }
 
     void setTimeFormatter(final DateFormat argTimeFormatter) {
-        Validate.notNull(argTimeFormatter, "argTimeFormatter must not be null");
         this.timeFormatter = argTimeFormatter;
     }
 }

@@ -57,15 +57,13 @@ final class DeleteOneOperation implements FileOperation {
                         file.getName());
         final Object confirmationLabel = new JLabel(message);
         final Image image = Helper.INSTANCE.getSettings().getIconImage();
-        Icon  icon  = null;
-        if (image != null) {
-            icon = new ImageIcon(image);
-        }
+        final Icon icon = new ImageIcon(image);
         final Object[] options = {
                 this.localizable.getOptionDeleteFile(),
                 this.localizable.getOptionCancel()
         };
 
+        @SuppressWarnings("nullness")
         final int choice = JOptionPane.showOptionDialog(
                 null, // no parent component
                 confirmationLabel,
@@ -86,13 +84,13 @@ final class DeleteOneOperation implements FileOperation {
     }
 
     @Override
+    @SuppressWarnings("nullness")
     public void execute(final List<File> files) {
         final File file = files.iterator().next();
-        // ESCA-JAVA0166: IOException, SecurityException
         try {
             LOG.info(String.format("Deleting file %s", file.getAbsoluteFile()));
             FileUtils.forceDelete(file);
-        } catch (Exception e) { // $codepro.audit.disable caughtExceptions
+        } catch (Exception e) {
             LOG.log(Level.WARNING, e.getMessage(), e);
             final String errorMessage =
                     this.localizable.getErrorMessageDeleteFile(file.getName());

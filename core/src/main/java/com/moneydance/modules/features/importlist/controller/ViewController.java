@@ -52,60 +52,60 @@ import javax.swing.table.AbstractTableModel;
  */
 public final class ViewController implements HomePageView {
 
-    private final Settings              settings;
-    private final Localizable           localizable;
-    private final FileAdmin             fileAdmin;
-    private final Tracker               tracker;
-    private       boolean               initialized;
-    private       ColumnFactory         columnFactory;
-    private       JViewport             viewport;
-    private       ComponentFactory      splitPaneFactory;
-    private       BaseTableFactory      baseTableFactory;
-    private       AbstractTableModel    baseTableModel;
-    private       AbstractTableModel    aggrTableModel;
-    private       boolean               dirty;
+    private final Settings settings;
+    private final Localizable localizable;
+    private final FileAdmin fileAdmin;
+    private final Tracker tracker;
+    private boolean initialized;
+    private final ColumnFactory columnFactory;
+    private final JViewport viewport;
+    private final ComponentFactory splitPaneFactory;
+    private final BaseTableFactory baseTableFactory;
+    private final AbstractTableModel baseTableModel;
+    private final AbstractTableModel aggrTableModel;
+    private boolean dirty;
 
 
     public ViewController(
             final String baseDirectory,
             final FeatureModuleContext argContext,
             final Tracker argTracker) {
-        this.settings    = Helper.INSTANCE.getSettings();
+        this.settings = Helper.INSTANCE.getSettings();
         this.localizable = Helper.INSTANCE.getLocalizable();
-        this.fileAdmin   = new FileAdmin(baseDirectory, argContext);
+        this.fileAdmin = new FileAdmin(baseDirectory, argContext);
         this.fileAdmin.addObserver(new ViewControllerObserver());
-        this.tracker     = argTracker;
-    }
+        this.tracker = argTracker;
 
-
-    private void init() {
         this.viewport = new JViewport();
         this.viewport.setOpaque(false);
 
-        this.baseTableModel   = new FileTableModel(this.fileAdmin.getFiles());
+        this.baseTableModel = new FileTableModel(this.fileAdmin.getFiles());
         this.baseTableFactory = new BaseTableFactory(
                 this.baseTableModel,
                 this.fileAdmin);
 
-        this.aggrTableModel   = new AggregationTableModel();
+        this.aggrTableModel = new AggregationTableModel();
         AggregationTableFactory aggrTableFactory = new AggregationTableFactory(
                 this.aggrTableModel,
                 this.fileAdmin);
-        this.columnFactory    = this.baseTableFactory.getColumnFactory();
+        this.columnFactory  = this.baseTableFactory.getColumnFactory();
 
         this.splitPaneFactory = new SplitPaneFactory(
                 this.baseTableFactory,
                 aggrTableFactory);
+    }
 
+
+    private void init() {
         this.setDirty(true);
         this.refresh();
         this.fileAdmin.startMonitor();
-
         this.tracker.track(Tracker.EventName.DISPLAY);
     }
 
 
     @Override
+    @SuppressWarnings("nullness")
     public synchronized void refresh() {
         if (this.viewport == null || !this.viewport.isVisible()) {
             return;

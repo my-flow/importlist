@@ -47,6 +47,7 @@ final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
     }
 
     @Override
+    @SuppressWarnings("nullness")
     void chooseBaseDirectory() {
         final JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle(
@@ -58,16 +59,20 @@ final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
         try {
             fileChooser.setCurrentDirectory(FileUtils.getUserDirectory());
         } catch (SecurityException e) {
-            LOG.log(Level.WARNING, e.getMessage(), e);
+            final String message = e.getMessage();
+            if (message != null) {
+                LOG.log(Level.WARNING, message, e);
+            }
         }
 
-        if (this.getBaseDirectory() != null) {
-            final File parentDirectory =
-                    this.getBaseDirectory().getParentFile();
+        final File baseDirectory = this.getBaseDirectory();
+        if (baseDirectory != null) {
+            final File parentDirectory = baseDirectory.getParentFile();
             fileChooser.setCurrentDirectory(parentDirectory);
         }
 
-        if (fileChooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+        final int dialogRet = fileChooser.showOpenDialog(null);
+        if (dialogRet != JFileChooser.APPROVE_OPTION) {
             return;
         }
 

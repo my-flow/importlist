@@ -25,6 +25,8 @@ import com.infinitekind.moneydance.model.AccountBook;
 import com.moneydance.apps.md.extensionapi.AccountEditor;
 import com.moneydance.apps.md.view.HomePageView;
 
+import javax.annotation.Nullable;
+
 /**
  * This test stub simulates a context in stand-alone mode. It provides canned
  * answers to the standard calls. Also, it can be cast safely to
@@ -41,12 +43,13 @@ public final class StubContext extends Main {
     private static final Logger LOG =
             Logger.getLogger(StubContext.class.getName());
 
-    private final FeatureModule   featureModule;
-    private       AccountBook     accountBook;
-    private       UserPreferences userPreferences;
-    private static boolean        isInitialized;
+    @Nullable private final FeatureModule featureModule;
+    @Nullable private AccountBook accountBook;
+    @Nullable private UserPreferences userPreferences;
+    private static boolean isInitialized;
 
-    StubContext(final FeatureModule argFeatureModule) {
+    @SuppressWarnings("nullness")
+    StubContext(@Nullable final FeatureModule argFeatureModule) {
         super();
         this.featureModule = argFeatureModule;
         try {
@@ -55,9 +58,15 @@ public final class StubContext extends Main {
                 isInitialized = true;
             }
         } catch (Error e) {
-            LOG.log(Level.SEVERE, e.getMessage(), e);
+            final String message = e.getMessage();
+            if (message != null) {
+                LOG.log(Level.SEVERE, message, e);
+            }
         } catch (Exception e) {
-            LOG.log(Level.WARNING, e.getMessage(), e);
+            final String message = e.getMessage();
+            if (message != null) {
+                LOG.log(Level.WARNING, message, e);
+            }
         }
     }
 
@@ -67,12 +76,13 @@ public final class StubContext extends Main {
 
     @Override
     public AccountBook getCurrentAccountBook() {
+        assert this.accountBook != null : "@AssumeAssertion(nullness)";
         return this.accountBook;
     }
 
     @Override
     public String getVersion() {
-        return null;
+        return "0";
     }
 
     @Override
@@ -133,11 +143,12 @@ public final class StubContext extends Main {
     public UserPreferences getPreferences() {
         if (this.userPreferences == null) {
             final File preferencesFile = Common.getPreferencesFile();
-            this.userPreferences       = new UserPreferences(preferencesFile);
+            this.userPreferences = new UserPreferences(preferencesFile);
             LOG.config(String.format(
                     "Stub context returns user preferences from file %s",
                     preferencesFile.getAbsolutePath()));
         }
+        assert this.userPreferences != null : "@AssumeAssertion(nullness)";
         return this.userPreferences;
     }
 }

@@ -54,15 +54,13 @@ final class DeleteAllOperation implements FileOperation {
                         files.size());
         final Object confirmationLabel = new JLabel(message);
         final Image image = Helper.INSTANCE.getSettings().getIconImage();
-        Icon  icon  = null;
-        if (image != null) {
-            icon = new ImageIcon(image);
-        }
+        final Icon icon = new ImageIcon(image);
         final Object[] options = {
                 this.localizable.getOptionDeleteFile(),
                 this.localizable.getOptionCancel()
         };
 
+        @SuppressWarnings("nullness")
         final int choice = JOptionPane.showOptionDialog(
                 null, // no parent component
                 confirmationLabel,

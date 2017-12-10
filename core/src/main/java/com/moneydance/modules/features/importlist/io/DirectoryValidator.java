@@ -55,7 +55,10 @@ enum DirectoryValidator implements IOFileFilter {
                     CanReadFileFilter.CAN_READ,
                     FileFilterUtils.directoryFileFilter()).accept(file);
         } catch (SecurityException e) {
-            LOG.log(Level.WARNING, e.getMessage(), e);
+            final String message = e.getMessage();
+            if (message != null) {
+                LOG.log(Level.WARNING, message, e);
+            }
             return false;
         }
     }

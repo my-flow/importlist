@@ -28,11 +28,10 @@ import java.text.DateFormat;
 import java.util.Hashtable;
 import java.util.Locale;
 
+import javax.annotation.Nullable;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.UIManager;
-
-import org.apache.commons.lang3.Validate;
 
 /**
  * This preferences class contains the values the user can control in the
@@ -44,12 +43,12 @@ import org.apache.commons.lang3.Validate;
  */
 public final class Preferences {
 
-    private final Settings        settings;
-    private       UserPreferences userPreferences;
-    private final StreamTable     columnOrderDefault;
-    private final StreamTable     sortOrderDefault;
-    private final StreamTable     columnWidths;
-    private       StreamTable     columnOrder;
+    private final Settings settings;
+    @Nullable private UserPreferences userPreferences;
+    private final StreamTable columnOrderDefault;
+    private final StreamTable sortOrderDefault;
+    private final StreamTable columnWidths;
+    @Nullable private StreamTable columnOrder;
 
     /**
      * The constructor must be called exactly once before using the only
@@ -76,12 +75,12 @@ public final class Preferences {
         if (this.userPreferences == null) {
             Helper.INSTANCE.setChanged();
             Helper.INSTANCE.notifyObservers(Boolean.FALSE);
-            Validate.notNull(this.userPreferences,
-                    "user preferences not initialized");
         }
+        assert this.userPreferences != null : "@AssumeAssertion(nullness)";
         return this.userPreferences;
     }
 
+    @SuppressWarnings("nullness")
     public void setAllWritablePreferencesToNull() {
         this.getUserPreferences().setSetting(
                 "importlist.first_run",
@@ -121,7 +120,8 @@ public final class Preferences {
         return this.getUserPreferences().getSetting("importlist.import_dir");
     }
 
-    public void setBaseDirectory(final String baseDirectory) {
+    @SuppressWarnings("nullness")
+    public void setBaseDirectory(@Nullable final String baseDirectory) {
         this.getUserPreferences().setSetting(
                 "importlist.import_dir",
                 baseDirectory);
@@ -178,6 +178,7 @@ public final class Preferences {
                 Helper.INSTANCE.getSettings().getColumnWidth());
     }
 
+    @SuppressWarnings("nullness")
     public void setColumnNames(final Hashtable<String, String> hashtable) {
         StreamTable streamTable = null;
         if (hashtable != null) {
@@ -195,7 +196,9 @@ public final class Preferences {
                     "importlist.column_order",
                     this.columnOrderDefault);
         }
-        return this.columnOrder.getStr(Integer.toString(column), null);
+        @SuppressWarnings("nullness")
+        final String columnName = this.columnOrder.getStr(Integer.toString(column), null);
+        return columnName;
     }
 
     public void setSortKey(final RowSorter.SortKey sortKey) {
@@ -211,6 +214,7 @@ public final class Preferences {
                 "importlist.sort_order", this.sortOrderDefault);
         Object key        = streamTable.keys().nextElement();
         int column        = Integer.parseInt(key.toString());
+        @SuppressWarnings("nullness")
         String sortOrder  = streamTable.getStr(key, null);
         return new RowSorter.SortKey(column, SortOrder.valueOf(sortOrder));
     }

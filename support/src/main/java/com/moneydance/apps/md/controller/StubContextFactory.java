@@ -27,6 +27,8 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang3.Validate;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Florian J. Breunig
  */
@@ -38,23 +40,23 @@ public final class StubContextFactory {
     private static final Logger LOG =
             Logger.getLogger(StubContextFactory.class.getName());
 
-    private final FeatureModule featureModule;
-    private final StubContext   context;
+    @Nullable private final FeatureModule featureModule;
+    private final StubContext context;
 
     public StubContextFactory() {
         this.featureModule = null;
         this.context = new StubContext(this.featureModule);
-        this.initContext();
+        initContext(this.context);
     }
 
     public StubContextFactory(final FeatureModule argFeatureModule) {
         Validate.notNull(argFeatureModule, "featureModule must not be null");
         this.featureModule  = argFeatureModule;
         this.context = new StubContext(this.featureModule);
-        this.initContext();
+        initContext(this.context);
     }
 
-    private void initContext() {
+    private static void initContext(final StubContext context) {
         AccountBook accountBook = AccountBook.fakeAccountBook();
         accountBook.initializeAccounts(new Account(accountBook));
 
@@ -66,13 +68,17 @@ public final class StubContextFactory {
                             Account.AccountType.BANK,
                             accountBook.getRootAccount()));
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, e.getMessage(), e);
+            final String message = e.getMessage();
+            if (message != null) {
+                LOG.log(Level.WARNING, message, e);
+            }
         }
 
-        this.context.setAccountBook(accountBook);
-        Helper.INSTANCE.setContext(this.context);
+        context.setAccountBook(accountBook);
+        Helper.INSTANCE.setContext(context);
     }
 
+    @SuppressWarnings("nullness")
     public void init() {
         LOG.info("Setting up stub context");
         this.featureModule.setup(
@@ -83,7 +89,7 @@ public final class StubContextFactory {
                 null);
     }
 
-    public StubContext getContext() {
+    @Nullable public StubContext getContext() {
         return this.context;
     }
 }

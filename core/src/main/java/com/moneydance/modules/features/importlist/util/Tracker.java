@@ -72,6 +72,7 @@ public final class Tracker {
         this.analyticsTracker = new GoogleAnalytics(config, argTrackingCode);
     }
 
+    @SuppressWarnings("nullness")
     public void track(final EventName eventName) {
         this.analyticsTracker.postAsync(new EventHit(
                 this.fullVersion,

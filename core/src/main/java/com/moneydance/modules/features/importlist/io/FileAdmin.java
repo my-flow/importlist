@@ -30,6 +30,7 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.Nullable;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -56,19 +57,20 @@ public final class FileAdmin extends Observable implements Observer {
     private static final Logger LOG =
             Logger.getLogger(FileAdmin.class.getName());
 
-    private final Localizable               localizable;
-    private final FeatureModuleContext      context;
-    private final AbstractDirectoryChooser  directoryChooser;
-    private final DirectoryValidator        directoryValidator;
-    private final IOFileFilter              transactionFileFilter;
-    private final IOFileFilter              textFileFilter;
-    private final IOFileFilter              readableFileFilter;
-    private final TransactionFileListener   listener;
-    private final FileAlterationMonitor     monitor;
-    private final List<File>                files;
-    private       FileAlterationObserver    observer;
-    private       boolean                   isMonitorRunning;
+    private final Localizable localizable;
+    private final FeatureModuleContext context;
+    private final AbstractDirectoryChooser directoryChooser;
+    private final DirectoryValidator directoryValidator;
+    private final IOFileFilter transactionFileFilter;
+    private final IOFileFilter textFileFilter;
+    private final IOFileFilter readableFileFilter;
+    private final TransactionFileListener listener;
+    private final FileAlterationMonitor monitor;
+    private final List<File> files;
+    @Nullable private FileAlterationObserver observer;
+    private boolean isMonitorRunning;
 
+    @SuppressWarnings("nullness")
     public FileAdmin(final String baseDirectory,
             final FeatureModuleContext argContext) {
         this.localizable = Helper.INSTANCE.getLocalizable();
@@ -98,13 +100,16 @@ public final class FileAdmin extends Observable implements Observer {
     public void chooseBaseDirectory() {
         LOG.info("Choosing new base directory.");
         this.directoryChooser.chooseBaseDirectory();
-        this.monitor.removeObserver(this.observer);
+        if (this.observer != null) {
+            this.monitor.removeObserver(this.observer);
+        }
         this.setFileMonitorToCurrentImportDir();
         this.startMonitor();
         this.setChanged();
         this.notifyObservers();
     }
 
+    @SuppressWarnings("nullness")
     public void checkValidBaseDirectory() {
         final File baseDirectory = this.getBaseDirectory();
 
@@ -134,6 +139,7 @@ public final class FileAdmin extends Observable implements Observer {
         return Collections.unmodifiableList(this.files);
     }
 
+    @SuppressWarnings("nullness")
     public void reloadFiles() {
         synchronized (FileAdmin.class) {
             this.files.clear();
@@ -144,12 +150,15 @@ public final class FileAdmin extends Observable implements Observer {
                         null); // ignore subdirectories
                 this.files.addAll(collection);
             } catch (IllegalArgumentException e) {
-                LOG.log(Level.WARNING, e.getMessage(), e);
+                final String message = e.getMessage();
+                if (message != null) {
+                    LOG.log(Level.WARNING, message, e);
+                }
             }
         }
     }
 
-    public File getBaseDirectory() {
+    @Nullable public File getBaseDirectory() {
         return this.directoryChooser.getBaseDirectory();
     }
 
@@ -171,12 +180,14 @@ public final class FileAdmin extends Observable implements Observer {
         }
         LOG.config("Starting the directory monitor.");
         this.setFileMonitorToCurrentImportDir();
-        // ESCA-JAVA0166:
         try {
             this.monitor.start();
             this.isMonitorRunning = true;
-        } catch (Exception e) { // $codepro.audit.disable caughtExceptions
-            LOG.log(Level.WARNING, e.getMessage(), e);
+        } catch (Exception e) {
+            final String message = e.getMessage();
+            if (message != null) {
+                LOG.log(Level.WARNING, message, e);
+            }
         }
     }
 
@@ -192,8 +203,11 @@ public final class FileAdmin extends Observable implements Observer {
         try {
             this.monitor.stop(0);
             this.isMonitorRunning = false;
-        } catch (Exception e) { // $codepro.audit.disable caughtExceptions
-            LOG.log(Level.WARNING, e.getMessage(), e);
+        } catch (Exception e) {
+            final String message = e.getMessage();
+            if (message != null) {
+                LOG.log(Level.WARNING, message, e);
+            }
         }
     }
 
@@ -242,6 +256,7 @@ public final class FileAdmin extends Observable implements Observer {
         this.notifyObservers();
     }
 
+    @SuppressWarnings("nullness")
     private void setFileMonitorToCurrentImportDir() {
         if (this.getBaseDirectory() == null) {
             return;

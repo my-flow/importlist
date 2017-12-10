@@ -22,6 +22,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.annotation.Nullable;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
@@ -31,17 +32,15 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 
-import org.apache.commons.lang3.Validate;
-
 /**
  * @author Florian J. Breunig
  */
 public abstract class AbstractEditor extends DefaultCellEditor {
 
     private static final long serialVersionUID = 1L;
-    private final transient FileAdmin       fileAdmin;
-    private final transient ButtonRenderer  buttonRenderer;
-    private                 String          label;
+    private final transient FileAdmin fileAdmin;
+    private final transient ButtonRenderer buttonRenderer;
+    @Nullable private String label;
 
     public abstract ActionListener getActionListener(final int rowNumber);
 
@@ -51,12 +50,6 @@ public abstract class AbstractEditor extends DefaultCellEditor {
             final FileAdmin argFileAdmin,
             final ButtonRenderer argButtonRenderer) {
         super(new JCheckBox());
-        Validate.notNull(
-                argFileAdmin,
-                "file admin must not be null"); //$NON-NLS-1$
-        Validate.notNull(
-                argButtonRenderer,
-                "button renderer must not be null");
         this.fileAdmin      = argFileAdmin;
         this.buttonRenderer = argButtonRenderer;
     }
@@ -66,6 +59,7 @@ public abstract class AbstractEditor extends DefaultCellEditor {
     }
 
     @Override
+    @SuppressWarnings("nullness")
     public final Object getCellEditorValue() {
         return this.label;
     }
@@ -92,7 +86,6 @@ public abstract class AbstractEditor extends DefaultCellEditor {
 
 
     public final void registerKeyboardShortcut(final JComponent jComponent) {
-        Validate.notNull(jComponent, "jComponent must not be null");
         if (this.getKeyStroke() == null) {
             return;
         }

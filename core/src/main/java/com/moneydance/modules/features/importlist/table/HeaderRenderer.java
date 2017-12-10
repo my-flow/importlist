@@ -29,8 +29,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
-import org.apache.commons.lang3.Validate;
-
 /**
  * This decorator class sets header-specific attributes to a
  * <code>TableCellRenderer</code>.
@@ -42,9 +40,6 @@ final class HeaderRenderer implements TableCellRenderer {
     private final TableCellRenderer defaultHeaderTableCellRenderer;
 
     HeaderRenderer(final TableCellRenderer argDefaultHeaderTableCellRenderer) {
-        Validate.notNull(
-                argDefaultHeaderTableCellRenderer,
-                "argDefaultHeaderTableCellRenderer must not be null");
         this.defaultHeaderTableCellRenderer = argDefaultHeaderTableCellRenderer;
     }
 

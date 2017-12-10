@@ -27,7 +27,7 @@ import javax.swing.border.EmptyBorder;
  */
 public final class SplitPaneFactory implements ComponentFactory {
 
-    private       JSplitPane splitPane;
+    private final JSplitPane splitPane;
     private final ComponentFactory topComponentFactory;
     private final ComponentFactory bottomComponentFactory;
 
@@ -37,9 +37,7 @@ public final class SplitPaneFactory implements ComponentFactory {
 
         this.topComponentFactory    = argTopComponentFactory;
         this.bottomComponentFactory = argBottomComponentFactory;
-    }
 
-    private void init() {
         this.splitPane = new JCustomSplitPane(JSplitPane.VERTICAL_SPLIT);
         this.splitPane.setResizeWeight(1.0);
         this.splitPane.setDividerSize(0);
@@ -50,10 +48,6 @@ public final class SplitPaneFactory implements ComponentFactory {
 
     @Override
     public JSplitPane getComponent() {
-        if (this.splitPane == null) {
-            this.init();
-        }
-
         JComponent topComponent = this.topComponentFactory.getComponent();
         topComponent.setBorder(new EmptyBorder(0, 0, 0, 0));
         this.splitPane.setTopComponent(topComponent);

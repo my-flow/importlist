@@ -57,11 +57,15 @@ public final class FileTableModelTest {
     }
 
     @Test
-    public void testGetColumnClassInt() {
+    public void testGetColumnClassIntExpected() {
         assertThat(this.emptyModel.getColumnClass(0), notNullValue());
         assertThat(this.emptyModel.getColumnClass(1), notNullValue());
         assertThat(this.emptyModel.getColumnClass(2), notNullValue());
         assertThat(this.emptyModel.getColumnClass(3), notNullValue());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetColumnClassIntUnexpected() {
         assertThat(this.emptyModel.getColumnClass(5), nullValue());
     }
 
@@ -72,11 +76,11 @@ public final class FileTableModelTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetValueAtForFullModel() {
-        assertThat(this.fullModel.getValueAt(0,  0), notNullValue());
-        assertThat(this.fullModel.getValueAt(0,  1), notNullValue());
-        assertThat(this.fullModel.getValueAt(0,  2), notNullValue());
-        assertThat(this.fullModel.getValueAt(0,  3), notNullValue());
-        this.fullModel.getValueAt(0,  4); // throw an expected exception
+        assertThat(this.fullModel.getValueAt(0, 0), notNullValue());
+        assertThat(this.fullModel.getValueAt(0, 1), notNullValue());
+        assertThat(this.fullModel.getValueAt(0, 2), notNullValue());
+        assertThat(this.fullModel.getValueAt(0, 3), notNullValue());
+        this.fullModel.getValueAt(0, 4); // throw an expected exception
     }
 
     @Test

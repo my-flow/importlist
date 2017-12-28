@@ -19,20 +19,18 @@ package com.moneydance.modules.features.importlist.io;
 import com.infinitekind.moneydance.model.Account;
 import com.infinitekind.moneydance.model.AccountUtil;
 import com.infinitekind.moneydance.model.AcctFilter;
+import com.infinitekind.util.StringUtils;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.text.StrSubstitutor;
 
 /**
  * @author Florian J. Breunig
@@ -68,24 +66,20 @@ final class ImportOneOperation implements FileOperation {
     @Override
     public void execute(final List<File> files) {
         final File file = files.iterator().next();
-        Map<String, String> valuesMap = new HashMap<String, String>(1);
-        valuesMap.put("filename",  file.getAbsolutePath());
-
+        
         String uriScheme = "";
         if (this.transactionFileFilter.accept(file)) {
-            uriScheme = Helper.INSTANCE.getSettings()
-                    .getTransactionFileImportUriScheme();
+          uriScheme = Helper.INSTANCE.getSettings().getTransactionFileImportUriScheme();
         } else if (this.textFileFilter.accept(file)) {
-            uriScheme = Helper.INSTANCE.getSettings()
-                    .getTextFileImportUriScheme();
-            valuesMap.put("accountno", this.getAccountNumberForFile(file));
+          uriScheme = Helper.INSTANCE.getSettings().getTextFileImportUriScheme();
+          uriScheme = StringUtils.replaceAll(uriScheme, "${accountno}", 
+                                             this.getAccountNumberForFile(file));
         }
-
-        final StrSubstitutor sub = new StrSubstitutor(valuesMap);
-        final String resolvedUri = sub.replace(uriScheme);
-
+        uriScheme = StringUtils.replaceAll(uriScheme, "${filename}", 
+                                           file.getAbsolutePath());
+        
         // Import the file by calling the URI
-        this.context.showURL(resolvedUri);
+        this.context.showURL(uriScheme);
     }
 
     private String getAccountNumberForFile(final File argFile) {

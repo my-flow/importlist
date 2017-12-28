@@ -19,11 +19,10 @@ package com.moneydance.modules.features.importlist.util;
 import com.brsanthu.googleanalytics.EventHit;
 import com.brsanthu.googleanalytics.GoogleAnalytics;
 import com.brsanthu.googleanalytics.GoogleAnalyticsConfig;
+import com.infinitekind.util.StringUtils;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * A facade for dispatching Google Analytics tracking information.
@@ -45,7 +44,7 @@ public final class Tracker {
         this.build = String.format("%s v%d", argExtensionName, argBuild);
 
         Settings settings = Helper.INSTANCE.getSettings();
-        boolean enabled = StringUtils.isNotEmpty(settings.getTrackingCode());
+        boolean enabled = ! StringUtils.isBlank(settings.getTrackingCode());
 
         GoogleAnalyticsConfig config = new GoogleAnalyticsConfig();
         config.setEnabled(enabled);

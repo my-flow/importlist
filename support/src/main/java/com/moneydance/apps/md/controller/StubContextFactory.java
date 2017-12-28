@@ -25,8 +25,6 @@ import com.moneydance.util.StreamTable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.Validate;
-
 import javax.annotation.Nullable;
 
 /**
@@ -50,7 +48,7 @@ public final class StubContextFactory {
     }
 
     public StubContextFactory(final FeatureModule argFeatureModule) {
-        Validate.notNull(argFeatureModule, "featureModule must not be null");
+        if(argFeatureModule==null) throw new NullPointerException("featureModule must not be null");
         this.featureModule  = argFeatureModule;
         this.context = new StubContext(this.featureModule);
         initContext(this.context);

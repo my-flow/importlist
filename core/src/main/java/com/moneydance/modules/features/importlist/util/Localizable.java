@@ -17,12 +17,11 @@
 package com.moneydance.modules.features.importlist.util;
 
 import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.text.StrSubstitutor;
-import org.apache.commons.lang3.text.WordUtils;
+import com.infinitekind.util.StringUtils;
 
 /**
  * This i18n class provides language-dependent strings such as labels and
@@ -127,13 +126,8 @@ public final class Localizable {
     public String getErrorMessageBaseDirectory(final String baseDirectory) {
         final String templateString = this.resourceBundle.getString(
                 "error_message_base_directory");
-
-        Map<String, String> valuesMap =
-                new ConcurrentHashMap<String, String>(1);
-        valuesMap.put("import.dir",  getMarkupFilename(baseDirectory));
-        StrSubstitutor sub = new StrSubstitutor(valuesMap);
-
-        return sub.replace(templateString);
+      
+        return StringUtils.replaceAll(templateString, "${import.dir}", getMarkupFilename(baseDirectory));
     }
 
     /**
@@ -145,12 +139,7 @@ public final class Localizable {
         final String templateString = this.resourceBundle.getString(
                 "confirmation_message_delete_one_file");
 
-        Map<String, String> valuesMap =
-                new ConcurrentHashMap<String, String>(1);
-        valuesMap.put("filename",  getMarkupFilename(filename));
-        StrSubstitutor sub = new StrSubstitutor(valuesMap);
-
-        return sub.replace(templateString);
+        return StringUtils.replaceAll(templateString, "${filename}", getMarkupFilename(filename));
     }
 
     /**
@@ -161,13 +150,7 @@ public final class Localizable {
     public String getConfirmationMessageDeleteAllFiles(final int size) {
         final String templateString = this.resourceBundle.getString(
                 "confirmation_message_delete_all_files");
-
-        Map<String, String> valuesMap =
-                new ConcurrentHashMap<String, String>(1);
-        valuesMap.put("no.files",  String.valueOf(size));
-        StrSubstitutor sub = new StrSubstitutor(valuesMap);
-
-        return sub.replace(templateString);
+      return StringUtils.replaceAll(templateString, "${no.files}", String.valueOf(size));
     }
 
     /**
@@ -177,13 +160,7 @@ public final class Localizable {
     public String getErrorMessageDeleteFile(final String filename) {
         final String templateString = this.resourceBundle.getString(
                 "error_message_delete_file");
-
-        Map<String, String> valuesMap =
-                new ConcurrentHashMap<String, String>(1);
-        valuesMap.put("filename",  getMarkupFilename(filename));
-        StrSubstitutor sub = new StrSubstitutor(valuesMap);
-
-        return sub.replace(templateString);
+      return StringUtils.replaceAll(templateString, "${filename}", getMarkupFilename(filename));
     }
 
     /**
@@ -208,19 +185,76 @@ public final class Localizable {
     public String getEmptyMessage(final String baseDirectory) {
         final String templateString = this.resourceBundle.getString(
                 "empty_message");
-
-        Map<String, String> valuesMap =
-                new ConcurrentHashMap<String, String>(1);
-        valuesMap.put("import.dir", baseDirectory);
-        StrSubstitutor sub = new StrSubstitutor(valuesMap);
-
-        return sub.replace(templateString);
+      return StringUtils.replaceAll(templateString, "${import.dir}", baseDirectory);
     }
 
     private static String getMarkupFilename(final String filename) {
-        return WordUtils.wrap(
-                filename,
-                Helper.INSTANCE.getSettings().getMessageFilenameLineMaxLength(),
-                "<br>", /*wrapLongWords*/ true);
+      return wrapLongWords(filename, Helper.INSTANCE.getSettings().getMessageFilenameLineMaxLength(), "<br>", true);
     }
+    
+    // mostly copied from apache commons-text implementation of WordUtils.wrap() implementation
+    private static String wrapLongWords(String stringToWrap, int maxLineLength, String newLineStr, boolean wrapLongWords) {
+      StringBuilder str = new StringBuilder();
+      Pattern wrapOnPattern = Pattern.compile(" ");
+      int origLength = stringToWrap.length();
+      final StringBuilder wrappedLine = new StringBuilder(stringToWrap.length() + 32);
+      int offset = 0;
+
+      while (offset < origLength) {
+        int spaceToWrapAt = -1;
+        Matcher matcher = wrapOnPattern.matcher(str.substring(offset, Math.min(offset + maxLineLength + 1, origLength)));
+        if (matcher.find()) {
+          if (matcher.start() == 0) {
+            offset += matcher.end();
+            continue;
+          }
+          spaceToWrapAt = matcher.start() + offset;
+        }
+
+        // only last line without leading spaces is left
+        if(origLength - offset <= maxLineLength) {
+          break;
+        }
+
+        while(matcher.find()){
+          spaceToWrapAt = matcher.start() + offset;
+        }
+
+        if (spaceToWrapAt >= offset) {
+          // normal case
+          wrappedLine.append(str, offset, spaceToWrapAt);
+          wrappedLine.append(newLineStr);
+          offset = spaceToWrapAt + 1;
+
+        } else {
+          // really long word or URL
+          if (wrapLongWords) {
+            // wrap really long word one line at a time
+            wrappedLine.append(str, offset, maxLineLength + offset);
+            wrappedLine.append(newLineStr);
+            offset += maxLineLength;
+          } else {
+            // do not wrap really long word, just extend beyond limit
+            matcher = wrapOnPattern.matcher(str.substring(offset + maxLineLength));
+            if (matcher.find()) {
+              spaceToWrapAt = matcher.start() + offset + maxLineLength;
+            }
+
+            if (spaceToWrapAt >= 0) {
+              wrappedLine.append(str, offset, spaceToWrapAt);
+              wrappedLine.append(newLineStr);
+              offset = spaceToWrapAt + 1;
+            } else {
+              wrappedLine.append(str, offset, str.length());
+              offset = origLength
+              ;
+            }
+          }
+        }
+      }
+
+      // Whatever is left in line is short enough to just pass through
+      return wrappedLine.append(str, offset, str.length()).toString();
+    }
+    
 }

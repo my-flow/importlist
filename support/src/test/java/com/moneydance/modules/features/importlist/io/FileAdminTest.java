@@ -47,11 +47,6 @@ public final class FileAdminTest {
     }
 
     @Test
-    public void testChooseBaseDirectory() {
-        this.fileAdmin.chooseBaseDirectory();
-    }
-
-    @Test
     public void testGetFiles() {
         assertThat(this.fileAdmin.getFiles(), notNullValue());
     }

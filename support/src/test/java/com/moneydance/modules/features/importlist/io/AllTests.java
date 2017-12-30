@@ -26,8 +26,6 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
     DefaultDirectoryChooserTest.class,
-    DeleteAllOperationTest.class,
-    DeleteOneOperationTest.class,
     DirectoryValidatorTest.class,
     FileAdminTest.class,
     ImportAllOperationTest.class,

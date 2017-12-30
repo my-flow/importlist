@@ -80,11 +80,6 @@ public final class ViewControllerTest {
     }
 
     @Test
-    public void testChooseBaseDirectory() {
-        this.viewController.chooseBaseDirectory();
-    }
-
-    @Test
     public void testCleanup() {
         this.viewController.cleanup();
 

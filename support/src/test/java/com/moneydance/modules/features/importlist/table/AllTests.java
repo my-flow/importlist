@@ -30,7 +30,6 @@ import org.junit.runners.Suite.SuiteClasses;
     ColumnFactoryTest.class,
     DeleteAllEditorTest.class,
     DeleteOneEditorTest.class,
-    HeaderRendererTest.class,
     ImportAllEditorTest.class,
     ImportOneEditorTest.class,
     LabelModifiedRendererTest.class,

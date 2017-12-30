@@ -25,8 +25,6 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-    AggregationTableFactoryTest.class,
-    BaseTableFactoryTest.class,
     DirectoryChooserButtonFactoryTest.class,
     EmptyLabelFactoryTest.class,
     FileTableRowSorterTest.class,

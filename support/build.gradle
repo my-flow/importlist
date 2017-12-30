@@ -7,24 +7,21 @@ dependencies {
 
     testCompile('junit:junit:4.12')
 
-    testRuntime('org.jmockit:jmockit-coverage:1.21')
+    testRuntime('org.jmockit:jmockit-coverage:1.23')
     testRuntime('org.slf4j:slf4j-simple:1.7.25')
 }
 
 mainClassName = 'com.moneydance.modules.features.importlist.ConsoleRunner'
 
 test {
-    include 'com/moneydance/modules/features/importlist/**/AllUnitTests.*'
-}
-
-task testAll(type: Test) {
     doFirst {
         String jMockit = project.configurations.testRuntime.find {
             it.name.startsWith("jmockit-coverage")
         }
         jvmArgs "-javaagent:${jMockit}"
+        systemProperty 'coverage-srcDirs', project(':core').projectDir
         systemProperty 'coverage-classes', 'com.moneydance.modules.features.importlist.*'
-        systemProperty 'coverage-excludes', '*AllUnitTests|*AllTests|*Stub*|*Mock*|*ConsoleRunner*'
+        systemProperty 'coverage-excludes', '.*AllTests|.*Stub.*|.*Mock.*|.*ConsoleRunner.*|.*Test'
         systemProperty 'coverage-metrics', 'all'
         systemProperty 'coverage-outputDir', "${project.docsDir}/coverage-report"
     }

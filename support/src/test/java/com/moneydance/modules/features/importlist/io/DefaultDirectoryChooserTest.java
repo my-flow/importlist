@@ -42,11 +42,4 @@ public final class DefaultDirectoryChooserTest {
                 "");
         assertThat(directoryChooser.getBaseDirectory(), notNullValue());
     }
-
-    @Test
-    public void testChooseBaseDirectory() {
-        AbstractDirectoryChooser directoryChooser = new DefaultDirectoryChooser(
-                null);
-        directoryChooser.chooseBaseDirectory();
-    }
 }

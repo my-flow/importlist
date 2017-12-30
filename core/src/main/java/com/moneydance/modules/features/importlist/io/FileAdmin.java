@@ -42,7 +42,6 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
-import org.apache.commons.lang3.SystemUtils;
 
 /**
  * This core class coordinates and delegates operations on the file system.

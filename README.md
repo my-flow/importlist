@@ -1,10 +1,10 @@
 # Import List [![Build Status](https://travis-ci.org/my-flow/importlist.svg?branch=master)](https://travis-ci.org/my-flow/importlist)
 
-Import List is an open-source extension for [Moneydance]
-(http://www.moneydance.com) monitoring a given directory for transaction files
-to import. For more information on where to download and how to install the
-extension please visit the [project page]
-(http://my-flow.github.io/importlist/).
+Import List is an open-source extension for
+[Moneydance](http://www.moneydance.com) monitoring a given directory for
+transaction files to import. For more information on where to download and how
+to install the extension please visit the
+[project page](http://my-flow.github.io/importlist/).
 
 ## Build Prerequisites
 * Java Development Kit, version 7
@@ -30,10 +30,9 @@ mock-ups) and the test cases. It depends from the core project.
 
 ## Documentation
 * [Import List API](http://my-flow.github.io/importlist/docs/api/)
-* [JMockit Coverage Report]
-(http://my-flow.github.io/importlist/docs/coverage-report/)
+* [JMockit Coverage Report](http://my-flow.github.io/importlist/docs/coverage-report/)
 
 ## License
-Copyright 2011-2017 [Florian J. Breunig](http://www.my-flow.com). Import List is
-released under the [GNU General Public License]
-(http://www.gnu.org/licenses/gpl.html).
+Copyright 2011-2017 [Florian J. Breunig](http://www.my-flow.com). Import List
+is released under the
+[GNU General Public License](http://www.gnu.org/licenses/gpl.html).

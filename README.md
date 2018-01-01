@@ -33,6 +33,6 @@ mock-ups) and the test cases. It depends from the core project.
 * [JMockit Coverage Report](http://my-flow.github.io/importlist/docs/coverage-report/)
 
 ## License
-Copyright 2011-2017 [Florian J. Breunig](http://www.my-flow.com). Import List
+Copyright 2011-2018 [Florian J. Breunig](http://www.my-flow.com). Import List
 is released under the
 [GNU General Public License](http://www.gnu.org/licenses/gpl.html).

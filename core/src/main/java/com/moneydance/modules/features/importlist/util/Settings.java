@@ -46,17 +46,17 @@ public final class Settings {
     private final Configuration config;
 
     Settings() {
-        final AbstractFileConfiguration abstractFileConfiguration =
-                new PropertiesConfiguration();
-
         try {
             InputStream inputStream = Helper.getInputStreamFromResource(
                     PROPERTIES_RESOURCE);
+
+            final AbstractFileConfiguration abstractFileConfiguration =
+                    new PropertiesConfiguration();
             abstractFileConfiguration.load(inputStream);
+            this.config = abstractFileConfiguration;
         } catch (ConfigurationException e) {
             throw new IllegalStateException(e.getMessage(), e);
         }
-        this.config = abstractFileConfiguration;
     }
 
     /**
@@ -326,14 +326,12 @@ public final class Settings {
     }
 
     private static Image getImage(final String resource) {
-        Image image = null;
         try {
             InputStream inputStream = Helper.getInputStreamFromResource(
                     resource);
-            image = ImageIO.read(inputStream);
+            return ImageIO.read(inputStream);
         } catch (IOException e) {
             throw new IllegalStateException(e.getMessage(), e);
         }
-        return image;
     }
 }

@@ -22,7 +22,6 @@ import com.moneydance.modules.features.importlist.controller.ViewController;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
-import com.moneydance.modules.features.importlist.util.Tracker;
 
 import javax.annotation.Nullable;
 import java.awt.Image;
@@ -45,7 +44,6 @@ public final class Main extends FeatureModule implements Observer {
 
     private final Preferences prefs;
     private final Settings settings;
-    @Nullable private Tracker tracker;
     @Nullable private String baseDirectory;
     @Nullable private ViewController viewController;
 
@@ -65,18 +63,15 @@ public final class Main extends FeatureModule implements Observer {
     @Override
     public void init() {
         Helper.INSTANCE.addObserver(this);
-        this.tracker  = Helper.INSTANCE.getTracker(this.getBuild());
 
         if (this.prefs.isFirstRun()) {
             this.prefs.setFirstRun(false);
             LOG.config("Install");
-            this.tracker.track(Tracker.EventName.INSTALL);
         }
 
         this.viewController = new ViewController(
                 this.baseDirectory,
-                this.getContext(),
-                this.tracker);
+                this.getContext());
 
         // register this module's homepage view
         LOG.config("Registering homepage view");
@@ -117,7 +112,6 @@ public final class Main extends FeatureModule implements Observer {
     @Override
     public void unload() {
         LOG.info("Unloading extension."); //$NON-NLS-1$
-        this.tracker.track(Tracker.EventName.UNINSTALL);
         this.viewController.setActive(false);
         this.cleanup();
         this.prefs.setAllWritablePreferencesToNull();

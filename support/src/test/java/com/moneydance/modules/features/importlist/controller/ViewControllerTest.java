@@ -39,8 +39,7 @@ public final class ViewControllerTest {
         new StubContextFactory();
         this.viewController = new ViewController(
                 null,
-                new StubContextFactory().getContext(),
-                Helper.INSTANCE.getTracker(0));
+                new StubContextFactory().getContext());
     }
 
     @Test

@@ -4,8 +4,8 @@ Import List is released under the GNU General Public License, Version 3.0.
 
 --
 
-Apache Commons Configuration, Apache Commons IO, Apache Commons Lang, 
- Apache Commons Logging, HttpComponents Core, Apache HttpComponents Client
+Apache Commons Configuration, Apache Commons IO, Apache Commons Lang,
+ Apache Commons Logging
 Copyright 2001-2015 The Apache Software Foundation
 
 This product includes software developed by
@@ -234,11 +234,6 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
---
-
-Java API for Google Analytics Measurement Protocol (part of Universal Analytics).
-This library is released under liberal Apache Open source License 2.0
 
 --
 

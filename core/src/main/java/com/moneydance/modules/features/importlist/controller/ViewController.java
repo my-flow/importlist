@@ -33,7 +33,6 @@ import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
-import com.moneydance.modules.features.importlist.util.Tracker;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -55,7 +54,6 @@ public final class ViewController implements HomePageView {
     private final Settings settings;
     private final Localizable localizable;
     private final FileAdmin fileAdmin;
-    private final Tracker tracker;
     private boolean initialized;
     private final ColumnFactory columnFactory;
     private final JViewport viewport;
@@ -68,13 +66,11 @@ public final class ViewController implements HomePageView {
 
     public ViewController(
             final String baseDirectory,
-            final FeatureModuleContext argContext,
-            final Tracker argTracker) {
+            final FeatureModuleContext argContext) {
         this.settings = Helper.INSTANCE.getSettings();
         this.localizable = Helper.INSTANCE.getLocalizable();
         this.fileAdmin = new FileAdmin(baseDirectory, argContext);
         this.fileAdmin.addObserver(new ViewControllerObserver());
-        this.tracker = argTracker;
 
         this.viewport = new JViewport();
         this.viewport.setOpaque(false);
@@ -100,7 +96,6 @@ public final class ViewController implements HomePageView {
         this.setDirty(true);
         this.refresh();
         this.fileAdmin.startMonitor();
-        this.tracker.track(Tracker.EventName.DISPLAY);
     }
 
 

@@ -186,24 +186,4 @@ public final class SettingsTest {
     public void testGetKeyboardShortcutDelete() {
         assertThat(this.settings.getKeyboardShortcutDelete(), notNullValue());
     }
-
-    @Test
-    public void testGetTrackingCode() {
-        assertThat(this.settings.getTrackingCode(), notNullValue());
-    }
-
-    @Test
-    public void testGetEventActionInstall() {
-        assertThat(this.settings.getEventActionInstall(), notNullValue());
-    }
-
-    @Test
-    public void testGetEventActionDisplay() {
-        assertThat(this.settings.getEventActionDisplay(), notNullValue());
-    }
-
-    @Test
-    public void testGetEventActionUninstall() {
-        assertThat(this.settings.getEventActionUninstall(), notNullValue());
-    }
 }

@@ -45,7 +45,6 @@ public enum Helper {
     private final Settings settings;
     @Nullable private Preferences prefs;
     @Nullable private Localizable localizable;
-    @Nullable private Tracker tracker;
 
     Helper() {
         this.observable = new HelperObservable();
@@ -74,19 +73,6 @@ public enum Helper {
             }
         }
         return this.localizable;
-    }
-
-    public Tracker getTracker(final int build) {
-        synchronized (Helper.class) {
-            if (this.tracker == null) {
-                this.tracker = new Tracker(
-                        build,
-                        this.settings.getExtensionName(),
-                        this.prefs.getFullVersion(),
-                        this.settings.getTrackingCode());
-            }
-        }
-        return this.tracker;
     }
 
     public void addObserver(final Observer observer) {

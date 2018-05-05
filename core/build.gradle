@@ -12,7 +12,6 @@ apply plugin: 'com.github.johnrengelman.shadow'
 
 dependencies {
     compile(':moneydance:')
-    compile('com.brsanthu:google-analytics-java:1.1.2')
     compile('commons-io:commons-io:2.5')
     compile('org.apache.commons:commons-lang3:3.6')
     compile('commons-configuration:commons-configuration:1.10')
@@ -49,14 +48,10 @@ shadowJar {
         include dependency('org.apache.commons:commons-lang3:3.6')
         include dependency('commons-io:commons-io:2.5')
         include dependency('commons-configuration:commons-configuration:1.10')
-        include dependency('org.apache.httpcomponents:httpcore:4.3')
-        include dependency('org.apache.httpcomponents:httpclient:4.3')
         include dependency('commons-logging:commons-logging:1.2')
-        include dependency('com.brsanthu:google-analytics-java:1.1.2')
         include dependency('org.slf4j:slf4j-api:1.7.25')
         include dependency('org.slf4j:slf4j-nop:1.7.25')
     }
-    relocate 'org.apache.http', 'com.moneydance.modules.features.importlist.apache.http'
 }
 
 task proguard(type: ProGuardTask, dependsOn: 'shadowJar') {
@@ -82,7 +77,6 @@ javadoc {
     options.links = [
         'https://docs.oracle.com/javase/7/docs/api/',
         'http://moneydance.com/dev/apidoc/',
-        'https://brsanthu.github.io/google-analytics-java/javadocs/',
         'http://www.slf4j.org/apidocs/',
         'https://commons.apache.org/proper/commons-configuration/javadocs/v1.10/apidocs/',
         'https://commons.apache.org/proper/commons-io/javadocs/api-2.5/',

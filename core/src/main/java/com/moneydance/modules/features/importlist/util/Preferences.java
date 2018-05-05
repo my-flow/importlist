@@ -108,10 +108,6 @@ public final class Preferences {
                 true);
     }
 
-    public String getFullVersion() {
-        return this.getUserPreferences().getSetting("current_version", "0");
-    }
-
     public Locale getLocale() {
         return this.getUserPreferences().getLocale();
     }

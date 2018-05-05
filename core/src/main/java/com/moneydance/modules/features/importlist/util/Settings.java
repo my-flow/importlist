@@ -297,34 +297,6 @@ public final class Settings {
         return this.config.getString("keyboard_shortcut_delete"); //$NON-NLS-1$
     }
 
-    /**
-     * @return Tracking code for Google Analytics (aka "utmac").
-     */
-    public String getTrackingCode() {
-        return this.config.getString("tracking_code"); //$NON-NLS-1$
-    }
-
-    /**
-     * @return Event action for installation
-     */
-    public String getEventActionInstall() {
-        return this.config.getString("event_action_install"); //$NON-NLS-1$
-    }
-
-    /**
-     * @return Event action for display
-     */
-    public String getEventActionDisplay() {
-        return this.config.getString("event_action_display"); //$NON-NLS-1$
-    }
-
-    /**
-     * @return Event action for removal
-     */
-    public String getEventActionUninstall() {
-        return this.config.getString("event_action_uninstall"); //$NON-NLS-1$
-    }
-
     private static Image getImage(final String resource) {
         try {
             InputStream inputStream = Helper.getInputStreamFromResource(

@@ -12,13 +12,13 @@ apply plugin: 'com.github.johnrengelman.shadow'
 
 dependencies {
     compile(':moneydance:')
-    compile('commons-io:commons-io:2.5')
-    compile('org.apache.commons:commons-lang3:3.6')
+    compile('commons-io:commons-io:2.6')
+    compile('org.apache.commons:commons-lang3:3.7')
     compile('commons-configuration:commons-configuration:1.10')
     compile('org.slf4j:slf4j-api:1.7.25')
     compile('org.slf4j:slf4j-nop:1.7.25')
     compile('commons-logging:commons-logging:1.2')
-    compile('org.checkerframework:checker:2.2.0')
+    compile('org.checkerframework:checker:2.3.2')
 }
 
 jar {
@@ -45,8 +45,8 @@ shadowJar {
 
     dependencies {
         include dependency('commons-lang:commons-lang:2.6')
-        include dependency('org.apache.commons:commons-lang3:3.6')
-        include dependency('commons-io:commons-io:2.5')
+        include dependency('org.apache.commons:commons-lang3:3.7')
+        include dependency('commons-io:commons-io:2.6')
         include dependency('commons-configuration:commons-configuration:1.10')
         include dependency('commons-logging:commons-logging:1.2')
         include dependency('org.slf4j:slf4j-api:1.7.25')
@@ -79,8 +79,8 @@ javadoc {
         'http://moneydance.com/dev/apidoc/',
         'http://www.slf4j.org/apidocs/',
         'https://commons.apache.org/proper/commons-configuration/javadocs/v1.10/apidocs/',
-        'https://commons.apache.org/proper/commons-io/javadocs/api-2.5/',
-        'https://commons.apache.org/proper/commons-lang/javadocs/api-3.6/',
+        'https://commons.apache.org/proper/commons-io/javadocs/api-2.6/',
+        'https://commons.apache.org/proper/commons-lang/javadocs/api-3.7/',
         'https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/',
         'https://commons.apache.org/proper/commons-logging/javadocs/api-release/'
     ]

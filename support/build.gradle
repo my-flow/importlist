@@ -3,7 +3,7 @@ apply plugin: 'application'
 dependencies {
     compile project(':core')
 
-    runtime('org.slf4j:slf4j-simple:1.7.13')
+    runtime('org.slf4j:slf4j-simple:1.7.25')
 
     testCompile('junit:junit:4.12')
 

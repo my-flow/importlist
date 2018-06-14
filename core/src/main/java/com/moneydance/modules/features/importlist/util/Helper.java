@@ -24,8 +24,6 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.LogManager;
 
-import org.apache.commons.lang3.Validate;
-
 import javax.annotation.Nullable;
 
 /**
@@ -109,7 +107,9 @@ public enum Helper {
             final String resource) {
         ClassLoader cloader     = Helper.class.getClassLoader();
         InputStream inputStream = cloader.getResourceAsStream(resource);
-        Validate.notNull(inputStream, "Resource %s was not found.", resource);
+        if(inputStream==null) {
+          throw new NullPointerException("Resource "+resource+" was not found.");
+        }
         return inputStream;
     }
 

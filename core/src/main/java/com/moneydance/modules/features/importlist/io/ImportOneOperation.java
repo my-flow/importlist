@@ -16,22 +16,15 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import com.infinitekind.moneydance.model.Account;
-import com.infinitekind.moneydance.model.AccountUtil;
-import com.infinitekind.moneydance.model.AcctFilter;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 
 /**
@@ -39,25 +32,14 @@ import org.apache.commons.lang3.text.StrSubstitutor;
  */
 final class ImportOneOperation implements FileOperation {
 
-    private final Preferences          prefs;
     private final FeatureModuleContext context;
     private final FileFilter           transactionFileFilter;
-    private final FileFilter           textFileFilter;
-
-    /**
-     * Static initialization of class-dependent logger.
-     */
-    private static final Logger LOG =
-            Logger.getLogger(ImportOneOperation.class.getName());
 
     ImportOneOperation(
             final FeatureModuleContext argContext,
-            final FileFilter argTransactionFileFilter,
-            final FileFilter argTextFileFilter) {
-        this.prefs                  = Helper.INSTANCE.getPreferences();
+            final FileFilter argTransactionFileFilter) {
         this.context                = argContext;
         this.transactionFileFilter  = argTransactionFileFilter;
-        this.textFileFilter         = argTextFileFilter;
     }
 
     @Override
@@ -75,10 +57,6 @@ final class ImportOneOperation implements FileOperation {
         if (this.transactionFileFilter.accept(file)) {
             uriScheme = Helper.INSTANCE.getSettings()
                     .getTransactionFileImportUriScheme();
-        } else if (this.textFileFilter.accept(file)) {
-            uriScheme = Helper.INSTANCE.getSettings()
-                    .getTextFileImportUriScheme();
-            valuesMap.put("accountno", this.getAccountNumberForFile(file));
         }
 
         final StrSubstitutor sub = new StrSubstitutor(valuesMap);
@@ -86,42 +64,5 @@ final class ImportOneOperation implements FileOperation {
 
         // Import the file by calling the URI
         this.context.showURL(resolvedUri);
-    }
-
-    private String getAccountNumberForFile(final File argFile) {
-        final String fileName = FilenameUtils.removeExtension(
-                argFile.getName());
-
-        Account rootAccount =
-                this.context.getCurrentAccountBook().getRootAccount();
-
-        String accountNumber = "-1";
-
-        for (Iterator<Account> iterator =
-                AccountUtil.getAccountIterator(rootAccount);
-                iterator.hasNext();) {
-            final Account account = iterator.next();
-            if (!AcctFilter.NON_CATEGORY_FILTER.matches(account)
-                    || rootAccount.equals(account)) {
-                continue;
-            }
-
-            final String accountName = account.getFullAccountName();
-            if (this.isEqual(accountName, fileName)) {
-                LOG.config(String.format(
-                        "Found matching account \"%s\" for file %s",
-                        account.getFullAccountName(),
-                        argFile.getName()));
-                accountNumber = String.valueOf(account.getAccountNum());
-            }
-        }
-
-        return accountNumber;
-    }
-
-    private boolean isEqual(final String first, final String second) {
-        final String string1 =  first.toUpperCase(this.prefs.getLocale());
-        final String string2 = second.toUpperCase(this.prefs.getLocale());
-        return string1.contains(string2) || string2.contains(string1);
     }
 }

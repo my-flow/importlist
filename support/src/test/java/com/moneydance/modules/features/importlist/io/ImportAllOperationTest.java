@@ -20,7 +20,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,8 +47,7 @@ public final class ImportAllOperationTest {
 
         this.fileOperation = new ImportAllOperation(
                 context,
-                TrueFileFilter.TRUE,
-                FalseFileFilter.FALSE);
+                TrueFileFilter.TRUE);
     }
 
     @Test

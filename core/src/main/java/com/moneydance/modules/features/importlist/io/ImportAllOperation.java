@@ -30,15 +30,12 @@ final class ImportAllOperation implements FileOperation {
 
     private final FeatureModuleContext context;
     private final FileFilter           transactionFileFilter;
-    private final FileFilter           textFileFilter;
 
     ImportAllOperation(
             final FeatureModuleContext argContext,
-            final FileFilter argTransactionFileFilter,
-            final FileFilter argTextFileFilter) {
+            final FileFilter argTransactionFileFilter) {
         this.context                = argContext;
         this.transactionFileFilter  = argTransactionFileFilter;
-        this.textFileFilter         = argTextFileFilter;
     }
 
     @Override
@@ -50,8 +47,7 @@ final class ImportAllOperation implements FileOperation {
     public void execute(final List<File> files) {
         FileOperation importOneOperation = new ImportOneOperation(
                 this.context,
-                this.transactionFileFilter,
-                this.textFileFilter);
+                this.transactionFileFilter);
         for (final File file : files) {
             importOneOperation.execute(Collections.singletonList(file));
         }

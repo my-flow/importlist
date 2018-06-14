@@ -36,14 +36,10 @@ import org.junit.Test;
 public final class ImportOneOperationTest {
 
     private final File incomeFile;
-    private final File creditcardFile;
-    private final File noCategoryFile;
 
     public ImportOneOperationTest() {
         Helper.INSTANCE.getPreferences();
-        this.incomeFile     = new File("mybank.csv");
-        this.creditcardFile = new File("credit.csv");
-        this.noCategoryFile = new File("nocategory.csv");
+        this.incomeFile = new File("mybank.csv");
     }
 
     @Test
@@ -63,56 +59,12 @@ public final class ImportOneOperationTest {
         context.setAccountBook(accountBook);
         fileOperation = new ImportOneOperation(
                 context,
-                TrueFileFilter.TRUE,
-                FalseFileFilter.FALSE);
-        fileOperation.execute(Collections.singletonList(this.incomeFile));
-
-        fileOperation = new ImportOneOperation(
-                context,
-                TrueFileFilter.TRUE,
-                FalseFileFilter.FALSE);
-        fileOperation.execute(Collections.singletonList(this.creditcardFile));
-
-        fileOperation = new ImportOneOperation(
-                context,
-                TrueFileFilter.TRUE,
-                FalseFileFilter.FALSE);
-        fileOperation.execute(Collections.singletonList(this.noCategoryFile));
-
-        fileOperation = new ImportOneOperation(
-                context,
-                FalseFileFilter.FALSE,
                 TrueFileFilter.TRUE);
         fileOperation.execute(Collections.singletonList(this.incomeFile));
 
         fileOperation = new ImportOneOperation(
                 context,
-                FalseFileFilter.FALSE,
-                TrueFileFilter.TRUE);
-        fileOperation.execute(Collections.singletonList(this.creditcardFile));
-
-        fileOperation = new ImportOneOperation(
-                context,
-                FalseFileFilter.FALSE,
-                TrueFileFilter.TRUE);
-        fileOperation.execute(Collections.singletonList(this.noCategoryFile));
-
-        fileOperation = new ImportOneOperation(
-                context,
-                FalseFileFilter.FALSE,
                 FalseFileFilter.FALSE);
         fileOperation.execute(Collections.singletonList(this.incomeFile));
-
-        fileOperation = new ImportOneOperation(
-                context,
-                FalseFileFilter.FALSE,
-                FalseFileFilter.FALSE);
-        fileOperation.execute(Collections.singletonList(this.creditcardFile));
-
-        fileOperation = new ImportOneOperation(
-                context,
-                FalseFileFilter.FALSE,
-                FalseFileFilter.FALSE);
-        fileOperation.execute(Collections.singletonList(this.noCategoryFile));
     }
 }

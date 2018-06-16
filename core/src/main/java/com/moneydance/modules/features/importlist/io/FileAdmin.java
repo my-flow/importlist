@@ -61,7 +61,6 @@ public final class FileAdmin extends Observable implements Observer {
     private final AbstractDirectoryChooser directoryChooser;
     private final DirectoryValidator directoryValidator;
     private final IOFileFilter transactionFileFilter;
-    private final IOFileFilter textFileFilter;
     private final IOFileFilter readableFileFilter;
     private final TransactionFileListener listener;
     private final FileAlterationMonitor monitor;
@@ -79,14 +78,9 @@ public final class FileAdmin extends Observable implements Observer {
         this.transactionFileFilter = new SuffixFileFilter(
                 Helper.INSTANCE.getSettings().getTransactionFileExtensions(),
                 IOCase.INSENSITIVE);
-        this.textFileFilter = new SuffixFileFilter(
-                Helper.INSTANCE.getSettings().getTextFileExtensions(),
-                IOCase.INSENSITIVE);
         this.readableFileFilter = FileFilterUtils.and(
                 CanReadFileFilter.CAN_READ,
-                FileFilterUtils.or(
-                        this.transactionFileFilter,
-                        this.textFileFilter));
+                this.transactionFileFilter);
 
         this.listener = new TransactionFileListener();
         this.listener.addObserver(this);
@@ -213,8 +207,7 @@ public final class FileAdmin extends Observable implements Observer {
     public void importAllRows() {
         FileOperation importAllOperation = new ImportAllOperation(
                 this.context,
-                this.transactionFileFilter,
-                this.textFileFilter);
+                this.transactionFileFilter);
         importAllOperation.showWarningAndExecute(this.files);
         this.setChanged();
         this.notifyObservers();
@@ -226,8 +219,7 @@ public final class FileAdmin extends Observable implements Observer {
         }
         FileOperation importOneOperation = new ImportOneOperation(
                 this.context,
-                this.transactionFileFilter,
-                this.textFileFilter);
+                this.transactionFileFilter);
         importOneOperation.showWarningAndExecute(
                 Collections.singletonList(this.files.get(rowNumber)));
         this.setChanged();

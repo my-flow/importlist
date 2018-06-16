@@ -139,17 +139,6 @@ public final class Settings {
     }
 
     /**
-     * @return Valid extensions of text files that can be imported
-     * (case-insensitive).
-     */
-    public String[] getTextFileExtensions() {
-        String[] textFileExtensions =
-                this.config.getStringArray(
-                        "text_file_extensions"); //$NON-NLS-1$
-        return textFileExtensions;
-    }
-
-    /**
      * @return Maximum length of a filename displayed in an error message.
      */
     public int getMaxFilenameLength() {

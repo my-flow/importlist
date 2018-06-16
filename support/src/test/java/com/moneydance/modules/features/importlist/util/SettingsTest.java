@@ -83,11 +83,6 @@ public final class SettingsTest {
     }
 
     @Test
-    public void testGetTextFileExtensions() {
-        assertThat(this.settings.getTextFileExtensions(), notNullValue());
-    }
-
-    @Test
     public void testGetMaxFilenameLength() {
         assertThat(this.settings.getMaxFilenameLength(), notNullValue());
     }

@@ -7,7 +7,7 @@ to install the extension please visit the
 [project page](http://my-flow.github.io/importlist/).
 
 ## Build Prerequisites
-* Java Development Kit, version 7
+* Java Development Kit, version 8
 
 ## Building the extension
 1. `git clone git@github.com:my-flow/importlist.git` creates a copy of the

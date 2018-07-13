@@ -75,7 +75,7 @@ javadoc {
     options.docTitle = 'Import List for Moneydance'
     options.windowTitle = 'Import List for Moneydance'
     options.links = [
-        'https://docs.oracle.com/javase/7/docs/api/',
+        'https://docs.oracle.com/javase/8/docs/api/',
         'http://moneydance.com/dev/apidoc/',
         'http://www.slf4j.org/apidocs/',
         'https://commons.apache.org/proper/commons-configuration/javadocs/v1.10/apidocs/',

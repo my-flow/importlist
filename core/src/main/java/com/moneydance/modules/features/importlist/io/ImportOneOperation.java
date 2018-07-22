@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.text.StrSubstitutor;
+import org.apache.commons.text.StringSubstitutor;
 
 /**
  * @author Florian J. Breunig
@@ -59,7 +59,7 @@ final class ImportOneOperation implements FileOperation {
                     .getTransactionFileImportUriScheme();
         }
 
-        final StrSubstitutor sub = new StrSubstitutor(valuesMap);
+        final StringSubstitutor sub = new StringSubstitutor(valuesMap);
         final String resolvedUri = sub.replace(uriScheme);
 
         // Import the file by calling the URI

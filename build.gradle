@@ -5,7 +5,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
-        classpath 'commons-configuration:commons-configuration:1.10'
+        classpath 'org.apache.commons:commons-configuration2:2.3'
         classpath 'net.sf.proguard:proguard-gradle:6.0.2'
     }
 }

@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.lang3.text.StrSubstitutor;
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.StringSubstitutor;
+import org.apache.commons.text.WordUtils;
 
 /**
  * This i18n class provides language-dependent strings such as labels and
@@ -131,7 +131,7 @@ public final class Localizable {
         Map<String, String> valuesMap =
                 new ConcurrentHashMap<String, String>(1);
         valuesMap.put("import.dir",  getMarkupFilename(baseDirectory));
-        StrSubstitutor sub = new StrSubstitutor(valuesMap);
+        StringSubstitutor sub = new StringSubstitutor(valuesMap);
 
         return sub.replace(templateString);
     }
@@ -148,7 +148,7 @@ public final class Localizable {
         Map<String, String> valuesMap =
                 new ConcurrentHashMap<String, String>(1);
         valuesMap.put("filename",  getMarkupFilename(filename));
-        StrSubstitutor sub = new StrSubstitutor(valuesMap);
+        StringSubstitutor sub = new StringSubstitutor(valuesMap);
 
         return sub.replace(templateString);
     }
@@ -165,7 +165,7 @@ public final class Localizable {
         Map<String, String> valuesMap =
                 new ConcurrentHashMap<String, String>(1);
         valuesMap.put("no.files",  String.valueOf(size));
-        StrSubstitutor sub = new StrSubstitutor(valuesMap);
+        StringSubstitutor sub = new StringSubstitutor(valuesMap);
 
         return sub.replace(templateString);
     }
@@ -181,7 +181,7 @@ public final class Localizable {
         Map<String, String> valuesMap =
                 new ConcurrentHashMap<String, String>(1);
         valuesMap.put("filename",  getMarkupFilename(filename));
-        StrSubstitutor sub = new StrSubstitutor(valuesMap);
+        StringSubstitutor sub = new StringSubstitutor(valuesMap);
 
         return sub.replace(templateString);
     }
@@ -212,7 +212,7 @@ public final class Localizable {
         Map<String, String> valuesMap =
                 new ConcurrentHashMap<String, String>(1);
         valuesMap.put("import.dir", baseDirectory);
-        StrSubstitutor sub = new StrSubstitutor(valuesMap);
+        StringSubstitutor sub = new StringSubstitutor(valuesMap);
 
         return sub.replace(templateString);
     }

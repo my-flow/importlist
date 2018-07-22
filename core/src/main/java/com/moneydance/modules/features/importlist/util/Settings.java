@@ -19,13 +19,17 @@ package com.moneydance.modules.features.importlist.util;
 import java.awt.Image;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.configuration.AbstractFileConfiguration;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 
 
 /**
@@ -43,6 +47,11 @@ public final class Settings {
      */
     private static final String PROPERTIES_RESOURCE = "settings.properties";
 
+    /**
+     * The list delimiter character.
+     */
+    private static final char DELIMITER = ',';
+
     private final Configuration config;
 
     Settings() {
@@ -50,11 +59,11 @@ public final class Settings {
             InputStream inputStream = Helper.getInputStreamFromResource(
                     PROPERTIES_RESOURCE);
 
-            final AbstractFileConfiguration abstractFileConfiguration =
-                    new PropertiesConfiguration();
-            abstractFileConfiguration.load(inputStream);
-            this.config = abstractFileConfiguration;
-        } catch (ConfigurationException e) {
+            final PropertiesConfiguration propertiesConfig = new PropertiesConfiguration();
+            propertiesConfig.setListDelimiterHandler(new DefaultListDelimiterHandler(DELIMITER));
+            propertiesConfig.read(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            this.config = propertiesConfig;
+        } catch (ConfigurationException | IOException e) {
             throw new IllegalStateException(e.getMessage(), e);
         }
     }
@@ -132,10 +141,9 @@ public final class Settings {
      * @return Valid extensions of transaction files that can be imported
      * (case-insensitive).
      */
-    public String[] getTransactionFileExtensions() {
-        String[] transactionFileExtensions = this.config.getStringArray(
-                "transaction_file_extensions"); //$NON-NLS-1$
-        return transactionFileExtensions;
+    public List<String> getTransactionFileExtensions() {
+        return Collections.unmodifiableList(this.config.getList(String.class,
+                "transaction_file_extensions")); //$NON-NLS-1$
     }
 
     /**

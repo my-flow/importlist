@@ -52,12 +52,14 @@ final class DeleteAllOperation implements FileOperation {
         final String message =
                 this.localizable.getConfirmationMessageDeleteAllFiles(
                         files.size());
-        final Object confirmationLabel = new JLabel(message);
+        final JLabel confirmationLabel = new JLabel(message);
+        confirmationLabel.setLabelFor(null);
+
         final Image image = Helper.INSTANCE.getSettings().getIconImage();
         final Icon icon = new ImageIcon(image);
         final Object[] options = {
                 this.localizable.getOptionDeleteFile(),
-                this.localizable.getOptionCancel()
+                this.localizable.getOptionCancel(),
         };
 
         @SuppressWarnings("nullness")
@@ -69,7 +71,7 @@ final class DeleteAllOperation implements FileOperation {
                 JOptionPane.WARNING_MESSAGE,
                 icon,
                 options,
-                options[1]);
+                options[options.length - 1]);
 
         if (choice == 0) {
             this.execute(files);

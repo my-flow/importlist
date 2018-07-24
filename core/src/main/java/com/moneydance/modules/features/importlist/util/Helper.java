@@ -24,9 +24,9 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.LogManager;
 
-import org.apache.commons.lang3.Validate;
-
 import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.Validate;
 
 /**
  * This singleton provides public convenience methods.
@@ -48,7 +48,7 @@ public enum Helper {
 
     Helper() {
         this.observable = new HelperObservable();
-        this.settings   = new Settings();
+        this.settings = new Settings();
     }
 
     public Settings getSettings() {
@@ -94,20 +94,17 @@ public enum Helper {
     public static void loadLoggerConfiguration() {
         try {
             InputStream inputStream = getInputStreamFromResource(
-                    Helper.INSTANCE.getSettings()
-                    .getLoggingPropertiesResource());
+                    Helper.INSTANCE.getSettings().getLoggingPropertiesResource());
             LogManager.getLogManager().readConfiguration(inputStream);
 
-        } catch (SecurityException e) {
-            e.printStackTrace(System.err);
-        } catch (IOException e) {
+        } catch (SecurityException | IOException e) {
             e.printStackTrace(System.err);
         }
     }
 
     public static InputStream getInputStreamFromResource(
             final String resource) {
-        ClassLoader cloader     = Helper.class.getClassLoader();
+        ClassLoader cloader = Helper.class.getClassLoader();
         InputStream inputStream = cloader.getResourceAsStream(resource);
         Validate.notNull(inputStream, "Resource %s was not found.", resource);
         return inputStream;
@@ -118,8 +115,10 @@ public enum Helper {
      */
     private static final class HelperObservable extends Observable {
         @Override
-        public synchronized void setChanged() { // increase visiblity
-            super.setChanged();
+        public void setChanged() { // increase visiblity
+            synchronized (this) {
+                super.setChanged();
+            }
         }
     }
 }

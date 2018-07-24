@@ -68,9 +68,9 @@ public final class FileAdmin extends Observable implements Observer {
     @Nullable private FileAlterationObserver observer;
     private boolean isMonitorRunning;
 
-    @SuppressWarnings("nullness")
     public FileAdmin(final String baseDirectory,
             final FeatureModuleContext argContext) {
+        super();
         this.localizable = Helper.INSTANCE.getLocalizable();
         this.context = argContext;
         this.directoryChooser = new DefaultDirectoryChooser(baseDirectory);
@@ -84,8 +84,7 @@ public final class FileAdmin extends Observable implements Observer {
 
         this.listener = new TransactionFileListener();
         this.listener.addObserver(this);
-        this.monitor  = new FileAlterationMonitor(
-                Helper.INSTANCE.getSettings().getMonitorInterval());
+        this.monitor = new FileAlterationMonitor(Helper.INSTANCE.getSettings().getMonitorInterval());
 
         this.files = Collections.synchronizedList(new ArrayList<File>());
     }
@@ -102,7 +101,6 @@ public final class FileAdmin extends Observable implements Observer {
         this.notifyObservers();
     }
 
-    @SuppressWarnings("nullness")
     public void checkValidBaseDirectory() {
         final File baseDirectory = this.getBaseDirectory();
 
@@ -115,9 +113,10 @@ public final class FileAdmin extends Observable implements Observer {
                     "Could not open directory %s",
                     baseDirectory.getAbsolutePath()));
             final String errorMessage
-            = this.localizable.getErrorMessageBaseDirectory(
+                    = this.localizable.getErrorMessageBaseDirectory(
                     baseDirectory.getName());
-            final Object errorLabel = new JLabel(errorMessage);
+            final JLabel errorLabel = new JLabel(errorMessage);
+            errorLabel.setLabelFor(null);
             JOptionPane.showMessageDialog(
                     null, // no parent component
                     errorLabel,
@@ -132,7 +131,6 @@ public final class FileAdmin extends Observable implements Observer {
         return Collections.unmodifiableList(this.files);
     }
 
-    @SuppressWarnings("nullness")
     public void reloadFiles() {
         synchronized (FileAdmin.class) {
             this.files.clear();
@@ -247,7 +245,6 @@ public final class FileAdmin extends Observable implements Observer {
         this.notifyObservers();
     }
 
-    @SuppressWarnings("nullness")
     private void setFileMonitorToCurrentImportDir() {
         if (this.getBaseDirectory() == null) {
             return;

@@ -38,21 +38,21 @@ import javax.swing.KeyStroke;
 public abstract class AbstractEditor extends DefaultCellEditor {
 
     private static final long serialVersionUID = 1L;
-    private final transient FileAdmin fileAdmin;
-    private final transient ButtonRenderer buttonRenderer;
-    @Nullable private String label;
-
-    public abstract ActionListener getActionListener(final int rowNumber);
-
-    public abstract KeyStroke getKeyStroke();
+    private final FileAdmin fileAdmin;
+    private final ButtonRenderer buttonRenderer;
+    @Nullable private Object label;
 
     protected AbstractEditor(
             final FileAdmin argFileAdmin,
             final ButtonRenderer argButtonRenderer) {
         super(new JCheckBox());
-        this.fileAdmin      = argFileAdmin;
+        this.fileAdmin = argFileAdmin;
         this.buttonRenderer = argButtonRenderer;
     }
+
+    public abstract ActionListener getActionListener(int rowNumber);
+
+    public abstract KeyStroke getKeyStroke();
 
     protected final FileAdmin getFileAdmin() {
         return this.fileAdmin;
@@ -61,7 +61,10 @@ public abstract class AbstractEditor extends DefaultCellEditor {
     @Override
     @SuppressWarnings("nullness")
     public final Object getCellEditorValue() {
-        return this.label;
+        if (this.label == null) {
+            return null;
+        }
+        return this.label.toString();
     }
 
     @Override
@@ -71,9 +74,8 @@ public abstract class AbstractEditor extends DefaultCellEditor {
             final boolean isSelected,
             final int row,
             final int column) {
-        if (value != null) {
-            this.label = value.toString();
-        }
+
+        this.label = value;
 
         AbstractButton button = this.buttonRenderer.getTableCellRendererButton(
                 value, row);

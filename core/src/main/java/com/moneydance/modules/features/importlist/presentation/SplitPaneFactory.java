@@ -35,7 +35,7 @@ public final class SplitPaneFactory implements ComponentFactory {
             final ComponentFactory argTopComponentFactory,
             final ComponentFactory argBottomComponentFactory) {
 
-        this.topComponentFactory    = argTopComponentFactory;
+        this.topComponentFactory = argTopComponentFactory;
         this.bottomComponentFactory = argBottomComponentFactory;
 
         this.splitPane = new JCustomSplitPane(JSplitPane.VERTICAL_SPLIT);

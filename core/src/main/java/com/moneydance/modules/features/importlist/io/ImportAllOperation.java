@@ -29,13 +29,11 @@ import java.util.List;
 final class ImportAllOperation implements FileOperation {
 
     private final FeatureModuleContext context;
-    private final FileFilter           transactionFileFilter;
+    private final FileFilter transactionFileFilter;
 
-    ImportAllOperation(
-            final FeatureModuleContext argContext,
-            final FileFilter argTransactionFileFilter) {
-        this.context                = argContext;
-        this.transactionFileFilter  = argTransactionFileFilter;
+    ImportAllOperation(final FeatureModuleContext argContext, final FileFilter argTransactionFileFilter) {
+        this.context = argContext;
+        this.transactionFileFilter = argTransactionFileFilter;
     }
 
     @Override
@@ -45,9 +43,7 @@ final class ImportAllOperation implements FileOperation {
 
     @Override
     public void execute(final List<File> files) {
-        FileOperation importOneOperation = new ImportOneOperation(
-                this.context,
-                this.transactionFileFilter);
+        FileOperation importOneOperation = new ImportOneOperation(this.context, this.transactionFileFilter);
         for (final File file : files) {
             importOneOperation.execute(Collections.singletonList(file));
         }

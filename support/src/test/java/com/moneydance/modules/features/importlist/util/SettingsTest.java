@@ -16,13 +16,12 @@
 
 package com.moneydance.modules.features.importlist.util;
 
+import org.junit.Before;
+import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author Florian J. Breunig

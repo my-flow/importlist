@@ -20,8 +20,9 @@ import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
-import javax.annotation.Nullable;
 import java.io.File;
+
+import javax.annotation.Nullable;
 
 /**
  * This abstract class provides the functionality to choose, access, and reset

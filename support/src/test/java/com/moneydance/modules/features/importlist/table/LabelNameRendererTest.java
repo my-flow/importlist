@@ -16,14 +16,13 @@
 
 package com.moneydance.modules.features.importlist.table;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
 import org.junit.Before;
 import org.junit.Test;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Florian J. Breunig

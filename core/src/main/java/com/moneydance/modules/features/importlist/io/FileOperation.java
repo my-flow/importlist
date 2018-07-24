@@ -27,6 +27,7 @@ import java.util.List;
  */
 interface FileOperation {
 
-    void showWarningAndExecute(final List<File> files);
-    void execute(final List<File> files);
+    void showWarningAndExecute(List<File> files);
+
+    void execute(List<File> files);
 }

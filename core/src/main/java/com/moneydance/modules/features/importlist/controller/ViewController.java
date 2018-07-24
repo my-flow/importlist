@@ -84,7 +84,7 @@ public final class ViewController implements HomePageView {
         AggregationTableFactory aggrTableFactory = new AggregationTableFactory(
                 this.aggrTableModel,
                 this.fileAdmin);
-        this.columnFactory  = this.baseTableFactory.getColumnFactory();
+        this.columnFactory = this.baseTableFactory.getColumnFactory();
 
         this.splitPaneFactory = new SplitPaneFactory(
                 this.baseTableFactory,
@@ -113,28 +113,7 @@ public final class ViewController implements HomePageView {
 
         // display a label iff no base directory has been chosen
         if (this.fileAdmin.getBaseDirectory() == null) {
-            DirectoryChooserButtonFactory directoryChooserFactory =
-                    new DirectoryChooserButtonFactory(
-                            String.format(
-                                    "<html><u>%s</u></html>",
-                                    this.localizable.getDirectoryChooserTitle()
-                                    ),
-                                    new ChooseBaseDirectoryActionListener()
-                            );
-
-            this.viewport.setView(directoryChooserFactory.getComponent());
-            this.viewport.setMinimumSize(
-                    new Dimension(
-                            this.settings.getPreferredEmptyMessageWidth(),
-                            this.settings.getPreferredEmptyMessageHeight()));
-            this.viewport.setPreferredSize(
-                    new Dimension(
-                            this.settings.getPreferredEmptyMessageWidth(),
-                            this.settings.getPreferredEmptyMessageHeight()));
-            this.viewport.setMaximumSize(
-                    new Dimension(
-                            this.settings.getPreferredEmptyMessageWidth(),
-                            this.settings.getPreferredEmptyMessageHeight()));
+            showLabelMissingBaseDirectory();
             return;
         }
 
@@ -147,25 +126,7 @@ public final class ViewController implements HomePageView {
 
         // display a label iff there are no files in the list
         if (this.baseTableModel.getRowCount() == 0) {
-            EmptyLabelFactory emptyLabelFactory = new EmptyLabelFactory(
-                    this.localizable.getEmptyMessage(
-                            this.fileAdmin.getBaseDirectory().getAbsolutePath()
-                            )
-                    );
-
-            this.viewport.setView(emptyLabelFactory.getComponent());
-            this.viewport.setMinimumSize(
-                    new Dimension(
-                            this.settings.getPreferredEmptyMessageWidth(),
-                            this.settings.getPreferredEmptyMessageHeight()));
-            this.viewport.setPreferredSize(
-                    new Dimension(
-                            this.settings.getPreferredEmptyMessageWidth(),
-                            this.settings.getPreferredEmptyMessageHeight()));
-            this.viewport.setMaximumSize(
-                    new Dimension(
-                            this.settings.getPreferredEmptyMessageWidth(),
-                            this.settings.getPreferredEmptyMessageHeight()));
+            showLabelEmptyList();
             return;
         }
 
@@ -181,10 +142,8 @@ public final class ViewController implements HomePageView {
                             this.settings.getMinimumTableHeight()));
             this.viewport.setPreferredSize(
                     new Dimension(
-                            Helper.INSTANCE.getPreferences()
-                            .getPreferredTableWidth(),
-                            Helper.INSTANCE.getPreferences()
-                            .getPreferredTableHeight(
+                            Helper.INSTANCE.getPreferences().getPreferredTableWidth(),
+                            Helper.INSTANCE.getPreferences().getPreferredTableHeight(
                                     this.baseTableModel.getRowCount())));
             this.viewport.setMaximumSize(
                     new Dimension(
@@ -273,6 +232,55 @@ public final class ViewController implements HomePageView {
     }
 
 
+    private void showLabelMissingBaseDirectory() {
+        DirectoryChooserButtonFactory directoryChooserFactory =
+                new DirectoryChooserButtonFactory(
+                        String.format(
+                                "<html><u>%s</u></html>",
+                                this.localizable.getDirectoryChooserTitle()
+                        ),
+                        new ChooseBaseDirectoryActionListener()
+                );
+
+        this.viewport.setView(directoryChooserFactory.getComponent());
+        this.viewport.setMinimumSize(
+                new Dimension(
+                        this.settings.getPreferredEmptyMessageWidth(),
+                        this.settings.getPreferredEmptyMessageHeight()));
+        this.viewport.setPreferredSize(
+                new Dimension(
+                        this.settings.getPreferredEmptyMessageWidth(),
+                        this.settings.getPreferredEmptyMessageHeight()));
+        this.viewport.setMaximumSize(
+                new Dimension(
+                        this.settings.getPreferredEmptyMessageWidth(),
+                        this.settings.getPreferredEmptyMessageHeight()));
+    }
+
+
+    private void showLabelEmptyList() {
+        EmptyLabelFactory emptyLabelFactory = new EmptyLabelFactory(
+                this.localizable.getEmptyMessage(
+                        this.fileAdmin.getBaseDirectory().getAbsolutePath()
+                )
+        );
+
+        this.viewport.setView(emptyLabelFactory.getComponent());
+        this.viewport.setMinimumSize(
+                new Dimension(
+                        this.settings.getPreferredEmptyMessageWidth(),
+                        this.settings.getPreferredEmptyMessageHeight()));
+        this.viewport.setPreferredSize(
+                new Dimension(
+                        this.settings.getPreferredEmptyMessageWidth(),
+                        this.settings.getPreferredEmptyMessageHeight()));
+        this.viewport.setMaximumSize(
+                new Dimension(
+                        this.settings.getPreferredEmptyMessageWidth(),
+                        this.settings.getPreferredEmptyMessageHeight()));
+    }
+
+
     private void registerKeyboardShortcuts4One() {
         AbstractEditor importOneEditor =
                 this.columnFactory.getImportOneEditor();
@@ -297,8 +305,7 @@ public final class ViewController implements HomePageView {
     /**
      * @author Florian J. Breunig
      */
-    private final class ViewControllerObserver
-    implements Observer {
+    private final class ViewControllerObserver implements Observer {
         @Override
         public void update(final Observable observable, final Object object) {
             ViewController.this.setDirty(true);
@@ -309,9 +316,7 @@ public final class ViewController implements HomePageView {
     /**
      * @author Florian J. Breunig
      */
-    private final class ChooseBaseDirectoryActionListener
-    implements ActionListener {
-
+    private final class ChooseBaseDirectoryActionListener implements ActionListener {
         @Override
         public void actionPerformed(final ActionEvent event) {
             ViewController.this.chooseBaseDirectory();

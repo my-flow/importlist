@@ -128,9 +128,8 @@ public final class Localizable {
         final String templateString = this.resourceBundle.getString(
                 "error_message_base_directory");
 
-        Map<String, String> valuesMap =
-                new ConcurrentHashMap<String, String>(1);
-        valuesMap.put("import.dir",  getMarkupFilename(baseDirectory));
+        Map<String, String> valuesMap = new ConcurrentHashMap<>(1);
+        valuesMap.put("import.dir", getMarkupFilename(baseDirectory));
         StringSubstitutor sub = new StringSubstitutor(valuesMap);
 
         return sub.replace(templateString);
@@ -145,9 +144,8 @@ public final class Localizable {
         final String templateString = this.resourceBundle.getString(
                 "confirmation_message_delete_one_file");
 
-        Map<String, String> valuesMap =
-                new ConcurrentHashMap<String, String>(1);
-        valuesMap.put("filename",  getMarkupFilename(filename));
+        Map<String, String> valuesMap = new ConcurrentHashMap<>(1);
+        valuesMap.put("filename", getMarkupFilename(filename));
         StringSubstitutor sub = new StringSubstitutor(valuesMap);
 
         return sub.replace(templateString);
@@ -162,9 +160,8 @@ public final class Localizable {
         final String templateString = this.resourceBundle.getString(
                 "confirmation_message_delete_all_files");
 
-        Map<String, String> valuesMap =
-                new ConcurrentHashMap<String, String>(1);
-        valuesMap.put("no.files",  String.valueOf(size));
+        Map<String, String> valuesMap = new ConcurrentHashMap<>(1);
+        valuesMap.put("no.files", String.valueOf(size));
         StringSubstitutor sub = new StringSubstitutor(valuesMap);
 
         return sub.replace(templateString);
@@ -178,9 +175,8 @@ public final class Localizable {
         final String templateString = this.resourceBundle.getString(
                 "error_message_delete_file");
 
-        Map<String, String> valuesMap =
-                new ConcurrentHashMap<String, String>(1);
-        valuesMap.put("filename",  getMarkupFilename(filename));
+        Map<String, String> valuesMap = new ConcurrentHashMap<>(1);
+        valuesMap.put("filename", getMarkupFilename(filename));
         StringSubstitutor sub = new StringSubstitutor(valuesMap);
 
         return sub.replace(templateString);

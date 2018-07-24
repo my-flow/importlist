@@ -32,12 +32,13 @@ import javax.swing.table.DefaultTableCellRenderer;
 final class LabelModifiedRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 1L;
-    private transient CustomDateFormat  dateFormatter;
-    private           DateFormat        timeFormatter;
+    private transient CustomDateFormat dateFormatter;
+    private DateFormat timeFormatter;
 
     LabelModifiedRenderer(
             final CustomDateFormat argDateFormatter,
             final DateFormat argTimeFormatter) {
+        super();
         this.dateFormatter = argDateFormatter;
         this.timeFormatter = argTimeFormatter;
     }

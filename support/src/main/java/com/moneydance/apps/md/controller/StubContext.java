@@ -16,22 +16,22 @@
 
 package com.moneydance.apps.md.controller;
 
+import com.infinitekind.moneydance.model.AccountBook;
+import com.moneydance.apps.md.extensionapi.AccountEditor;
+import com.moneydance.apps.md.view.HomePageView;
+
 import java.awt.Image;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.infinitekind.moneydance.model.AccountBook;
-import com.moneydance.apps.md.extensionapi.AccountEditor;
-import com.moneydance.apps.md.view.HomePageView;
 
 import javax.annotation.Nullable;
 
 /**
  * This test stub simulates a context in stand-alone mode. It provides canned
  * answers to the standard calls. Also, it can be cast safely to
- * <code>com.moneydance.apps.md.controller.Main</code> in order to request the
- * user's preferences.
+ * <code>com.moneydance.apps.md.controller.Main</code> in order to
+ * request the user's preferences.
  *
  * @author Florian J. Breunig
  */

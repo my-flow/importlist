@@ -30,14 +30,12 @@ import org.apache.commons.io.monitor.FileAlterationObserver;
  *
  * @author Florian J. Breunig
  */
-final class TransactionFileListener
-extends Observable implements FileAlterationListener {
+final class TransactionFileListener extends Observable implements FileAlterationListener {
 
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG
-    = Logger.getLogger(TransactionFileListener.class.getName());
+    private static final Logger LOG = Logger.getLogger(TransactionFileListener.class.getName());
 
     @Override
     public void onStart(final FileAlterationObserver observer) {

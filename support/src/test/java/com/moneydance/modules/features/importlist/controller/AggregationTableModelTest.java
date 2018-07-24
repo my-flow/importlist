@@ -16,16 +16,15 @@
 
 package com.moneydance.modules.features.importlist.controller;
 
+import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.util.Helper;
+
+import org.junit.Before;
+import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 /**
  * @author Florian J. Breunig
@@ -55,11 +54,11 @@ public final class AggregationTableModelTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetValueAt() {
-        assertThat(this.aggregationTableModel.getValueAt(0,  0), nullValue());
-        assertThat(this.aggregationTableModel.getValueAt(0,  1), nullValue());
-        assertThat(this.aggregationTableModel.getValueAt(0,  2), notNullValue());
-        assertThat(this.aggregationTableModel.getValueAt(0,  3), notNullValue());
-        this.aggregationTableModel.getValueAt(0,  4);
+        assertThat(this.aggregationTableModel.getValueAt(0, 0), nullValue());
+        assertThat(this.aggregationTableModel.getValueAt(0, 1), nullValue());
+        assertThat(this.aggregationTableModel.getValueAt(0, 2), notNullValue());
+        assertThat(this.aggregationTableModel.getValueAt(0, 3), notNullValue());
+        this.aggregationTableModel.getValueAt(0, 4);
         // throw an expected exception
     }
 

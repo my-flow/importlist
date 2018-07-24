@@ -1,10 +1,10 @@
+import java.nio.charset.StandardCharsets
 import java.util.jar.Attributes
 
 import java.text.SimpleDateFormat
 
 import org.apache.commons.configuration2.FileBasedConfiguration
 import org.apache.commons.configuration2.PropertiesConfiguration
-import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder
 
 import proguard.gradle.ProGuardTask
 
@@ -20,6 +20,8 @@ dependencies {
     compile('org.slf4j:slf4j-api:1.7.25')
     compile('org.slf4j:slf4j-nop:1.7.25')
     compile('org.checkerframework:checker:2.3.2')
+
+    findbugsPlugins 'com.mebigfatguy.fb-contrib:fb-contrib:7.4.3'
 }
 
 jar {
@@ -96,7 +98,7 @@ String getCurrentTimestamp() {
 String getConfigValueForKey(String key) {
     file('src/main/resources/com/moneydance/modules/features/importlist/meta_info.dict').withInputStream {
         final FileBasedConfiguration config = new PropertiesConfiguration();
-        config.read(new InputStreamReader(it, "UTF-8"))
+        config.read(new InputStreamReader(it, StandardCharsets.UTF_8))
         return config.getString("\"" + key + "\"").replaceAll("^\"|\"\$", "");
     }
 }

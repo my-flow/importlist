@@ -30,17 +30,17 @@ import javax.swing.table.TableCellRenderer;
  */
 public final class ColumnFactory {
 
-    private final TableCellRenderer     headerRenderer;
-    private final TableCellRenderer     labelNameOneRenderer;
-    private final TableCellRenderer     labelNameAllRenderer;
+    private final TableCellRenderer headerRenderer;
+    private final TableCellRenderer labelNameOneRenderer;
+    private final TableCellRenderer labelNameAllRenderer;
     private final LabelModifiedRenderer labelModifiedOneRenderer;
     private final LabelModifiedRenderer labelModifiedAllRenderer;
-    private final ButtonRenderer        buttonOneRenderer;
-    private final ButtonRenderer        buttonAllRenderer;
-    private final AbstractEditor        importOneEditor;
-    private final AbstractEditor        importAllEditor;
-    private final AbstractEditor        deleteOneEditor;
-    private final AbstractEditor        deleteAllEditor;
+    private final ButtonRenderer buttonOneRenderer;
+    private final ButtonRenderer buttonAllRenderer;
+    private final AbstractEditor importOneEditor;
+    private final AbstractEditor importAllEditor;
+    private final AbstractEditor deleteOneEditor;
+    private final AbstractEditor deleteAllEditor;
 
     public ColumnFactory(
             final FileAdmin fileAdmin,
@@ -48,30 +48,17 @@ public final class ColumnFactory {
             final CustomDateFormat argDateFormatter,
             final DateFormat argTimeFormatter) {
 
-        this.headerRenderer           = new HeaderRenderer(
-                defaultHeaderTableCellRenderer);
-        this.labelNameOneRenderer     = new LabelNameRenderer();
-        this.labelNameAllRenderer     = new LabelNameRenderer();
-        this.labelModifiedOneRenderer = new LabelModifiedRenderer(
-                argDateFormatter,
-                argTimeFormatter);
-        this.labelModifiedAllRenderer = new LabelModifiedRenderer(
-                argDateFormatter,
-                argTimeFormatter);
-        this.buttonOneRenderer        = new ButtonRenderer();
-        this.buttonAllRenderer        = new ButtonRenderer();
-        this.importOneEditor          = new ImportOneEditor(
-                fileAdmin,
-                this.buttonOneRenderer);
-        this.importAllEditor          = new ImportAllEditor(
-                fileAdmin,
-                this.buttonAllRenderer);
-        this.deleteOneEditor          = new DeleteOneEditor(
-                fileAdmin,
-                this.buttonOneRenderer);
-        this.deleteAllEditor          = new DeleteAllEditor(
-                fileAdmin,
-                this.buttonAllRenderer);
+        this.headerRenderer = new HeaderRenderer(defaultHeaderTableCellRenderer);
+        this.labelNameOneRenderer = new LabelNameRenderer();
+        this.labelNameAllRenderer = new LabelNameRenderer();
+        this.labelModifiedOneRenderer = new LabelModifiedRenderer(argDateFormatter, argTimeFormatter);
+        this.labelModifiedAllRenderer = new LabelModifiedRenderer(argDateFormatter, argTimeFormatter);
+        this.buttonOneRenderer = new ButtonRenderer();
+        this.buttonAllRenderer = new ButtonRenderer();
+        this.importOneEditor = new ImportOneEditor(fileAdmin, this.buttonOneRenderer);
+        this.importAllEditor = new ImportAllEditor(fileAdmin, this.buttonAllRenderer);
+        this.deleteOneEditor = new DeleteOneEditor(fileAdmin, this.buttonOneRenderer);
+        this.deleteAllEditor = new DeleteAllEditor(fileAdmin, this.buttonAllRenderer);
     }
 
     public TableCellRenderer getHeaderRenderer() {

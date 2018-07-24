@@ -39,12 +39,12 @@ public enum AlphanumComparator implements Comparator<String> {
     /**
      * The lowest ASCII symbol representing a digit.
      */
-    private static final int  DIGIT_LOWER_BOUND = 48;
+    private static final int DIGIT_LOWER_BOUND = 48;
 
     /**
      * The highest ASCII symbol representing a digit.
      */
-    private static final int  DIGIT_UPPER_BOUND = 57;
+    private static final int DIGIT_UPPER_BOUND = 57;
 
     /**
      * Restrictive constructor.
@@ -116,12 +116,10 @@ public enum AlphanumComparator implements Comparator<String> {
         final int s2Length = string2.length();
 
         while (thisMarker < s1Length && thatMarker < s2Length) {
-            final String thisChunk
-            = getChunk(string1, s1Length, thisMarker);
+            final String thisChunk = getChunk(string1, s1Length, thisMarker);
             thisMarker += thisChunk.length();
 
-            final String thatChunk
-            = getChunk(string2, s2Length, thatMarker);
+            final String thatChunk = getChunk(string2, s2Length, thatMarker);
             thatMarker += thatChunk.length();
 
             // If both chunks contain numeric characters, sort them numerically

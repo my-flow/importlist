@@ -34,13 +34,14 @@ import javax.swing.table.AbstractTableModel;
 public final class AggregationTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 1L;
-    private final transient Settings settings;
-    private final transient Preferences prefs;
-    private final transient Localizable localizable;
+    private final Settings settings;
+    private final Preferences prefs;
+    private final Localizable localizable;
 
     public AggregationTableModel() {
-        this.settings    = Helper.INSTANCE.getSettings();
-        this.prefs       = Helper.INSTANCE.getPreferences();
+        super();
+        this.settings = Helper.INSTANCE.getSettings();
+        this.prefs = Helper.INSTANCE.getPreferences();
         this.localizable = Helper.INSTANCE.getLocalizable();
     }
 

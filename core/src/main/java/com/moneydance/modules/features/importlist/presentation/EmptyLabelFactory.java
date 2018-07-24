@@ -31,9 +31,11 @@ public final class EmptyLabelFactory implements ComponentFactory {
     private final JPanel emptyPanel;
 
     public EmptyLabelFactory(final String text) {
-        JLabel emptyLabel = new JLabel(text);
-
         this.emptyPanel = new JPanel(new GridBagLayout());
+
+        final JLabel emptyLabel = new JLabel(text);
+        emptyLabel.setLabelFor(this.emptyPanel);
+
         this.emptyPanel.add(emptyLabel);
         this.emptyPanel.setBorder(MoneydanceLAF.homePageBorder);
     }

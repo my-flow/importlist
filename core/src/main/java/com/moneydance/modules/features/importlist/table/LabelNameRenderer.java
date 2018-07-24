@@ -42,9 +42,7 @@ final class LabelNameRenderer extends DefaultTableCellRenderer {
         this.setOpaque(false);
         String label = null;
         if (value != null) {
-            label = String.format("%s%s", Helper.INSTANCE.getSettings()
-                    .getIndentationPrefix(),
-                    value);
+            label = String.format("%s%s", Helper.INSTANCE.getSettings().getIndentationPrefix(), value);
         }
         super.getTableCellRendererComponent(
                 table,

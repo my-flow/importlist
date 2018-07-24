@@ -16,14 +16,13 @@
 
 package com.moneydance.modules.features.importlist.util;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 import org.junit.Test;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Florian J. Breunig

@@ -32,154 +32,126 @@ import javax.swing.JTable;
 import javax.swing.RowSorter;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 /**
  * @author Florian J. Breunig
  */
-public final class BaseTableFactory implements ComponentFactory {
+public final class BaseTableFactory extends AbstractTableFactory {
 
-    private final Settings        settings;
-    private final Preferences     prefs;
-    private final Localizable     localizable;
-    private final TableModel      tableModel;
-    private final JTable          table;
-    private final ColumnFactory   columnFactory;
-    private final JScrollPane     scrollPane;
+    private final Localizable localizable;
+    private final TableModel tableModel;
+    private final ColumnFactory columnFactory;
+    private final JScrollPane scrollPane;
 
     public BaseTableFactory(
             final TableModel argTableModel,
             final FileAdmin argFileAdmin) {
+        super(argTableModel);
+
         this.tableModel = argTableModel;
-        this.settings = Helper.INSTANCE.getSettings();
-        this.prefs = Helper.INSTANCE.getPreferences();
         this.localizable = Helper.INSTANCE.getLocalizable();
-        this.table = new JTable(this.tableModel);
-        this.table.setOpaque(false);
-        this.table.setShowGrid(false);
-        this.table.setShowVerticalLines(false);
-        this.table.setShowHorizontalLines(false);
-        this.table.setIntercellSpacing(new Dimension(0, 0));
-        this.table.setColumnSelectionAllowed(false);
-        this.table.setRowSelectionAllowed(false);
-        this.table.setCellSelectionEnabled(false);
-        JTableHeader tableHeader         = this.table.getTableHeader();
+
+        final Settings settings = Helper.INSTANCE.getSettings();
+        final JTable table = this.getTable();
+
+        table.setIntercellSpacing(new Dimension(0, 0));
+        JTableHeader tableHeader = table.getTableHeader();
         tableHeader.setOpaque(false);
-        TableColumnModel baseColumnModel = this.table.getColumnModel();
 
         this.columnFactory = new ColumnFactory(
                 argFileAdmin,
                 tableHeader.getDefaultRenderer(),
-                this.prefs.getDateFormatter(),
+                Helper.INSTANCE.getPreferences().getDateFormatter(),
                 Preferences.getTimeFormatter());
 
-        TableColumn nameCol = this.table.getColumn(
-                this.settings.getDescName());
-        int nameColNo = baseColumnModel.getColumnIndex(
-                this.settings.getDescName());
-        nameCol.setIdentifier(this.settings.getDescName());
+        // name column
+        final String descName = settings.getDescName();
+        final TableColumn nameCol = buildColumn(descName);
         nameCol.setHeaderRenderer(this.columnFactory.getHeaderRenderer());
-        nameCol.setCellRenderer(
-                this.columnFactory.getLabelNameOneRenderer());
-        nameCol.setMinWidth(this.settings.getMinColumnWidth());
-        nameCol.setPreferredWidth(this.prefs.getColumnWidths(nameColNo));
+        nameCol.setCellRenderer(this.columnFactory.getLabelNameOneRenderer());
 
-
-        TableColumn modifiedCol = this.table.getColumn(
-                this.settings.getDescModified());
-        int modifiedColNo = baseColumnModel.getColumnIndex(
-                this.settings.getDescModified());
-        modifiedCol.setIdentifier(this.settings.getDescModified());
+        // modified column
+        final String descModified = settings.getDescModified();
+        final TableColumn modifiedCol = buildColumn(descModified);
         modifiedCol.setHeaderRenderer(this.columnFactory.getHeaderRenderer());
-        modifiedCol.setCellRenderer(
-                this.columnFactory.getLabelModifiedOneRenderer());
-        modifiedCol.setMinWidth(this.settings.getMinColumnWidth());
-        modifiedCol.setPreferredWidth(
-                this.prefs.getColumnWidths(modifiedColNo));
+        modifiedCol.setCellRenderer(this.columnFactory.getLabelModifiedOneRenderer());
 
-
-        TableColumn importCol = this.table.getColumn(
-                this.settings.getDescImport());
-        int importColNo = baseColumnModel.getColumnIndex(
-                this.settings.getDescImport());
-        importCol.setIdentifier(this.settings.getDescImport());
+        // import column
+        final String descImport = settings.getDescImport();
+        final TableColumn importCol = buildColumn(descImport);
         importCol.setHeaderRenderer(this.columnFactory.getHeaderRenderer());
         importCol.setCellRenderer(this.columnFactory.getButtonOneRenderer());
         importCol.setCellEditor(this.columnFactory.getImportOneEditor());
-        importCol.setResizable(this.settings.isButtonResizable());
-        importCol.setMinWidth(this.settings.getMinColumnWidth());
-        importCol.setPreferredWidth(this.prefs.getColumnWidths(importColNo));
+        importCol.setResizable(settings.isButtonResizable());
 
-
-        TableColumn deleteCol = this.table.getColumn(
-                this.settings.getDescDelete());
-        int deleteColNo = baseColumnModel.getColumnIndex(
-                this.settings.getDescDelete());
-        deleteCol.setIdentifier(this.settings.getDescDelete());
+        // delete column
+        final String descDelete = settings.getDescDelete();
+        final TableColumn deleteCol = buildColumn(descDelete);
         deleteCol.setHeaderRenderer(this.columnFactory.getHeaderRenderer());
         deleteCol.setCellRenderer(this.columnFactory.getButtonOneRenderer());
         deleteCol.setCellEditor(this.columnFactory.getDeleteOneEditor());
-        deleteCol.setResizable(this.settings.isButtonResizable());
-        deleteCol.setMinWidth(this.settings.getMinColumnWidth());
-        deleteCol.setPreferredWidth(this.prefs.getColumnWidths(deleteColNo));
-
+        deleteCol.setResizable(settings.isButtonResizable());
 
         // resizing the columns
-        TableListener tableListener = new TableListener(this.table);
-        baseColumnModel.addColumnModelListener(tableListener);
+        TableListener tableListener = new TableListener(table);
+        this.getColumnModel().addColumnModelListener(tableListener);
 
         // reordering the columns
-        tableHeader.setReorderingAllowed(this.settings.isReorderingAllowed());
+        tableHeader.setReorderingAllowed(settings.isReorderingAllowed());
 
         // sorting the columns
         final RowSorter<TableModel> rowSorter =
                 new FileTableRowSorter(this.tableModel);
         final List<RowSorter.SortKey> sortKeys =
-                new ArrayList<RowSorter.SortKey>();
-        sortKeys.add(this.prefs.getSortKey());
+                new ArrayList<>();
+        sortKeys.add(Helper.INSTANCE.getPreferences().getSortKey());
         rowSorter.setSortKeys(sortKeys);
         rowSorter.addRowSorterListener(tableListener);
-        this.table.setRowSorter(rowSorter);
+        table.setRowSorter(rowSorter);
 
-        this.table.setPreferredScrollableViewportSize(
+        table.setPreferredScrollableViewportSize(
                 new Dimension(
-                        this.settings.getMinimumTableWidth(),
-                        this.settings.getMinimumTableHeight()));
+                        settings.getMinimumTableWidth(),
+                        settings.getMinimumTableHeight()));
 
         this.scrollPane = new JCustomScrollPane();
     }
 
     @Override
     public JScrollPane getComponent() {
-        this.table.setRowHeight(this.prefs.getBodyRowHeight());
-        this.columnFactory.setDateFormatter(this.prefs.getDateFormatter());
+        final Settings settings = Helper.INSTANCE.getSettings();
+        final JTable table = this.getTable();
+        final Preferences prefs = Helper.INSTANCE.getPreferences();
+
+        table.setRowHeight(prefs.getBodyRowHeight());
+        this.columnFactory.setDateFormatter(prefs.getDateFormatter());
         this.columnFactory.setTimeFormatter(Preferences.getTimeFormatter());
 
-        TableColumn nameCol = this.table.getColumn(
-                this.settings.getDescName());
+        TableColumn nameCol = table.getColumn(
+                settings.getDescName());
         nameCol.setHeaderValue(this.localizable.getHeaderValueName());
-        TableColumn modifiedCol = this.table.getColumn(
-                this.settings.getDescModified());
+        TableColumn modifiedCol = table.getColumn(
+                settings.getDescModified());
         modifiedCol.setHeaderValue(this.localizable.getHeaderValueModified());
-        TableColumn importCol = this.table.getColumn(
-                this.settings.getDescImport());
+        TableColumn importCol = table.getColumn(
+                settings.getDescImport());
         importCol.setHeaderValue(this.localizable.getHeaderValueImport());
-        TableColumn deleteCol = this.table.getColumn(
-                this.settings.getDescDelete());
+        TableColumn deleteCol = table.getColumn(
+                settings.getDescDelete());
         deleteCol.setHeaderValue(
                 this.localizable.getHeaderValueDelete());
 
-        this.scrollPane.setViewportView(this.table);
+        this.scrollPane.setViewportView(table);
 
         this.scrollPane.setMinimumSize(
                 new Dimension(
-                        this.settings.getMinimumTableWidth(),
-                        this.settings.getMinimumTableHeight()));
+                        settings.getMinimumTableWidth(),
+                        settings.getMinimumTableHeight()));
         this.scrollPane.setPreferredSize(
                 new Dimension(
-                        this.prefs.getPreferredTableWidth(),
-                        this.prefs.getPreferredTableHeight(
+                        prefs.getPreferredTableWidth(),
+                        prefs.getPreferredTableHeight(
                                 this.tableModel.getRowCount())));
         this.scrollPane.setMaximumSize(
                 new Dimension(

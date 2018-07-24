@@ -38,8 +38,7 @@ import javax.swing.event.TableColumnModelListener;
  *
  * @author Florian J. Breunig
  */
-final class TableListener
-implements TableColumnModelListener, RowSorterListener {
+final class TableListener implements TableColumnModelListener, RowSorterListener {
 
     /**
      * Static initialization of class-dependent logger.
@@ -71,7 +70,7 @@ implements TableColumnModelListener, RowSorterListener {
         }
         LOG.config("Order of columns changed.");
         this.lastFrom = event.getFromIndex();
-        this.lastTo   = event.getToIndex();
+        this.lastTo = event.getToIndex();
 
         this.saveColumnOrder();
         this.saveSortKey();
@@ -99,7 +98,7 @@ implements TableColumnModelListener, RowSorterListener {
         int columnCount = this.table.getColumnCount();
         for (int column = 0; column < columnCount; column++) {
             String columnName = this.table.getColumnName(column);
-            int columnWidth   = this.table.getColumn(columnName).getWidth();
+            int columnWidth = this.table.getColumn(columnName).getWidth();
             this.prefs.setColumnWidths(column, columnWidth);
         }
     }

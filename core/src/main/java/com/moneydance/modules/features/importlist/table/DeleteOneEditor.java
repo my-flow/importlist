@@ -46,8 +46,7 @@ final class DeleteOneEditor extends AbstractEditor {
                 EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        DeleteOneEditor.this.getFileAdmin()
-                        .deleteRow(rowNumber);
+                        DeleteOneEditor.this.getFileAdmin().deleteRow(rowNumber);
                     }
                 });
             }

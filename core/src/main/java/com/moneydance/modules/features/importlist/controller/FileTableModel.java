@@ -22,6 +22,7 @@ import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -39,17 +40,18 @@ import javax.swing.table.AbstractTableModel;
 public final class FileTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 1L;
-    private final transient Settings settings;
-    private final transient Preferences prefs;
-    private final transient Localizable localizable;
-    private final           List<File>  files;
+    private final Settings settings;
+    private final Preferences prefs;
+    private final Localizable localizable;
+    private final List<File> files;
 
     public FileTableModel(final List<File> argFiles) {
-        this.settings    = Helper.INSTANCE.getSettings();
-        this.prefs       = Helper.INSTANCE.getPreferences();
+        super();
+        this.settings = Helper.INSTANCE.getSettings();
+        this.prefs = Helper.INSTANCE.getPreferences();
         this.localizable = Helper.INSTANCE.getLocalizable();
         // ESCA-JAVA0256: argFiles is readonly by design
-        this.files       = argFiles;
+        this.files = argFiles;
     }
 
     @Override
@@ -73,7 +75,7 @@ public final class FileTableModel extends AbstractTableModel {
     }
 
     @Override
-    public Object getValueAt(final int row, final int column) {
+    public Comparable<? extends Serializable> getValueAt(final int row, final int column) {
         if (row >= this.files.size()) {
             this.fireTableDataChanged();
             throw new IllegalArgumentException(String.format(

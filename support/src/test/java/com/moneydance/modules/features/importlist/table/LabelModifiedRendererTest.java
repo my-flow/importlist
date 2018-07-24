@@ -16,9 +16,6 @@
 
 package com.moneydance.modules.features.importlist.table;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 import com.infinitekind.util.CustomDateFormat;
 
 import java.text.SimpleDateFormat;
@@ -28,6 +25,8 @@ import javax.swing.JTable;
 
 import org.junit.Before;
 import org.junit.Test;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Florian J. Breunig

@@ -16,9 +16,6 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
@@ -26,6 +23,8 @@ import java.util.Observer;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.junit.Before;
 import org.junit.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Florian J. Breunig
@@ -34,13 +33,13 @@ public final class TransactionFileListenerTest implements Observer {
 
     private TransactionFileListener listener;
     private File file;
-    private boolean observerWasNotified = false;
+    private boolean observerWasNotified;
     private FileAlterationObserver fileAlterationObserver;
 
     @Before
     public void setUp() {
-        this.file                   = new File("");
-        this.listener               = new TransactionFileListener();
+        this.file = new File("");
+        this.listener = new TransactionFileListener();
         this.fileAlterationObserver = new FileAlterationObserver(this.file);
         this.listener.addObserver(this);
         this.listener.onStart(this.fileAlterationObserver);

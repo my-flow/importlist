@@ -35,6 +35,7 @@ import javax.swing.table.TableRowSorter;
 final class FileTableRowSorter extends TableRowSorter<TableModel> {
 
     private final Settings settings;
+
     /**
      * @param tableModel The table model that is to be sorted
      */
@@ -52,7 +53,7 @@ final class FileTableRowSorter extends TableRowSorter<TableModel> {
 
     @Override
     public Comparator<?> getComparator(final int column) {
-        final String columnName  = this.getModel().getColumnName(column);
+        final String columnName = this.getModel().getColumnName(column);
         Comparator<?> comparator;
         if (this.settings.getDescName().equals(columnName)) {
             comparator = AlphanumComparator.ALPHANUM;

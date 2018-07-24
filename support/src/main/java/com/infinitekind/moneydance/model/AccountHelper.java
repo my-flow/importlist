@@ -28,10 +28,7 @@ public final class AccountHelper {
         // Prevents this class from being instantiated from the outside.
     }
 
-    public static void addSubAccount(
-            final Account parent,
-            final Account subaccount
-            ) {
+    public static void addSubAccount(final Account parent, final Account subaccount) {
         parent.addSubAccount(subaccount);
     }
 }

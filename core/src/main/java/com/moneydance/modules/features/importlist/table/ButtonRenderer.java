@@ -76,7 +76,7 @@ final class ButtonRenderer implements TableCellRenderer {
             @Override
             @SuppressWarnings("nullness")
             public void mousePressed(final MouseEvent mouseevent) {
-                this.wasOpaque  = button.isOpaque();
+                this.wasOpaque = button.isOpaque();
 
                 this.foreground = button.getForeground();
                 this.background = button.getBackground();

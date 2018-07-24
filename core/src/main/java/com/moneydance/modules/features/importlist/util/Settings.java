@@ -53,6 +53,7 @@ public final class Settings {
     private static final char DELIMITER = ',';
 
     private final Configuration config;
+    private final Image iconImage;
 
     Settings() {
         try {
@@ -63,6 +64,7 @@ public final class Settings {
             propertiesConfig.setListDelimiterHandler(new DefaultListDelimiterHandler(DELIMITER));
             propertiesConfig.read(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             this.config = propertiesConfig;
+            this.iconImage = getImage(this.config.getString("icon_resource"));
         } catch (ConfigurationException | IOException e) {
             throw new IllegalStateException(e.getMessage(), e);
         }
@@ -86,7 +88,7 @@ public final class Settings {
      * @return The icon image that represents this extension.
      */
     public Image getIconImage() {
-        return getImage(this.config.getString("icon_resource")); //$NON-NLS-1$
+        return this.iconImage;
     }
 
     /**
@@ -294,13 +296,9 @@ public final class Settings {
         return this.config.getString("keyboard_shortcut_delete"); //$NON-NLS-1$
     }
 
-    private static Image getImage(final String resource) {
-        try {
-            InputStream inputStream = Helper.getInputStreamFromResource(
-                    resource);
-            return ImageIO.read(inputStream);
-        } catch (IOException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-        }
+    private static Image getImage(final String resource) throws IOException {
+        InputStream inputStream = Helper.getInputStreamFromResource(
+                resource);
+        return ImageIO.read(inputStream);
     }
 }

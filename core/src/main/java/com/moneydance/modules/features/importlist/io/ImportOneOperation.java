@@ -21,9 +21,9 @@ import com.moneydance.modules.features.importlist.util.Helper;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.text.StringSubstitutor;
 
@@ -33,13 +33,13 @@ import org.apache.commons.text.StringSubstitutor;
 final class ImportOneOperation implements FileOperation {
 
     private final FeatureModuleContext context;
-    private final FileFilter           transactionFileFilter;
+    private final FileFilter transactionFileFilter;
 
     ImportOneOperation(
             final FeatureModuleContext argContext,
             final FileFilter argTransactionFileFilter) {
-        this.context                = argContext;
-        this.transactionFileFilter  = argTransactionFileFilter;
+        this.context = argContext;
+        this.transactionFileFilter = argTransactionFileFilter;
     }
 
     @Override
@@ -49,14 +49,13 @@ final class ImportOneOperation implements FileOperation {
 
     @Override
     public void execute(final List<File> files) {
-        final File file = files.iterator().next();
-        Map<String, String> valuesMap = new HashMap<String, String>(1);
-        valuesMap.put("filename",  file.getAbsolutePath());
+        final File file = files.get(0);
+        Map<String, String> valuesMap = new ConcurrentHashMap<>(1);
+        valuesMap.put("filename", file.getAbsolutePath());
 
         String uriScheme = "";
         if (this.transactionFileFilter.accept(file)) {
-            uriScheme = Helper.INSTANCE.getSettings()
-                    .getTransactionFileImportUriScheme();
+            uriScheme = Helper.INSTANCE.getSettings().getTransactionFileImportUriScheme();
         }
 
         final StringSubstitutor sub = new StringSubstitutor(valuesMap);

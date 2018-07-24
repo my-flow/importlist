@@ -27,111 +27,84 @@ import java.awt.Dimension;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 /**
  * @author Florian J. Breunig
  */
-public final class AggregationTableFactory implements ComponentFactory {
-
-    private final Settings settings;
-    private final Preferences prefs;
-    private final JTable table;
+public final class AggregationTableFactory extends AbstractTableFactory {
 
     public AggregationTableFactory(
             final TableModel argTableModel,
             final FileAdmin argFileAdmin) {
-        this.settings   = Helper.INSTANCE.getSettings();
-        this.prefs      = Helper.INSTANCE.getPreferences();
+        super(argTableModel);
 
-        this.table = new JTable(argTableModel);
-        this.table.setOpaque(false);
-        this.table.setShowGrid(false);
-        this.table.setShowVerticalLines(false);
-        this.table.setShowHorizontalLines(false);
-        this.table.setIntercellSpacing(
+        final Settings settings = Helper.INSTANCE.getSettings();
+        final JTable table = this.getTable();
+
+        table.setIntercellSpacing(
                 new Dimension(
                         0,
-                        this.settings.getTableHeightOffset()));
-        this.table.setColumnSelectionAllowed(false);
-        this.table.setRowSelectionAllowed(false);
-        this.table.setCellSelectionEnabled(false);
+                        settings.getTableHeightOffset()));
 
-        TableColumnModel aggrColumnModel = this.table.getColumnModel();
-        JTableHeader tableHeader         = this.table.getTableHeader();
+        JTableHeader tableHeader = table.getTableHeader();
 
         ColumnFactory columnFactory = new ColumnFactory(
                 argFileAdmin,
                 tableHeader.getDefaultRenderer(),
-                this.prefs.getDateFormatter(),
+                Helper.INSTANCE.getPreferences().getDateFormatter(),
                 Preferences.getTimeFormatter());
 
+        // name column
+        final String descName = settings.getDescName();
+        final TableColumn nameCol = buildColumn(descName);
+        nameCol.setCellRenderer(columnFactory.getLabelNameAllRenderer());
 
-        TableColumn nameCol = this.table.getColumn(this.settings.getDescName());
-        int nameColNo = aggrColumnModel.getColumnIndex(
-                this.settings.getDescName());
-        nameCol.setIdentifier(this.settings.getDescName());
-        nameCol.setCellRenderer(
-                columnFactory.getLabelNameAllRenderer());
-        nameCol.setMinWidth(this.settings.getMinColumnWidth());
-        nameCol.setPreferredWidth(this.prefs.getColumnWidths(nameColNo));
+        // modified column
+        final String descModified = settings.getDescModified();
+        final TableColumn modifiedCol = buildColumn(descModified);
+        modifiedCol.setCellRenderer(columnFactory.getLabelModifiedAllRenderer());
 
-        TableColumn modifiedCol = this.table.getColumn(
-                this.settings.getDescModified());
-        int modifiedColNo = aggrColumnModel.getColumnIndex(
-                this.settings.getDescModified());
-        modifiedCol.setIdentifier(this.settings.getDescModified());
-        modifiedCol.setCellRenderer(
-                columnFactory.getLabelModifiedAllRenderer());
-        modifiedCol.setMinWidth(this.settings.getMinColumnWidth());
-        modifiedCol.setPreferredWidth(
-                this.prefs.getColumnWidths(modifiedColNo));
-
-        TableColumn importCol = this.table.getColumn(
-                this.settings.getDescImport());
-        int importColNo = aggrColumnModel.getColumnIndex(
-                this.settings.getDescImport());
-        importCol.setIdentifier(this.settings.getDescImport());
+        // import column
+        final String descImport = settings.getDescImport();
+        final TableColumn importCol = buildColumn(descImport);
         importCol.setCellRenderer(columnFactory.getButtonAllRenderer());
         importCol.setCellEditor(columnFactory.getImportAllEditor());
-        importCol.setResizable(this.settings.isButtonResizable());
-        importCol.setMinWidth(this.settings.getMinColumnWidth());
-        importCol.setPreferredWidth(this.prefs.getColumnWidths(importColNo));
+        importCol.setResizable(settings.isButtonResizable());
 
-        TableColumn deleteCol = this.table.getColumn(
-                this.settings.getDescDelete());
-        int deleteColNo = aggrColumnModel.getColumnIndex(
-                this.settings.getDescDelete());
-        deleteCol.setIdentifier(this.settings.getDescDelete());
+        // delete column
+        final String descDelete = settings.getDescDelete();
+        final TableColumn deleteCol = buildColumn(descDelete);
         deleteCol.setCellRenderer(columnFactory.getButtonAllRenderer());
         deleteCol.setCellEditor(columnFactory.getDeleteAllEditor());
-        deleteCol.setResizable(this.settings.isButtonResizable());
-        deleteCol.setMinWidth(this.settings.getMinColumnWidth());
-        deleteCol.setPreferredWidth(this.prefs.getColumnWidths(deleteColNo));
+        deleteCol.setResizable(settings.isButtonResizable());
     }
 
     @Override
     public JTable getComponent() {
-        this.table.setRowHeight(
-                this.prefs.getBodyRowHeight()
-                + this.settings.getTableHeightOffset());
-        this.table.setMinimumSize(
+        final JTable table = this.getTable();
+        int bodyRowHeight = Helper.INSTANCE.getPreferences().getBodyRowHeight();
+        int tableHeightOffset = Helper.INSTANCE.getSettings().getTableHeightOffset();
+
+        table.setRowHeight(
+                bodyRowHeight
+                + tableHeightOffset);
+        table.setMinimumSize(
                 new Dimension(
-                        this.settings.getMinimumTableWidth(),
-                        this.prefs.getBodyRowHeight()
-                        + this.settings.getTableHeightOffset()));
-        this.table.setPreferredSize(
+                        Helper.INSTANCE.getSettings().getMinimumTableWidth(),
+                        bodyRowHeight
+                        + tableHeightOffset));
+        table.setPreferredSize(
                 new Dimension(
-                        this.prefs.getPreferredTableWidth(),
-                        this.prefs.getBodyRowHeight()
-                        + this.settings.getTableHeightOffset()));
-        this.table.setMaximumSize(
+                        Helper.INSTANCE.getPreferences().getPreferredTableWidth(),
+                        bodyRowHeight
+                        + tableHeightOffset));
+        table.setMaximumSize(
                 new Dimension(
                         Preferences.getMaximumTableWidth(),
-                        this.prefs.getBodyRowHeight()
-                        + this.settings.getTableHeightOffset()));
+                        bodyRowHeight
+                        + tableHeightOffset));
 
-        return this.table;
+        return table;
     }
 }

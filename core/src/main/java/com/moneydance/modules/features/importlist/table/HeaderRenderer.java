@@ -53,8 +53,7 @@ final class HeaderRenderer implements TableCellRenderer {
             final int row,
             final int column) {
         Component component =
-                this.defaultHeaderTableCellRenderer
-                .getTableCellRendererComponent(
+                this.defaultHeaderTableCellRenderer.getTableCellRendererComponent(
                         table, value, hasFocus, hasFocus, row, column);
         if (component instanceof JComponent) {
             JComponent jComponent = (JComponent) component;

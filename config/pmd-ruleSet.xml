@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<ruleset name="Custom Java Rules"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+    <description>Custom Java Rule in PMD</description>
+
+    <rule ref="category/java/bestpractices.xml">
+        <exclude name="AvoidPrintStackTrace"/>
+        <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+        <exclude name="JUnitTestContainsTooManyAsserts"/>
+        <exclude name="JUnitTestsShouldIncludeAssert"/>
+        <exclude name="LooseCoupling"/>
+        <exclude name="ReplaceHashtableWithMap" />
+    </rule>
+
+    <rule ref="category/java/codestyle.xml">
+        <exclude name="AtLeastOneConstructor" />
+        <exclude name="CommentDefaultAccessModifier" />
+        <exclude name="DefaultPackage" />
+        <exclude name="LocalVariableCouldBeFinal" />
+        <exclude name="LongVariable" />
+        <exclude name="OnlyOneReturn" />
+        <exclude name="ShortClassName" />
+        <exclude name="TooManyStaticImports" />
+    </rule>
+
+    <rule ref="category/java/design.xml">
+        <exclude name="AvoidCatchingGenericException" />
+        <exclude name="DataClass" />
+        <exclude name="LawOfDemeter" />
+        <exclude name="LoosePackageCoupling" />
+        <exclude name="TooManyMethods" />
+    </rule>
+
+    <rule ref="category/java/documentation.xml">
+        <exclude name="CommentRequired" />
+    </rule>
+
+    <rule ref="category/java/errorprone.xml" >
+        <exclude name="BeanMembersShouldSerialize" />
+        <exclude name="DataflowAnomalyAnalysis" />
+        <exclude name="UseProperClassLoader" />
+    </rule>
+
+    <rule ref="category/java/errorprone.xml/AvoidLiteralsInIfCondition">
+        <properties>
+            <property name="ignoreMagicNumbers" value="-1,0,1" />
+        </properties>
+    </rule>
+
+    <rule ref="category/java/multithreading.xml">
+        <exclude name="AvoidSynchronizedAtMethodLevel" />
+        <exclude name="DoNotUseThreads" />
+    </rule>
+
+    <rule ref="category/java/performance.xml" />
+
+    <rule ref="category/java/security.xml" />
+
+</ruleset>

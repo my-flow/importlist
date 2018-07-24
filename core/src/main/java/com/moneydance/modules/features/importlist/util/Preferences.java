@@ -55,14 +55,14 @@ public final class Preferences {
      * instance of this class.
      */
     Preferences() {
-        this.settings           = Helper.INSTANCE.getSettings();
-        this.columnWidths       = new StreamTable();
+        this.settings = Helper.INSTANCE.getSettings();
+        this.columnWidths = new StreamTable();
         this.columnOrderDefault = new StreamTable();
         this.columnOrderDefault.put("0", this.settings.getDescName());
         this.columnOrderDefault.put("1", this.settings.getDescModified());
         this.columnOrderDefault.put("2", this.settings.getDescImport());
         this.columnOrderDefault.put("3", this.settings.getDescDelete());
-        this.sortOrderDefault   = new StreamTable();
+        this.sortOrderDefault = new StreamTable();
         this.sortOrderDefault.put("0", SortOrder.ASCENDING.toString());
     }
 
@@ -80,7 +80,6 @@ public final class Preferences {
         return this.userPreferences;
     }
 
-    @SuppressWarnings("nullness")
     public void setAllWritablePreferencesToNull() {
         this.getUserPreferences().setSetting(
                 "importlist.first_run",
@@ -116,7 +115,6 @@ public final class Preferences {
         return this.getUserPreferences().getSetting("importlist.import_dir");
     }
 
-    @SuppressWarnings("nullness")
     public void setBaseDirectory(@Nullable final String baseDirectory) {
         this.getUserPreferences().setSetting(
                 "importlist.import_dir",
@@ -174,7 +172,6 @@ public final class Preferences {
                 Helper.INSTANCE.getSettings().getColumnWidth());
     }
 
-    @SuppressWarnings("nullness")
     public void setColumnNames(final Hashtable<String, String> hashtable) {
         StreamTable streamTable = null;
         if (hashtable != null) {
@@ -192,9 +189,7 @@ public final class Preferences {
                     "importlist.column_order",
                     this.columnOrderDefault);
         }
-        @SuppressWarnings("nullness")
-        final String columnName = this.columnOrder.getStr(Integer.toString(column), null);
-        return columnName;
+        return this.columnOrder.getStr(Integer.toString(column), null);
     }
 
     public void setSortKey(final RowSorter.SortKey sortKey) {
@@ -208,10 +203,10 @@ public final class Preferences {
     public RowSorter.SortKey getSortKey() {
         StreamTable streamTable = this.getUserPreferences().getTableSetting(
                 "importlist.sort_order", this.sortOrderDefault);
-        Object key        = streamTable.keys().nextElement();
-        int column        = Integer.parseInt(key.toString());
+        Object key = streamTable.keys().nextElement();
+        int column = Integer.parseInt(key.toString());
         @SuppressWarnings("nullness")
-        String sortOrder  = streamTable.getStr(key, null);
+        String sortOrder = streamTable.getStr(key, null);
         return new RowSorter.SortKey(column, SortOrder.valueOf(sortOrder));
     }
 

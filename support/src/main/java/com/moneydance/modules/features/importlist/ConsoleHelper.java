@@ -24,8 +24,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
-import javax.swing.JFrame;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 /**
@@ -35,13 +35,13 @@ import javax.swing.WindowConstants;
  *
  * @author Florian J. Breunig
  */
-final class ConsoleRunner {
+final class ConsoleHelper {
 
     /**
      * Static initialization of class-dependent logger.
      */
     private static final Logger LOG =
-            Logger.getLogger(ConsoleRunner.class.getName());
+            Logger.getLogger(ConsoleHelper.class.getName());
 
     static {
         Helper.loadLoggerConfiguration();
@@ -50,7 +50,7 @@ final class ConsoleRunner {
     /**
      * Restrictive constructor.
      */
-    private ConsoleRunner() {
+    private ConsoleHelper() {
         // Prevents this class from being instantiated from the outside.
     }
 
@@ -80,11 +80,8 @@ final class ConsoleRunner {
         // Schedule a job for the event-dispatching thread:
         // creating and showing this application's GUI.
         final String argBaseDirectory = baseDirectory;
-        UiUtil.runOnUIThread(new Runnable() {
-            @Override
-            public void run() {
-                createAndShowGUI(argBaseDirectory);
-            }
+        UiUtil.runOnUIThread(() -> {
+            createAndShowGUI(argBaseDirectory);
         });
     }
 

@@ -15,6 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 package com.moneydance.modules.features.importlist.util;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -31,23 +32,30 @@ public final class LogFormatter extends Formatter {
     private static final String LINE_SEPARATOR =
             System.getProperty("line.separator");
 
+    /**
+     * Construct a new formatter.
+     */
+    LogFormatter() {
+        super();
+    }
+
     @Override
     public String format(final LogRecord record) {
         final StringBuilder stringBuilder = new StringBuilder(7);
 
-        stringBuilder.append(new Date(record.getMillis()))
-        .append(' ')
-        .append(record.getLevel().getLocalizedName())
-        .append(": ")
-        .append(this.formatMessage(record))
-        .append(LINE_SEPARATOR);
+        stringBuilder.append(new Date(record.getMillis())).
+                append(' ').
+                append(record.getLevel().getLocalizedName()).
+                append(": ").
+                append(this.formatMessage(record)).
+                append(LINE_SEPARATOR);
 
         if (record.getThrown() != null) {
             StringWriter stringWriter = new StringWriter();
             PrintWriter printWriter = new PrintWriter(stringWriter);
             try {
                 record.getThrown().printStackTrace(printWriter);
-                stringBuilder.append(stringWriter.toString());
+                stringBuilder.append(stringWriter);
             } finally {
                 printWriter.close();
                 try {

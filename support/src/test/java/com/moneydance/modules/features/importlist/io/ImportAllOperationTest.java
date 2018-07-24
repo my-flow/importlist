@@ -16,6 +16,10 @@
 
 package com.moneydance.modules.features.importlist.io;
 
+import com.moneydance.apps.md.controller.StubContext;
+import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.util.Helper;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +27,6 @@ import java.util.List;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.moneydance.apps.md.controller.StubContext;
-import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 /**
  * @author Florian J. Breunig

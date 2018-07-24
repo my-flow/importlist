@@ -16,7 +16,10 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
-import java.io.File;
+import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.controller.FileTableModel;
+import com.moneydance.modules.features.importlist.util.Helper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +30,6 @@ import javax.swing.table.TableModel;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.controller.FileTableModel;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 /**
  * @author Florian J. Breunig
@@ -44,7 +43,7 @@ public final class TableListenerTest {
     public void setUp() {
         Helper.INSTANCE.getPreferences();
         new StubContextFactory();
-        this.table = new JTable(new FileTableModel(new ArrayList<File>()));
+        this.table = new JTable(new FileTableModel(new ArrayList<>()));
         this.tableListener = new TableListener(this.table);
     }
 
@@ -58,7 +57,7 @@ public final class TableListenerTest {
         final RowSorter<TableModel> rowSorter =
                 new FileTableRowSorter(this.table.getModel());
         final List<RowSorter.SortKey> sortKeys =
-                new ArrayList<RowSorter.SortKey>();
+                new ArrayList<>();
         sortKeys.add(Helper.INSTANCE.getPreferences().getSortKey());
         rowSorter.setSortKeys(sortKeys);
         rowSorter.addRowSorterListener(this.tableListener);
@@ -74,7 +73,7 @@ public final class TableListenerTest {
         final RowSorter<TableModel> rowSorter =
                 new FileTableRowSorter(this.table.getModel());
         final List<RowSorter.SortKey> sortKeys =
-                new ArrayList<RowSorter.SortKey>();
+                new ArrayList<>();
         sortKeys.add(Helper.INSTANCE.getPreferences().getSortKey());
         rowSorter.setSortKeys(sortKeys);
         rowSorter.addRowSorterListener(this.tableListener);

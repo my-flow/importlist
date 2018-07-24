@@ -23,11 +23,12 @@ import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
-import javax.annotation.Nullable;
 import java.awt.Image;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
+
+import javax.annotation.Nullable;
 
 /**
  * The main class of the extension, instantiated by Moneydance's class loader.
@@ -55,6 +56,7 @@ public final class Main extends FeatureModule implements Observer {
      * Public standard constructor must be available in the Moneydance context.
      */
     public Main() {
+        super();
         LOG.info("Initializing extension in Moneydance's application context.");
         this.prefs = Helper.INSTANCE.getPreferences();
         this.settings = Helper.INSTANCE.getSettings();

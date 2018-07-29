@@ -4,6 +4,7 @@ dependencies {
     compile project(':core')
 
     runtime('org.slf4j:slf4j-simple:1.7.25')
+    runtime('org.syncloud:dropbox-client:1.5.3');
 
     testCompile('junit:junit:4.12')
     testCompile('org.hamcrest:hamcrest-junit:2.0.0.0')

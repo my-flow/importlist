@@ -20,6 +20,7 @@ import com.infinitekind.util.CustomDateFormat;
 import com.infinitekind.util.StreamTable;
 import com.moneydance.apps.md.controller.Main;
 import com.moneydance.apps.md.controller.UserPreferences;
+import com.moneydance.apps.md.view.gui.MoneydanceGUI;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -47,6 +48,7 @@ public final class Preferences {
 
     private final Settings settings;
     private final UserPreferences userPreferences;
+    private final Font defaultSystemFont;
     private final StreamTable columnOrderDefault;
     private final StreamTable sortOrderDefault;
     private final StreamTable columnWidths;
@@ -55,6 +57,7 @@ public final class Preferences {
     Preferences(final Main main, final Settings argSettings) {
         this.settings = argSettings;
         this.userPreferences = main.getPreferences();
+        this.defaultSystemFont = ((MoneydanceGUI) main.getUI()).getFonts().defaultSystemFont;
         this.columnWidths = new StreamTable();
         this.columnOrderDefault = new StreamTable();
         this.columnOrderDefault.put("0", this.settings.getDescName());
@@ -231,16 +234,17 @@ public final class Preferences {
     public int getHeaderRowHeight() {
         return Math.round(
                 (float) this.settings.getFactorRowHeightHeader()
-                * Preferences.getBodyFont().getSize2D());
+                * this.getBodyFont().getSize2D());
     }
 
     public int getBodyRowHeight() {
         return Math.round(
                 (float) this.settings.getSummandRowHeightBody()
-                + Preferences.getBodyFont().getSize2D());
+                + this.getBodyFont().getSize2D());
     }
 
-    private static Font getBodyFont() {
-        return UIManager.getFont("Label.font");
+    private Font getBodyFont() {
+        final int fontIncrement = this.userPreferences.getIntSetting(UserPreferences.GUI_FONT_DIFF, 0);
+        return this.defaultSystemFont.deriveFont(this.defaultSystemFont.getSize2D() + (float) fontIncrement);
     }
 }

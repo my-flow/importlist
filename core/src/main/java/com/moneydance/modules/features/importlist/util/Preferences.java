@@ -18,7 +18,7 @@ package com.moneydance.modules.features.importlist.util;
 
 import com.infinitekind.util.CustomDateFormat;
 import com.infinitekind.util.StreamTable;
-import com.moneydance.apps.md.controller.FeatureModuleContext;
+import com.moneydance.apps.md.controller.Main;
 import com.moneydance.apps.md.controller.UserPreferences;
 
 import java.awt.Color;
@@ -46,18 +46,15 @@ import javax.swing.UIManager;
 public final class Preferences {
 
     private final Settings settings;
-    @Nullable private UserPreferences userPreferences;
+    private final UserPreferences userPreferences;
     private final StreamTable columnOrderDefault;
     private final StreamTable sortOrderDefault;
     private final StreamTable columnWidths;
     @Nullable private StreamTable columnOrder;
 
-    /**
-     * The constructor must be called exactly once before using the only
-     * instance of this class.
-     */
-    Preferences() {
-        this.settings = Helper.INSTANCE.getSettings();
+    Preferences(final Main main, final Settings argSettings) {
+        this.settings = argSettings;
+        this.userPreferences = main.getPreferences();
         this.columnWidths = new StreamTable();
         this.columnOrderDefault = new StreamTable();
         this.columnOrderDefault.put("0", this.settings.getDescName());
@@ -68,53 +65,39 @@ public final class Preferences {
         this.sortOrderDefault.put("0", SortOrder.ASCENDING.toString());
     }
 
-    public void setContext(final FeatureModuleContext context) {
-        this.userPreferences = ((com.moneydance.apps.md.controller.Main)
-                context).getPreferences();
-    }
-
-    private UserPreferences getUserPreferences() {
-        if (this.userPreferences == null) {
-            Helper.INSTANCE.setChanged();
-            Helper.INSTANCE.notifyObservers(Boolean.FALSE);
-        }
-        assert this.userPreferences != null : "@AssumeAssertion(nullness)";
-        return this.userPreferences;
-    }
-
     public void setAllWritablePreferencesToNull() {
-        this.getUserPreferences().setSetting(
+        this.userPreferences.setSetting(
                 "importlist.first_run",
                 (String) null);
         this.setBaseDirectory(null);
-        this.getUserPreferences().setSetting(
+        this.userPreferences.setSetting(
                 "importlist.column_widths",
                 (StreamTable) null);
         this.setColumnNames(
                 null);
-        this.getUserPreferences().setSetting(
+        this.userPreferences.setSetting(
                 "importlist.sort_order",
                 (StreamTable) null);
     }
 
     public void setFirstRun(final boolean firstRun) {
-        this.getUserPreferences().setSetting(
+        this.userPreferences.setSetting(
                 "importlist.first_run",
                 firstRun);
     }
 
     public boolean isFirstRun() {
-        return this.getUserPreferences().getBoolSetting(
+        return this.userPreferences.getBoolSetting(
                 "importlist.first_run",
                 true);
     }
 
     public Locale getLocale() {
-        return this.getUserPreferences().getLocale();
+        return this.userPreferences.getLocale();
     }
 
     public Optional<File> getBaseDirectory() {
-        final String value = this.getUserPreferences().getSetting("importlist.import_dir");
+        final String value = this.userPreferences.getSetting("importlist.import_dir");
         if (value == null) {
             return Optional.empty();
         }
@@ -126,25 +109,25 @@ public final class Preferences {
         if (baseDirectory != null) {
             value = baseDirectory.getAbsolutePath();
         }
-        this.getUserPreferences().setSetting("importlist.import_dir", value);
+        this.userPreferences.setSetting("importlist.import_dir", value);
     }
 
     public void setColumnWidths(
             final int column,
             final int columnWidth) {
         this.columnWidths.put(Integer.toString(column), columnWidth);
-        this.getUserPreferences().setSetting(
+        this.userPreferences.setSetting(
                 "importlist.column_widths",
                 this.columnWidths);
     }
 
     public int getColumnWidths(final int column) {
-        StreamTable streamTable = this.getUserPreferences().getTableSetting(
+        StreamTable streamTable = this.userPreferences.getTableSetting(
                 "importlist.column_widths",
                 this.columnWidths);
         return streamTable.getInt(
                 Integer.toString(column),
-                Helper.INSTANCE.getSettings().getColumnWidth());
+                this.settings.getColumnWidth());
     }
 
     public void setColumnNames(final Hashtable<String, String> hashtable) {
@@ -153,14 +136,14 @@ public final class Preferences {
             streamTable = new StreamTable();
             streamTable.merge(hashtable);
         }
-        this.getUserPreferences().setSetting(
+        this.userPreferences.setSetting(
                 "importlist.column_order",
                 streamTable);
     }
 
     public String getColumnName(final int column) {
         if (this.columnOrder == null) {
-            this.columnOrder = this.getUserPreferences().getTableSetting(
+            this.columnOrder = this.userPreferences.getTableSetting(
                     "importlist.column_order",
                     this.columnOrderDefault);
         }
@@ -170,13 +153,13 @@ public final class Preferences {
     public void setSortKey(final RowSorter.SortKey sortKey) {
         StreamTable streamTable = new StreamTable();
         streamTable.put(sortKey.getColumn(), sortKey.getSortOrder().toString());
-        this.getUserPreferences().setSetting(
+        this.userPreferences.setSetting(
                 "importlist.sort_order",
                 streamTable);
     }
 
     public RowSorter.SortKey getSortKey() {
-        StreamTable streamTable = this.getUserPreferences().getTableSetting(
+        StreamTable streamTable = this.userPreferences.getTableSetting(
                 "importlist.sort_order", this.sortOrderDefault);
         Object key = streamTable.keys().nextElement();
         int column = Integer.parseInt(key.toString());
@@ -187,7 +170,7 @@ public final class Preferences {
 
     public int getColumnCount() {
         if (this.columnOrder == null) {
-            this.columnOrder = this.getUserPreferences().getTableSetting(
+            this.columnOrder = this.userPreferences.getTableSetting(
                     "importlist.column_order",
                     this.columnOrderDefault);
         }
@@ -195,7 +178,7 @@ public final class Preferences {
     }
 
     public CustomDateFormat getDateFormatter() {
-        return this.getUserPreferences().getShortDateFormatter();
+        return this.userPreferences.getShortDateFormatter();
     }
 
     public static DateFormat getTimeFormatter() {

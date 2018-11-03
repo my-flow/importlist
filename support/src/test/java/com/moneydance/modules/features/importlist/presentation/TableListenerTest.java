@@ -41,7 +41,6 @@ public final class TableListenerTest {
 
     @Before
     public void setUp() {
-        Helper.INSTANCE.getPreferences();
         new StubContextFactory();
         this.table = new JTable(new FileTableModel(new ArrayList<>()));
         this.tableListener = new TableListener(this.table);

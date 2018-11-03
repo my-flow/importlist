@@ -14,24 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-package com.moneydance.modules.features.importlist.util;
+package com.moneydance.modules.features.importlist;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.junit.Test;
 
 /**
  * @author Florian J. Breunig
  */
-@RunWith(Suite.class)
-@SuiteClasses({
-    AlphanumComparatorTest.class,
-    SettingsTest.class,
-    LocalizableTest.class,
-    LogFormatterTest.class,
-    HelperTest.class,
-    PreferencesTest.class
-})
-public final class AllTests {
-    // no test cases
+public final class ConsoleHelperTest {
+
+    @Test
+    public void testMain() {
+        final String[] args = new String[0];
+        ConsoleHelper.main(args);
+    }
+
+    @Test
+    public void testCreateAndShowGUI() {
+        ConsoleHelper.createAndShowGUI();
+    }
 }

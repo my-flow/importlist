@@ -16,8 +16,6 @@
 
 package com.moneydance.modules.features.importlist.util;
 
-import com.moneydance.apps.md.controller.StubContextFactory;
-
 import java.util.Hashtable;
 
 import javax.swing.RowSorter;
@@ -41,13 +39,7 @@ public final class PreferencesTest {
 
     @Before
     public void setUp() {
-        new StubContextFactory();
         this.prefs = Helper.INSTANCE.getPreferences();
-    }
-
-    @Test
-    public void testSetContext() {
-        this.prefs.setContext(new StubContextFactory().getContext());
     }
 
     @Test

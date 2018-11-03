@@ -30,6 +30,7 @@ import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.lang3.Validate;
 
 
 /**
@@ -43,11 +44,6 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 public final class Settings {
 
     /**
-     * The resource in the JAR file to read the settings from.
-     */
-    private static final String PROPERTIES_RESOURCE = "settings.properties";
-
-    /**
      * The list delimiter character.
      */
     private static final char DELIMITER = ',';
@@ -55,19 +51,13 @@ public final class Settings {
     private final Configuration config;
     private final Image iconImage;
 
-    Settings() {
-        try {
-            InputStream inputStream = Helper.getInputStreamFromResource(
-                    PROPERTIES_RESOURCE);
-
-            final PropertiesConfiguration propertiesConfig = new PropertiesConfiguration();
-            propertiesConfig.setListDelimiterHandler(new DefaultListDelimiterHandler(DELIMITER));
-            propertiesConfig.read(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            this.config = propertiesConfig;
-            this.iconImage = getImage(this.config.getString("icon_resource"));
-        } catch (ConfigurationException | IOException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-        }
+    Settings(final String resource) throws IOException, ConfigurationException {
+        final InputStream inputStream = getInputStreamFromResource(resource);
+        final PropertiesConfiguration propertiesConfig = new PropertiesConfiguration();
+        propertiesConfig.setListDelimiterHandler(new DefaultListDelimiterHandler(DELIMITER));
+        propertiesConfig.read(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        this.config = propertiesConfig;
+        this.iconImage = getImage(this.config.getString("icon_resource"));
     }
 
     /**
@@ -94,9 +84,8 @@ public final class Settings {
     /**
      * @return The resource that contains the configuration of the logger.
      */
-    public String getLoggingPropertiesResource() {
-        return this.config.getString(
-                "logging_properties_resource"); //$NON-NLS-1$
+    public InputStream getLoggingPropertiesResource() {
+        return getInputStreamFromResource(this.config.getString("logging_properties_resource")); //$NON-NLS-1$
     }
 
     /**
@@ -296,9 +285,15 @@ public final class Settings {
         return this.config.getString("keyboard_shortcut_delete"); //$NON-NLS-1$
     }
 
+    private static InputStream getInputStreamFromResource(final String resource) {
+        ClassLoader cloader = Settings.class.getClassLoader();
+        InputStream inputStream = cloader.getResourceAsStream(resource);
+        Validate.notNull(inputStream, "Resource %s was not found.", resource);
+        return inputStream;
+    }
+
     private static Image getImage(final String resource) throws IOException {
-        InputStream inputStream = Helper.getInputStreamFromResource(
-                resource);
+        InputStream inputStream = getInputStreamFromResource(resource);
         return ImageIO.read(inputStream);
     }
 }

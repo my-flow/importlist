@@ -17,6 +17,7 @@
 package com.moneydance.modules.features.importlist.util;
 
 import com.moneydance.apps.md.controller.FeatureModuleContext;
+import com.moneydance.apps.md.controller.Main;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,9 +25,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.LogManager;
 
-import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 
 /**
  * This singleton provides public convenience methods.
@@ -41,14 +40,31 @@ public enum Helper {
      */
     INSTANCE;
 
+    /**
+     * The resource in the JAR file to read the settings from.
+     */
+    private static final String SETTINGS_RESOURCE = "settings.properties";
+
     private final HelperObservable observable;
     private final Settings settings;
-    @Nullable private Preferences prefs;
-    @Nullable private Localizable localizable;
+    private Preferences prefs;
+    private Localizable localizable;
 
     Helper() {
         this.observable = new HelperObservable();
-        this.settings = new Settings();
+        try {
+            this.settings = new Settings(SETTINGS_RESOURCE);
+        } catch (ConfigurationException | IOException e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
+    }
+
+    public void setContext(final FeatureModuleContext context) {
+        synchronized (Helper.class) {
+            final Main main = (Main) context;
+            this.prefs = new Preferences(main, this.settings);
+            this.localizable = new Localizable(this.settings, this.prefs.getLocale());
+        }
     }
 
     public Settings getSettings() {
@@ -56,22 +72,10 @@ public enum Helper {
     }
 
     public Preferences getPreferences() {
-        synchronized (Helper.class) {
-            if (this.prefs == null) {
-                this.prefs = new Preferences();
-            }
-        }
         return this.prefs;
     }
 
     public Localizable getLocalizable() {
-        synchronized (Helper.class) {
-            if (this.localizable == null) {
-                this.localizable = new Localizable(
-                        this.settings.getLocalizableResource(),
-                        this.prefs.getLocale());
-            }
-        }
         return this.localizable;
     }
 
@@ -87,27 +91,13 @@ public enum Helper {
         this.observable.notifyObservers(arg);
     }
 
-    public void setContext(final FeatureModuleContext context) {
-        this.prefs.setContext(context);
-    }
-
     public static void loadLoggerConfiguration() {
         try {
-            InputStream inputStream = getInputStreamFromResource(
-                    Helper.INSTANCE.getSettings().getLoggingPropertiesResource());
+            InputStream inputStream = Helper.INSTANCE.getSettings().getLoggingPropertiesResource();
             LogManager.getLogManager().readConfiguration(inputStream);
-
         } catch (SecurityException | IOException e) {
             e.printStackTrace(System.err);
         }
-    }
-
-    public static InputStream getInputStreamFromResource(
-            final String resource) {
-        ClassLoader cloader = Helper.class.getClassLoader();
-        InputStream inputStream = cloader.getResourceAsStream(resource);
-        Validate.notNull(inputStream, "Resource %s was not found.", resource);
-        return inputStream;
     }
 
     /**

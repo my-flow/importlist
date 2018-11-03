@@ -21,7 +21,6 @@ import com.infinitekind.moneydance.model.AccountBook;
 import com.infinitekind.moneydance.model.AccountHelper;
 import com.moneydance.apps.md.controller.StubContext;
 import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 import java.io.File;
 import java.util.Collections;
@@ -38,7 +37,6 @@ public final class ImportOneOperationTest {
     private final File incomeFile;
 
     public ImportOneOperationTest() {
-        Helper.INSTANCE.getPreferences();
         this.incomeFile = new File("mybank.csv");
     }
 

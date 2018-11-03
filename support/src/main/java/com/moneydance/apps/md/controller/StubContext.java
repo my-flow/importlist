@@ -27,6 +27,8 @@ import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.Validate;
+
 /**
  * This test stub simulates a context in stand-alone mode. It provides canned
  * answers to the standard calls. Also, it can be cast safely to
@@ -40,30 +42,34 @@ public final class StubContext extends Main {
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG =
-            Logger.getLogger(StubContext.class.getName());
+    private static final Logger LOG = Logger.getLogger(StubContext.class.getName());
 
-    @Nullable private final FeatureModule featureModule;
+    @Nullable private FeatureModule featureModule;
     @Nullable private AccountBook accountBook;
     @Nullable private UserPreferences userPreferences;
 
     @SuppressWarnings("nullness")
-    StubContext(@Nullable final FeatureModule argFeatureModule) {
+    StubContext() {
         super();
+        init();
+    }
+
+    StubContext(final FeatureModule argFeatureModule) {
+        super();
+        Validate.notNull(argFeatureModule, "featureModule must not be null");
         this.featureModule = argFeatureModule;
+        init();
+    }
+
+    private void init() {
         try {
             if (!this.isInitialized()) {
                 this.initializeApp();
             }
-        } catch (Error e) {
+        } catch (Error | Exception e) {
             final String message = e.getMessage();
             if (message != null) {
                 LOG.log(Level.SEVERE, message, e);
-            }
-        } catch (Exception e) {
-            final String message = e.getMessage();
-            if (message != null) {
-                LOG.log(Level.WARNING, message, e);
             }
         }
     }

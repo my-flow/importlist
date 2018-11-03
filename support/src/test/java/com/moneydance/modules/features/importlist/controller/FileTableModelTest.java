@@ -17,7 +17,6 @@
 package com.moneydance.modules.features.importlist.controller;
 
 import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,7 +39,6 @@ public final class FileTableModelTest {
 
     @Before
     public void setUp() {
-        Helper.INSTANCE.getPreferences();
         new StubContextFactory();
         this.emptyModel = new FileTableModel(new ArrayList<File>());
         List<File> list = new ArrayList<>(1);

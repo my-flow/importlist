@@ -39,7 +39,6 @@ import javax.swing.table.TableModel;
  */
 public final class BaseTableFactory extends AbstractTableFactory {
 
-    private final Localizable localizable;
     private final TableModel tableModel;
     private final ColumnFactory columnFactory;
     private final JScrollPane scrollPane;
@@ -48,9 +47,7 @@ public final class BaseTableFactory extends AbstractTableFactory {
             final TableModel argTableModel,
             final FileAdmin argFileAdmin) {
         super(argTableModel);
-
         this.tableModel = argTableModel;
-        this.localizable = Helper.INSTANCE.getLocalizable();
 
         final Settings settings = Helper.INSTANCE.getSettings();
         final JTable table = this.getTable();
@@ -121,26 +118,22 @@ public final class BaseTableFactory extends AbstractTableFactory {
     @Override
     public JScrollPane getComponent() {
         final Settings settings = Helper.INSTANCE.getSettings();
-        final JTable table = this.getTable();
         final Preferences prefs = Helper.INSTANCE.getPreferences();
+        final Localizable localizable = Helper.INSTANCE.getLocalizable();
 
+        final JTable table = this.getTable();
         table.setRowHeight(prefs.getBodyRowHeight());
         this.columnFactory.setDateFormatter(prefs.getDateFormatter());
         this.columnFactory.setTimeFormatter(Preferences.getTimeFormatter());
 
-        TableColumn nameCol = table.getColumn(
-                settings.getDescName());
-        nameCol.setHeaderValue(this.localizable.getHeaderValueName());
-        TableColumn modifiedCol = table.getColumn(
-                settings.getDescModified());
-        modifiedCol.setHeaderValue(this.localizable.getHeaderValueModified());
-        TableColumn importCol = table.getColumn(
-                settings.getDescImport());
-        importCol.setHeaderValue(this.localizable.getHeaderValueImport());
-        TableColumn deleteCol = table.getColumn(
-                settings.getDescDelete());
-        deleteCol.setHeaderValue(
-                this.localizable.getHeaderValueDelete());
+        TableColumn nameCol = table.getColumn(settings.getDescName());
+        nameCol.setHeaderValue(localizable.getHeaderValueName());
+        TableColumn modifiedCol = table.getColumn(settings.getDescModified());
+        modifiedCol.setHeaderValue(localizable.getHeaderValueModified());
+        TableColumn importCol = table.getColumn(settings.getDescImport());
+        importCol.setHeaderValue(localizable.getHeaderValueImport());
+        TableColumn deleteCol = table.getColumn(settings.getDescDelete());
+        deleteCol.setHeaderValue(localizable.getHeaderValueDelete());
 
         this.scrollPane.setViewportView(table);
 

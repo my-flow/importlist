@@ -66,6 +66,11 @@ public final class MainTest {
     }
 
     @Test
+    public void testInvoke() {
+        this.main.invoke(null);
+    }
+
+    @Test
     public void testUpdate() {
         this.main.update(null, null);
     }

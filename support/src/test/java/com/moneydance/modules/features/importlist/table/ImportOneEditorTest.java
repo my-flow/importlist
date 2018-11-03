@@ -18,7 +18,6 @@ package com.moneydance.modules.features.importlist.table;
 
 import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 import java.awt.event.ActionListener;
 
@@ -36,7 +35,6 @@ public final class ImportOneEditorTest {
 
     @Before
     public void setUp() {
-        Helper.INSTANCE.getPreferences();
         StubContextFactory factory = new StubContextFactory();
         this.importOneEditor = new ImportOneEditor(
                 new FileAdmin(null, factory.getContext()),

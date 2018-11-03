@@ -30,7 +30,6 @@ import com.moneydance.modules.features.importlist.presentation.SplitPaneFactory;
 import com.moneydance.modules.features.importlist.table.AbstractEditor;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
 import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
@@ -53,7 +52,6 @@ import javax.swing.table.AbstractTableModel;
 public final class ViewController implements HomePageView {
 
     private final Settings settings;
-    private final Localizable localizable;
     private final FileAdmin fileAdmin;
     private boolean initialized;
     private final ColumnFactory columnFactory;
@@ -69,7 +67,6 @@ public final class ViewController implements HomePageView {
             final File baseDirectory,
             final FeatureModuleContext argContext) {
         this.settings = Helper.INSTANCE.getSettings();
-        this.localizable = Helper.INSTANCE.getLocalizable();
         this.fileAdmin = new FileAdmin(baseDirectory, argContext);
         this.fileAdmin.addObserver(new ViewControllerObserver());
 
@@ -238,7 +235,7 @@ public final class ViewController implements HomePageView {
                 new DirectoryChooserButtonFactory(
                         String.format(
                                 "<html><u>%s</u></html>",
-                                this.localizable.getDirectoryChooserTitle()
+                                Helper.INSTANCE.getLocalizable().getDirectoryChooserTitle()
                         ),
                         new ChooseBaseDirectoryActionListener()
                 );
@@ -261,7 +258,7 @@ public final class ViewController implements HomePageView {
 
     private void showLabelEmptyList() {
         EmptyLabelFactory emptyLabelFactory = new EmptyLabelFactory(
-                this.localizable.getEmptyMessage(
+                Helper.INSTANCE.getLocalizable().getEmptyMessage(
                         this.fileAdmin.getBaseDirectory().orElseThrow(AssertionError::new).getAbsolutePath()
                 )
         );

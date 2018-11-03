@@ -20,8 +20,8 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author Florian J. Breunig
@@ -48,6 +48,11 @@ public final class SettingsTest {
     @Test
     public void testGetIconImage() {
         assertThat(this.settings.getIconImage(), notNullValue());
+    }
+
+    @Test
+    public void testGetLoggingPropertiesResource() {
+        assertThat(this.settings.getLoggingPropertiesResource(), notNullValue());
     }
 
     @Test
@@ -80,7 +85,7 @@ public final class SettingsTest {
     public void testGetTransactionFileExtensions() {
         assertThat(this.settings.getTransactionFileExtensions(),
                 notNullValue());
-        assertTrue(this.settings.getTransactionFileExtensions().size() > 1);
+        assertThat(this.settings.getTransactionFileExtensions().size(), greaterThan(0));
     }
 
     @Test(expected = UnsupportedOperationException.class)

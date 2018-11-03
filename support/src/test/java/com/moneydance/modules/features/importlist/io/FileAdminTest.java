@@ -17,7 +17,6 @@
 package com.moneydance.modules.features.importlist.io;
 
 import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 import java.io.File;
 
@@ -35,7 +34,6 @@ public final class FileAdminTest {
 
     @Before
     public void setUp() {
-        Helper.INSTANCE.getPreferences();
         new StubContextFactory();
         final File basedir = new File(String.format("%s%s%s%s%s",
                 "src", File.separator,

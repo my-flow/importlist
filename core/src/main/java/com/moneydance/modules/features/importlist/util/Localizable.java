@@ -32,11 +32,13 @@ import org.apache.commons.text.WordUtils;
  */
 public final class Localizable {
 
+    private final Settings settings;
     private final ResourceBundle resourceBundle;
 
-    Localizable(final String localizableResource, final Locale locale) {
+    Localizable(final Settings argSettings, final Locale locale) {
+        this.settings = argSettings;
         this.resourceBundle = ResourceBundle.getBundle(
-                localizableResource,
+                this.settings.getLocalizableResource(),
                 locale);
     }
 
@@ -54,8 +56,7 @@ public final class Localizable {
     public String getHeaderValueName() {
         final String headerValueName =
                 this.resourceBundle.getString("header_value_name");
-        return Helper.INSTANCE.getSettings().getIndentationPrefix()
-                + headerValueName;
+        return this.settings.getIndentationPrefix() + headerValueName;
     }
 
     /**
@@ -65,7 +66,7 @@ public final class Localizable {
         final String headerValueModified =
                 this.resourceBundle.getString("header_value_modified");
         return String.format("%s%s",
-                Helper.INSTANCE.getSettings().getIndentationPrefix(),
+                this.settings.getIndentationPrefix(),
                 headerValueModified);
     }
 
@@ -76,7 +77,7 @@ public final class Localizable {
         final String headerValueImport =
                 this.resourceBundle.getString("header_value_import");
         return String.format("%s%s",
-                Helper.INSTANCE.getSettings().getIndentationPrefix(),
+                this.settings.getIndentationPrefix(),
                 headerValueImport);
     }
 
@@ -87,7 +88,7 @@ public final class Localizable {
         final String headerValueDelete =
                 this.resourceBundle.getString("header_value_delete");
         return String.format("%s%s",
-                Helper.INSTANCE.getSettings().getIndentationPrefix(),
+                this.settings.getIndentationPrefix(),
                 headerValueDelete);
     }
 
@@ -213,10 +214,10 @@ public final class Localizable {
         return sub.replace(templateString);
     }
 
-    private static String getMarkupFilename(final String filename) {
+    private String getMarkupFilename(final String filename) {
         return WordUtils.wrap(
                 filename,
-                Helper.INSTANCE.getSettings().getMessageFilenameLineMaxLength(),
+                this.settings.getMessageFilenameLineMaxLength(),
                 "<br>", /*wrapLongWords*/ true);
     }
 }

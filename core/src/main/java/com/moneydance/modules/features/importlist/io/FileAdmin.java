@@ -18,7 +18,6 @@ package com.moneydance.modules.features.importlist.io;
 
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Localizable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,10 +53,8 @@ public final class FileAdmin extends Observable implements Observer {
     /**
      * Static initialization of class-dependent logger.
      */
-    private static final Logger LOG =
-            Logger.getLogger(FileAdmin.class.getName());
+    private static final Logger LOG = Logger.getLogger(FileAdmin.class.getName());
 
-    private final Localizable localizable;
     private final FeatureModuleContext context;
     private final AbstractDirectoryChooser directoryChooser;
     private final DirectoryValidator directoryValidator;
@@ -71,7 +68,6 @@ public final class FileAdmin extends Observable implements Observer {
 
     public FileAdmin(final File baseDirectory, final FeatureModuleContext argContext) {
         super();
-        this.localizable = Helper.INSTANCE.getLocalizable();
         this.context = argContext;
         this.directoryChooser = new DefaultDirectoryChooser(baseDirectory);
         this.directoryValidator = DirectoryValidator.INSTANCE;
@@ -109,9 +105,8 @@ public final class FileAdmin extends Observable implements Observer {
             LOG.warning(String.format(
                     "Could not open directory %s",
                     baseDirectory.getAbsolutePath()));
-            final String errorMessage
-                    = this.localizable.getErrorMessageBaseDirectory(
-                    baseDirectory.getName());
+            final String errorMessage = Helper.INSTANCE.getLocalizable().
+                    getErrorMessageBaseDirectory(baseDirectory.getName());
             final JLabel errorLabel = new JLabel(errorMessage);
             errorLabel.setLabelFor(null);
             JOptionPane.showMessageDialog(

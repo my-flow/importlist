@@ -18,7 +18,6 @@ package com.moneydance.modules.features.importlist.io;
 
 import com.moneydance.apps.md.controller.StubContext;
 import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ public final class ImportAllOperationTest {
 
     @Before
     public void setUp() {
-        Helper.INSTANCE.getPreferences();
         final StubContextFactory factory = new StubContextFactory();
         StubContext context = factory.getContext();
 

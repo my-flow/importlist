@@ -17,7 +17,6 @@
 package com.moneydance.modules.features.importlist.io;
 
 import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 import java.io.File;
 
@@ -33,7 +32,6 @@ public final class DefaultDirectoryChooserTest {
 
     @Before
     public void setUp() {
-        Helper.INSTANCE.getPreferences();
         new StubContextFactory();
     }
 

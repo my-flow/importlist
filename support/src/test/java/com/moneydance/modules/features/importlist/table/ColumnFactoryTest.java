@@ -19,7 +19,6 @@ package com.moneydance.modules.features.importlist.table;
 import com.infinitekind.util.CustomDateFormat;
 import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,7 +39,6 @@ public final class ColumnFactoryTest {
 
     @Before
     public void setUp() {
-        Helper.INSTANCE.getPreferences();
         StubContextFactory factory = new StubContextFactory();
         this.columnFactory = new ColumnFactory(
                 new FileAdmin(null, factory.getContext()),

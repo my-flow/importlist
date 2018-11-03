@@ -32,7 +32,6 @@ public final class LocalizableTest {
 
     @Before
     public void setUp() {
-        Helper.INSTANCE.getPreferences();
         new StubContextFactory();
         this.localizable = Helper.INSTANCE.getLocalizable();
     }
@@ -80,6 +79,13 @@ public final class LocalizableTest {
     @Test
     public void testGetLabelDeleteAllButton() {
         assertThat(this.localizable.getLabelDeleteAllButton(), notNullValue());
+    }
+
+    @Test
+    public void testGetErrorMessageBaseDirectory() {
+        assertThat(
+                this.localizable.getErrorMessageBaseDirectory("directory name"),
+                notNullValue());
     }
 
     @Test

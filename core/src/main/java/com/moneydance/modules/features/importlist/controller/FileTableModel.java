@@ -17,7 +17,6 @@
 package com.moneydance.modules.features.importlist.controller;
 
 import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
@@ -42,14 +41,12 @@ public final class FileTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 1L;
     private final Settings settings;
     private final Preferences prefs;
-    private final Localizable localizable;
     private final List<File> files;
 
     public FileTableModel(final List<File> argFiles) {
         super();
         this.settings = Helper.INSTANCE.getSettings();
         this.prefs = Helper.INSTANCE.getPreferences();
-        this.localizable = Helper.INSTANCE.getLocalizable();
         // ESCA-JAVA0256: argFiles is readonly by design
         this.files = argFiles;
     }
@@ -92,10 +89,10 @@ public final class FileTableModel extends AbstractTableModel {
             return new Date(file.lastModified());
         }
         if (this.settings.getDescImport().equals(columnName)) {
-            return this.localizable.getLabelImportOneButton();
+            return Helper.INSTANCE.getLocalizable().getLabelImportOneButton();
         }
         if (this.settings.getDescDelete().equals(columnName)) {
-            return this.localizable.getLabelDeleteOneButton();
+            return Helper.INSTANCE.getLocalizable().getLabelDeleteOneButton();
         }
         throw new IllegalArgumentException(String.format(
                 "Could not find value for row %d, column %d", row, column));

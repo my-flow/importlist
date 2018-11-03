@@ -17,7 +17,6 @@
 package com.moneydance.modules.features.importlist.controller;
 
 import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
@@ -36,13 +35,11 @@ public final class AggregationTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 1L;
     private final Settings settings;
     private final Preferences prefs;
-    private final Localizable localizable;
 
-    public AggregationTableModel() {
+    AggregationTableModel() {
         super();
         this.settings = Helper.INSTANCE.getSettings();
         this.prefs = Helper.INSTANCE.getPreferences();
-        this.localizable = Helper.INSTANCE.getLocalizable();
     }
 
     @Override
@@ -61,10 +58,10 @@ public final class AggregationTableModel extends AbstractTableModel {
             return null;
         }
         if (this.settings.getDescImport().equals(columnName)) {
-            return this.localizable.getLabelImportAllButton();
+            return Helper.INSTANCE.getLocalizable().getLabelImportAllButton();
         }
         if (this.settings.getDescDelete().equals(columnName)) {
-            return this.localizable.getLabelDeleteAllButton();
+            return Helper.INSTANCE.getLocalizable().getLabelDeleteAllButton();
         }
         throw new IllegalArgumentException(String.format(
                 "Could not find value for row %d, column %d", row, column));

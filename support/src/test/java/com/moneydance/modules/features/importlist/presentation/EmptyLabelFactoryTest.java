@@ -17,7 +17,6 @@
 package com.moneydance.modules.features.importlist.presentation;
 
 import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +32,6 @@ public final class EmptyLabelFactoryTest {
 
     @Before
     public void setUp() {
-        Helper.INSTANCE.getPreferences();
         new StubContextFactory();
         this.emptyLabelFactory = new EmptyLabelFactory("stub text");
     }

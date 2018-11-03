@@ -31,7 +31,6 @@ public final class HelperTest {
 
     @Before
     public void setUp() {
-        Helper.INSTANCE.getPreferences();
         new StubContextFactory();
     }
 
@@ -43,12 +42,5 @@ public final class HelperTest {
     @Test
     public void testGetLocalizable() {
         assertThat(Helper.INSTANCE.getLocalizable(), notNullValue());
-    }
-
-    @Test
-    public void testGetInputStreamFromResource() {
-        assertThat(Helper.getInputStreamFromResource(
-                Helper.INSTANCE.getSettings().getLoggingPropertiesResource()),
-                notNullValue());
     }
 }

@@ -44,7 +44,7 @@ public final class StubContextFactory {
     private FeatureModule featureModule;
 
     public StubContextFactory() {
-        this.context = new StubContext(null);
+        this.context = new StubContext();
         initContext(this.context);
     }
 

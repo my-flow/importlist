@@ -17,7 +17,6 @@
 package com.moneydance.modules.features.importlist.io;
 
 import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.io.File;
@@ -34,7 +33,6 @@ import java.util.Optional;
 abstract class AbstractDirectoryChooser {
 
     private final Preferences prefs;
-    private final Localizable localizable;
 
     /**
      * @param argBaseDirectory set the base directory when executed as a
@@ -42,7 +40,6 @@ abstract class AbstractDirectoryChooser {
      */
     AbstractDirectoryChooser(final File argBaseDirectory) {
         this.prefs = Helper.INSTANCE.getPreferences();
-        this.localizable = Helper.INSTANCE.getLocalizable();
         if (argBaseDirectory != null) {
             this.prefs.setBaseDirectory(argBaseDirectory);
         }
@@ -60,9 +57,5 @@ abstract class AbstractDirectoryChooser {
 
     protected final Preferences getPrefs() {
         return this.prefs;
-    }
-
-    protected final Localizable getLocalizable() {
-        return this.localizable;
     }
 }

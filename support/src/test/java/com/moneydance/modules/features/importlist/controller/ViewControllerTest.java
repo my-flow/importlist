@@ -17,7 +17,6 @@
 package com.moneydance.modules.features.importlist.controller;
 
 import com.moneydance.apps.md.controller.StubContextFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +33,6 @@ public final class ViewControllerTest {
 
     @Before
     public void setUp() {
-        Helper.INSTANCE.getPreferences();
         new StubContextFactory();
         this.viewController = new ViewController(
                 null,

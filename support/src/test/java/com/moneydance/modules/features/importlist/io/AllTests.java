@@ -28,6 +28,7 @@ import org.junit.runners.Suite.SuiteClasses;
     DefaultDirectoryChooserTest.class,
     DirectoryValidatorTest.class,
     FileAdminTest.class,
+    FileContainerTest.class,
     ImportAllOperationTest.class,
     ImportOneOperationTest.class,
     TransactionFileListenerTest.class

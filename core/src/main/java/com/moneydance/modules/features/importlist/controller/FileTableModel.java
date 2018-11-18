@@ -16,14 +16,12 @@
 
 package com.moneydance.modules.features.importlist.controller;
 
+import com.moneydance.modules.features.importlist.io.FileContainer;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
-import java.io.File;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -41,14 +39,13 @@ public final class FileTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 1L;
     private final Settings settings;
     private final Preferences prefs;
-    private final List<File> files;
+    private final FileContainer fileContainer;
 
-    public FileTableModel(final List<File> argFiles) {
+    public FileTableModel(final FileContainer argFileContainer) {
         super();
         this.settings = Helper.INSTANCE.getSettings();
         this.prefs = Helper.INSTANCE.getPreferences();
-        // ESCA-JAVA0256: argFiles is readonly by design
-        this.files = argFiles;
+        this.fileContainer = argFileContainer;
     }
 
     @Override
@@ -59,7 +56,7 @@ public final class FileTableModel extends AbstractTableModel {
             return String.class;
         }
         if (this.settings.getDescModified().equals(columnName)) {
-            return Date.class;
+            return Long.class;
         }
         if (this.settings.getDescImport().equals(columnName)) {
             return String.class;
@@ -73,7 +70,7 @@ public final class FileTableModel extends AbstractTableModel {
 
     @Override
     public Comparable<? extends Serializable> getValueAt(final int row, final int column) {
-        if (row >= this.files.size()) {
+        if (row >= this.fileContainer.size()) {
             this.fireTableDataChanged();
             throw new IllegalArgumentException(String.format(
                     "Could not find value for row %d, column %d", row, column));
@@ -81,12 +78,10 @@ public final class FileTableModel extends AbstractTableModel {
         String columnName = this.getColumnName(column);
 
         if (this.settings.getDescName().equals(columnName)) {
-            final File file = this.files.get(row);
-            return file.getName();
+            return this.fileContainer.getFileName(row);
         }
         if (this.settings.getDescModified().equals(columnName)) {
-            final File file = this.files.get(row);
-            return new Date(file.lastModified());
+            return this.fileContainer.getLastModifiedTime(row);
         }
         if (this.settings.getDescImport().equals(columnName)) {
             return Helper.INSTANCE.getLocalizable().getLabelImportOneButton();
@@ -124,6 +119,6 @@ public final class FileTableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return this.files.size();
+        return this.fileContainer.size();
     }
 }

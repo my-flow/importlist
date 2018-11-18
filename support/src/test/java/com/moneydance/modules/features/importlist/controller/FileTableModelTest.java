@@ -17,11 +17,13 @@
 package com.moneydance.modules.features.importlist.controller;
 
 import com.moneydance.apps.md.controller.StubContextFactory;
+import com.moneydance.modules.features.importlist.io.FileContainer;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.junit.Before;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
@@ -40,10 +42,14 @@ public final class FileTableModelTest {
     @Before
     public void setUp() {
         new StubContextFactory();
-        this.emptyModel = new FileTableModel(new ArrayList<File>());
-        List<File> list = new ArrayList<>(1);
-        list.add(new File(""));
-        this.fullModel = new FileTableModel(list);
+        this.emptyModel = new FileTableModel(new FileContainer(TrueFileFilter.TRUE));
+
+        List<File> files = new ArrayList<>(1);
+        File file = new File("");
+        files.add(file);
+        List<Long> sizes = new ArrayList<>(1);
+        sizes.add(0L);
+        this.fullModel = new FileTableModel(new FileContainer(files, sizes, TrueFileFilter.TRUE));
     }
 
     @Test

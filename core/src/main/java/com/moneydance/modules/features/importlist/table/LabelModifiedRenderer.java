@@ -55,8 +55,8 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
 
         this.setOpaque(false);
         String label = null;
-        if (value instanceof Date) {
-            final Date fileDate = (Date) value;
+        if (value instanceof Long) {
+            final Date fileDate = new Date((Long) value);
             label = String.format("%s%s %s",
                     Helper.INSTANCE.getSettings().getIndentationPrefix(),
                     this.dateFormatter.format(fileDate),

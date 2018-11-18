@@ -16,73 +16,57 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.apps.md.controller.StubContextFactory;
 
 import java.io.File;
 
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.junit.Before;
 import org.junit.Test;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
+
 
 /**
  * @author Florian J. Breunig
  */
-public final class FileAdminTest {
+public class FileContainerTest {
 
-    private FileAdmin fileAdmin;
+    private FileContainer fileContainer;
 
     @Before
     public void setUp() {
-        new StubContextFactory();
+        this.fileContainer = new FileContainer(TrueFileFilter.TRUE);
         final File basedir = new File(String.format("%s%s%s%s%s",
                 "src", File.separator,
                 "test", File.separator,
                 "resources"));
-        StubContextFactory factory = new StubContextFactory();
-        this.fileAdmin = new FileAdmin(basedir, factory.getContext());
+        this.fileContainer.reloadFiles(basedir);
     }
 
     @Test
-    public void testGetFileContainer() {
-        assertThat(this.fileAdmin.getFileContainer(), notNullValue());
+    public void testGet() {
+        assertThat(this.fileContainer.get(0), notNullValue());
     }
 
     @Test
-    public void testGetBaseDirectory() {
-        assertThat(this.fileAdmin.getBaseDirectory(), notNullValue());
+    public void testSize() {
+        assertThat(this.fileContainer.size(), greaterThan(0));
     }
 
     @Test
-    public void testUpdate() {
-        this.fileAdmin.update(null, null);
+    public void testIsEmpty() {
+        assertThat(this.fileContainer.isEmpty(), is(false));
     }
 
     @Test
-    public void testStartMonitor() {
-        this.fileAdmin.startMonitor();
-        this.fileAdmin.startMonitor(); // fail the second time
+    public void testGetFileName() {
+        assertThat(this.fileContainer.getFileName(0), notNullValue());
     }
 
     @Test
-    public void testStopMonitor() {
-        this.fileAdmin.stopMonitor();
-    }
-
-    @Test
-    public void testImportAllRows() {
-        this.fileAdmin.importAllRows();
-
-        this.fileAdmin.reloadFiles();
-        this.fileAdmin.importAllRows();
-    }
-
-    @Test
-    public void testImportRow() {
-        this.fileAdmin.importRow(0);
-
-        this.fileAdmin.reloadFiles();
-        this.fileAdmin.importRow(0);
-        this.fileAdmin.importRow(Integer.MAX_VALUE);
+    public void testGetLastModifiedTime() {
+        assertThat(this.fileContainer.getLastModifiedTime(0), notNullValue());
     }
 }

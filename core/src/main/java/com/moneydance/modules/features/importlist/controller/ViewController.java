@@ -73,7 +73,8 @@ public final class ViewController implements HomePageView {
         this.viewport = new JViewport();
         this.viewport.setOpaque(false);
 
-        this.baseTableModel = new FileTableModel(this.fileAdmin.getFiles());
+        this.baseTableModel = new FileTableModel(
+                this.fileAdmin.getFileContainer());
         this.baseTableFactory = new BaseTableFactory(
                 this.baseTableModel,
                 this.fileAdmin);

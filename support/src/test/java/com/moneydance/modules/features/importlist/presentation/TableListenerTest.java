@@ -18,6 +18,7 @@ package com.moneydance.modules.features.importlist.presentation;
 
 import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.modules.features.importlist.controller.FileTableModel;
+import com.moneydance.modules.features.importlist.io.FileContainer;
 import com.moneydance.modules.features.importlist.util.Helper;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import javax.swing.RowSorter;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.table.TableModel;
 
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,7 +44,7 @@ public final class TableListenerTest {
     @Before
     public void setUp() {
         new StubContextFactory();
-        this.table = new JTable(new FileTableModel(new ArrayList<>()));
+        this.table = new JTable(new FileTableModel(new FileContainer(TrueFileFilter.TRUE)));
         this.tableListener = new TableListener(this.table);
     }
 

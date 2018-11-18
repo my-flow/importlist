@@ -20,10 +20,7 @@ import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.modules.features.importlist.util.Helper;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
@@ -34,7 +31,6 @@ import javax.annotation.Nullable;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.CanReadFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -62,7 +58,7 @@ public final class FileAdmin extends Observable implements Observer {
     private final IOFileFilter readableFileFilter;
     private final TransactionFileListener listener;
     private final FileAlterationMonitor monitor;
-    private final List<File> files;
+    private final FileContainer fileContainer;
     @Nullable private FileAlterationObserver observer;
     private boolean isMonitorRunning;
 
@@ -82,7 +78,7 @@ public final class FileAdmin extends Observable implements Observer {
         this.listener.addObserver(this);
         this.monitor = new FileAlterationMonitor(Helper.INSTANCE.getSettings().getMonitorInterval());
 
-        this.files = Collections.synchronizedList(new ArrayList<File>());
+        this.fileContainer = new FileContainer(this.readableFileFilter);
     }
 
     public void chooseBaseDirectory() {
@@ -119,19 +115,11 @@ public final class FileAdmin extends Observable implements Observer {
         });
     }
 
-    public List<File> getFiles() {
-        return Collections.unmodifiableList(this.files);
-    }
-
     public void reloadFiles() {
         synchronized (FileAdmin.class) {
-            this.files.clear();
             try {
-                final Collection<File> collection = FileUtils.listFiles(
-                        this.getBaseDirectory().orElseThrow(AssertionError::new),
-                        this.readableFileFilter,
-                        null); // ignore subdirectories
-                this.files.addAll(collection);
+                final File baseDirectory = this.getBaseDirectory().orElseThrow(AssertionError::new);
+                this.fileContainer.reloadFiles(baseDirectory);
             } catch (IllegalArgumentException e) {
                 final String message = e.getMessage();
                 if (message != null) {
@@ -198,41 +186,41 @@ public final class FileAdmin extends Observable implements Observer {
         FileOperation importAllOperation = new ImportAllOperation(
                 this.context,
                 this.transactionFileFilter);
-        importAllOperation.showWarningAndExecute(this.files);
+        importAllOperation.showWarningAndExecute(this.fileContainer);
         this.setChanged();
         this.notifyObservers();
     }
 
     public void importRow(final int rowNumber) {
-        if (rowNumber >= this.files.size()) {
+        if (rowNumber >= this.fileContainer.size()) {
             return;
         }
         FileOperation importOneOperation = new ImportOneOperation(
                 this.context,
                 this.transactionFileFilter);
         importOneOperation.showWarningAndExecute(
-                Collections.singletonList(this.files.get(rowNumber)));
+                Collections.singletonList(this.fileContainer.get(rowNumber)));
         this.setChanged();
         this.notifyObservers();
     }
 
     public void deleteAllRows() {
-        if (this.files.isEmpty()) {
+        if (this.fileContainer.isEmpty()) {
             return;
         }
         FileOperation deleteAllOperation = new DeleteAllOperation();
-        deleteAllOperation.showWarningAndExecute(this.files);
+        deleteAllOperation.showWarningAndExecute(this.fileContainer);
         this.setChanged();
         this.notifyObservers();
     }
 
     public void deleteRow(final int rowNumber) {
-        if (rowNumber >= this.files.size()) {
+        if (rowNumber >= this.fileContainer.size()) {
             return;
         }
         FileOperation deleteOneOperation = new DeleteOneOperation();
         deleteOneOperation.showWarningAndExecute(
-                Collections.singletonList(this.files.get(rowNumber)));
+                Collections.singletonList(this.fileContainer.get(rowNumber)));
         this.setChanged();
         this.notifyObservers();
     }
@@ -247,5 +235,9 @@ public final class FileAdmin extends Observable implements Observer {
                 IOCase.SYSTEM);
         this.observer.addListener(this.listener);
         this.monitor.addObserver(this.observer);
+    }
+
+    public FileContainer getFileContainer() {
+        return fileContainer;
     }
 }

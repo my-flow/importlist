@@ -37,6 +37,7 @@ import com.moneydance.modules.features.importlist.util.Settings;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -65,7 +66,7 @@ public final class ViewController implements HomePageView {
 
 
     public ViewController(
-            final String baseDirectory,
+            final File baseDirectory,
             final FeatureModuleContext argContext) {
         this.settings = Helper.INSTANCE.getSettings();
         this.localizable = Helper.INSTANCE.getLocalizable();
@@ -112,7 +113,7 @@ public final class ViewController implements HomePageView {
         this.fileAdmin.checkValidBaseDirectory();
 
         // display a label iff no base directory has been chosen
-        if (this.fileAdmin.getBaseDirectory() == null) {
+        if (!this.fileAdmin.getBaseDirectory().isPresent()) {
             showLabelMissingBaseDirectory();
             return;
         }
@@ -222,12 +223,12 @@ public final class ViewController implements HomePageView {
     }
 
 
-    public void setDirty(final boolean argDirty) {
+    void setDirty(final boolean argDirty) {
         this.dirty = argDirty;
     }
 
 
-    public boolean isDirty() {
+    boolean isDirty() {
         return this.dirty;
     }
 
@@ -261,7 +262,7 @@ public final class ViewController implements HomePageView {
     private void showLabelEmptyList() {
         EmptyLabelFactory emptyLabelFactory = new EmptyLabelFactory(
                 this.localizable.getEmptyMessage(
-                        this.fileAdmin.getBaseDirectory().getAbsolutePath()
+                        this.fileAdmin.getBaseDirectory().orElseThrow(AssertionError::new).getAbsolutePath()
                 )
         );
 

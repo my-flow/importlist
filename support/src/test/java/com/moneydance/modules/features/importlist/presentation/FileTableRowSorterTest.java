@@ -20,7 +20,6 @@ import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.modules.features.importlist.controller.FileTableModel;
 import com.moneydance.modules.features.importlist.util.Helper;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import org.junit.Before;
@@ -38,7 +37,7 @@ public final class FileTableRowSorterTest {
         Helper.INSTANCE.getPreferences();
         new StubContextFactory();
         this.fileTableRowSorter = new FileTableRowSorter(
-                new FileTableModel(new ArrayList<File>()));
+                new FileTableModel(new ArrayList<>()));
     }
 
     @Test

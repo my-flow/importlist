@@ -19,9 +19,11 @@ package com.moneydance.modules.features.importlist.io;
 import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.modules.features.importlist.util.Helper;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -37,8 +39,7 @@ public final class DefaultDirectoryChooserTest {
 
     @Test
     public void testGetBaseDirectory() {
-        AbstractDirectoryChooser directoryChooser = new DefaultDirectoryChooser(
-                "");
-        assertThat(directoryChooser.getBaseDirectory(), notNullValue());
+        AbstractDirectoryChooser directoryChooser = new DefaultDirectoryChooser(new File(""));
+        assertThat(directoryChooser.getBaseDirectory().isPresent(), is(true));
     }
 }

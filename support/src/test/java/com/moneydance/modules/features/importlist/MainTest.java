@@ -18,6 +18,8 @@ package com.moneydance.modules.features.importlist;
 
 import com.moneydance.apps.md.controller.StubContextFactory;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -69,8 +71,8 @@ public final class MainTest {
     }
 
     @Test
-    public void testSetBaseDirectory() {
-        this.main.setBaseDirectory(null);
+    public void testConstructor() {
+        this.main = new Main(new File(System.getProperty("user.home")));
     }
 
     @Test

@@ -16,7 +16,6 @@
 
 package com.moneydance.modules.features.importlist.util;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
@@ -52,17 +51,9 @@ public final class LogFormatter extends Formatter {
 
         if (record.getThrown() != null) {
             StringWriter stringWriter = new StringWriter();
-            PrintWriter printWriter = new PrintWriter(stringWriter);
-            try {
+            try (PrintWriter printWriter = new PrintWriter(stringWriter)) {
                 record.getThrown().printStackTrace(printWriter);
                 stringBuilder.append(stringWriter);
-            } finally {
-                printWriter.close();
-                try {
-                    stringWriter.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
 

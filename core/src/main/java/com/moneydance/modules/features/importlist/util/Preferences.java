@@ -24,9 +24,11 @@ import com.moneydance.apps.md.controller.UserPreferences;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.io.File;
 import java.text.DateFormat;
 import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.swing.RowSorter;
@@ -89,7 +91,7 @@ public final class Preferences {
                 "importlist.column_widths",
                 (StreamTable) null);
         this.setColumnNames(
-                (Hashtable<String, String>) null);
+                null);
         this.getUserPreferences().setSetting(
                 "importlist.sort_order",
                 (StreamTable) null);
@@ -111,47 +113,20 @@ public final class Preferences {
         return this.getUserPreferences().getLocale();
     }
 
-    public String getBaseDirectory() {
-        return this.getUserPreferences().getSetting("importlist.import_dir");
+    public Optional<File> getBaseDirectory() {
+        final String value = this.getUserPreferences().getSetting("importlist.import_dir");
+        if (value == null) {
+            return Optional.empty();
+        }
+        return Optional.of(new File(value));
     }
 
-    public void setBaseDirectory(@Nullable final String baseDirectory) {
-        this.getUserPreferences().setSetting(
-                "importlist.import_dir",
-                baseDirectory);
-    }
-
-    public boolean hasProxy() {
-        return this.getUserPreferences().getBoolSetting(
-                UserPreferences.NET_USE_PROXY,
-                false);
-    }
-
-    public String getProxyHost() {
-        return this.getUserPreferences().getSetting(
-                UserPreferences.NET_PROXY_HOST);
-    }
-
-    public int getProxyPort() {
-        return this.getUserPreferences().getIntSetting(
-                UserPreferences.NET_PROXY_PORT,
-                0);
-    }
-
-    public boolean hasProxyAuthentication() {
-        return this.getUserPreferences().getBoolSetting(
-                UserPreferences.NET_AUTH_PROXY,
-                false);
-    }
-
-    public String getProxyUsername() {
-        return this.getUserPreferences().getSetting(
-                UserPreferences.NET_PROXY_USER);
-    }
-
-    public String getProxyPassword() {
-        return this.getUserPreferences().getSetting(
-                UserPreferences.NET_PROXY_PASS);
+    public void setBaseDirectory(@Nullable final File baseDirectory) {
+        String value = null;
+        if (baseDirectory != null) {
+            value = baseDirectory.getAbsolutePath();
+        }
+        this.getUserPreferences().setSetting("importlist.import_dir", value);
     }
 
     public void setColumnWidths(

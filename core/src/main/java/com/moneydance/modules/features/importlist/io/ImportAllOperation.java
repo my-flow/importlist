@@ -44,8 +44,6 @@ final class ImportAllOperation implements FileOperation {
     @Override
     public void execute(final List<File> files) {
         FileOperation importOneOperation = new ImportOneOperation(this.context, this.transactionFileFilter);
-        for (final File file : files) {
-            importOneOperation.execute(Collections.singletonList(file));
-        }
+        files.forEach(file -> importOneOperation.execute(Collections.singletonList(file)));
     }
 }

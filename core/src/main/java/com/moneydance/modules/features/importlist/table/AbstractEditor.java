@@ -54,7 +54,7 @@ public abstract class AbstractEditor extends DefaultCellEditor {
 
     public abstract KeyStroke getKeyStroke();
 
-    protected final FileAdmin getFileAdmin() {
+    final FileAdmin getFileAdmin() {
         return this.fileAdmin;
     }
 

@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -68,8 +69,7 @@ public final class FileAdmin extends Observable implements Observer {
     @Nullable private FileAlterationObserver observer;
     private boolean isMonitorRunning;
 
-    public FileAdmin(final String baseDirectory,
-            final FeatureModuleContext argContext) {
+    public FileAdmin(final File baseDirectory, final FeatureModuleContext argContext) {
         super();
         this.localizable = Helper.INSTANCE.getLocalizable();
         this.context = argContext;
@@ -102,13 +102,10 @@ public final class FileAdmin extends Observable implements Observer {
     }
 
     public void checkValidBaseDirectory() {
-        final File baseDirectory = this.getBaseDirectory();
-
-        if (baseDirectory == null) {
-            return;
-        }
-
-        if (!this.directoryValidator.isValidDirectory(baseDirectory)) {
+        this.getBaseDirectory().ifPresent(baseDirectory -> {
+            if (this.directoryValidator.isValidDirectory(baseDirectory)) {
+                return;
+            }
             LOG.warning(String.format(
                     "Could not open directory %s",
                     baseDirectory.getAbsolutePath()));
@@ -124,7 +121,7 @@ public final class FileAdmin extends Observable implements Observer {
                     JOptionPane.ERROR_MESSAGE);
 
             this.directoryChooser.reset();
-        }
+        });
     }
 
     public List<File> getFiles() {
@@ -136,7 +133,7 @@ public final class FileAdmin extends Observable implements Observer {
             this.files.clear();
             try {
                 final Collection<File> collection = FileUtils.listFiles(
-                        this.getBaseDirectory(),
+                        this.getBaseDirectory().orElseThrow(AssertionError::new),
                         this.readableFileFilter,
                         null); // ignore subdirectories
                 this.files.addAll(collection);
@@ -149,7 +146,7 @@ public final class FileAdmin extends Observable implements Observer {
         }
     }
 
-    @Nullable public File getBaseDirectory() {
+    public Optional<File> getBaseDirectory() {
         return this.directoryChooser.getBaseDirectory();
     }
 
@@ -166,7 +163,7 @@ public final class FileAdmin extends Observable implements Observer {
         if (this.isMonitorRunning) {
             return;
         }
-        if (this.getBaseDirectory() == null) {
+        if (!this.getBaseDirectory().isPresent()) {
             return;
         }
         LOG.config("Starting the directory monitor.");
@@ -246,11 +243,11 @@ public final class FileAdmin extends Observable implements Observer {
     }
 
     private void setFileMonitorToCurrentImportDir() {
-        if (this.getBaseDirectory() == null) {
+        if (!this.getBaseDirectory().isPresent()) {
             return;
         }
         this.observer = new FileAlterationObserver(
-                this.getBaseDirectory(),
+                this.getBaseDirectory().get(),
                 this.readableFileFilter,
                 IOCase.SYSTEM);
         this.observer.addListener(this.listener);

@@ -21,6 +21,7 @@ import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.util.Hashtable;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 import javax.swing.JTable;
 import javax.swing.RowSorter;
@@ -84,23 +85,23 @@ final class TableListener implements TableColumnModelListener, RowSorterListener
     }
 
     private void saveColumnOrder() {
-        Hashtable<String, String> hashtable = new Hashtable<String, String>(
+        Hashtable<String, String> hashtable = new Hashtable<>(
                 this.table.getColumnCount());
-        int columnCount = this.table.getColumnCount();
-        for (int column = 0; column < columnCount; column++) {
-            String columnName = this.table.getColumnName(column);
-            hashtable.put(Integer.toString(column), columnName);
-        }
+        IntStream.range(0, this.table.getColumnCount()).forEach(column -> {
+            hashtable.put(
+                    Integer.toString(column),
+                    this.table.getColumnName(column));
+        });
         this.prefs.setColumnNames(hashtable);
     }
 
     private void saveColumnWidths() {
-        int columnCount = this.table.getColumnCount();
-        for (int column = 0; column < columnCount; column++) {
-            String columnName = this.table.getColumnName(column);
-            int columnWidth = this.table.getColumn(columnName).getWidth();
-            this.prefs.setColumnWidths(column, columnWidth);
-        }
+        IntStream.range(0, this.table.getColumnCount()).forEach(column -> {
+            final String columnName = this.table.getColumnName(column);
+            this.prefs.setColumnWidths(
+                    column,
+                    this.table.getColumn(columnName).getWidth());
+        });
     }
 
     private void saveSortKey() {

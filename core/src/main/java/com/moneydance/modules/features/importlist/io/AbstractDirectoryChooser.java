@@ -21,8 +21,7 @@ import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.io.File;
-
-import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * This abstract class provides the functionality to choose, access, and reset
@@ -41,7 +40,7 @@ abstract class AbstractDirectoryChooser {
      * @param argBaseDirectory set the base directory when executed as a
      * stand-alone application
      */
-    protected AbstractDirectoryChooser(final String argBaseDirectory) {
+    AbstractDirectoryChooser(final File argBaseDirectory) {
         this.prefs = Helper.INSTANCE.getPreferences();
         this.localizable = Helper.INSTANCE.getLocalizable();
         if (argBaseDirectory != null) {
@@ -51,12 +50,8 @@ abstract class AbstractDirectoryChooser {
 
     abstract void chooseBaseDirectory();
 
-    @Nullable final File getBaseDirectory() {
-        if (this.prefs.getBaseDirectory() == null) {
-            return null;
-        }
-
-        return new File(this.prefs.getBaseDirectory());
+    final Optional<File> getBaseDirectory() {
+        return this.prefs.getBaseDirectory();
     }
 
     final void reset() {

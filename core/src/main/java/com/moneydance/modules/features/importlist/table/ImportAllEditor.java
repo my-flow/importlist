@@ -19,7 +19,6 @@ package com.moneydance.modules.features.importlist.table;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.util.Helper;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.KeyStroke;
@@ -39,12 +38,7 @@ final class ImportAllEditor extends AbstractEditor {
 
     @Override
     public ActionListener getActionListener(final int rowNumber) {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent actionEvent) {
-                ImportAllEditor.this.getFileAdmin().importAllRows();
-            }
-        };
+        return actionEvent -> this.getFileAdmin().importAllRows();
     }
 
     @Override

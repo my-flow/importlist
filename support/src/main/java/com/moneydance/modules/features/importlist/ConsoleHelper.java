@@ -20,10 +20,10 @@ import com.moneydance.apps.md.controller.StubContextFactory;
 import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.util.UiUtil;
 
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -81,7 +81,11 @@ final class ConsoleHelper {
         // creating and showing this application's GUI.
         final String argBaseDirectory = baseDirectory;
         UiUtil.runOnUIThread(() -> {
-            createAndShowGUI(argBaseDirectory);
+            if (argBaseDirectory == null) {
+                createAndShowGUI();
+            } else {
+                createAndShowGUI(new File(argBaseDirectory));
+            }
         });
     }
 
@@ -91,10 +95,17 @@ final class ConsoleHelper {
      * @param baseDirectory The base directory where the transaction files
      * reside.
      */
-    @SuppressWarnings("nullness")
-    static void createAndShowGUI(@Nullable final String baseDirectory) {
+    static void createAndShowGUI(final File baseDirectory) {
+        final Main main = new Main(baseDirectory);
+        createAndShowGUI(main);
+    }
+
+    static void createAndShowGUI() {
         final Main main = new Main();
-        main.setBaseDirectory(baseDirectory);
+        createAndShowGUI(main);
+    }
+
+    static void createAndShowGUI(final Main main) {
         final StubContextFactory factory = new StubContextFactory(main);
         factory.init();
         main.init();

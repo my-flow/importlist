@@ -17,6 +17,7 @@
 package com.moneydance.modules.features.importlist.io;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,7 +43,7 @@ final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
      * @param argBaseDirectory set the base directory when executed as a stand-
      * alone application
      */
-    DefaultDirectoryChooser(final String argBaseDirectory) {
+    DefaultDirectoryChooser(final File argBaseDirectory) {
         super(argBaseDirectory);
     }
 
@@ -65,9 +66,9 @@ final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
             }
         }
 
-        final File baseDirectory = this.getBaseDirectory();
-        if (baseDirectory != null) {
-            final File parentDirectory = baseDirectory.getParentFile();
+        final Optional<File> baseDirectory = this.getBaseDirectory();
+        if (baseDirectory.isPresent()) {
+            final File parentDirectory = baseDirectory.get().getParentFile();
             fileChooser.setCurrentDirectory(parentDirectory);
         }
 
@@ -76,10 +77,10 @@ final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
             return;
         }
 
-        this.getPrefs().setBaseDirectory(
-                fileChooser.getSelectedFile().getAbsolutePath());
+        this.getPrefs().setBaseDirectory(fileChooser.getSelectedFile());
 
-        LOG.info(String.format("Base directory is %s",
-                this.getPrefs().getBaseDirectory()));
+        this.getPrefs().getBaseDirectory().ifPresent(file ->
+            LOG.info(String.format("Base directory is %s", file.getAbsolutePath()))
+        );
     }
 }

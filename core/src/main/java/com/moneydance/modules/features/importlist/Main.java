@@ -24,6 +24,7 @@ import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.awt.Image;
+import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
@@ -45,7 +46,7 @@ public final class Main extends FeatureModule implements Observer {
 
     private final Preferences prefs;
     private final Settings settings;
-    @Nullable private String baseDirectory;
+    private File baseDirectory;
     @Nullable private ViewController viewController;
 
     static {
@@ -60,6 +61,11 @@ public final class Main extends FeatureModule implements Observer {
         LOG.info("Initializing extension in Moneydance's application context.");
         this.prefs = Helper.INSTANCE.getPreferences();
         this.settings = Helper.INSTANCE.getSettings();
+    }
+
+    public Main(final File argBaseDirectory) {
+        this();
+        this.baseDirectory = argBaseDirectory;
     }
 
     @Override
@@ -122,10 +128,6 @@ public final class Main extends FeatureModule implements Observer {
     @Override
     public void cleanup() {
         this.viewController.cleanup();
-    }
-
-    void setBaseDirectory(final String argBaseDirectory) {
-        this.baseDirectory = argBaseDirectory;
     }
 
     HomePageView getHomePageView() {

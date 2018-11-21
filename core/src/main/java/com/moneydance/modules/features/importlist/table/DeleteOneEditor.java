@@ -20,7 +20,6 @@ import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.util.Helper;
 
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.KeyStroke;
@@ -40,17 +39,7 @@ final class DeleteOneEditor extends AbstractEditor {
 
     @Override
     public ActionListener getActionListener(final int rowNumber) {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent actionEvent) {
-                EventQueue.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        DeleteOneEditor.this.getFileAdmin().deleteRow(rowNumber);
-                    }
-                });
-            }
-        };
+        return actionEvent -> EventQueue.invokeLater(() -> this.getFileAdmin().deleteRow(rowNumber));
     }
 
     @Override

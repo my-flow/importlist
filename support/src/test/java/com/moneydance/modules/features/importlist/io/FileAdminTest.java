@@ -37,10 +37,10 @@ public final class FileAdminTest {
     public void setUp() {
         Helper.INSTANCE.getPreferences();
         new StubContextFactory();
-        final String basedir = String.format("%s%s%s%s%s",
+        final File basedir = new File(String.format("%s%s%s%s%s",
                 "src", File.separator,
                 "test", File.separator,
-                "resources");
+                "resources"));
         StubContextFactory factory = new StubContextFactory();
         this.fileAdmin = new FileAdmin(basedir, factory.getContext());
     }

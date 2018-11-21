@@ -43,7 +43,7 @@ public final class FileTableModelTest {
         Helper.INSTANCE.getPreferences();
         new StubContextFactory();
         this.emptyModel = new FileTableModel(new ArrayList<File>());
-        List<File> list = new ArrayList<File>(1);
+        List<File> list = new ArrayList<>(1);
         list.add(new File(""));
         this.fullModel = new FileTableModel(list);
     }

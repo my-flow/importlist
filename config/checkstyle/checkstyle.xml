@@ -161,7 +161,9 @@
         <module name="OverloadMethodsDeclarationOrder"/>
         <module name="PackageDeclaration"/>
         <module name="ParameterAssignment"/>
-        <module name="RequireThis"/>
+        <module name="RequireThis">
+            <property name="validateOnlyOverlapping" value="false"/>
+        </module>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="StringLiteralEquality"/>
@@ -180,7 +182,9 @@
         <module name="MutableException"/>
         <module name="OneTopLevelClass"/>
         <module name="ThrowsCount"/>
-        <module name="VisibilityModifier"/>
+        <module name="VisibilityModifier">
+            <property name="packageAllowed" value="true"/>
+        </module>
 
         <!-- Miscellaneous other checks.                   -->
         <!-- See http://checkstyle.sf.net/config_misc.html -->

@@ -16,7 +16,6 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.io.File;
@@ -30,19 +29,13 @@ import java.util.Optional;
  * mode (sandboxed vs full access).
  * @author Florian J. Breunig
  */
-abstract class AbstractDirectoryChooser {
+public abstract class AbstractDirectoryChooser {
 
     private final Preferences prefs;
 
-    /**
-     * @param argBaseDirectory set the base directory when executed as a
-     * stand-alone application
-     */
-    AbstractDirectoryChooser(final File argBaseDirectory) {
-        this.prefs = Helper.INSTANCE.getPreferences();
-        if (argBaseDirectory != null) {
-            this.prefs.setBaseDirectory(argBaseDirectory);
-        }
+    AbstractDirectoryChooser(final Preferences argPrefs) {
+        super();
+        this.prefs = argPrefs;
     }
 
     abstract void chooseBaseDirectory();

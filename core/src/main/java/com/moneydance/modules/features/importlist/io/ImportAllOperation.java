@@ -16,10 +16,7 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.apps.md.controller.FeatureModuleContext;
-
 import java.io.File;
-import java.io.FileFilter;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,12 +25,11 @@ import java.util.List;
  */
 final class ImportAllOperation implements FileOperation {
 
-    private final FeatureModuleContext context;
-    private final FileFilter transactionFileFilter;
+    private final FileOperation importOneOperation;
 
-    ImportAllOperation(final FeatureModuleContext argContext, final FileFilter argTransactionFileFilter) {
-        this.context = argContext;
-        this.transactionFileFilter = argTransactionFileFilter;
+    ImportAllOperation(final FileOperation argImportOneOperation) {
+        super();
+        this.importOneOperation = argImportOneOperation;
     }
 
     @Override
@@ -43,7 +39,6 @@ final class ImportAllOperation implements FileOperation {
 
     @Override
     public void execute(final List<File> files) {
-        FileOperation importOneOperation = new ImportOneOperation(this.context, this.transactionFileFilter);
-        files.forEach(file -> importOneOperation.execute(Collections.singletonList(file)));
+        files.forEach(file -> this.importOneOperation.execute(Collections.singletonList(file)));
     }
 }

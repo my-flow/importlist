@@ -16,10 +16,9 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
+import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.awt.Dimension;
@@ -36,16 +35,16 @@ public final class AggregationTableFactory extends AbstractTableFactory {
 
     public AggregationTableFactory(
             final TableModel argTableModel,
-            final FileAdmin argFileAdmin) {
-        super(argTableModel);
+            final FileAdmin argFileAdmin,
+            final Settings argSettings) {
+        super(argTableModel, argSettings);
 
-        final Settings settings = Helper.INSTANCE.getSettings();
         final JTable table = this.getTable();
 
         table.setIntercellSpacing(
                 new Dimension(
                         0,
-                        settings.getTableHeightOffset()));
+                        argSettings.getTableHeightOffset()));
 
         JTableHeader tableHeader = table.getTableHeader();
 
@@ -53,45 +52,48 @@ public final class AggregationTableFactory extends AbstractTableFactory {
                 argFileAdmin,
                 tableHeader.getDefaultRenderer(),
                 Helper.INSTANCE.getPreferences().getDateFormatter(),
-                Preferences.getTimeFormatter());
+                Helper.INSTANCE.getPreferences().getTimeFormatter(),
+                argSettings);
 
         // name column
-        final String descName = settings.getDescName();
+        final String descName = argSettings.getDescName();
         final TableColumn nameCol = buildColumn(descName);
         nameCol.setCellRenderer(columnFactory.getLabelNameAllRenderer());
 
         // modified column
-        final String descModified = settings.getDescModified();
+        final String descModified = argSettings.getDescModified();
         final TableColumn modifiedCol = buildColumn(descModified);
         modifiedCol.setCellRenderer(columnFactory.getLabelModifiedAllRenderer());
 
         // import column
-        final String descImport = settings.getDescImport();
+        final String descImport = argSettings.getDescImport();
         final TableColumn importCol = buildColumn(descImport);
         importCol.setCellRenderer(columnFactory.getButtonAllRenderer());
         importCol.setCellEditor(columnFactory.getImportAllEditor());
-        importCol.setResizable(settings.isButtonResizable());
+        importCol.setResizable(argSettings.isButtonResizable());
 
         // delete column
-        final String descDelete = settings.getDescDelete();
+        final String descDelete = argSettings.getDescDelete();
         final TableColumn deleteCol = buildColumn(descDelete);
         deleteCol.setCellRenderer(columnFactory.getButtonAllRenderer());
         deleteCol.setCellEditor(columnFactory.getDeleteAllEditor());
-        deleteCol.setResizable(settings.isButtonResizable());
+        deleteCol.setResizable(argSettings.isButtonResizable());
     }
 
     @Override
     public JTable getComponent() {
         final JTable table = this.getTable();
+        final Settings settings = this.getSettings();
+
         int bodyRowHeight = Helper.INSTANCE.getPreferences().getBodyRowHeight();
-        int tableHeightOffset = Helper.INSTANCE.getSettings().getTableHeightOffset();
+        int tableHeightOffset = settings.getTableHeightOffset();
 
         table.setRowHeight(
                 bodyRowHeight
                 + tableHeightOffset);
         table.setMinimumSize(
                 new Dimension(
-                        Helper.INSTANCE.getSettings().getMinimumTableWidth(),
+                        settings.getMinimumTableWidth(),
                         bodyRowHeight
                         + tableHeightOffset));
         table.setPreferredSize(
@@ -101,7 +103,7 @@ public final class AggregationTableFactory extends AbstractTableFactory {
                         + tableHeightOffset));
         table.setMaximumSize(
                 new Dimension(
-                        Preferences.getMaximumTableWidth(),
+                        Helper.INSTANCE.getPreferences().getMaximumTableWidth(),
                         bodyRowHeight
                         + tableHeightOffset));
 

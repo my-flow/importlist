@@ -16,8 +16,8 @@
 
 package com.moneydance.modules.features.importlist.controller;
 
+import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.io.FileContainer;
-import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
@@ -37,15 +37,19 @@ import javax.swing.table.AbstractTableModel;
 public final class FileTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 1L;
+
+    private final FileContainer fileContainer;
     private final Settings settings;
     private final Preferences prefs;
-    private final FileContainer fileContainer;
 
-    public FileTableModel(final FileContainer argFileContainer) {
+    public FileTableModel(
+            final FileContainer argFileContainer,
+            final Settings argSettings,
+            final Preferences argPrefs) {
         super();
-        this.settings = Helper.INSTANCE.getSettings();
-        this.prefs = Helper.INSTANCE.getPreferences();
         this.fileContainer = argFileContainer;
+        this.settings = argSettings;
+        this.prefs = argPrefs;
     }
 
     @Override

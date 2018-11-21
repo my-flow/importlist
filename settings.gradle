@@ -1,2 +1,5 @@
 rootProject.name='importlist'
-include 'core', 'support'
+include 'core'
+include 'core-test'
+include 'target2015'
+include 'target2015-test'

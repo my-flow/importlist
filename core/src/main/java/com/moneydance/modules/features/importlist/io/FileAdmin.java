@@ -16,8 +16,7 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.apps.md.controller.FeatureModuleContext;
-import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.bootstrap.Helper;
 
 import java.io.File;
 import java.util.Collections;
@@ -28,14 +27,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.IOCase;
-import org.apache.commons.io.filefilter.CanReadFileFilter;
-import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 
@@ -44,6 +43,7 @@ import org.apache.commons.io.monitor.FileAlterationObserver;
  *
  * @author Florian J. Breunig
  */
+@Singleton
 public final class FileAdmin extends Observable implements Observer {
 
     /**
@@ -51,34 +51,25 @@ public final class FileAdmin extends Observable implements Observer {
      */
     private static final Logger LOG = Logger.getLogger(FileAdmin.class.getName());
 
-    private final FeatureModuleContext context;
-    private final AbstractDirectoryChooser directoryChooser;
-    private final DirectoryValidator directoryValidator;
-    private final IOFileFilter transactionFileFilter;
-    private final IOFileFilter readableFileFilter;
+    @Inject AbstractDirectoryChooser directoryChooser;
+    @Inject DirectoryValidator directoryValidator;
+    @Inject FileAlterationMonitor monitor;
+    @Inject FileContainer fileContainer;
+    @Inject @Named("import all") FileOperation importAllOperation;
+    @Inject @Named("import one") FileOperation importOneOperation;
+    @Inject @Named("delete all") FileOperation deleteAllOperation;
+    @Inject @Named("delete one") FileOperation deleteOneOperation;
+    @Inject @Named("readable files") IOFileFilter readableFileFilter;
+
     private final TransactionFileListener listener;
-    private final FileAlterationMonitor monitor;
-    private final FileContainer fileContainer;
     @Nullable private FileAlterationObserver observer;
     private boolean isMonitorRunning;
 
-    public FileAdmin(final File baseDirectory, final FeatureModuleContext argContext) {
+    @Inject
+    public FileAdmin() {
         super();
-        this.context = argContext;
-        this.directoryChooser = new DefaultDirectoryChooser(baseDirectory);
-        this.directoryValidator = DirectoryValidator.INSTANCE;
-        this.transactionFileFilter = new SuffixFileFilter(
-                Helper.INSTANCE.getSettings().getTransactionFileExtensions(),
-                IOCase.INSENSITIVE);
-        this.readableFileFilter = FileFilterUtils.and(
-                CanReadFileFilter.CAN_READ,
-                this.transactionFileFilter);
-
         this.listener = new TransactionFileListener();
         this.listener.addObserver(this);
-        this.monitor = new FileAlterationMonitor(Helper.INSTANCE.getSettings().getMonitorInterval());
-
-        this.fileContainer = new FileContainer(this.readableFileFilter);
     }
 
     public void chooseBaseDirectory() {
@@ -182,11 +173,12 @@ public final class FileAdmin extends Observable implements Observer {
         }
     }
 
+    public FileContainer getFileContainer() {
+        return this.fileContainer;
+    }
+
     public void importAllRows() {
-        FileOperation importAllOperation = new ImportAllOperation(
-                this.context,
-                this.transactionFileFilter);
-        importAllOperation.showWarningAndExecute(this.fileContainer);
+        this.importAllOperation.showWarningAndExecute(this.fileContainer);
         this.setChanged();
         this.notifyObservers();
     }
@@ -195,10 +187,7 @@ public final class FileAdmin extends Observable implements Observer {
         if (rowNumber >= this.fileContainer.size()) {
             return;
         }
-        FileOperation importOneOperation = new ImportOneOperation(
-                this.context,
-                this.transactionFileFilter);
-        importOneOperation.showWarningAndExecute(
+        this.importOneOperation.showWarningAndExecute(
                 Collections.singletonList(this.fileContainer.get(rowNumber)));
         this.setChanged();
         this.notifyObservers();
@@ -208,8 +197,7 @@ public final class FileAdmin extends Observable implements Observer {
         if (this.fileContainer.isEmpty()) {
             return;
         }
-        FileOperation deleteAllOperation = new DeleteAllOperation();
-        deleteAllOperation.showWarningAndExecute(this.fileContainer);
+        this.deleteAllOperation.showWarningAndExecute(this.fileContainer);
         this.setChanged();
         this.notifyObservers();
     }
@@ -218,8 +206,7 @@ public final class FileAdmin extends Observable implements Observer {
         if (rowNumber >= this.fileContainer.size()) {
             return;
         }
-        FileOperation deleteOneOperation = new DeleteOneOperation();
-        deleteOneOperation.showWarningAndExecute(
+        this.deleteOneOperation.showWarningAndExecute(
                 Collections.singletonList(this.fileContainer.get(rowNumber)));
         this.setChanged();
         this.notifyObservers();
@@ -235,9 +222,5 @@ public final class FileAdmin extends Observable implements Observer {
                 IOCase.SYSTEM);
         this.observer.addListener(this.listener);
         this.monitor.addObserver(this.observer);
-    }
-
-    public FileContainer getFileContainer() {
-        return fileContainer;
     }
 }

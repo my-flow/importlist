@@ -16,10 +16,9 @@
 
 package com.moneydance.modules.features.importlist.table;
 
-import com.infinitekind.util.CustomDateFormat;
+import com.moneydance.modules.features.importlist.datetime.DateFormatter;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
-
-import java.text.DateFormat;
+import com.moneydance.modules.features.importlist.util.Settings;
 
 import javax.swing.table.TableCellRenderer;
 
@@ -45,20 +44,39 @@ public final class ColumnFactory {
     public ColumnFactory(
             final FileAdmin fileAdmin,
             final TableCellRenderer defaultHeaderTableCellRenderer,
-            final CustomDateFormat argDateFormatter,
-            final DateFormat argTimeFormatter) {
+            final DateFormatter argDateFormatter,
+            final DateFormatter argTimeFormatter,
+            final Settings argSettings) {
 
         this.headerRenderer = new HeaderRenderer(defaultHeaderTableCellRenderer);
-        this.labelNameOneRenderer = new LabelNameRenderer();
-        this.labelNameAllRenderer = new LabelNameRenderer();
-        this.labelModifiedOneRenderer = new LabelModifiedRenderer(argDateFormatter, argTimeFormatter);
-        this.labelModifiedAllRenderer = new LabelModifiedRenderer(argDateFormatter, argTimeFormatter);
+        this.labelNameOneRenderer = new LabelNameRenderer(argSettings.getIndentationPrefix());
+        this.labelNameAllRenderer = new LabelNameRenderer(argSettings.getIndentationPrefix());
+        this.labelModifiedOneRenderer = new LabelModifiedRenderer(
+                argDateFormatter,
+                argTimeFormatter,
+                argSettings.getIndentationPrefix());
+        this.labelModifiedAllRenderer = new LabelModifiedRenderer(
+                argDateFormatter,
+                argTimeFormatter,
+                argSettings.getIndentationPrefix());
         this.buttonOneRenderer = new ButtonRenderer();
         this.buttonAllRenderer = new ButtonRenderer();
-        this.importOneEditor = new ImportOneEditor(fileAdmin, this.buttonOneRenderer);
-        this.importAllEditor = new ImportAllEditor(fileAdmin, this.buttonAllRenderer);
-        this.deleteOneEditor = new DeleteOneEditor(fileAdmin, this.buttonOneRenderer);
-        this.deleteAllEditor = new DeleteAllEditor(fileAdmin, this.buttonAllRenderer);
+        this.importOneEditor = new ImportOneEditor(
+                fileAdmin,
+                this.buttonOneRenderer,
+                argSettings.getKeyboardShortcutImport());
+        this.importAllEditor = new ImportAllEditor(
+                fileAdmin,
+                this.buttonAllRenderer,
+                argSettings.getKeyboardShortcutImport());
+        this.deleteOneEditor = new DeleteOneEditor(
+                fileAdmin,
+                this.buttonOneRenderer,
+                argSettings.getKeyboardShortcutDelete());
+        this.deleteAllEditor = new DeleteAllEditor(
+                fileAdmin,
+                this.buttonAllRenderer,
+                argSettings.getKeyboardShortcutDelete());
     }
 
     public TableCellRenderer getHeaderRenderer() {
@@ -105,11 +123,11 @@ public final class ColumnFactory {
         return this.deleteAllEditor;
     }
 
-    public void setDateFormatter(final CustomDateFormat argDateFormatter) {
+    public void setDateFormatter(final DateFormatter argDateFormatter) {
         this.labelModifiedOneRenderer.setDateFormatter(argDateFormatter);
     }
 
-    public void setTimeFormatter(final DateFormat argTimeFormatter) {
+    public void setTimeFormatter(final DateFormatter argTimeFormatter) {
         this.labelModifiedOneRenderer.setTimeFormatter(argTimeFormatter);
     }
 }

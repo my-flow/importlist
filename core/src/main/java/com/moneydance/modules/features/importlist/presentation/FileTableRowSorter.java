@@ -17,8 +17,6 @@
 package com.moneydance.modules.features.importlist.presentation;
 
 import com.moneydance.modules.features.importlist.util.AlphanumComparator;
-import com.moneydance.modules.features.importlist.util.Helper;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.util.Comparator;
 
@@ -34,30 +32,29 @@ import javax.swing.table.TableRowSorter;
  */
 final class FileTableRowSorter extends TableRowSorter<TableModel> {
 
-    private final Settings settings;
+    private final String descName;
+    private final String descModified;
 
-    /**
-     * @param tableModel The table model that is to be sorted
-     */
-    FileTableRowSorter(final TableModel tableModel) {
-        super(tableModel);
-        this.settings = Helper.INSTANCE.getSettings();
+    FileTableRowSorter(final TableModel argTableModel, final String argDescName, final String argDescModified) {
+        super(argTableModel);
+        this.descName = argDescName;
+        this.descModified = argDescModified;
     }
 
     @Override
     public boolean isSortable(final int column) {
         String columnName = this.getModel().getColumnName(column);
-        return this.settings.getDescName().equals(columnName)
-                || this.settings.getDescModified().equals(columnName);
+        return this.descName.equals(columnName)
+                || this.descModified.equals(columnName);
     }
 
     @Override
     public Comparator<?> getComparator(final int column) {
         final String columnName = this.getModel().getColumnName(column);
         Comparator<?> comparator;
-        if (this.settings.getDescName().equals(columnName)) {
+        if (this.descName.equals(columnName)) {
             comparator = AlphanumComparator.ALPHANUM;
-        } else if (this.settings.getDescModified().equals(columnName)) {
+        } else if (this.descModified.equals(columnName)) {
             comparator = super.getComparator(column);
         } else {
             throw new IllegalArgumentException(String.format(

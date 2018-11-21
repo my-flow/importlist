@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.inject.Singleton;
 
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -41,6 +42,7 @@ import org.apache.commons.lang3.Validate;
  *
  * @author Florian J. Breunig
  */
+@Singleton
 public final class Settings {
 
     /**
@@ -51,7 +53,7 @@ public final class Settings {
     private final Configuration config;
     private final Image iconImage;
 
-    Settings(final String resource) throws IOException, ConfigurationException {
+    public Settings(final String resource) throws IOException, ConfigurationException {
         final InputStream inputStream = getInputStreamFromResource(resource);
         final PropertiesConfiguration propertiesConfig = new PropertiesConfiguration();
         propertiesConfig.setListDelimiterHandler(new DefaultListDelimiterHandler(DELIMITER));

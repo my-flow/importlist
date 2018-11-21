@@ -16,3 +16,8 @@ branches:
     - /^hotfix\/\S+$/
     - /^release\/\S+$/
     - gh-pages
+script:
+- ./gradlew core:check
+- ./gradlew core-test:check
+- ./gradlew target2015:check
+- ./gradlew target2015-test:check -x target2015-test:test

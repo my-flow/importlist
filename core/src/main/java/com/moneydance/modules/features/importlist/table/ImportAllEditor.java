@@ -17,11 +17,10 @@
 package com.moneydance.modules.features.importlist.table;
 
 import com.moneydance.modules.features.importlist.io.FileAdmin;
-import com.moneydance.modules.features.importlist.util.Helper;
 
 import java.awt.event.ActionListener;
 
-import javax.swing.KeyStroke;
+import javax.inject.Inject;
 
 /**
  * @author Florian J. Breunig
@@ -30,20 +29,15 @@ final class ImportAllEditor extends AbstractEditor {
 
     private static final long serialVersionUID = 1L;
 
-    ImportAllEditor(
+    @Inject ImportAllEditor(
             final FileAdmin fileAdmin,
-            final ButtonRenderer buttonRenderer) {
-        super(fileAdmin, buttonRenderer);
+            final ButtonRenderer buttonRenderer,
+            final String keyboardShortcut) {
+        super(fileAdmin, buttonRenderer, keyboardShortcut);
     }
 
     @Override
     public ActionListener getActionListener(final int rowNumber) {
         return actionEvent -> this.getFileAdmin().importAllRows();
-    }
-
-    @Override
-    public KeyStroke getKeyStroke() {
-        return KeyStroke.getKeyStroke(
-                Helper.INSTANCE.getSettings().getKeyboardShortcutImport());
     }
 }

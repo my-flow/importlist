@@ -16,7 +16,7 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
-import com.moneydance.apps.md.view.gui.MoneydanceLAF;
+import com.moneydance.modules.features.importlist.bootstrap.Helper;
 
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
@@ -43,7 +43,7 @@ public final class SplitPaneFactory implements ComponentFactory {
         this.splitPane.setDividerSize(0);
         this.splitPane.setContinuousLayout(true);
         this.splitPane.setOpaque(false);
-        this.splitPane.setBorder(MoneydanceLAF.homePageBorder);
+        this.splitPane.setBorder(Helper.INSTANCE.getPreferences().getHomePageBorder());
     }
 
     @Override

@@ -16,7 +16,7 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
-import com.moneydance.apps.md.view.gui.MoneydanceLAF;
+import com.moneydance.modules.features.importlist.bootstrap.Helper;
 
 import java.awt.GridBagLayout;
 
@@ -37,7 +37,7 @@ public final class EmptyLabelFactory implements ComponentFactory {
         emptyLabel.setLabelFor(this.emptyPanel);
 
         this.emptyPanel.add(emptyLabel);
-        this.emptyPanel.setBorder(MoneydanceLAF.homePageBorder);
+        this.emptyPanel.setBorder(Helper.INSTANCE.getPreferences().getHomePageBorder());
     }
 
     @Override

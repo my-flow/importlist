@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author Florian J. Breunig
  */
-interface FileOperation {
+public interface FileOperation {
 
     void showWarningAndExecute(List<File> files);
 

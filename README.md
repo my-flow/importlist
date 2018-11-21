@@ -12,25 +12,25 @@ to install the extension please visit the
 ## Building the extension
 1. `git clone git@github.com:my-flow/importlist.git` creates a copy of the
 repository.
-2. `./gradlew core:assemble` produces the distributable.
+2. `./gradlew assemble` produces the distributable.
 
 ## Signing the extension
 1. `./gradlew genKeys` generates a passphrase-protected key pair.
 2. `./gradlew sign` signs the extension.
 
 ## Running the extension
-After the build process has succeeded, the resulting extension file
-`core/build/distributions/importlist.mxt` can be added to Moneydance®.
+After the build process has succeeded, the resulting MXT file located in
+`target2015/build/distributions` can be added to Moneydance.
 
-## Project Structure
-The project consists of 2 gradle sub-projects:
-- The **core** sub-project contains the source code which must be audited.
-- The **support** sub-project contains the test infrastructure (stubs and
-mock-ups) and the test cases. It depends from the core project.
+## Project structure
+The project consists of the following main projects that must be audited:
+- The *core* project contains the common source code.
+- The *target2015* project contains source code specific to Moneydance
+versions 2015 and above.
 
-## Documentation
-* [Import List API](http://my-flow.github.io/importlist/docs/api/)
-* [Coverage Report](http://my-flow.github.io/importlist/docs/coverage-report/)
+The following support projects provide test infrastructure and test cases:
+- The *core-test* project contains tests for the *core* project.
+- The *target2015-test* project contains tests for the *target2015* project.
 
 ## License
 Copyright 2011-2018 [Florian J. Breunig](http://www.my-flow.com). Import List

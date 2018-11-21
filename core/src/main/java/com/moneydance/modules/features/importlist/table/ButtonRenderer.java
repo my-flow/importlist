@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -35,6 +36,11 @@ import javax.swing.table.TableCellRenderer;
  * @author Florian J. Breunig
  */
 final class ButtonRenderer implements TableCellRenderer {
+
+    @Inject
+    ButtonRenderer() {
+        super();
+    }
 
     // ESCA-JAVA0138: abstract method from interface TableCellRenderer
     @Override

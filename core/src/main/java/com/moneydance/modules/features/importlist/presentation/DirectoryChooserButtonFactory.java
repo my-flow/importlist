@@ -16,13 +16,12 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
-import com.moneydance.apps.md.view.gui.MoneydanceLAF;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 /**
  * @author Florian J. Breunig
@@ -33,14 +32,15 @@ public final class DirectoryChooserButtonFactory implements ComponentFactory {
 
     public DirectoryChooserButtonFactory(
             final String text,
-            final ActionListener argActionListener) {
+            final ActionListener argActionListener,
+            final Border border) {
         JButton chooserButton = new JButton(text);
         chooserButton.setBorderPainted(false);
         chooserButton.addActionListener(argActionListener);
 
         this.panel = new JPanel(new BorderLayout());
         this.panel.add(chooserButton);
-        this.panel.setBorder(MoneydanceLAF.homePageBorder);
+        this.panel.setBorder(border);
     }
 
     @Override

@@ -35,7 +35,7 @@ public final class Localizable {
     private final Settings settings;
     private final ResourceBundle resourceBundle;
 
-    Localizable(final Settings argSettings, final Locale locale) {
+    public Localizable(final Settings argSettings, final Locale locale) {
         this.settings = argSettings;
         this.resourceBundle = ResourceBundle.getBundle(
                 this.settings.getLocalizableResource(),
@@ -130,7 +130,7 @@ public final class Localizable {
                 "error_message_base_directory");
 
         Map<String, String> valuesMap = new ConcurrentHashMap<>(1);
-        valuesMap.put("import.dir", getMarkupFilename(baseDirectory));
+        valuesMap.put("import.dir", this.getMarkupFilename(baseDirectory));
         StringSubstitutor sub = new StringSubstitutor(valuesMap);
 
         return sub.replace(templateString);
@@ -146,7 +146,7 @@ public final class Localizable {
                 "confirmation_message_delete_one_file");
 
         Map<String, String> valuesMap = new ConcurrentHashMap<>(1);
-        valuesMap.put("filename", getMarkupFilename(filename));
+        valuesMap.put("filename", this.getMarkupFilename(filename));
         StringSubstitutor sub = new StringSubstitutor(valuesMap);
 
         return sub.replace(templateString);
@@ -177,7 +177,7 @@ public final class Localizable {
                 "error_message_delete_file");
 
         Map<String, String> valuesMap = new ConcurrentHashMap<>(1);
-        valuesMap.put("filename", getMarkupFilename(filename));
+        valuesMap.put("filename", this.getMarkupFilename(filename));
         StringSubstitutor sub = new StringSubstitutor(valuesMap);
 
         return sub.replace(templateString);

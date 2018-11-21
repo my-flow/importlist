@@ -16,13 +16,16 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.bootstrap.Helper;
+import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.io.File;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.swing.JFileChooser;
 
 import org.apache.commons.io.FileUtils;
@@ -33,6 +36,7 @@ import org.apache.commons.io.FileUtils;
  *
  * @author Florian J. Breunig
  */
+@Singleton
 final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
 
     /**
@@ -41,12 +45,9 @@ final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
     private static final Logger LOG =
             Logger.getLogger(DefaultDirectoryChooser.class.getName());
 
-    /**
-     * @param argBaseDirectory set the base directory when executed as a stand-
-     * alone application
-     */
-    DefaultDirectoryChooser(final File argBaseDirectory) {
-        super(argBaseDirectory);
+    @Inject
+    DefaultDirectoryChooser(final Preferences prefs) {
+        super(prefs);
     }
 
     @Override

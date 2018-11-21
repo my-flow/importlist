@@ -16,9 +16,9 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
+import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
-import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
@@ -45,11 +45,11 @@ public final class BaseTableFactory extends AbstractTableFactory {
 
     public BaseTableFactory(
             final TableModel argTableModel,
-            final FileAdmin argFileAdmin) {
-        super(argTableModel);
+            final FileAdmin argFileAdmin,
+            final Settings argSettings) {
+        super(argTableModel, argSettings);
         this.tableModel = argTableModel;
 
-        final Settings settings = Helper.INSTANCE.getSettings();
         final JTable table = this.getTable();
 
         table.setIntercellSpacing(new Dimension(0, 0));
@@ -60,46 +60,47 @@ public final class BaseTableFactory extends AbstractTableFactory {
                 argFileAdmin,
                 tableHeader.getDefaultRenderer(),
                 Helper.INSTANCE.getPreferences().getDateFormatter(),
-                Preferences.getTimeFormatter());
+                Helper.INSTANCE.getPreferences().getTimeFormatter(),
+                argSettings);
 
         // name column
-        final String descName = settings.getDescName();
+        final String descName = argSettings.getDescName();
         final TableColumn nameCol = buildColumn(descName);
         nameCol.setHeaderRenderer(this.columnFactory.getHeaderRenderer());
         nameCol.setCellRenderer(this.columnFactory.getLabelNameOneRenderer());
 
         // modified column
-        final String descModified = settings.getDescModified();
+        final String descModified = argSettings.getDescModified();
         final TableColumn modifiedCol = buildColumn(descModified);
         modifiedCol.setHeaderRenderer(this.columnFactory.getHeaderRenderer());
         modifiedCol.setCellRenderer(this.columnFactory.getLabelModifiedOneRenderer());
 
         // import column
-        final String descImport = settings.getDescImport();
+        final String descImport = argSettings.getDescImport();
         final TableColumn importCol = buildColumn(descImport);
         importCol.setHeaderRenderer(this.columnFactory.getHeaderRenderer());
         importCol.setCellRenderer(this.columnFactory.getButtonOneRenderer());
         importCol.setCellEditor(this.columnFactory.getImportOneEditor());
-        importCol.setResizable(settings.isButtonResizable());
+        importCol.setResizable(argSettings.isButtonResizable());
 
         // delete column
-        final String descDelete = settings.getDescDelete();
+        final String descDelete = argSettings.getDescDelete();
         final TableColumn deleteCol = buildColumn(descDelete);
         deleteCol.setHeaderRenderer(this.columnFactory.getHeaderRenderer());
         deleteCol.setCellRenderer(this.columnFactory.getButtonOneRenderer());
         deleteCol.setCellEditor(this.columnFactory.getDeleteOneEditor());
-        deleteCol.setResizable(settings.isButtonResizable());
+        deleteCol.setResizable(argSettings.isButtonResizable());
 
         // resizing the columns
-        TableListener tableListener = new TableListener(table);
+        TableListener tableListener = new TableListener(table, Helper.INSTANCE.getPreferences());
         this.getColumnModel().addColumnModelListener(tableListener);
 
         // reordering the columns
-        tableHeader.setReorderingAllowed(settings.isReorderingAllowed());
+        tableHeader.setReorderingAllowed(argSettings.isReorderingAllowed());
 
         // sorting the columns
         final RowSorter<TableModel> rowSorter =
-                new FileTableRowSorter(this.tableModel);
+                new FileTableRowSorter(this.tableModel, argSettings.getDescName(), argSettings.getDescModified());
         final List<RowSorter.SortKey> sortKeys =
                 new ArrayList<>();
         sortKeys.add(Helper.INSTANCE.getPreferences().getSortKey());
@@ -109,22 +110,22 @@ public final class BaseTableFactory extends AbstractTableFactory {
 
         table.setPreferredScrollableViewportSize(
                 new Dimension(
-                        settings.getMinimumTableWidth(),
-                        settings.getMinimumTableHeight()));
+                        argSettings.getMinimumTableWidth(),
+                        argSettings.getMinimumTableHeight()));
 
         this.scrollPane = new JCustomScrollPane();
     }
 
     @Override
     public JScrollPane getComponent() {
-        final Settings settings = Helper.INSTANCE.getSettings();
+        final Settings settings = this.getSettings();
         final Preferences prefs = Helper.INSTANCE.getPreferences();
         final Localizable localizable = Helper.INSTANCE.getLocalizable();
 
         final JTable table = this.getTable();
         table.setRowHeight(prefs.getBodyRowHeight());
         this.columnFactory.setDateFormatter(prefs.getDateFormatter());
-        this.columnFactory.setTimeFormatter(Preferences.getTimeFormatter());
+        this.columnFactory.setTimeFormatter(prefs.getTimeFormatter());
 
         TableColumn nameCol = table.getColumn(settings.getDescName());
         nameCol.setHeaderValue(localizable.getHeaderValueName());
@@ -148,8 +149,8 @@ public final class BaseTableFactory extends AbstractTableFactory {
                                 this.tableModel.getRowCount())));
         this.scrollPane.setMaximumSize(
                 new Dimension(
-                        Preferences.getMaximumTableWidth(),
-                        Preferences.getMaximumTableHeight()));
+                        prefs.getMaximumTableWidth(),
+                        prefs.getMaximumTableHeight()));
 
         return this.scrollPane;
     }

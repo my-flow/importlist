@@ -16,8 +16,8 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.apps.md.controller.FeatureModuleContext;
-import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.controller.Context;
+import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -32,14 +32,17 @@ import org.apache.commons.text.StringSubstitutor;
  */
 final class ImportOneOperation implements FileOperation {
 
-    private final FeatureModuleContext context;
+    private final Context context;
     private final FileFilter transactionFileFilter;
+    private final Settings settings;
 
     ImportOneOperation(
-            final FeatureModuleContext argContext,
-            final FileFilter argTransactionFileFilter) {
+            final Context argContext,
+            final FileFilter argTransactionFileFilter,
+            final Settings argSettings) {
         this.context = argContext;
         this.transactionFileFilter = argTransactionFileFilter;
+        this.settings = argSettings;
     }
 
     @Override
@@ -55,7 +58,7 @@ final class ImportOneOperation implements FileOperation {
 
         String uriScheme = "";
         if (this.transactionFileFilter.accept(file)) {
-            uriScheme = Helper.INSTANCE.getSettings().getTransactionFileImportUriScheme();
+            uriScheme = this.settings.getTransactionFileImportUriScheme();
         }
 
         final StringSubstitutor sub = new StringSubstitutor(valuesMap);

@@ -1,0 +1,35 @@
+dependencies {
+    compile project(':core')
+    annotationProcessor "com.google.dagger:dagger-compiler:2.4"
+
+    runtime('org.slf4j:slf4j-simple:1.7.25')
+
+    testCompile('junit:junit:4.12')
+    testCompile('org.hamcrest:hamcrest-junit:2.0.0.0')
+
+    testRuntime('org.slf4j:slf4j-simple:1.7.25')
+}
+
+test {
+    jacocoTestReport {
+        sourceDirectories = files(project(':core').sourceSets.main.allSource.srcDirs)
+        classDirectories =  files(project(':core').sourceSets.main.output)
+
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                fileTree(dir: it,
+                        include: 'com/moneydance/modules/features/importlist/**',
+                        exclude: [
+                            'com/moneydance/modules/features/importlist/datetime/**',
+                            '**/*Mock.class',
+                            '**/*_MembersInjector.class',
+                            '**/Dagger*Component.class', // covers component implementations
+                            '**/Dagger*Component$Builder.class', // covers component builders
+                            '**/*_*Factory.class',
+                            '**/*Module.class',
+                            '**/*Module.class',
+                        ])
+            })
+        }
+    }
+}

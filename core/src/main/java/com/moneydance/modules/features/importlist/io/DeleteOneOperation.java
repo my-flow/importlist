@@ -16,8 +16,8 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Localizable;
+import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.awt.Image;
 import java.io.File;
@@ -44,10 +44,14 @@ final class DeleteOneOperation implements FileOperation {
     private static final Logger LOG =
             Logger.getLogger(DeleteOneOperation.class.getName());
 
+    private final Settings settings;
     private final Localizable localizable;
 
-    DeleteOneOperation() {
-        this.localizable = Helper.INSTANCE.getLocalizable();
+    DeleteOneOperation(
+            final Settings argSettings,
+            final Localizable argLocalizable) {
+        this.settings = argSettings;
+        this.localizable = argLocalizable;
     }
 
     @Override
@@ -59,7 +63,7 @@ final class DeleteOneOperation implements FileOperation {
         final JLabel confirmationLabel = new JLabel(message);
         confirmationLabel.setLabelFor(null);
 
-        final Image image = Helper.INSTANCE.getSettings().getIconImage();
+        final Image image = this.settings.getIconImage();
         final Icon icon = new ImageIcon(image);
         final Object[] options = {
                 this.localizable.getOptionDeleteFile(),

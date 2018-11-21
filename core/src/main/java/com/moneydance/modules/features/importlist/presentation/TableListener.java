@@ -16,7 +16,6 @@
 
 package com.moneydance.modules.features.importlist.presentation;
 
-import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.util.Hashtable;
@@ -35,7 +34,7 @@ import javax.swing.event.TableColumnModelListener;
 /**
  * This <code>EventListener</code> is notified upon rearrangement, resorting,
  * and resizing of the table. It saves its state in the
- * <code>Preferences</code>.
+ * <code>PreferencesImpl</code>.
  *
  * @author Florian J. Breunig
  */
@@ -52,9 +51,9 @@ final class TableListener implements TableColumnModelListener, RowSorterListener
     private int lastFrom;
     private int lastTo;
 
-    TableListener(final JTable argTable) {
-        this.prefs = Helper.INSTANCE.getPreferences();
+    TableListener(final JTable argTable, final Preferences argPrefs) {
         this.table = argTable;
+        this.prefs = argPrefs;
     }
 
     @Override

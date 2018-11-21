@@ -16,8 +16,6 @@
 
 package com.moneydance.modules.features.importlist.table;
 
-import com.moneydance.modules.features.importlist.util.Helper;
-
 import java.awt.Component;
 
 import javax.swing.JTable;
@@ -29,6 +27,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 final class LabelNameRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 1L;
+    private final String indentationPrefix;
+
+    LabelNameRenderer(final String argIndentationPrefix) {
+        super();
+        this.indentationPrefix = argIndentationPrefix;
+    }
 
     // ESCA-JAVA0138: abstract method from interface TableCellRenderer
     @Override
@@ -42,7 +46,7 @@ final class LabelNameRenderer extends DefaultTableCellRenderer {
         this.setOpaque(false);
         String label = null;
         if (value != null) {
-            label = String.format("%s%s", Helper.INSTANCE.getSettings().getIndentationPrefix(), value);
+            label = String.format("%s%s", this.indentationPrefix, value);
         }
         super.getTableCellRendererComponent(
                 table,

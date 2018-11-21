@@ -16,10 +16,11 @@
 
 package com.moneydance.modules.features.importlist.controller;
 
-import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
+import javax.inject.Inject;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -36,10 +37,11 @@ public final class AggregationTableModel extends AbstractTableModel {
     private final Settings settings;
     private final Preferences prefs;
 
-    AggregationTableModel() {
+    @Inject
+    AggregationTableModel(final Settings argSettings, final Preferences argPrefs) {
         super();
-        this.settings = Helper.INSTANCE.getSettings();
-        this.prefs = Helper.INSTANCE.getPreferences();
+        this.settings = argSettings;
+        this.prefs = argPrefs;
     }
 
     @Override
@@ -88,7 +90,7 @@ public final class AggregationTableModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(final int column) {
-        return this.prefs.getColumnName(column);
+        return Helper.INSTANCE.getPreferences().getColumnName(column);
     }
 
     @Override

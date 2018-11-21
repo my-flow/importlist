@@ -1,9 +1,20 @@
+import java.nio.charset.StandardCharsets
+import java.text.SimpleDateFormat
+
+import org.apache.commons.configuration2.FileBasedConfiguration
+import org.apache.commons.configuration2.PropertiesConfiguration
+import proguard.gradle.ProGuardTask
+
 buildscript {
     repositories {
         mavenCentral()
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
+        classpath 'net.ltgt.gradle:gradle-apt-plugin:0.18'
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
         classpath 'org.apache.commons:commons-configuration2:2.3'
         classpath 'net.sf.proguard:proguard-gradle:6.0.2'
@@ -12,11 +23,14 @@ buildscript {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'net.ltgt.apt'
+    apply plugin: 'com.github.johnrengelman.shadow'
     apply plugin: 'checkstyle'
     apply plugin: 'pmd'
     apply plugin: 'idea'
     apply plugin: 'findbugs'
     apply plugin: 'jacoco'
+
 
     sourceCompatibility = 1.8
 
@@ -24,12 +38,54 @@ subprojects {
         privkeyid = '99'
         privkeyfile = "$rootDir/config/priv_key"
         pubkeyfile = "$rootDir/config/pub_key"
-        mxtfile = "${project(':core').distsDir}/${rootProject.name}.mxt"
+        mxtfile = "${project.distsDir}/${rootProject.name}-${project.name}-v${getConfigValueForKey("module_build")}.mxt"
     }
 
     repositories {
         mavenCentral()
         flatDir dirs: "$rootDir/lib"
+    }
+
+    jar {
+        baseName rootProject.name
+        manifest {
+            attributes ((java.util.jar.Attributes.Name.IMPLEMENTATION_TITLE.toString()): getConfigValueForKey("module_name"),
+                    (java.util.jar.Attributes.Name.IMPLEMENTATION_VERSION.toString()): getConfigValueForKey("module_build"),
+                    (java.util.jar.Attributes.Name.IMPLEMENTATION_VENDOR.toString()): getConfigValueForKey("vendor"),
+                    'Built-By': System.getProperty('user.name'),
+                    'Built-Date': getCurrentTimestamp(),
+                    'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')')
+
+        }
+    }
+
+    shadowJar {
+        baseName rootProject.name
+        from 'NOTICE'
+        from 'LICENSE'
+        exclude 'META-INF/**/*'
+
+        dependencies {
+            include project(':core')
+            include dependency('javax.inject:javax.inject:1')
+            include dependency('com.google.dagger:dagger:2.4')
+            include dependency('org.apache.commons:commons-configuration2:2.3')
+            include dependency('org.apache.commons:commons-lang3:3.7')
+            include dependency('org.apache.commons:commons-text:1.4')
+            include dependency('commons-io:commons-io:2.6')
+            include dependency('org.slf4j:slf4j-api:1.7.25')
+            include dependency('org.slf4j:slf4j-nop:1.7.25')
+        }
+    }
+
+    task proguard(type: ProGuardTask, dependsOn: 'shadowJar') {
+        injars  shadowJar.archivePath
+        outjars "${project.distsDir}/proguard-${rootProject.name}.jar"
+        configuration 'config/proguard.cfg'
+    }
+
+    proguard.doLast {
+        new File("${project.distsDir}/proguard-${rootProject.name}.jar").renameTo mxtfile as String
     }
 
     checkstyle {
@@ -58,5 +114,19 @@ subprojects {
 
     jacoco {
         toolVersion = "0.8.2"
+    }
+}
+
+String getCurrentTimestamp() {
+    Date today = new Date()
+    SimpleDateFormat df = new SimpleDateFormat('yyyy-MM-dd HH:mm:ss')
+    return df.format(today)
+}
+
+String getConfigValueForKey(String key) {
+    file("${project(':core').projectDir}/src/main/resources/com/moneydance/modules/features/importlist/meta_info.dict").withInputStream {
+        final FileBasedConfiguration config = new PropertiesConfiguration();
+        config.read(new InputStreamReader(it, StandardCharsets.UTF_8))
+        return config.getString("\"" + key + "\"").replaceAll("^\"|\"\$", "");
     }
 }

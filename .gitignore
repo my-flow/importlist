@@ -1,6 +1,6 @@
 # java specific
 *.class
- 
+
 # generic files to ignore
 *~
 *.lock
@@ -17,7 +17,9 @@ config/pub_key
 .gradle
 build/
 core/out/
-support/out/
+core-test/out/
+target2015/out/
+target2015-test/out/
 gradle-app.setting
 !gradle-wrapper.jar
 .gradletasknamecache

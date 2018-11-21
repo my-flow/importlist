@@ -16,31 +16,35 @@
 
 package com.moneydance.modules.features.importlist.table;
 
-import com.infinitekind.util.CustomDateFormat;
-import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.datetime.DateFormatter;
 
 import java.awt.Component;
-import java.text.DateFormat;
 import java.util.Date;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  * @author Florian J. Breunig
  */
-final class LabelModifiedRenderer extends DefaultTableCellRenderer {
+public final class LabelModifiedRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 1L;
-    private transient CustomDateFormat dateFormatter;
-    private DateFormat timeFormatter;
+    private final String indentationPrefix;
+    private DateFormatter dateFormatter;
+    private DateFormatter timeFormatter;
 
+    @Inject
     LabelModifiedRenderer(
-            final CustomDateFormat argDateFormatter,
-            final DateFormat argTimeFormatter) {
+            @Named("date") final DateFormatter argDateFormatter,
+            @Named("time") final DateFormatter argTimeFormatter,
+            final String argIndentationPrefix) {
         super();
         this.dateFormatter = argDateFormatter;
         this.timeFormatter = argTimeFormatter;
+        this.indentationPrefix = argIndentationPrefix;
     }
 
     @Override
@@ -58,7 +62,7 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
         if (value instanceof Long) {
             final Date fileDate = new Date((Long) value);
             label = String.format("%s%s %s",
-                    Helper.INSTANCE.getSettings().getIndentationPrefix(),
+                    this.indentationPrefix,
                     this.dateFormatter.format(fileDate),
                     this.timeFormatter.format(fileDate));
         }
@@ -74,11 +78,11 @@ final class LabelModifiedRenderer extends DefaultTableCellRenderer {
         return this;
     }
 
-    void setDateFormatter(final CustomDateFormat argDateFormatter) {
+    void setDateFormatter(final DateFormatter argDateFormatter) {
         this.dateFormatter = argDateFormatter;
     }
 
-    void setTimeFormatter(final DateFormat argTimeFormatter) {
+    void setTimeFormatter(final DateFormatter argTimeFormatter) {
         this.timeFormatter = argTimeFormatter;
     }
 }

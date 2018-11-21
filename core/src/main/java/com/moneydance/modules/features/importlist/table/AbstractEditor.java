@@ -40,19 +40,20 @@ public abstract class AbstractEditor extends DefaultCellEditor {
     private static final long serialVersionUID = 1L;
     private final FileAdmin fileAdmin;
     private final ButtonRenderer buttonRenderer;
+    private final String keyboardShortcut;
     @Nullable private Object label;
 
     protected AbstractEditor(
             final FileAdmin argFileAdmin,
-            final ButtonRenderer argButtonRenderer) {
+            final ButtonRenderer argButtonRenderer,
+            final String argKeyboardShortcut) {
         super(new JCheckBox());
         this.fileAdmin = argFileAdmin;
         this.buttonRenderer = argButtonRenderer;
+        this.keyboardShortcut = argKeyboardShortcut;
     }
 
     public abstract ActionListener getActionListener(int rowNumber);
-
-    public abstract KeyStroke getKeyStroke();
 
     final FileAdmin getFileAdmin() {
         return this.fileAdmin;
@@ -88,7 +89,9 @@ public abstract class AbstractEditor extends DefaultCellEditor {
 
 
     public final void registerKeyboardShortcut(final JComponent jComponent) {
-        if (this.getKeyStroke() == null) {
+        final KeyStroke keyStroke = KeyStroke.getKeyStroke(this.keyboardShortcut);
+
+        if (keyStroke == null) {
             return;
         }
 
@@ -105,7 +108,7 @@ public abstract class AbstractEditor extends DefaultCellEditor {
 
         final String actionMapKey = this.getClass().getName(); // unique
         jComponent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-                this.getKeyStroke(),
+                keyStroke,
                 actionMapKey);
         jComponent.getActionMap().put(actionMapKey, action);
     }

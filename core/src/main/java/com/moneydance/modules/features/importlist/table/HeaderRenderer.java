@@ -16,7 +16,7 @@
 
 package com.moneydance.modules.features.importlist.table;
 
-import com.moneydance.modules.features.importlist.util.Helper;
+import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.awt.Component;
@@ -66,21 +66,23 @@ final class HeaderRenderer implements TableCellRenderer {
             }
         }
 
-        component.setFont(Preferences.getHeaderFont());
-        component.setForeground(Preferences.getHeaderForeground());
+        final Preferences prefs = Helper.INSTANCE.getPreferences();
+
+        component.setFont(prefs.getHeaderFont());
+        component.setForeground(prefs.getHeaderForeground());
 
         component.setSize(new Dimension(
                 component.getWidth(),
-                Helper.INSTANCE.getPreferences().getHeaderRowHeight()));
+                prefs.getHeaderRowHeight()));
         component.setMinimumSize(new Dimension(
                 component.getWidth(),
-                Helper.INSTANCE.getPreferences().getHeaderRowHeight()));
+                prefs.getHeaderRowHeight()));
         component.setPreferredSize(new Dimension(
                 component.getWidth(),
-                Helper.INSTANCE.getPreferences().getHeaderRowHeight()));
+                prefs.getHeaderRowHeight()));
         component.setMaximumSize(new Dimension(
                 component.getWidth(),
-                Helper.INSTANCE.getPreferences().getHeaderRowHeight()));
+                prefs.getHeaderRowHeight()));
 
         return component;
     }

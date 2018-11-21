@@ -16,8 +16,8 @@
 
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.modules.features.importlist.util.Helper;
 import com.moneydance.modules.features.importlist.util.Localizable;
+import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.awt.Image;
 import java.io.File;
@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.inject.Named;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -41,10 +42,17 @@ final class DeleteAllOperation implements FileOperation {
     private static final Logger LOG =
             Logger.getLogger(DeleteAllOperation.class.getName());
 
+    private final FileOperation deleteOneOperation;
+    private final Settings settings;
     private final Localizable localizable;
 
-    DeleteAllOperation() {
-        this.localizable = Helper.INSTANCE.getLocalizable();
+    DeleteAllOperation(
+            @Named("delete one") final FileOperation argDeleteOneOperation,
+            final Settings argSettings,
+            final Localizable argLocalizable) {
+        this.deleteOneOperation = argDeleteOneOperation;
+        this.settings = argSettings;
+        this.localizable = argLocalizable;
     }
 
     @Override
@@ -55,7 +63,7 @@ final class DeleteAllOperation implements FileOperation {
         final JLabel confirmationLabel = new JLabel(message);
         confirmationLabel.setLabelFor(null);
 
-        final Image image = Helper.INSTANCE.getSettings().getIconImage();
+        final Image image = this.settings.getIconImage();
         final Icon icon = new ImageIcon(image);
         final Object[] options = {
                 this.localizable.getOptionDeleteFile(),
@@ -82,7 +90,6 @@ final class DeleteAllOperation implements FileOperation {
 
     @Override
     public void execute(final List<File> files) {
-        FileOperation deleteOneOperation = new DeleteOneOperation();
-        files.forEach(file -> deleteOneOperation.execute(Collections.singletonList(file)));
+        files.forEach(file -> this.deleteOneOperation.execute(Collections.singletonList(file)));
     }
 }

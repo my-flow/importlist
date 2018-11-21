@@ -39,9 +39,9 @@ public final class FileAdminTest {
         Helper.INSTANCE.getPreferences();
         new StubContextFactory();
         final String basedir = String.format("%s%s%s%s%s",
-                new File("").getAbsolutePath(),
-                File.separator, "test",
-                File.separator, "testfiles");
+                "src", File.separator,
+                "test", File.separator,
+                "resources");
         StubContextFactory factory = new StubContextFactory();
         this.fileAdmin = new FileAdmin(basedir, factory.getContext());
     }
@@ -93,22 +93,5 @@ public final class FileAdminTest {
         this.fileAdmin.reloadFiles();
         this.fileAdmin.importRow(0);
         this.fileAdmin.importRow(Integer.MAX_VALUE);
-    }
-
-    @Test
-    public void testDeleteAllRows() {
-        this.fileAdmin.deleteAllRows();
-
-        this.fileAdmin.reloadFiles();
-        this.fileAdmin.deleteAllRows();
-    }
-
-    @Test
-    public void testDeleteRow() {
-        this.fileAdmin.deleteRow(0);
-
-        this.fileAdmin.reloadFiles();
-        this.fileAdmin.deleteRow(0);
-        this.fileAdmin.deleteRow(Integer.MAX_VALUE);
     }
 }

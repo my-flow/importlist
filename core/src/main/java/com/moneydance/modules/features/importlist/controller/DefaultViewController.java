@@ -25,6 +25,7 @@ import com.moneydance.modules.features.importlist.presentation.DirectoryChooserB
 import com.moneydance.modules.features.importlist.presentation.EmptyLabelFactory;
 import com.moneydance.modules.features.importlist.presentation.SplitPaneFactory;
 import com.moneydance.modules.features.importlist.table.AbstractEditor;
+import com.moneydance.modules.features.importlist.table.ColorScheme;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
@@ -62,6 +63,8 @@ abstract class DefaultViewController implements ViewController {
             final FileAdmin argFileAdmin,
             final AbstractTableModel argBaseTableModel,
             final AbstractTableModel argAggrTableModel,
+            final ColorScheme evenColorScheme,
+            final ColorScheme oddColorScheme,
             final Settings argSettings,
             final Preferences argPrefs) {
 
@@ -73,13 +76,20 @@ abstract class DefaultViewController implements ViewController {
         this.baseTableModel = argBaseTableModel;
         this.baseTableFactory = new BaseTableFactory(
                 this.baseTableModel,
-                this.fileAdmin, this.settings);
+                this.fileAdmin,
+                evenColorScheme,
+                oddColorScheme,
+                this.settings,
+                this.prefs);
 
         this.aggrTableModel = argAggrTableModel;
         AggregationTableFactory aggrTableFactory = new AggregationTableFactory(
                 this.aggrTableModel,
                 this.fileAdmin,
-                this.settings);
+                evenColorScheme,
+                oddColorScheme,
+                this.settings,
+                this.prefs);
         this.columnFactory = this.baseTableFactory.getColumnFactory();
 
         this.splitPaneFactory = new SplitPaneFactory(
@@ -228,8 +238,9 @@ abstract class DefaultViewController implements ViewController {
                                 Helper.INSTANCE.getLocalizable().getDirectoryChooserTitle()
                         ),
                         new ChooseBaseDirectoryActionListener(),
-                        this.prefs.getHomePageBorder()
-                );
+                        this.prefs.getHomePageBorder(),
+                        this.prefs.getBackground(),
+                        this.prefs.getBodyFont());
 
         this.viewport.setView(directoryChooserFactory.getComponent());
         this.viewport.setMinimumSize(
@@ -251,8 +262,10 @@ abstract class DefaultViewController implements ViewController {
         EmptyLabelFactory emptyLabelFactory = new EmptyLabelFactory(
                 Helper.INSTANCE.getLocalizable().getEmptyMessage(
                         this.fileAdmin.getBaseDirectory().orElseThrow(AssertionError::new).getAbsolutePath()
-                )
-        );
+                ),
+                this.prefs.getHomePageBorder(),
+                this.prefs.getBackground(),
+                this.prefs.getBodyFont());
 
         this.viewport.setView(emptyLabelFactory.getComponent());
         this.viewport.setMinimumSize(

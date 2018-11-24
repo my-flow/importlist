@@ -27,5 +27,5 @@ import dagger.Module;
         com.moneydance.modules.features.importlist.io.FactoryModule.class,
         com.moneydance.modules.features.importlist.util.FactoryModule.class
 })
-final class CoreModule {
+class CoreModule {
 }

@@ -24,13 +24,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.swing.RowSorter;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+
+import java8.util.Optional;
 
 /**
  * @author Florian J. Breunig
@@ -146,13 +147,33 @@ public final class PreferencesMock implements Preferences {
     }
 
     @Override
-    public Font getHeaderFont() {
-        return UIManager.getFont("Label.font");
+    public Color getForeground() {
+        return Color.BLACK;
     }
 
     @Override
     public Color getHeaderForeground() {
         return Color.BLACK;
+    }
+
+    @Override
+    public Color getBackground() {
+        return Color.BLACK;
+    }
+
+    @Override
+    public Color getBackgroundAlt() {
+        return Color.BLACK;
+    }
+
+    @Override
+    public Font getHeaderFont() {
+        return UIManager.getFont("Label.font");
+    }
+
+    @Override
+    public Font getBodyFont() {
+        return null;
     }
 
     @Override

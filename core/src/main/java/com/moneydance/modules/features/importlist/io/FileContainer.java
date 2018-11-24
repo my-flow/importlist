@@ -22,11 +22,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -78,7 +79,7 @@ public final class FileContainer extends AbstractList<File> {
                     baseDirectory,
                     this.fileFilter,
                     null); // ignore subdirectories
-            final Collection<Long> lastModifiedTimeCollection = fileCollection.stream().
+            final Collection<Long> lastModifiedTimeCollection = StreamSupport.stream(fileCollection).
                     map(File::lastModified).
                     collect(Collectors.toList());
             this.lastModifiedTimes.addAll(lastModifiedTimeCollection);

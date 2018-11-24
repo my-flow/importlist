@@ -20,7 +20,6 @@ import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.util.Hashtable;
 import java.util.logging.Logger;
-import java.util.stream.IntStream;
 
 import javax.swing.JTable;
 import javax.swing.RowSorter;
@@ -30,6 +29,8 @@ import javax.swing.event.RowSorterEvent;
 import javax.swing.event.RowSorterListener;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
+
+import java8.util.stream.IntStreams;
 
 /**
  * This <code>EventListener</code> is notified upon rearrangement, resorting,
@@ -86,7 +87,7 @@ final class TableListener implements TableColumnModelListener, RowSorterListener
     private void saveColumnOrder() {
         Hashtable<String, String> hashtable = new Hashtable<>(
                 this.table.getColumnCount());
-        IntStream.range(0, this.table.getColumnCount()).forEach(column -> {
+        IntStreams.range(0, this.table.getColumnCount()).forEach(column -> {
             hashtable.put(
                     Integer.toString(column),
                     this.table.getColumnName(column));
@@ -95,7 +96,7 @@ final class TableListener implements TableColumnModelListener, RowSorterListener
     }
 
     private void saveColumnWidths() {
-        IntStream.range(0, this.table.getColumnCount()).forEach(column -> {
+        IntStreams.range(0, this.table.getColumnCount()).forEach(column -> {
             final String columnName = this.table.getColumnName(column);
             this.prefs.setColumnWidths(
                     column,

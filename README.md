@@ -19,18 +19,22 @@ repository.
 2. `./gradlew sign` signs the extension.
 
 ## Running the extension
-After the build process has succeeded, the resulting MXT file located in
-`target2015/build/distributions` can be added to Moneydance.
+After the build process has succeeded, the resulting MXT files are located in
+- `target2012/build/distributions`
+- `target2015/build/distributions`
+
+These MXT files can be added to Moneydance.
 
 ## Project structure
-The project consists of the following main projects that must be audited:
-- The *core* project contains the common source code.
-- The *target2015* project contains source code specific to Moneydance
-versions 2015 and above.
+The project consists of the following main projects:
+- `target2012` contains source code specific to Moneydance 2012 and 2014.
+- `target2015` contains source code specific to Moneydance 2015 and later.
+- `core` contains common source code.
 
-The following support projects provide test infrastructure and test cases:
-- The *core-test* project contains tests for the *core* project.
-- The *target2015-test* project contains tests for the *target2015* project.
+Support projects provide test infrastructure and test cases:
+- `target2012-test` contains tests of the *target2012* project.
+- `target2015-test` contains tests of the *target2015* project.
+- `core-test` contains tests of the *core* project.
 
 ## License
 Copyright 2011-2019 [Florian J. Breunig](http://www.my-flow.com). Import List

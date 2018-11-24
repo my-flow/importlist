@@ -27,10 +27,14 @@ import javax.swing.table.DefaultTableCellRenderer;
 final class LabelNameRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 1L;
+    private final ColorScheme colorScheme;
     private final String indentationPrefix;
 
-    LabelNameRenderer(final String argIndentationPrefix) {
+    LabelNameRenderer(
+            final ColorScheme argColorScheme,
+        final String argIndentationPrefix) {
         super();
+        this.colorScheme = argColorScheme;
         this.indentationPrefix = argIndentationPrefix;
     }
 
@@ -44,6 +48,7 @@ final class LabelNameRenderer extends DefaultTableCellRenderer {
             final int row,
             final int column) {
         this.setOpaque(false);
+        this.colorScheme.applyColorScheme(this, row);
         String label = null;
         if (value != null) {
             label = String.format("%s%s", this.indentationPrefix, value);

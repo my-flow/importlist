@@ -23,13 +23,19 @@ import java.awt.Font;
 import java.io.File;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.swing.RowSorter;
 import javax.swing.border.Border;
 
+import java8.util.Optional;
+
 /**
+ * This preferences class contains the values the user can control in the
+ * application. It serves as a facade abstracting Moneydance's
+ * <code>UserPreferences</code> (received from the
+ * <code>FeatureModuleContext</code>).
+ *
  * @author Florian J. Breunig
  */
 public interface Preferences {
@@ -87,9 +93,26 @@ public interface Preferences {
      */
     int getMaximumTableHeight();
 
-    Font getHeaderFont();
+    /**
+     * @return Default foreground color.
+     */
+    Color getForeground();
 
     Color getHeaderForeground();
+
+    /**
+     * @return Default background color.
+     */
+    Color getBackground();
+
+    /**
+     * @return Default alternative background color.
+     */
+    Color getBackgroundAlt();
+
+    Font getHeaderFont();
+
+    Font getBodyFont();
 
     int getHeaderRowHeight();
 

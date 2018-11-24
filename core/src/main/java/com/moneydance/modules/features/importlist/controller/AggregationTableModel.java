@@ -90,7 +90,7 @@ public final class AggregationTableModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(final int column) {
-        return Helper.INSTANCE.getPreferences().getColumnName(column);
+        return this.prefs.getColumnName(column);
     }
 
     @Override

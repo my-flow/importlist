@@ -18,6 +18,7 @@ package com.moneydance.modules.features.importlist.presentation;
 
 import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.table.ColorScheme;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
 import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
@@ -46,7 +47,10 @@ public final class BaseTableFactory extends AbstractTableFactory {
     public BaseTableFactory(
             final TableModel argTableModel,
             final FileAdmin argFileAdmin,
-            final Settings argSettings) {
+            final ColorScheme evenColorScheme,
+            final ColorScheme oddColorScheme,
+            final Settings argSettings,
+            final Preferences argPrefs) {
         super(argTableModel, argSettings);
         this.tableModel = argTableModel;
 
@@ -59,8 +63,10 @@ public final class BaseTableFactory extends AbstractTableFactory {
         this.columnFactory = new ColumnFactory(
                 argFileAdmin,
                 tableHeader.getDefaultRenderer(),
-                Helper.INSTANCE.getPreferences().getDateFormatter(),
-                Helper.INSTANCE.getPreferences().getTimeFormatter(),
+                argPrefs.getDateFormatter(),
+                argPrefs.getTimeFormatter(),
+                evenColorScheme,
+                oddColorScheme,
                 argSettings);
 
         // name column
@@ -92,7 +98,7 @@ public final class BaseTableFactory extends AbstractTableFactory {
         deleteCol.setResizable(argSettings.isButtonResizable());
 
         // resizing the columns
-        TableListener tableListener = new TableListener(table, Helper.INSTANCE.getPreferences());
+        TableListener tableListener = new TableListener(table, argPrefs);
         this.getColumnModel().addColumnModelListener(tableListener);
 
         // reordering the columns
@@ -103,7 +109,7 @@ public final class BaseTableFactory extends AbstractTableFactory {
                 new FileTableRowSorter(this.tableModel, argSettings.getDescName(), argSettings.getDescModified());
         final List<RowSorter.SortKey> sortKeys =
                 new ArrayList<>();
-        sortKeys.add(Helper.INSTANCE.getPreferences().getSortKey());
+        sortKeys.add(argPrefs.getSortKey());
         rowSorter.setSortKeys(sortKeys);
         rowSorter.addRowSorterListener(tableListener);
         table.setRowSorter(rowSorter);

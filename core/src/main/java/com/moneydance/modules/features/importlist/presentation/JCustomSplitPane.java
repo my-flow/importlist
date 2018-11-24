@@ -36,10 +36,12 @@ final class JCustomSplitPane extends JSplitPane {
 
         if (this.getTopComponent() != null) {
             ((JComponent) this.getTopComponent()).setOpaque(false);
+            this.getTopComponent().setBackground(this.getBackground());
         }
 
         if (this.getBottomComponent() != null) {
             ((JComponent) this.getBottomComponent()).setOpaque(false);
+            this.getBottomComponent().setBackground(this.getBackground());
         }
     }
 }

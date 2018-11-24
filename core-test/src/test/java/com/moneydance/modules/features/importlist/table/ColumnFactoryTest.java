@@ -20,8 +20,6 @@ import com.moneydance.modules.features.importlist.CoreTestComponent;
 import com.moneydance.modules.features.importlist.CoreTestModule;
 import com.moneydance.modules.features.importlist.DaggerCoreTestComponent;
 
-import javax.swing.table.DefaultTableCellRenderer;
-
 import org.junit.Before;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -39,12 +37,7 @@ public final class ColumnFactoryTest {
         final CoreTestModule testModule = new CoreTestModule();
         final CoreTestComponent testComponent = DaggerCoreTestComponent.builder().coreTestModule(testModule).build();
 
-        this.columnFactory = new ColumnFactory(
-                testComponent.fileAdmin(),
-                new DefaultTableCellRenderer(),
-                null,
-                null,
-                testComponent.settings());
+        this.columnFactory = testComponent.columnFactory();
     }
 
     @Test

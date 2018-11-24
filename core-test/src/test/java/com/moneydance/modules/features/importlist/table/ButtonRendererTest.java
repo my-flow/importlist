@@ -37,7 +37,7 @@ public final class ButtonRendererTest {
 
     @Before
     public void setUp() {
-        this.buttonRenderer = new ButtonRenderer();
+        this.buttonRenderer = new ButtonRenderer(new ColorSchemeMock());
     }
 
     @Test

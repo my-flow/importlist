@@ -20,6 +20,7 @@ import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.io.FileContainer;
 import com.moneydance.modules.features.importlist.io.FileOperation;
 import com.moneydance.modules.features.importlist.table.AbstractEditor;
+import com.moneydance.modules.features.importlist.table.ColumnFactory;
 import com.moneydance.modules.features.importlist.table.LabelModifiedRenderer;
 
 import javax.inject.Named;
@@ -37,9 +38,13 @@ import dagger.Component;
 @Singleton
 public interface CoreTestComponent extends CoreComponent {
 
+    ColumnFactory columnFactory();
+
     FileAdmin fileAdmin();
 
     FileContainer fileContainer();
+
+    LabelModifiedRenderer labelNameRenderer();
 
     LabelModifiedRenderer labelModifiedRenderer();
 

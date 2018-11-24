@@ -32,16 +32,19 @@ import javax.swing.table.DefaultTableCellRenderer;
 public final class LabelModifiedRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 1L;
+    private final ColorScheme colorScheme;
     private final String indentationPrefix;
     private DateFormatter dateFormatter;
     private DateFormatter timeFormatter;
 
     @Inject
     LabelModifiedRenderer(
+            @Named("odd color scheme") final ColorScheme argColorScheme,
             @Named("date") final DateFormatter argDateFormatter,
             @Named("time") final DateFormatter argTimeFormatter,
             final String argIndentationPrefix) {
         super();
+        this.colorScheme = argColorScheme;
         this.dateFormatter = argDateFormatter;
         this.timeFormatter = argTimeFormatter;
         this.indentationPrefix = argIndentationPrefix;
@@ -58,6 +61,7 @@ public final class LabelModifiedRenderer extends DefaultTableCellRenderer {
             final int column) {
 
         this.setOpaque(false);
+        this.colorScheme.applyColorScheme(this, row);
         String label = null;
         if (value instanceof Long) {
             final Date fileDate = new Date((Long) value);

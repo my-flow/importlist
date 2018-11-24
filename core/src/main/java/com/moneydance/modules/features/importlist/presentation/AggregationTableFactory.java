@@ -18,7 +18,9 @@ package com.moneydance.modules.features.importlist.presentation;
 
 import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.table.ColorScheme;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
+import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.awt.Dimension;
@@ -36,7 +38,10 @@ public final class AggregationTableFactory extends AbstractTableFactory {
     public AggregationTableFactory(
             final TableModel argTableModel,
             final FileAdmin argFileAdmin,
-            final Settings argSettings) {
+            final ColorScheme evenColorScheme,
+            final ColorScheme oddColorScheme,
+            final Settings argSettings,
+            final Preferences argPrefs) {
         super(argTableModel, argSettings);
 
         final JTable table = this.getTable();
@@ -51,8 +56,10 @@ public final class AggregationTableFactory extends AbstractTableFactory {
         ColumnFactory columnFactory = new ColumnFactory(
                 argFileAdmin,
                 tableHeader.getDefaultRenderer(),
-                Helper.INSTANCE.getPreferences().getDateFormatter(),
-                Helper.INSTANCE.getPreferences().getTimeFormatter(),
+                argPrefs.getDateFormatter(),
+                argPrefs.getTimeFormatter(),
+                evenColorScheme,
+                oddColorScheme,
                 argSettings);
 
         // name column

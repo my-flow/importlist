@@ -90,6 +90,8 @@ final class DeleteAllOperation implements FileOperation {
 
     @Override
     public void execute(final List<File> files) {
-        files.forEach(file -> this.deleteOneOperation.execute(Collections.singletonList(file)));
+        for (File file : files) {
+            this.deleteOneOperation.execute(Collections.singletonList(file));
+        }
     }
 }

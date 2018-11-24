@@ -11,7 +11,7 @@ shadowJar.finalizedBy proguard
 task genKeys(type: JavaExec) {
     description 'Generates a passphrase-protected key pair.'
     standardInput = System.in
-    classpath = files("$rootDir/lib/extadmin-4.0.jar", "$rootDir/lib/moneydance-2015.7-1358.jar")
+    classpath = files("$rootDir/lib/extadmin-2015.jar", "$rootDir/lib/moneydance-2015.7-1358.jar")
     main = 'com.moneydance.admin.KeyAdmin'
     args 'genkey', privkeyfile, pubkeyfile
 }
@@ -22,7 +22,7 @@ task sign(type: JavaExec) {
         new File(privkeyfile as String).exists()
     }
     standardInput = System.in
-    classpath = files("$rootDir/lib/extadmin-4.0.jar", "$rootDir/lib/moneydance-2015.7-1358.jar")
+    classpath = files("$rootDir/lib/extadmin-2015.jar", "$rootDir/lib/moneydance-2015.7-1358.jar")
     main = 'com.moneydance.admin.KeyAdmin'
     args 'signextjar', privkeyfile, privkeyid, rootProject.name, mxtfile
 }

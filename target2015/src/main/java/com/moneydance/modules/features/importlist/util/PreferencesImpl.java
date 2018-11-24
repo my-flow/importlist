@@ -33,7 +33,6 @@ import java.io.File;
 import java.text.DateFormat;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -41,6 +40,8 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+
+import java8.util.Optional;
 
 /**
  * This preferences class contains the values the user can control in the
@@ -54,20 +55,19 @@ public final class PreferencesImpl implements Preferences {
 
     private final Settings settings;
     private final UserPreferences userPreferences;
-    private final Font defaultSystemFont;
     private final StreamTable columnOrderDefault;
     private final StreamTable sortOrderDefault;
     private final StreamTable columnWidths;
     private final DateFormatter dateFormatter;
     private final DateFormatter timeFormatter;
     @Nullable private StreamTable columnOrder;
+    private final Font defaultSystemFont;
 
     @Inject
     public PreferencesImpl(final Settings argSettings, final FeatureModuleContext context) {
         this.settings = argSettings;
         final Main main = (Main) context;
         this.userPreferences = main.getPreferences();
-        this.defaultSystemFont = ((MoneydanceGUI) main.getUI()).getFonts().defaultSystemFont;
         this.columnWidths = new StreamTable();
         this.columnOrderDefault = new StreamTable();
         this.columnOrderDefault.put("0", this.settings.getDescName());
@@ -78,6 +78,7 @@ public final class PreferencesImpl implements Preferences {
         this.sortOrderDefault.put("0", SortOrder.ASCENDING.toString());
         this.dateFormatter = new DateFormatterImpl(this.userPreferences.getShortDateFormatter());
         this.timeFormatter = new TimeFormatterImpl(DateFormat.getTimeInstance());
+        this.defaultSystemFont = ((MoneydanceGUI) main.getUI()).getFonts().defaultSystemFont;
     }
 
     @Override
@@ -220,18 +221,11 @@ public final class PreferencesImpl implements Preferences {
         return MoneydanceLAF.homePageBorder;
     }
 
-    /**
-     * @return Preferred width of the file table.
-     */
     @Override
     public int getPreferredTableWidth() {
         return this.settings.getMinimumTableWidth();
     }
 
-    /**
-     * @param rowCount The number of rows to display inside the table.
-     * @return Preferred height of the file table.
-     */
     @Override
     public int getPreferredTableHeight(final int rowCount) {
         int fit = this.getHeaderRowHeight()
@@ -240,22 +234,45 @@ public final class PreferencesImpl implements Preferences {
         return Math.max(this.settings.getMinimumTableHeight(), min);
     }
 
-    /**
-     * @return Maximum width of the file table.
-     */
     @Override
     public int getMaximumTableWidth() {
         return (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth()
                 / (2 + 1);
     }
 
-    /**
-     * @return Maximum height of the file table.
-     */
     @Override
     public int getMaximumTableHeight() {
         return (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight()
                 / (2 + 1);
+    }
+
+    @Override
+    public Color getForeground() {
+        int foregroundValue = this.userPreferences.getIntSetting(
+                UserPreferences.GUI_HOMEPG_FG,
+                this.settings.getColorValueFgDef());
+        return new Color(foregroundValue);
+    }
+
+    @Override
+    public Color getHeaderForeground() {
+        return UIManager.getColor("Label.disabledForeground");
+    }
+
+    @Override
+    public Color getBackground() {
+        int backgroundValue = this.userPreferences.getIntSetting(
+                UserPreferences.GUI_HOMEPG_BG,
+                this.settings.getColorValueBgDef());
+        return new Color(backgroundValue);
+    }
+
+    @Override
+    public Color getBackgroundAlt() {
+        int backgroundAltValue = this.userPreferences.getIntSetting(
+                UserPreferences.GUI_HOMEPGALT_BG,
+                this.settings.getColorValueBgAltDef());
+        return new Color(backgroundAltValue);
     }
 
     @Override
@@ -265,8 +282,9 @@ public final class PreferencesImpl implements Preferences {
     }
 
     @Override
-    public Color getHeaderForeground() {
-        return UIManager.getColor("Label.disabledForeground");
+    public Font getBodyFont() {
+        final int fontIncrement = this.userPreferences.getIntSetting(UserPreferences.GUI_FONT_DIFF, 0);
+        return this.defaultSystemFont.deriveFont(this.defaultSystemFont.getSize2D() + (float) fontIncrement);
     }
 
     @Override
@@ -281,10 +299,5 @@ public final class PreferencesImpl implements Preferences {
         return Math.round(
                 (float) this.settings.getSummandRowHeightBody()
                 + this.getBodyFont().getSize2D());
-    }
-
-    private Font getBodyFont() {
-        final int fontIncrement = this.userPreferences.getIntSetting(UserPreferences.GUI_FONT_DIFF, 0);
-        return this.defaultSystemFont.deriveFont(this.defaultSystemFont.getSize2D() + (float) fontIncrement);
     }
 }

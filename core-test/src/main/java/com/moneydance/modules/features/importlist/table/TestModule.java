@@ -21,6 +21,8 @@ import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.util.Settings;
 
 import javax.inject.Named;
+import javax.inject.Singleton;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import dagger.Module;
 import dagger.Provides;
@@ -32,11 +34,54 @@ import dagger.Provides;
 public final class TestModule {
 
     @Provides
-    LabelModifiedRenderer labelModifiedRenderer(
+    ColumnFactory provideColumnFactory(
+            final FileAdmin fileAdmin,
+            @Named("odd color scheme") final ColorScheme colorScheme,
+            final Settings settings) {
+        return new ColumnFactory(
+                fileAdmin,
+                new DefaultTableCellRenderer(),
+                null,
+                null,
+                colorScheme,
+                colorScheme,
+                settings);
+    }
+
+    @Provides
+    LabelNameRenderer provideLabelNameRenderer(
+            @Named("odd color scheme") final ColorScheme colorScheme,
+            final Settings settings) {
+        return new LabelNameRenderer(
+                colorScheme,
+                settings.getIndentationPrefix());
+    }
+
+    @Provides
+    LabelModifiedRenderer provideLabelModifiedRenderer(
+            @Named("odd color scheme") final ColorScheme colorScheme,
             @Named("date") final DateFormatter dateFormatter,
             @Named("time") final DateFormatter timeFormatter,
             final Settings settings) {
-        return new LabelModifiedRenderer(dateFormatter, timeFormatter, settings.getIndentationPrefix());
+        return new LabelModifiedRenderer(
+                colorScheme,
+                dateFormatter,
+                timeFormatter,
+                settings.getIndentationPrefix());
+    }
+
+    @Provides
+    @Singleton
+    @Named("even color scheme")
+    ColorScheme provideEvenColorSchemeImpl() {
+        return new ColorSchemeMock();
+    }
+
+    @Provides
+    @Singleton
+    @Named("odd color scheme")
+    ColorScheme provideOddColorSchemeImpl() {
+        return new ColorSchemeMock();
     }
 
     @Provides

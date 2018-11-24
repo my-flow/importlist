@@ -45,11 +45,11 @@ public final class AbstractEditorTest {
 
         this.nullStubEditor = new NullEditorStub(
                 testComponent.fileAdmin(),
-                new ButtonRenderer(),
+                new ButtonRenderer(new ColorSchemeMock()),
                 testComponent.settings());
         this.fullStubEditor = new FullEditorStub(
                 testComponent.fileAdmin(),
-                new ButtonRenderer(),
+                new ButtonRenderer(new ColorSchemeMock()),
                 testComponent.settings());
     }
 

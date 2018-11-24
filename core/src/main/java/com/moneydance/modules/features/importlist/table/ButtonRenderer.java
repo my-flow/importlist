@@ -24,6 +24,7 @@ import java.awt.event.MouseListener;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -37,10 +38,15 @@ import javax.swing.table.TableCellRenderer;
  */
 final class ButtonRenderer implements TableCellRenderer {
 
+    private final ColorScheme colorScheme;
+
     @Inject
-    ButtonRenderer() {
+    ButtonRenderer(
+            @Named("odd color scheme") final ColorScheme argColorSchemeHelper) {
         super();
+        this.colorScheme = argColorSchemeHelper;
     }
+
 
     // ESCA-JAVA0138: abstract method from interface TableCellRenderer
     @Override
@@ -60,10 +66,17 @@ final class ButtonRenderer implements TableCellRenderer {
             final int row) {
         JButton button = new JButton();
         button.setOpaque(false);
+        this.colorScheme.applyColorScheme(button, row);
         Border border = BorderFactory.createEtchedBorder(
                 EtchedBorder.LOWERED,
                 button.getBackground().brighter(),
                 button.getBackground().darker());
+        if (row % 2 == 0) {
+            border = BorderFactory.createEtchedBorder(
+                    EtchedBorder.RAISED,
+                    button.getBackground().darker(),
+                    button.getBackground().brighter());
+        }
         button.setBorder(border);
 
         if (value != null) {

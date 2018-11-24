@@ -23,6 +23,9 @@ import com.moneydance.modules.features.importlist.controller.ContextImpl;
 import com.moneydance.modules.features.importlist.controller.ViewController;
 import com.moneydance.modules.features.importlist.controller.ViewControllerImpl;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.table.ColorScheme;
+import com.moneydance.modules.features.importlist.table.EvenColorSchemeImpl;
+import com.moneydance.modules.features.importlist.table.OddColorSchemeImpl;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.PreferencesImpl;
 import com.moneydance.modules.features.importlist.util.Settings;
@@ -80,8 +83,31 @@ final class TargetModule {
             @Named("base") final AbstractTableModel baseTableModel,
             @Named("aggregation") final AbstractTableModel aggrTableModel,
             final FileAdmin fileAdmin,
+            @Named("even color scheme") final ColorScheme evenColorScheme,
+            @Named("odd color scheme") final ColorScheme oddColorScheme,
             final Settings settings,
             final Preferences prefs) {
-        return new ViewControllerImpl(fileAdmin, baseTableModel, aggrTableModel, settings, prefs);
+        return new ViewControllerImpl(
+                fileAdmin,
+                baseTableModel,
+                aggrTableModel,
+                evenColorScheme,
+                oddColorScheme,
+                settings,
+                prefs);
+    }
+
+    @Provides
+    @Singleton
+    @Named("even color scheme")
+    ColorScheme provideEvenColorSchemeImpl() {
+        return new EvenColorSchemeImpl();
+    }
+
+    @Provides
+    @Singleton
+    @Named("odd color scheme")
+    ColorScheme provideOddColorSchemeImpl() {
+        return new OddColorSchemeImpl();
     }
 }

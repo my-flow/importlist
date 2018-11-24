@@ -259,6 +259,27 @@ public final class Settings {
     }
 
     /**
+     * @return The default foreground color.
+     */
+    public int getColorValueFgDef() {
+        return this.config.getInt("color_value_fg_def"); //$NON-NLS-1$
+    }
+
+    /**
+     * @return The default background color.
+     */
+    public int getColorValueBgDef() {
+        return this.config.getInt("color_value_bg_def"); //$NON-NLS-1$
+    }
+
+    /**
+     * @return Default alternative background color.
+     */
+    public int getColorValueBgAltDef() {
+        return this.config.getInt("color_value_bg_alt_def"); //$NON-NLS-1$
+    }
+
+    /**
      * @return The height of the header row by multiplying this value with
      * the font size.
      */

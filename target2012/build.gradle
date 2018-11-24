@@ -1,0 +1,37 @@
+dependencies {
+    compile project(':core')
+    compile(':moneydance-2012.5-862:')
+    annotationProcessor "com.google.dagger:dagger-compiler:2.4"
+}
+
+retrolambda {
+    javaVersion JavaVersion.VERSION_1_7
+    incremental false
+}
+
+assemble.dependsOn shadowJar
+build.dependsOn shadowJar
+shadowJar.finalizedBy proguard
+
+task genKeys(type: JavaExec) {
+    description 'Generates a passphrase-protected key pair.'
+    standardInput = System.in
+    classpath = files("$rootDir/lib/extadmin-2012.jar", "$rootDir/lib/moneydance-2012.5-862.jar")
+    main = 'com.moneydance.admin.KeyAdmin'
+    args 'genkey', privkeyfile, pubkeyfile
+}
+
+task sign(type: JavaExec) {
+    description 'Signs an MXT file with a private key that must already exist.'
+    onlyIf {
+        new File(privkeyfile as String).exists()
+    }
+    standardInput = System.in
+    classpath = files("$rootDir/lib/extadmin-2012.jar", "$rootDir/lib/moneydance-2012.5-862.jar")
+    main = 'com.moneydance.admin.KeyAdmin'
+    args 'signextjar', privkeyfile, privkeyid, rootProject.name, mxtfile
+}
+
+sign.doLast {
+    new File("$projectDir/s-importlist.mxt").renameTo mxtfile as String
+}

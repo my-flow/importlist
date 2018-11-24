@@ -40,7 +40,7 @@ public final class LabelNameRendererTest {
         final CoreTestModule testModule = new CoreTestModule();
         final CoreTestComponent testComponent = DaggerCoreTestComponent.builder().coreTestModule(testModule).build();
 
-        this.labelNameRenderer = new LabelNameRenderer(testComponent.settings().getIndentationPrefix());
+        this.labelNameRenderer = testComponent.labelNameRenderer();
     }
 
     @Test

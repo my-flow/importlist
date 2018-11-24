@@ -33,7 +33,9 @@ abstract class AbstractTableFactory implements ComponentFactory {
     private final TableColumnModel columnModel;
     private final Settings settings;
 
-    AbstractTableFactory(final TableModel argTableModel, final Settings argSettings) {
+    AbstractTableFactory(
+            final TableModel argTableModel,
+            final Settings argSettings) {
         this.table = new JTable(argTableModel);
         this.table.setOpaque(false);
         this.table.setShowGrid(false);

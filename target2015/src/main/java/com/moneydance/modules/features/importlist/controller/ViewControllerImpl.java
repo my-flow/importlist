@@ -19,6 +19,7 @@ package com.moneydance.modules.features.importlist.controller;
 import com.infinitekind.moneydance.model.AccountBook;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.table.ColorScheme;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
@@ -36,9 +37,17 @@ public final class ViewControllerImpl extends DefaultViewController implements H
             final FileAdmin fileAdmin,
             final AbstractTableModel baseTableModel,
             final AbstractTableModel aggrTableModel,
+            final ColorScheme evenColorScheme,
+            final ColorScheme oddColorScheme,
             final Settings settings,
             final Preferences prefs) {
-        super(fileAdmin, baseTableModel, aggrTableModel, settings, prefs);
+        super(fileAdmin,
+                baseTableModel,
+                aggrTableModel,
+                evenColorScheme,
+                oddColorScheme,
+                settings,
+                prefs);
     }
 
 

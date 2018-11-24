@@ -38,8 +38,12 @@ import javax.swing.table.TableCellRenderer;
 final class HeaderRenderer implements TableCellRenderer {
 
     private final TableCellRenderer defaultHeaderTableCellRenderer;
+    private final ColorScheme colorScheme;
 
-    HeaderRenderer(final TableCellRenderer argDefaultHeaderTableCellRenderer) {
+    HeaderRenderer(
+            final ColorScheme argColorScheme,
+            final TableCellRenderer argDefaultHeaderTableCellRenderer) {
+        this.colorScheme = argColorScheme;
         this.defaultHeaderTableCellRenderer = argDefaultHeaderTableCellRenderer;
     }
 
@@ -55,6 +59,7 @@ final class HeaderRenderer implements TableCellRenderer {
         Component component =
                 this.defaultHeaderTableCellRenderer.getTableCellRendererComponent(
                         table, value, hasFocus, hasFocus, row, column);
+        this.colorScheme.applyColorScheme(component, row);
         if (component instanceof JComponent) {
             JComponent jComponent = (JComponent) component;
             jComponent.setBorder(new EmptyBorder(1, 1, 1, 1));

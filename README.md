@@ -33,6 +33,6 @@ The following support projects provide test infrastructure and test cases:
 - The *target2015-test* project contains tests for the *target2015* project.
 
 ## License
-Copyright 2011-2018 [Florian J. Breunig](http://www.my-flow.com). Import List
+Copyright 2011-2019 [Florian J. Breunig](http://www.my-flow.com). Import List
 is released under the
 [GNU General Public License](http://www.gnu.org/licenses/gpl.html).

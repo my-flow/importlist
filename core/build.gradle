@@ -10,6 +10,7 @@ dependencies {
     compile('org.slf4j:slf4j-nop:1.7.25')
     compile('org.checkerframework:checker:2.3.2')
     compile('com.google.code.findbugs:findbugs:3.0.1')
+    compile('net.java.dev.jna:jna-platform:4.5.2')
 
     findbugsPlugins 'com.mebigfatguy.fb-contrib:fb-contrib:7.4.3'
 }

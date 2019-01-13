@@ -93,13 +93,29 @@ final class DeleteOneOperation implements FileOperation {
     @SuppressWarnings("nullness")
     public void execute(final List<File> files) {
         final File file = files.get(0);
+        com.sun.jna.platform.FileUtils fileUtils = com.sun.jna.platform.FileUtils.getInstance();
+        if (fileUtils.hasTrash()) {
+            try {
+                fileUtils.moveToTrash(files.toArray(new File[0]));
+            } catch (IOException e) {
+                final String message = e.getMessage();
+                if (message != null) {
+                    LOG.log(Level.WARNING, message, e);
+                }
+                this.forceDelete(file);
+            }
+        } else {
+            this.forceDelete(file);
+        }
+    }
+
+    private void forceDelete(final File file) {
         try {
             LOG.info(String.format("Deleting file %s", file.getAbsoluteFile()));
             FileUtils.forceDelete(file);
         } catch (IOException e) {
             LOG.log(Level.WARNING, e.getMessage(), e);
-            final String errorMessage =
-                    this.localizable.getErrorMessageDeleteFile(file.getName());
+            final String errorMessage = this.localizable.getErrorMessageDeleteFile(file.getName());
             final JLabel errorLabel = new JLabel(errorMessage);
             errorLabel.setLabelFor(null);
             JOptionPane.showMessageDialog(

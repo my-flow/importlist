@@ -8,6 +8,7 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+    - $HOME/.sonar/cache/
 branches:
   only:
     - master
@@ -23,3 +24,4 @@ script:
 - ./gradlew target2015-test:check -x target2015-test:test
 - ./gradlew target2012:check
 - ./gradlew target2012-test:check -x target2012-test:test
+- ./gradlew sonarqube -x target2012-test:test -x target2015-test:test -Dsonar.login="${SONAR_TOKEN}"

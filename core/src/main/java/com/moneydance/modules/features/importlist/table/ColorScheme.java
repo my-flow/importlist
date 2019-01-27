@@ -18,6 +18,7 @@ package com.moneydance.modules.features.importlist.table;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.io.Serializable;
 
 /**
  * This template class defines the abstract methods required to apply a color
@@ -25,7 +26,7 @@ import java.awt.Component;
  *
  * @author Florian J. Breunig
  */
-public interface ColorScheme {
+public interface ColorScheme extends Serializable {
 
     void applyColorScheme(Component component, int row);
 

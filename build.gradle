@@ -19,6 +19,7 @@ buildscript {
         classpath 'org.apache.commons:commons-configuration2:2.3'
         classpath 'net.sf.proguard:proguard-gradle:6.0.2'
         classpath 'me.tatarka:gradle-retrolambda:3.7.0'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7'
     }
 }
 
@@ -32,6 +33,7 @@ subprojects {
     apply plugin: 'findbugs'
     apply plugin: 'jacoco'
     apply plugin: 'me.tatarka.retrolambda'
+    apply plugin: 'org.sonarqube'
 
 
     sourceCompatibility = 1.8
@@ -125,6 +127,13 @@ subprojects {
 
     jacoco {
         toolVersion = "0.8.2"
+    }
+
+    sonarqube {
+        properties {
+            property "sonar.host.url", "https://sonarcloud.io"
+            property "sonar.organization", "${rootProject.name}"
+        }
     }
 }
 

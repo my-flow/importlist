@@ -32,6 +32,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * A business object that decorates a list of <code>File</code>s.
@@ -100,6 +102,29 @@ public final class FileContainer extends AbstractList<File> {
     @Override
     public boolean isEmpty() {
         return this.files.isEmpty();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31).
+                append(this.files.hashCode()).
+                append(this.lastModifiedTimes.hashCode()).
+                toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (!(obj instanceof FileContainer)) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+
+        final FileContainer rhs = (FileContainer) obj;
+        return new EqualsBuilder().
+                append(this.hashCode(), rhs.hashCode()).
+                isEquals();
     }
 
     public String getFileName(final int index) {

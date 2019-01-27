@@ -32,6 +32,8 @@ import org.apache.commons.lang3.Validate;
  */
 public final class OddColorSchemeImpl implements ColorScheme {
 
+    private static final long serialVersionUID = 1L;
+
     private Color foreground;
     private Color background;
     private Color backgroundAlt;

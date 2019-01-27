@@ -207,7 +207,7 @@ public final class Localizable {
                 "empty_message");
 
         Map<String, String> valuesMap =
-                new ConcurrentHashMap<String, String>(1);
+                new ConcurrentHashMap<>(1);
         valuesMap.put("import.dir", baseDirectory);
         StringSubstitutor sub = new StringSubstitutor(valuesMap);
 

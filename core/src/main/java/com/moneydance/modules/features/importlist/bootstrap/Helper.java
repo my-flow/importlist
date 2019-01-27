@@ -97,10 +97,8 @@ public enum Helper {
      */
     private static final class HelperObservable extends Observable {
         @Override
-        public void setChanged() { // increase visiblity
-            synchronized (this) {
-                super.setChanged();
-            }
+        public synchronized void setChanged() { // increase visiblity
+            super.setChanged();
         }
     }
 }

@@ -19,7 +19,8 @@ package com.moneydance.modules.features.importlist.util;
 import com.moneydance.modules.features.importlist.DaggerTargetTestComponent;
 import com.moneydance.modules.features.importlist.TargetTestComponent;
 
-import java.util.Hashtable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
@@ -93,8 +94,8 @@ public final class PreferencesTest {
 
     @Test
     public void testSetColumnNames() {
-        Hashtable<String, String> hashtable = new Hashtable<>();
-        this.prefs.setColumnNames(hashtable);
+        Map<String, String> map = new ConcurrentHashMap<>();
+        this.prefs.setColumnNames(map);
     }
 
     @Test

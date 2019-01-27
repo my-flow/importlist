@@ -21,8 +21,8 @@ import com.moneydance.modules.features.importlist.datetime.DateFormatter;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
-import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.swing.RowSorter;
@@ -56,7 +56,7 @@ public interface Preferences {
 
     int getColumnWidths(int column);
 
-    void setColumnNames(Hashtable<String, String> hashtable);
+    void setColumnNames(Map<String, String> map);
 
     String getColumnName(int column);
 

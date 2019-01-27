@@ -28,6 +28,8 @@ import java.awt.Component;
  */
 public final class OddColorSchemeImpl implements ColorScheme {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public void applyColorScheme(final Component component, final int row) {
         // no manual setting of color scheme required

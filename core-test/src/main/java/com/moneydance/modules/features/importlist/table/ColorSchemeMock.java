@@ -24,6 +24,8 @@ import java.awt.Component;
  */
 final class ColorSchemeMock implements ColorScheme {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public void applyColorScheme(final Component component, final int row) {
         // do nothing

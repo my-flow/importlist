@@ -32,6 +32,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -153,11 +154,11 @@ public final class PreferencesImpl implements Preferences {
     }
 
     @Override
-    public void setColumnNames(final Hashtable<String, String> hashtable) {
+    public void setColumnNames(final Map<String, String> map) {
         StreamTable streamTable = null;
-        if (hashtable != null) {
+        if (map != null) {
             streamTable = new StreamTable();
-            streamTable.merge(hashtable);
+            streamTable.merge(new Hashtable<>(map));
         }
         this.userPreferences.setSetting(
                 "importlist.column_order",

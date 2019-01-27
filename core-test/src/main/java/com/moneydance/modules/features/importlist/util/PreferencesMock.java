@@ -22,8 +22,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
-import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.swing.RowSorter;
@@ -87,7 +87,7 @@ public final class PreferencesMock implements Preferences {
     }
 
     @Override
-    public void setColumnNames(final Hashtable<String, String> hashtable) {
+    public void setColumnNames(final Map<String, String> map) {
         // empty
     }
 

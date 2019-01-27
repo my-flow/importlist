@@ -36,6 +36,11 @@ Support projects provide test infrastructure and test cases:
 - `target2015-test` contains tests of the *target2015* project.
 - `core-test` contains tests of the *core* project.
 
+## Documentation
+* [Import List API](http://my-flow.github.io/importlist/docs/api/)
+* [Coverage Report](http://my-flow.github.io/importlist/docs/coverage-report/)
+* [SonarCloud](https://sonarcloud.io/organizations/importlist/)
+
 ## License
 Copyright 2011-2019 [Florian J. Breunig](http://www.my-flow.com). Import List
 is released under the

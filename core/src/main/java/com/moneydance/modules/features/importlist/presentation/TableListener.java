@@ -18,7 +18,8 @@ package com.moneydance.modules.features.importlist.presentation;
 
 import com.moneydance.modules.features.importlist.util.Preferences;
 
-import java.util.Hashtable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import javax.swing.JTable;
@@ -85,14 +86,13 @@ final class TableListener implements TableColumnModelListener, RowSorterListener
     }
 
     private void saveColumnOrder() {
-        Hashtable<String, String> hashtable = new Hashtable<>(
-                this.table.getColumnCount());
-        IntStreams.range(0, this.table.getColumnCount()).forEach(column -> {
-            hashtable.put(
-                    Integer.toString(column),
-                    this.table.getColumnName(column));
-        });
-        this.prefs.setColumnNames(hashtable);
+        Map<String, String> map = new ConcurrentHashMap<>(this.table.getColumnCount());
+        IntStreams.range(0, this.table.getColumnCount()).forEach(column ->
+            map.put(
+                Integer.toString(column),
+                this.table.getColumnName(column))
+        );
+        this.prefs.setColumnNames(map);
     }
 
     private void saveColumnWidths() {

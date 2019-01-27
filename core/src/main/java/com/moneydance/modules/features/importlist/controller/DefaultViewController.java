@@ -171,7 +171,6 @@ abstract class DefaultViewController implements ViewController {
             this.viewport.setPreferredSize(null);
             this.viewport.setMaximumSize(null);
             this.registerKeyboardShortcuts4All();
-            return;
         }
     }
 

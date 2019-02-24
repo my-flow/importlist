@@ -132,6 +132,9 @@ public final class BaseTableFactory extends AbstractTableFactory {
         table.setRowHeight(prefs.getBodyRowHeight());
         this.columnFactory.setDateFormatter(prefs.getDateFormatter());
         this.columnFactory.setTimeFormatter(prefs.getTimeFormatter());
+        this.columnFactory.setForeground(prefs.getForeground());
+        this.columnFactory.setBackground(prefs.getBackground());
+        this.columnFactory.setBackgroundAlt(prefs.getBackgroundAlt());
 
         TableColumn nameCol = table.getColumn(settings.getDescName());
         nameCol.setHeaderValue(localizable.getHeaderValueName());

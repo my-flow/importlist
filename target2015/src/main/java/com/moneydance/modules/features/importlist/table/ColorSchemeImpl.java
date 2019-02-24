@@ -19,6 +19,8 @@ package com.moneydance.modules.features.importlist.table;
 import java.awt.Color;
 import java.awt.Component;
 
+import org.apache.commons.lang3.Validate;
+
 /**
  * This helper class applies a given color scheme to a <code>Component</code>.
  * It is used by different <code>TableCellRenderer</code>s to guarantee a
@@ -26,27 +28,34 @@ import java.awt.Component;
  *
  * @author Florian J. Breunig
  */
-public final class OddColorSchemeImpl implements ColorScheme {
+public final class ColorSchemeImpl implements ColorScheme {
 
     private static final long serialVersionUID = 1L;
 
+    private Color foreground;
+
+    public ColorSchemeImpl(final Color argForeground) {
+        this.setForeground(argForeground);
+    }
+
     @Override
     public void applyColorScheme(final Component component, final int row) {
-        // no manual setting of color scheme required
+        component.setForeground(this.foreground);
     }
 
     @Override
     public void setForeground(final Color argForeground) {
-        // no manual setting of color scheme required
+        Validate.notNull(argForeground, "argForeground must not be null");
+        this.foreground = argForeground;
     }
 
     @Override
     public void setBackground(final Color argBackground) {
-        // no manual setting of color scheme required
+        // no manual setting required
     }
 
     @Override
     public void setBackgroundAlt(final Color argBackgroundAlt) {
-        // no manual setting of color scheme required
+        // no manual setting required
     }
 }

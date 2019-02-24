@@ -24,8 +24,7 @@ import com.moneydance.modules.features.importlist.controller.ViewController;
 import com.moneydance.modules.features.importlist.controller.ViewControllerImpl;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.table.ColorScheme;
-import com.moneydance.modules.features.importlist.table.EvenColorSchemeImpl;
-import com.moneydance.modules.features.importlist.table.OddColorSchemeImpl;
+import com.moneydance.modules.features.importlist.table.ColorSchemeImpl;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.PreferencesImpl;
 import com.moneydance.modules.features.importlist.util.Settings;
@@ -100,14 +99,14 @@ final class TargetModule {
     @Provides
     @Singleton
     @Named("even color scheme")
-    ColorScheme provideEvenColorSchemeImpl() {
-        return new EvenColorSchemeImpl();
+    ColorScheme provideEvenColorSchemeImpl(final Preferences prefs) {
+        return new ColorSchemeImpl(prefs.getForeground());
     }
 
     @Provides
     @Singleton
     @Named("odd color scheme")
-    ColorScheme provideOddColorSchemeImpl() {
-        return new OddColorSchemeImpl();
+    ColorScheme provideOddColorSchemeImpl(final Preferences prefs) {
+        return new ColorSchemeImpl(prefs.getForeground());
     }
 }

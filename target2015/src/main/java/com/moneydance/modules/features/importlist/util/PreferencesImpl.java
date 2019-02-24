@@ -20,6 +20,7 @@ import com.infinitekind.util.StreamTable;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.controller.Main;
 import com.moneydance.apps.md.controller.UserPreferences;
+import com.moneydance.apps.md.view.gui.MDColors;
 import com.moneydance.apps.md.view.gui.MoneydanceGUI;
 import com.moneydance.apps.md.view.gui.MoneydanceLAF;
 import com.moneydance.modules.features.importlist.datetime.DateFormatter;
@@ -62,6 +63,7 @@ public final class PreferencesImpl implements Preferences {
     private final DateFormatter dateFormatter;
     private final DateFormatter timeFormatter;
     @Nullable private StreamTable columnOrder;
+    private final MDColors colors;
     private final Font defaultSystemFont;
 
     @Inject
@@ -79,6 +81,7 @@ public final class PreferencesImpl implements Preferences {
         this.sortOrderDefault.put("0", SortOrder.ASCENDING.toString());
         this.dateFormatter = new DateFormatterImpl(this.userPreferences.getShortDateFormatter());
         this.timeFormatter = new TimeFormatterImpl(DateFormat.getTimeInstance());
+        this.colors = ((MoneydanceGUI) main.getUI()).getColors();
         this.defaultSystemFont = ((MoneydanceGUI) main.getUI()).getFonts().defaultSystemFont;
     }
 
@@ -249,10 +252,14 @@ public final class PreferencesImpl implements Preferences {
 
     @Override
     public Color getForeground() {
-        int foregroundValue = this.userPreferences.getIntSetting(
-                UserPreferences.GUI_HOMEPG_FG,
-                this.settings.getColorValueFgDef());
-        return new Color(foregroundValue);
+        Color foreground = this.colors.homePageFG;
+        if (foreground == null) {
+            int foregroundValue = this.userPreferences.getIntSetting(
+                    UserPreferences.GUI_HOMEPG_FG,
+                    this.settings.getColorValueFgDef());
+            foreground = new Color(foregroundValue);
+        }
+        return foreground;
     }
 
     @Override

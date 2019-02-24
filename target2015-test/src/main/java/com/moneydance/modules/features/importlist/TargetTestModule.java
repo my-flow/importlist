@@ -25,12 +25,12 @@ import com.moneydance.modules.features.importlist.controller.ViewControllerImpl;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.io.FileContainer;
 import com.moneydance.modules.features.importlist.table.ColorScheme;
-import com.moneydance.modules.features.importlist.table.EvenColorSchemeImpl;
-import com.moneydance.modules.features.importlist.table.OddColorSchemeImpl;
+import com.moneydance.modules.features.importlist.table.ColorSchemeImpl;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.PreferencesImpl;
 import com.moneydance.modules.features.importlist.util.Settings;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import javax.inject.Named;
@@ -99,13 +99,13 @@ public final class TargetTestModule {
     @Singleton
     @Named("even color scheme")
     ColorScheme provideEvenColorSchemeImpl() {
-        return new EvenColorSchemeImpl();
+        return new ColorSchemeImpl(Color.BLACK);
     }
 
     @Provides
     @Singleton
     @Named("odd color scheme")
     ColorScheme provideOddColorSchemeImpl() {
-        return new OddColorSchemeImpl();
+        return new ColorSchemeImpl(Color.BLACK);
     }
 }

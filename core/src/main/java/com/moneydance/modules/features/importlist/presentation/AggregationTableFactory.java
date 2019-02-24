@@ -92,6 +92,8 @@ public final class AggregationTableFactory extends AbstractTableFactory {
         final JTable table = this.getTable();
         final Settings settings = this.getSettings();
 
+        table.setBackground(Helper.INSTANCE.getPreferences().getBackground());
+
         int bodyRowHeight = Helper.INSTANCE.getPreferences().getBodyRowHeight();
         int tableHeightOffset = settings.getTableHeightOffset();
 

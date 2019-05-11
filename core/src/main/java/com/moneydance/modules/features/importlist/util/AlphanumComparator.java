@@ -109,6 +109,7 @@ public enum AlphanumComparator implements Comparator<String> {
      * argument is less than, equal to, or greater than the second.
      */
     @Override
+    @SuppressWarnings("PMD.CognitiveComplexity")
     public int compare(final String string1, final String string2) {
         int thisMarker = 0;
         int thatMarker = 0;
@@ -123,7 +124,7 @@ public enum AlphanumComparator implements Comparator<String> {
             thatMarker += thatChunk.length();
 
             // If both chunks contain numeric characters, sort them numerically
-            int result = 0;
+            int result;
             if (isDigit(thisChunk.charAt(0))
                     && isDigit(thatChunk.charAt(0))) {
                 // Simple chunk comparison by length.

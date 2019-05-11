@@ -65,7 +65,7 @@ public final class PreferencesMock implements Preferences {
             file.deleteOnExit();
             return Optional.of(file.getParentFile());
         } catch (IOException e) {
-            throw new IllegalStateException(e.getMessage(), e);
+            return Optional.empty();
         }
     }
 

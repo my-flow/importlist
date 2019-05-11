@@ -30,6 +30,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Florian J. Breunig
@@ -102,6 +103,6 @@ public final class FileTableModelTest {
 
     @Test
     public void testGetRowCount() {
-        assertThat(this.emptyModel.getRowCount() >= 0, is(true));
+        assertTrue(this.emptyModel.getRowCount() >= 0);
     }
 }

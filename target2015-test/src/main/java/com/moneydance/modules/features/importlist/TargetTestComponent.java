@@ -26,8 +26,8 @@ import dagger.Component;
  * @author Florian J. Breunig
  */
 @Component(modules = {
-        CoreModule.class,
-        TargetTestModule.class,
+    CoreModule.class,
+    TargetTestModule.class,
 })
 @Singleton
 public interface TargetTestComponent extends TargetComponent {

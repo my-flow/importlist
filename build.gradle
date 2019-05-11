@@ -8,18 +8,18 @@ import proguard.gradle.ProGuardTask
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
-        classpath 'net.ltgt.gradle:gradle-apt-plugin:0.18'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+        classpath 'net.ltgt.gradle:gradle-apt-plugin:0.21'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.3'
         classpath 'org.apache.commons:commons-configuration2:2.3'
-        classpath 'net.sf.proguard:proguard-gradle:6.0.2'
-        classpath 'me.tatarka:gradle-retrolambda:3.7.0'
-        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7'
+        classpath 'net.sf.proguard:proguard-gradle:6.2.2'
+        classpath 'me.tatarka:gradle-retrolambda:3.7.1'
+        classpath 'gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.7.1'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
     }
 }
 
@@ -30,7 +30,7 @@ subprojects {
     apply plugin: 'checkstyle'
     apply plugin: 'pmd'
     apply plugin: 'idea'
-    apply plugin: 'findbugs'
+    apply plugin: 'com.github.spotbugs'
     apply plugin: 'jacoco'
     apply plugin: 'me.tatarka.retrolambda'
     apply plugin: 'org.sonarqube'
@@ -72,14 +72,14 @@ subprojects {
         dependencies {
             include project(':core')
             include dependency('javax.inject:javax.inject:1')
-            include dependency('com.google.dagger:dagger:2.4')
-            include dependency('net.sourceforge.streamsupport:streamsupport:1.7.0')
+            include dependency('com.google.dagger:dagger:2.37')
+            include dependency('net.sourceforge.streamsupport:streamsupport:1.7.3')
             include dependency('org.apache.commons:commons-configuration2:2.3')
             include dependency('org.apache.commons:commons-lang3:3.7')
             include dependency('org.apache.commons:commons-text:1.3')
-            include dependency('commons-io:commons-io:2.6')
-            include dependency('org.slf4j:slf4j-api:1.7.25')
-            include dependency('org.slf4j:slf4j-nop:1.7.25')
+            include dependency('commons-io:commons-io:2.10.0')
+            include dependency('org.slf4j:slf4j-api:1.7.30')
+            include dependency('org.slf4j:slf4j-nop:1.7.30')
         }
 
         relocate 'dagger', 'com.moneydance.modules.features.importlist.dagger'
@@ -102,31 +102,32 @@ subprojects {
     }
 
     checkstyle {
-        toolVersion '8.14';
+        toolVersion '8.43';
     }
 
     pmd {
-        toolVersion = "6.11.0"
+        toolVersion = "6.35.0"
         ruleSets = []
         ruleSetFiles = files("$rootDir/config/pmd-ruleSet.xml")
     }
 
-    findbugs {
-        toolVersion = "3.0.1"
+    spotbugs {
+        toolVersion = "4.2.3"
         effort = "max"
         reportLevel = "medium"
-        excludeFilter file("$rootDir/config/findbugs-exclude.xml")
+        excludeFilter = file("$rootDir/config/spotbugs-exclude.xml")
     }
 
-    tasks.withType(FindBugs) {
+    spotbugsMain {
         reports {
-            xml.enabled = false
-            html.enabled = true
+            html {
+                enabled = true
+            }
         }
     }
 
     jacoco {
-        toolVersion = "0.8.2"
+        toolVersion = "0.8.7"
     }
 
     sonarqube {

@@ -22,10 +22,10 @@ import com.moneydance.modules.features.importlist.DaggerCoreTestComponent;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Florian J. Breunig
@@ -137,7 +137,7 @@ public final class SettingsTest {
 
     @Test
     public void testGetMinColumnWidth() {
-        assertThat(this.settings.getMinColumnWidth() >= 0, is(true));
+        assertTrue(this.settings.getMinColumnWidth() >= 0);
     }
 
     @Test
@@ -152,42 +152,42 @@ public final class SettingsTest {
 
     @Test
     public void testGetMinimumTableHeight() {
-        assertThat(this.settings.getMinimumTableHeight() >= 0, is(true));
+        assertTrue(this.settings.getMinimumTableHeight() >= 0);
     }
 
     @Test
     public void testGetTableHeightOffset() {
-        assertThat(this.settings.getTableHeightOffset() >= 0, is(true));
+        assertTrue(this.settings.getTableHeightOffset() >= 0);
     }
 
     @Test
     public void testGetColumnWidth() {
-        assertThat(this.settings.getColumnWidth() >= 0, is(true));
+        assertTrue(this.settings.getColumnWidth() >= 0);
     }
 
     @Test
     public void testGetPreferredEmptyMessageWidth() {
-        assertThat(this.settings.getPreferredEmptyMessageWidth() >= 0, is(true));
+        assertTrue(this.settings.getPreferredEmptyMessageWidth() >= 0);
     }
 
     @Test
     public void testGetPreferredEmptyMessageHeight() {
-        assertThat(this.settings.getPreferredEmptyMessageHeight() >= 0, is(true));
+        assertTrue(this.settings.getPreferredEmptyMessageHeight() >= 0);
     }
 
     @Test
     public void testGetMessageFilenameLineMaxLength() {
-        assertThat(this.settings.getMessageFilenameLineMaxLength() >= 0, is(true));
+        assertTrue(this.settings.getMessageFilenameLineMaxLength() >= 0);
     }
 
     @Test
     public void testGetFactorRowHeightHeader() {
-        assertThat(this.settings.getFactorRowHeightHeader() >= 0, is(true));
+        assertTrue(this.settings.getFactorRowHeightHeader() >= 0);
     }
 
     @Test
     public void testGetSummandRowHeightBody() {
-        assertThat(this.settings.getSummandRowHeightBody() >= 0, is(true));
+        assertTrue(this.settings.getSummandRowHeightBody() >= 0);
     }
 
     @Test

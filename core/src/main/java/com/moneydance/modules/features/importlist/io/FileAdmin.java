@@ -89,9 +89,7 @@ public final class FileAdmin extends Observable implements Observer {
             if (this.directoryValidator.isValidDirectory(baseDirectory)) {
                 return;
             }
-            LOG.warning(String.format(
-                    "Could not open directory %s",
-                    baseDirectory.getAbsolutePath()));
+            LOG.warning(() -> String.format("Could not open directory %s", baseDirectory.getAbsolutePath()));
             final String errorMessage = Helper.INSTANCE.getLocalizable().
                     getErrorMessageBaseDirectory(baseDirectory.getName());
             final JLabel errorLabel = new JLabel(errorMessage);

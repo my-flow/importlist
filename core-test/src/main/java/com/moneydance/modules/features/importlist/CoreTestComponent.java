@@ -32,8 +32,8 @@ import dagger.Component;
  * @author Florian J. Breunig
  */
 @Component(modules = {
-        CoreModule.class,
-        CoreTestModule.class
+    CoreModule.class,
+    CoreTestModule.class
 })
 @Singleton
 public interface CoreTestComponent extends CoreComponent {

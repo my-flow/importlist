@@ -54,10 +54,11 @@ public final class Settings {
     private final Image iconImage;
 
     public Settings(final String resource) throws IOException, ConfigurationException {
-        final InputStream inputStream = getInputStreamFromResource(resource);
         final PropertiesConfiguration propertiesConfig = new PropertiesConfiguration();
         propertiesConfig.setListDelimiterHandler(new DefaultListDelimiterHandler(DELIMITER));
-        propertiesConfig.read(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        try (InputStream inputStream = getInputStreamFromResource(resource)) {
+            propertiesConfig.read(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        }
         this.config = propertiesConfig;
         this.iconImage = getImage(this.config.getString("icon_resource"));
     }
@@ -316,7 +317,8 @@ public final class Settings {
     }
 
     private static Image getImage(final String resource) throws IOException {
-        InputStream inputStream = getInputStreamFromResource(resource);
-        return ImageIO.read(inputStream);
+        try (InputStream inputStream = getInputStreamFromResource(resource)) {
+            return ImageIO.read(inputStream);
+        }
     }
 }

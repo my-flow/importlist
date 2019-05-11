@@ -85,9 +85,10 @@ public enum Helper {
 
     public static void loadLoggerConfiguration(final Settings settings) {
         try {
-            InputStream inputStream = settings.getLoggingPropertiesResource();
-            LogManager.getLogManager().readConfiguration(inputStream);
-        } catch (SecurityException | IOException e) {
+            try (InputStream inputStream = settings.getLoggingPropertiesResource()) {
+                LogManager.getLogManager().readConfiguration(inputStream);
+            }
+        } catch (IOException e) {
             e.printStackTrace(System.err);
         }
     }

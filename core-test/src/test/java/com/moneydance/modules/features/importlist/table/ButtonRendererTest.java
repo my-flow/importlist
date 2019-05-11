@@ -26,6 +26,7 @@ import javax.swing.JTable;
 import org.junit.Before;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -64,7 +65,9 @@ public final class ButtonRendererTest {
         button.setBackground(Color.white);
         MouseListener[] mouseListeners = button.getMouseListeners();
         assertThat(mouseListeners, notNullValue());
-        MouseListener mouseListener = mouseListeners[1];
+        assertNotEquals(mouseListeners.length, 0);
+
+        MouseListener mouseListener = mouseListeners[0];
         MouseEvent mouseEvent = new MouseEvent(button, 0, 0, 0, 0, 0, 0, false);
         mouseListener.mousePressed(mouseEvent);
         mouseListener.mouseReleased(mouseEvent);

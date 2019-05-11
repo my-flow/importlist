@@ -1,7 +1,7 @@
 dependencies {
     compile project(':core')
     compile(':moneydance-2012.5-862:')
-    annotationProcessor "com.google.dagger:dagger-compiler:2.4"
+    annotationProcessor "com.google.dagger:dagger-compiler:2.37"
 }
 
 retrolambda {

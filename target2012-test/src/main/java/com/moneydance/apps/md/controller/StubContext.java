@@ -49,9 +49,9 @@ public final class StubContext extends Main {
         try {
             this.initializeApp();
         } catch (Error e) {
-            LOG.log(Level.SEVERE, e.getMessage(), e);
+            LOG.log(Level.SEVERE, e, e::getMessage);
         } catch (Exception e) {
-            LOG.log(Level.WARNING, e.getMessage(), e);
+            LOG.log(Level.WARNING, e, e::getMessage);
         }
     }
 

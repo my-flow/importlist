@@ -52,9 +52,9 @@ public final class LogFormatter extends Formatter {
         if (record.getThrown() != null) {
             StringWriter stringWriter = new StringWriter();
             try (PrintWriter printWriter = new PrintWriter(stringWriter)) {
-                record.getThrown().printStackTrace(printWriter);
-                stringBuilder.append(stringWriter);
+                printWriter.println(record.getThrown().getMessage());
             }
+            stringBuilder.append(stringWriter);
         }
 
         return stringBuilder.toString();

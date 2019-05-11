@@ -83,9 +83,7 @@ final class DeleteOneOperation implements FileOperation {
         if (choice == 0) {
             this.execute(files);
         } else {
-            LOG.info(String.format(
-                    "Canceled deleting file %s",
-                    file.getAbsoluteFile()));
+            LOG.info(() -> String.format("Canceled deleting file %s", file.getAbsoluteFile()));
         }
     }
 
@@ -94,10 +92,10 @@ final class DeleteOneOperation implements FileOperation {
     public void execute(final List<File> files) {
         final File file = files.get(0);
         try {
-            LOG.info(String.format("Deleting file %s", file.getAbsoluteFile()));
+            LOG.info(() -> String.format("Deleting file %s", file.getAbsoluteFile()));
             FileUtils.forceDelete(file);
         } catch (IOException e) {
-            LOG.log(Level.WARNING, e.getMessage(), e);
+            LOG.log(Level.WARNING, e, e::getMessage);
             final String errorMessage =
                     this.localizable.getErrorMessageDeleteFile(file.getName());
             final JLabel errorLabel = new JLabel(errorMessage);

@@ -52,7 +52,6 @@ public final class SplitPaneFactoryTest {
 
     @Test
     public void testGetComponent() {
-        assertThat(this.splitPaneFactory.getComponent(), notNullValue()); // init
         assertThat(this.splitPaneFactory.getComponent(), notNullValue());
     }
 }

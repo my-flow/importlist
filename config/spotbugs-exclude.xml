@@ -1,14 +1,20 @@
 <FindBugsFilter>
     <Match>
-        <Class name="~.*Factory.*"/>
+        <Or>
+            <Class name="~.*Factory"/>
+            <Class name="~.*Dagger.*Component.*"/>
+        </Or>
     </Match>
     <Match>
         <Bug pattern="IMC_IMMATURE_CLASS_PRINTSTACKTRACE"/>
     </Match>
     <Match>
+        <Bug pattern="IS2_INCONSISTENT_SYNC"/>
+    </Match>
+    <Match>
         <Bug pattern="S508C_SET_COMP_COLOR"/>
     </Match>
     <Match>
-        <Bug pattern="IS2_INCONSISTENT_SYNC"/>
+        <Bug pattern="PATH_TRAVERSAL_IN"/>
     </Match>
 </FindBugsFilter>

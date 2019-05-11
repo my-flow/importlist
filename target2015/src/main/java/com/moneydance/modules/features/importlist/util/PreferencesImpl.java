@@ -17,7 +17,6 @@
 package com.moneydance.modules.features.importlist.util;
 
 import com.infinitekind.util.StreamTable;
-import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.controller.Main;
 import com.moneydance.apps.md.controller.UserPreferences;
 import com.moneydance.apps.md.view.gui.MDColors;
@@ -67,9 +66,8 @@ public final class PreferencesImpl implements Preferences {
     private final Font defaultSystemFont;
 
     @Inject
-    public PreferencesImpl(final Settings argSettings, final FeatureModuleContext context) {
+    public PreferencesImpl(final Settings argSettings, final Main main) {
         this.settings = argSettings;
-        final Main main = (Main) context;
         this.userPreferences = main.getPreferences();
         this.columnWidths = new StreamTable();
         this.columnOrderDefault = new StreamTable();

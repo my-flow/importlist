@@ -26,7 +26,7 @@ import java.awt.event.ActionListener;
  */
 final class NullEditorStub extends AbstractEditor {
 
-    private static final long serialVersionUID = 5291937749895264108L;
+    private static final long serialVersionUID = 1;
 
     NullEditorStub(
             final FileAdmin fileAdmin,

@@ -2,25 +2,25 @@ dependencies {
     compile project(':core')
     compile project(':core-test')
     compile project(':target2015')
-    compile('com.google.dagger:dagger:2.4')
-    annotationProcessor "com.google.dagger:dagger-compiler:2.4"
+    compile('com.google.dagger:dagger:2.37')
+    annotationProcessor "com.google.dagger:dagger-compiler:2.37"
 
-    runtime('org.slf4j:slf4j-simple:1.7.25')
+    runtime('org.slf4j:slf4j-simple:1.7.30')
     runtime('org.syncloud:dropbox-client:1.5.3');
 
-    testCompile('junit:junit:4.12')
+    testCompile('junit:junit:4.13.2')
     testCompile('org.hamcrest:hamcrest-junit:2.0.0.0')
 
-    testRuntime('org.slf4j:slf4j-simple:1.7.25')
+    testRuntime('org.slf4j:slf4j-simple:1.7.30')
 }
 
 test {
     jacocoTestReport {
-        sourceDirectories = files(project(':target2015').sourceSets.main.allSource.srcDirs)
-        classDirectories =  files(project(':target2015').sourceSets.main.output)
+        sourceDirectories.from = files(project(':target2015').sourceSets.main.allSource.srcDirs)
+        classDirectories.from =  files(project(':target2015').sourceSets.main.output)
 
         afterEvaluate {
-            classDirectories = files(classDirectories.files.collect {
+            classDirectories.from = files(classDirectories.files.collect {
                 fileTree(dir: it,
                         include: 'com/moneydance/modules/features/importlist/**',
                         exclude: [

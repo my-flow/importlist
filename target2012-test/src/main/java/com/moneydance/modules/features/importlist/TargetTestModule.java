@@ -67,7 +67,9 @@ public final class TargetTestModule {
 
     @Provides
     Preferences providePreferences(final Settings argSettings, final FeatureModuleContext argContext) {
-        return new PreferencesImpl(argSettings, argContext);
+        final com.moneydance.apps.md.controller.Main main =
+                (com.moneydance.apps.md.controller.Main) argContext;
+        return new PreferencesImpl(argSettings, main);
     }
 
     @Provides

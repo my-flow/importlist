@@ -42,6 +42,6 @@ Support projects provide test infrastructure and test cases:
 * [SonarCloud](https://sonarcloud.io/organizations/importlist/)
 
 ## License
-Copyright 2011-2019 [Florian J. Breunig](http://www.my-flow.com). Import List
+Copyright 2011-2020 [Florian J. Breunig](http://www.my-flow.com). Import List
 is released under the
 [GNU General Public License](http://www.gnu.org/licenses/gpl.html).

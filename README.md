@@ -4,7 +4,7 @@ Import List is an open-source extension for
 [Moneydance](http://www.moneydance.com) monitoring a given directory for
 transaction files to import. For more information on where to download and how
 to install the extension please visit the
-[project page](http://my-flow.github.io/importlist/).
+[project page](https://www.my-flow.com/importlist/).
 
 ## Build Prerequisites
 * Java Development Kit, version 7
@@ -29,8 +29,8 @@ The project consists of 2 gradle sub-projects:
 mock-ups) and the test cases. It depends from the core project.
 
 ## Documentation
-* [Import List API](http://my-flow.github.io/importlist/docs/api/)
-* [JMockit Coverage Report](http://my-flow.github.io/importlist/docs/coverage-report/)
+* [Import List API](https://www.my-flow.com/importlist/docs/api/)
+* [JMockit Coverage Report](https://www.my-flow.com/importlist/docs/coverage-report/)
 
 ## License
 Copyright 2011-2018 [Florian J. Breunig](http://www.my-flow.com). Import List

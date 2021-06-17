@@ -12,6 +12,12 @@
 logs
 config/priv_key
 config/pub_key
+core/src/main/generated/
+core-test/src/main/generated/
+target2012/src/main/generated/
+target2012-test/src/main/generated/
+target2015/src/main/generated/
+target2015-test/src/main/generated/
 
 # gradle
 .gradle

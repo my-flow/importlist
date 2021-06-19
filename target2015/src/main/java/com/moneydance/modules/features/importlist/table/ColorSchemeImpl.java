@@ -32,21 +32,23 @@ public final class ColorSchemeImpl implements ColorScheme {
 
     private static final long serialVersionUID = 1L;
 
-    private Color foreground;
+    private Color color;
 
-    public ColorSchemeImpl(final Color argForeground) {
-        this.setForeground(argForeground);
+    public ColorSchemeImpl(final Color argColor) {
+        this.setForeground(argColor);
+        this.setBackground(argColor);
     }
 
     @Override
     public void applyColorScheme(final Component component, final int row) {
-        component.setForeground(this.foreground);
+        component.setForeground(this.color);
+        component.setBackground(this.color);
     }
 
     @Override
     public void setForeground(final Color argForeground) {
         Validate.notNull(argForeground, "argForeground must not be null");
-        this.foreground = argForeground;
+        this.color = argForeground;
     }
 
     @Override

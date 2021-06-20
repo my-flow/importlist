@@ -7,7 +7,7 @@ to install the extension please visit the
 [project page](https://www.my-flow.com/importlist/).
 
 ## Build Prerequisites
-* Java Development Kit, version 8
+* Java Development Kit, version 11
 
 ## Building the extension
 1. `git clone git@github.com:my-flow/importlist.git` creates a copy of the
@@ -37,6 +37,7 @@ Support projects provide test infrastructure and test cases:
 - `core-test` contains tests of the *core* project.
 
 ## Documentation
+* [Changelog](CHANGELOG.md)
 * [SonarCloud](https://sonarcloud.io/organizations/importlist/)
 
 ## License

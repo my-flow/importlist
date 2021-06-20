@@ -1,6 +1,6 @@
 {
   "vendor" = "Florian J. Breunig"
-  "module_build" = "14"
+  "module_build" = "15"
   "minbuild" = "1000"
   "vendor.url" = "https://www.my-flow.com/importlist/"
   "module_name" = "Import List"

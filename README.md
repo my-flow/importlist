@@ -37,8 +37,6 @@ Support projects provide test infrastructure and test cases:
 - `core-test` contains tests of the *core* project.
 
 ## Documentation
-* [Import List API](https://www.my-flow.com/importlist/docs/api/)
-* [Coverage Report](https://www.my-flow.com/importlist/docs/coverage-report/)
 * [SonarCloud](https://sonarcloud.io/organizations/importlist/)
 
 ## License

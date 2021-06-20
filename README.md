@@ -1,4 +1,4 @@
-# Import List [![Build Status](https://travis-ci.org/my-flow/importlist.svg?branch=master)](https://travis-ci.org/my-flow/importlist)
+# Import List [![Build Status](https://travis-ci.com/my-flow/importlist.svg?branch=develop)](https://travis-ci.com/my-flow/importlist)
 
 Import List is an open-source extension for
 [Moneydance](http://www.moneydance.com) monitoring a given directory for

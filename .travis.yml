@@ -1,6 +1,6 @@
 language: java
 jdk:
-  - openjdk8
+  - openjdk11
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -11,7 +11,7 @@ cache:
     - $HOME/.sonar/cache/
 branches:
   only:
-    - master
+    - main
     - develop
     - /^feature\/\S+$/
     - /^hotfix\/\S+$/
@@ -24,4 +24,4 @@ script:
 - ./gradlew target2015-test:check -x target2015-test:test
 - ./gradlew target2012:check
 - ./gradlew target2012-test:check -x target2012-test:test
-- ./gradlew sonarqube -x target2012-test:test -x target2015-test:test -Dsonar.login="${SONAR_TOKEN}"
+#- ./gradlew sonarqube -x target2012-test:test -x target2015-test:test -Dsonar.login="${SONAR_TOKEN}"

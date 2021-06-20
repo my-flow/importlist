@@ -13,8 +13,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.ltgt.gradle:gradle-apt-plugin:0.21'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.3'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
         classpath 'org.apache.commons:commons-configuration2:2.3'
         classpath 'net.sf.proguard:proguard-gradle:6.2.2'
         classpath 'me.tatarka:gradle-retrolambda:3.7.1'
@@ -24,8 +23,7 @@ buildscript {
 }
 
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'net.ltgt.apt'
+    apply plugin: 'java-library'
     apply plugin: 'com.github.johnrengelman.shadow'
     apply plugin: 'checkstyle'
     apply plugin: 'pmd'
@@ -42,7 +40,7 @@ subprojects {
         privkeyid = '99'
         privkeyfile = "$rootDir/config/priv_key"
         pubkeyfile = "$rootDir/config/pub_key"
-        mxtfile = "${project.distsDir}/${rootProject.name}-${project.name}-v${getConfigValueForKey("module_build")}.mxt"
+        mxtfile = "${project.buildDir}/${project.distsDirName}/${rootProject.name}-${project.name}-v${getConfigValueForKey("module_build")}.mxt"
     }
 
     repositories {
@@ -51,7 +49,7 @@ subprojects {
     }
 
     jar {
-        baseName rootProject.name
+        archiveBaseName.set(rootProject.name)
         manifest {
             attributes ((java.util.jar.Attributes.Name.IMPLEMENTATION_TITLE.toString()): getConfigValueForKey("module_name"),
                     (java.util.jar.Attributes.Name.IMPLEMENTATION_VERSION.toString()): getConfigValueForKey("module_build"),
@@ -64,7 +62,7 @@ subprojects {
     }
 
     shadowJar {
-        baseName rootProject.name
+        archiveBaseName.set(rootProject.name)
         from 'NOTICE'
         from 'LICENSE'
         exclude 'META-INF/**/*'
@@ -93,12 +91,12 @@ subprojects {
 
     task proguard(type: ProGuardTask, dependsOn: 'shadowJar') {
         injars  shadowJar.archivePath
-        outjars "${project.distsDir}/proguard-${rootProject.name}.jar"
+        outjars "${project.buildDir}/${project.distsDirName}/proguard-${rootProject.name}.jar"
         configuration 'config/proguard.cfg'
     }
 
     proguard.doLast {
-        new File("${project.distsDir}/proguard-${rootProject.name}.jar").renameTo mxtfile as String
+        new File("${project.buildDir}/${project.distsDirName}/proguard-${rootProject.name}.jar").renameTo mxtfile as String
     }
 
     checkstyle {

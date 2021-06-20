@@ -1,15 +1,15 @@
 dependencies {
-    compile('com.google.dagger:dagger:2.37')
+    api('com.google.dagger:dagger:2.37')
     annotationProcessor('com.google.dagger:dagger-compiler:2.37')
-    compile 'net.sourceforge.streamsupport:streamsupport:1.7.3'
-    compile('org.apache.commons:commons-lang3:3.12.0')
-    compile('org.apache.commons:commons-configuration2:2.3')
-    compile('org.apache.commons:commons-text:1.9')
-    compile('commons-io:commons-io:2.10.0')
-    compile('org.slf4j:slf4j-api:1.7.30')
-    compile('org.slf4j:slf4j-nop:1.7.30')
-    compile('org.checkerframework:checker:3.14.0')
-    compile('com.github.spotbugs:spotbugs:3.1.12')
+    api 'net.sourceforge.streamsupport:streamsupport:1.7.3'
+    api('org.apache.commons:commons-lang3:3.12.0')
+    api('org.apache.commons:commons-configuration2:2.3')
+    api('org.apache.commons:commons-text:1.9')
+    api('commons-io:commons-io:2.10.0')
+    api('org.slf4j:slf4j-api:1.7.30')
+    api('org.slf4j:slf4j-nop:1.7.30')
+    api('org.checkerframework:checker:3.14.0')
+    api('com.github.spotbugs:spotbugs:3.1.12')
 
     spotbugsPlugins 'com.mebigfatguy.fb-contrib:fb-contrib:7.4.7'
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0'

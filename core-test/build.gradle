@@ -1,13 +1,13 @@
 dependencies {
-    compile project(':core')
+    api project(':core')
     annotationProcessor "com.google.dagger:dagger-compiler:2.37"
 
-    runtime('org.slf4j:slf4j-simple:1.7.30')
+    runtimeOnly('org.slf4j:slf4j-simple:1.7.30')
 
-    testCompile('junit:junit:4.13.2')
-    testCompile('org.hamcrest:hamcrest-junit:2.0.0.0')
+    testImplementation('junit:junit:4.13.2')
+    testImplementation('org.hamcrest:hamcrest-junit:2.0.0.0')
 
-    testRuntime('org.slf4j:slf4j-simple:1.7.30')
+    testRuntimeOnly('org.slf4j:slf4j-simple:1.7.30')
 }
 
 test {

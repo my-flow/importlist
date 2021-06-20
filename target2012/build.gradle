@@ -1,6 +1,6 @@
 dependencies {
-    compile project(':core')
-    compile(':moneydance-2012.5-862:')
+    api project(':core')
+    api(':moneydance-2012.5-862:')
     annotationProcessor "com.google.dagger:dagger-compiler:2.37"
 }
 

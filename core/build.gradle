@@ -1,18 +1,18 @@
 dependencies {
-    api('com.google.dagger:dagger:2.37')
-    annotationProcessor('com.google.dagger:dagger-compiler:2.37')
-    api 'net.sourceforge.streamsupport:streamsupport:1.7.3'
+    api('com.google.dagger:dagger:2.41')
+    annotationProcessor('com.google.dagger:dagger-compiler:2.41')
+    api 'net.sourceforge.streamsupport:streamsupport:1.7.4'
     api('org.apache.commons:commons-lang3:3.12.0')
     api('org.apache.commons:commons-configuration2:2.3')
     api('org.apache.commons:commons-text:1.9')
-    api('commons-io:commons-io:2.10.0')
-    api('org.slf4j:slf4j-api:1.7.30')
-    api('org.slf4j:slf4j-nop:1.7.30')
-    api('org.checkerframework:checker:3.14.0')
-    api('com.github.spotbugs:spotbugs:3.1.12')
+    api('commons-io:commons-io:2.11.0')
+    api('org.slf4j:slf4j-api:1.7.36')
+    api('org.slf4j:slf4j-nop:1.7.36')
+    api('org.checkerframework:checker:3.22.0')
+    api('com.github.spotbugs:spotbugs:4.7.0')
 
     spotbugsPlugins 'com.mebigfatguy.fb-contrib:fb-contrib:7.4.7'
-    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0'
+    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'
 }
 
 javadoc {
@@ -24,7 +24,7 @@ javadoc {
     options.docTitle = 'Import List for Moneydance'
     options.windowTitle = 'Import List for Moneydance'
     options.links = [
-        'https://docs.oracle.com/en/java/javase/11/docs/api/',
+        'https://docs.oracle.com/en/java/javase/17/docs/api/',
         'http://moneydance.com/dev/apidoc/',
         'http://www.slf4j.org/apidocs/',
         'https://commons.apache.org/proper/commons-configuration/apidocs/',

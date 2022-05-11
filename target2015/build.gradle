@@ -1,7 +1,7 @@
 dependencies {
     api project(':core')
     api(':moneydance-2015.7-1358:')
-    annotationProcessor "com.google.dagger:dagger-compiler:2.37"
+    annotationProcessor "com.google.dagger:dagger-compiler:2.41"
 }
 
 assemble.dependsOn shadowJar

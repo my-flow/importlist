@@ -10,7 +10,6 @@ import com.moneydance.modules.features.importlist.util.Settings;
 import java.awt.Dimension;
 
 import javax.swing.JTable;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
@@ -35,11 +34,8 @@ public final class AggregationTableFactory extends AbstractTableFactory {
                         0,
                         argSettings.getTableHeightOffset()));
 
-        JTableHeader tableHeader = table.getTableHeader();
-
         ColumnFactory columnFactory = new ColumnFactory(
                 argFileAdmin,
-                tableHeader.getDefaultRenderer(),
                 argPrefs.getDateFormatter(),
                 argPrefs.getTimeFormatter(),
                 evenColorScheme,

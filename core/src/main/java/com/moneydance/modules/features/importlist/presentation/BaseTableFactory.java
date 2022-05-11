@@ -46,7 +46,6 @@ public final class BaseTableFactory extends AbstractTableFactory {
 
         this.columnFactory = new ColumnFactory(
                 argFileAdmin,
-                tableHeader.getDefaultRenderer(),
                 argPrefs.getDateFormatter(),
                 argPrefs.getTimeFormatter(),
                 evenColorScheme,

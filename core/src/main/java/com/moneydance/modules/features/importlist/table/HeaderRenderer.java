@@ -6,12 +6,10 @@ import com.moneydance.modules.features.importlist.util.Preferences;
 import java.awt.Component;
 import java.awt.Dimension;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  * This decorator class sets header-specific attributes to a
@@ -19,16 +17,14 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author Florian J. Breunig
  */
-final class HeaderRenderer implements TableCellRenderer {
+final class HeaderRenderer extends DefaultTableCellRenderer {
 
-    private final TableCellRenderer defaultHeaderTableCellRenderer;
+    private static final long serialVersionUID = 1L;
     private final ColorScheme colorScheme;
 
-    HeaderRenderer(
-            final ColorScheme argColorScheme,
-            final TableCellRenderer argDefaultHeaderTableCellRenderer) {
+    HeaderRenderer(final ColorScheme argColorScheme) {
+        super();
         this.colorScheme = argColorScheme;
-        this.defaultHeaderTableCellRenderer = argDefaultHeaderTableCellRenderer;
     }
 
     // ESCA-JAVA0138: abstract method from interface TableCellRenderer
@@ -40,39 +36,39 @@ final class HeaderRenderer implements TableCellRenderer {
             final boolean hasFocus,
             final int row,
             final int column) {
-        Component component =
-                this.defaultHeaderTableCellRenderer.getTableCellRendererComponent(
-                        table, value, hasFocus, hasFocus, row, column);
-        this.colorScheme.applyColorScheme(component, row);
-        if (component instanceof JComponent) {
-            JComponent jComponent = (JComponent) component;
-            jComponent.setBorder(new EmptyBorder(1, 1, 1, 1));
-            jComponent.setOpaque(false);
-
-            if (jComponent instanceof JLabel) {
-                JLabel jLabel = (JLabel) jComponent;
-                jLabel.setHorizontalAlignment(SwingConstants.LEFT);
-            }
+        this.colorScheme.applyColorScheme(this, row);
+        this.setBorder(new EmptyBorder(1, 1, 1, 1));
+        this.setOpaque(false);
+        this.setHorizontalAlignment(SwingConstants.LEFT);
+        String label = null;
+        if (value != null) {
+            label = String.format("%s", value);
         }
+        super.getTableCellRendererComponent(
+                table,
+                label,
+                isSelected,
+                hasFocus,
+                row,
+                column);
 
         final Preferences prefs = Helper.INSTANCE.getPreferences();
 
-        component.setFont(prefs.getHeaderFont());
-        component.setForeground(prefs.getHeaderForeground());
+        this.setFont(prefs.getHeaderFont());
+        this.setForeground(prefs.getHeaderForeground());
 
-        component.setSize(new Dimension(
-                component.getWidth(),
+        this.setSize(new Dimension(
+                this.getWidth(),
                 prefs.getHeaderRowHeight()));
-        component.setMinimumSize(new Dimension(
-                component.getWidth(),
+        this.setMinimumSize(new Dimension(
+                this.getWidth(),
                 prefs.getHeaderRowHeight()));
-        component.setPreferredSize(new Dimension(
-                component.getWidth(),
+        this.setPreferredSize(new Dimension(
+                this.getWidth(),
                 prefs.getHeaderRowHeight()));
-        component.setMaximumSize(new Dimension(
-                component.getWidth(),
+        this.setMaximumSize(new Dimension(
+                this.getWidth(),
                 prefs.getHeaderRowHeight()));
-
-        return component;
+        return this;
     }
 }

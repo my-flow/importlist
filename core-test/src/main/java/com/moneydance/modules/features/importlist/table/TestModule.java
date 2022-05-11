@@ -6,7 +6,6 @@ import com.moneydance.modules.features.importlist.util.Settings;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import dagger.Module;
 import dagger.Provides;
@@ -24,7 +23,6 @@ public final class TestModule {
             final Settings settings) {
         return new ColumnFactory(
                 fileAdmin,
-                new DefaultTableCellRenderer(),
                 null,
                 null,
                 colorScheme,

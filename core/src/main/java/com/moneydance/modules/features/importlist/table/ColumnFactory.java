@@ -31,7 +31,6 @@ public final class ColumnFactory {
 
     public ColumnFactory(
             final FileAdmin fileAdmin,
-            final TableCellRenderer defaultHeaderTableCellRenderer,
             final DateFormatter argDateFormatter,
             final DateFormatter argTimeFormatter,
             final ColorScheme argEvenColorSchemeHelper,
@@ -40,9 +39,7 @@ public final class ColumnFactory {
 
         this.evenColorScheme = argEvenColorSchemeHelper;
         this.oddColorScheme = argOddColorSchemeHelper;
-        this.headerRenderer = new HeaderRenderer(
-                this.oddColorScheme,
-                defaultHeaderTableCellRenderer);
+        this.headerRenderer = new HeaderRenderer(this.oddColorScheme);
         this.labelNameOneRenderer = new LabelNameRenderer(
                 this.oddColorScheme,
                 argSettings.getIndentationPrefix());

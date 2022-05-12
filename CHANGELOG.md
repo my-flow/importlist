@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project does *not* adhere to Semantic Versioning.
 
-## [Unreleased]
+## [v16] - 2022-05-12
 ### Fixed
 - Crash in Moneydance 2022.3 (4060) on Windows ([#11]).
 

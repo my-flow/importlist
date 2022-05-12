@@ -16,7 +16,6 @@ branches:
     - /^feature\/\S+$/
     - /^hotfix\/\S+$/
     - /^release\/\S+$/
-    - gh-pages
 script:
 - ./gradlew core:check
 - ./gradlew core-test:check

@@ -1,19 +1,3 @@
-// Import List - https://www.my-flow.com/importlist/
-// Copyright (C) 2011-2021 Florian J. Breunig
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
-
 package com.moneydance.modules.features.importlist.table;
 
 import com.moneydance.modules.features.importlist.datetime.DateFormatter;
@@ -47,7 +31,6 @@ public final class ColumnFactory {
 
     public ColumnFactory(
             final FileAdmin fileAdmin,
-            final TableCellRenderer defaultHeaderTableCellRenderer,
             final DateFormatter argDateFormatter,
             final DateFormatter argTimeFormatter,
             final ColorScheme argEvenColorSchemeHelper,
@@ -56,9 +39,7 @@ public final class ColumnFactory {
 
         this.evenColorScheme = argEvenColorSchemeHelper;
         this.oddColorScheme = argOddColorSchemeHelper;
-        this.headerRenderer = new HeaderRenderer(
-                this.oddColorScheme,
-                defaultHeaderTableCellRenderer);
+        this.headerRenderer = new HeaderRenderer(this.oddColorScheme);
         this.labelNameOneRenderer = new LabelNameRenderer(
                 this.oddColorScheme,
                 argSettings.getIndentationPrefix());

@@ -70,14 +70,14 @@ subprojects {
         dependencies {
             include project(':core')
             include dependency('javax.inject:javax.inject:1')
-            include dependency('com.google.dagger:dagger:2.37')
-            include dependency('net.sourceforge.streamsupport:streamsupport:1.7.3')
+            include dependency('com.google.dagger:dagger:2.41')
+            include dependency('net.sourceforge.streamsupport:streamsupport:1.7.4')
             include dependency('org.apache.commons:commons-configuration2:2.3')
             include dependency('org.apache.commons:commons-lang3:3.12.0')
             include dependency('org.apache.commons:commons-text:1.9')
-            include dependency('commons-io:commons-io:2.10.0')
-            include dependency('org.slf4j:slf4j-api:1.7.30')
-            include dependency('org.slf4j:slf4j-nop:1.7.30')
+            include dependency('commons-io:commons-io:2.11.0')
+            include dependency('org.slf4j:slf4j-api:1.7.36')
+            include dependency('org.slf4j:slf4j-nop:1.7.36')
         }
 
         relocate 'dagger', 'com.moneydance.modules.features.importlist.dagger'
@@ -100,17 +100,17 @@ subprojects {
     }
 
     checkstyle {
-        toolVersion '8.43';
+        toolVersion '10.2';
     }
 
     pmd {
-        toolVersion = "6.35.0"
+        toolVersion = "6.45.0"
         ruleSets = []
         ruleSetFiles = files("$rootDir/config/pmd-ruleSet.xml")
     }
 
     spotbugs {
-        toolVersion = "4.2.3"
+        toolVersion = "4.7.0"
         effort = "max"
         reportLevel = "medium"
         excludeFilter = file("$rootDir/config/spotbugs-exclude.xml")
@@ -125,7 +125,7 @@ subprojects {
     }
 
     jacoco {
-        toolVersion = "0.8.7"
+        toolVersion = "0.8.8"
     }
 
     sonarqube {

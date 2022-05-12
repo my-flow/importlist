@@ -1,4 +1,5 @@
-# Import List [![Build Status](https://travis-ci.com/my-flow/importlist.svg?branch=develop)](https://travis-ci.com/my-flow/importlist)
+# Import List
+[![GitHub release](https://img.shields.io/github/v/release/my-flow/importlist)](https://github.com/my-flow/importlist/releases/latest) [![Build Status](https://img.shields.io/travis/my-flow/importlist/develop)](https://app.travis-ci.com/github/my-flow/importlist) [![Quality Gate Status](https://img.shields.io/sonar/tech_debt/importlist:target2015?server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/component_measures?id=importlist%3Atarget2015&metric=sqale_debt_ratio) [![License](https://img.shields.io/github/license/my-flow/importlist)](LICENSE)
 
 Import List is an open-source extension for
 [Moneydance](http://www.moneydance.com) monitoring a given directory for
@@ -41,6 +42,5 @@ Support projects provide test infrastructure and test cases:
 * [SonarCloud](https://sonarcloud.io/organizations/importlist/)
 
 ## License
-Copyright 2011-2021 [Florian J. Breunig](http://www.my-flow.com). Import List
-is released under the
+Import List is released under the
 [GNU General Public License](http://www.gnu.org/licenses/gpl.html).

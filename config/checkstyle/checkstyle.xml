@@ -42,13 +42,6 @@
         <property name="message" value="Line has trailing spaces."/>
     </module>
 
-    <!-- Checks for Headers                                -->
-    <!-- See http://checkstyle.sf.net/config_header.html   -->
-    <module name="RegexpHeader">
-        <property name="headerFile" value="${config_loc}/java.header"/>
-        <property name="fileExtensions" value="java"/>
-    </module>
-
     <!-- Checks properties files for duplicated properties -->
     <!-- See http://checkstyle.sf.net/config_misc.html     -->
     <module name="UniqueProperties"/>

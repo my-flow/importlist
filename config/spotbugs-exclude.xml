@@ -6,6 +6,12 @@
         </Or>
     </Match>
     <Match>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+    <Match>
         <Bug pattern="IMC_IMMATURE_CLASS_PRINTSTACKTRACE"/>
     </Match>
     <Match>
@@ -16,5 +22,8 @@
     </Match>
     <Match>
         <Bug pattern="PATH_TRAVERSAL_IN"/>
+    </Match>
+    <Match>
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE"/>
     </Match>
 </FindBugsFilter>

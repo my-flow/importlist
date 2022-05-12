@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project does *not* adhere to Semantic Versioning.
 
+## [v16] - 2022-05-12
+### Fixed
+- Crash in Moneydance 2022.3 (4060) on Windows ([#11]).
+
 ## [v15] - 2021-06-20
 ### Added
 - CSV to list of supported file types that can be imported without Text File Importer extension ([#7]).
@@ -121,13 +125,15 @@ and this project does *not* adhere to Semantic Versioning.
 - Compatibility with Moneydance 2010.
 - Compatibility with Java 1.3 and later versions.
 
+[#11]: https://github.com/my-flow/importlist/issues/11
 [#10]: https://github.com/my-flow/importlist/issues/10
 [#7]: https://github.com/my-flow/importlist/issues/7
 [#5]: https://github.com/my-flow/importlist/issues/5
 [#3]: https://github.com/my-flow/importlist/issues/3
 [#1]: https://github.com/my-flow/importlist/issues/1
 
-[Unreleased]: https://github.com/my-flow/importlist/compare/v15...HEAD
+[Unreleased]: https://github.com/my-flow/importlist/compare/v16...HEAD
+[v16]: https://github.com/my-flow/importlist/compare/v15...v16
 [v15]: https://github.com/my-flow/importlist/compare/v14...v15
 [v14]: https://github.com/my-flow/importlist/compare/v13...v14
 [v13]: https://github.com/my-flow/importlist/compare/v12...v13

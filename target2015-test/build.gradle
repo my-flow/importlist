@@ -2,16 +2,16 @@ dependencies {
     api project(':core')
     api project(':core-test')
     api project(':target2015')
-    api('com.google.dagger:dagger:2.37')
-    annotationProcessor "com.google.dagger:dagger-compiler:2.37"
+    api('com.google.dagger:dagger:2.41')
+    annotationProcessor "com.google.dagger:dagger-compiler:2.41"
 
-    runtimeOnly('org.slf4j:slf4j-simple:1.7.30')
+    runtimeOnly('org.slf4j:slf4j-simple:1.7.36')
     runtimeOnly('org.syncloud:dropbox-client:1.5.3');
 
     testImplementation('junit:junit:4.13.2')
     testImplementation('org.hamcrest:hamcrest-junit:2.0.0.0')
 
-    testRuntimeOnly('org.slf4j:slf4j-simple:1.7.30')
+    testRuntimeOnly('org.slf4j:slf4j-simple:1.7.36')
 }
 
 test {

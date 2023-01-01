@@ -18,6 +18,7 @@ import java.text.DateFormat;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -25,8 +26,6 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
-
-import java8.util.Optional;
 
 /**
  * This preferences class contains the values the user can control in the

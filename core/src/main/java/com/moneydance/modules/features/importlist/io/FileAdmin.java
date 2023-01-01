@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,7 +17,6 @@ import javax.inject.Singleton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import java8.util.Optional;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.monitor.FileAlterationMonitor;

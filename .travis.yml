@@ -21,6 +21,4 @@ script:
 - ./gradlew core-test:check
 - ./gradlew target2015:check
 - ./gradlew target2015-test:check -x target2015-test:test
-- ./gradlew target2012:check
-- ./gradlew target2012-test:check -x target2012-test:test
-#- ./gradlew sonarqube -x target2012-test:test -x target2015-test:test -Dsonar.login="${SONAR_TOKEN}"
+#- ./gradlew sonarqube -x target2015-test:test -Dsonar.login="${SONAR_TOKEN}"

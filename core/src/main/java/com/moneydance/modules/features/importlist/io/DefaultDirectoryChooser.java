@@ -4,6 +4,7 @@ import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,7 +12,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.JFileChooser;
 
-import java8.util.Optional;
 import org.apache.commons.io.FileUtils;
 
 

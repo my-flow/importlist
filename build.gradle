@@ -16,7 +16,6 @@ buildscript {
         classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
         classpath 'org.apache.commons:commons-configuration2:2.3'
         classpath 'net.sf.proguard:proguard-gradle:6.2.2'
-        classpath 'me.tatarka:gradle-retrolambda:3.7.1'
         classpath 'gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.7.1'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
     }
@@ -30,7 +29,6 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'com.github.spotbugs'
     apply plugin: 'jacoco'
-    apply plugin: 'me.tatarka.retrolambda'
     apply plugin: 'org.sonarqube'
 
 
@@ -71,7 +69,6 @@ subprojects {
             include project(':core')
             include dependency('javax.inject:javax.inject:1')
             include dependency('com.google.dagger:dagger:2.41')
-            include dependency('net.sourceforge.streamsupport:streamsupport:1.7.4')
             include dependency('org.apache.commons:commons-configuration2:2.3')
             include dependency('org.apache.commons:commons-lang3:3.12.0')
             include dependency('org.apache.commons:commons-text:1.9')
@@ -81,7 +78,6 @@ subprojects {
         }
 
         relocate 'dagger', 'com.moneydance.modules.features.importlist.dagger'
-        relocate 'java8', 'com.moneydance.modules.features.importlist.java8'
         relocate 'javax.inject', 'com.moneydance.modules.features.importlist.javax.inject'
         relocate 'org.apache.commons.io', 'com.moneydance.modules.features.importlist.org.apache.commons.io'
         relocate 'org.apache.commons.lang3', 'com.moneydance.modules.features.importlist.org.apache.commons.lang3'

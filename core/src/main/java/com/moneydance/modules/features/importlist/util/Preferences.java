@@ -7,12 +7,11 @@ import java.awt.Font;
 import java.io.File;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.swing.RowSorter;
 import javax.swing.border.Border;
-
-import java8.util.Optional;
 
 /**
  * This preferences class contains the values the user can control in the

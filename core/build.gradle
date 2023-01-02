@@ -8,7 +8,7 @@ dependencies {
     api('org.slf4j:slf4j-api:1.7.36')
     api('org.slf4j:slf4j-nop:1.7.36')
     api('org.checkerframework:checker:3.22.0')
-    api('com.github.spotbugs:spotbugs:4.7.0')
+    api('com.github.spotbugs:spotbugs:4.7.3')
 
     spotbugsPlugins 'com.mebigfatguy.fb-contrib:fb-contrib:7.4.7'
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'

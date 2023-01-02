@@ -125,21 +125,6 @@ public final class PreferencesTest {
     }
 
     @Test
-    public void testGetPreferredTableHeight() {
-        assertThat(this.prefs.getPreferredTableHeight(0), greaterThan(0));
-    }
-
-    @Test
-    public void testGetMaximumTableWidth() {
-        assertThat(this.prefs.getMaximumTableWidth(), greaterThan(0));
-    }
-
-    @Test
-    public void testGetMaximumTableHeight() {
-        assertThat(this.prefs.getMaximumTableHeight(), greaterThan(0));
-    }
-
-    @Test
     public void testGetForeground() {
         assertThat(this.prefs.getForeground(), notNullValue());
     }

@@ -17,8 +17,5 @@ branches:
     - /^hotfix\/\S+$/
     - /^release\/\S+$/
 script:
-- ./gradlew core:check
-- ./gradlew core-test:check
-- ./gradlew target2015:check
-- ./gradlew target2015-test:check -x target2015-test:test
-#- ./gradlew sonarqube -x target2015-test:test -Dsonar.login="${SONAR_TOKEN}"
+- ./gradlew clean check test assemble
+- ./gradlew :core:sonar -Dsonar.login="${SONAR_TOKEN}"

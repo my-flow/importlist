@@ -195,11 +195,12 @@ public final class FileAdmin extends Observable implements Observer {
     }
 
     private void setFileMonitorToCurrentImportDir() {
-        if (!this.getBaseDirectory().isPresent()) {
+        final Optional<File> baseDirectory = this.getBaseDirectory();
+        if (!baseDirectory.isPresent()) {
             return;
         }
         this.observer = new FileAlterationObserver(
-                this.getBaseDirectory().get(),
+                baseDirectory.get(),
                 this.readableFileFilter,
                 IOCase.SYSTEM);
         this.observer.addListener(this.listener);

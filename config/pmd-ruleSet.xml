@@ -41,7 +41,7 @@
 
     <rule ref="category/java/errorprone.xml" >
         <exclude name="AvoidDuplicateLiterals" />
-        <exclude name="BeanMembersShouldSerialize" />
+        <exclude name="NonSerializableClass" />
         <exclude name="DataflowAnomalyAnalysis" />
         <exclude name="UseProperClassLoader" />
     </rule>

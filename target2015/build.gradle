@@ -12,7 +12,7 @@ task genKeys(type: JavaExec) {
     description 'Generates a passphrase-protected key pair.'
     standardInput = System.in
     classpath = files("$rootDir/lib/extadmin-2015.jar", "$rootDir/lib/moneydance-2015.7-1358.jar")
-    main = 'com.moneydance.admin.KeyAdmin'
+    mainClass = 'com.moneydance.admin.KeyAdmin'
     args 'genkey', privkeyfile, pubkeyfile
 }
 
@@ -23,7 +23,7 @@ task sign(type: JavaExec) {
     }
     standardInput = System.in
     classpath = files("$rootDir/lib/extadmin-2015.jar", "$rootDir/lib/moneydance-2015.7-1358.jar")
-    main = 'com.moneydance.admin.KeyAdmin'
+    mainClass = 'com.moneydance.admin.KeyAdmin'
     args 'signextjar', privkeyfile, privkeyid, rootProject.name, mxtfile
 }
 

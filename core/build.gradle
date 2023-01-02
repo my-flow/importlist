@@ -24,13 +24,12 @@ javadoc {
     options.windowTitle = 'Import List for Moneydance'
     options.links = [
         'https://docs.oracle.com/en/java/javase/17/docs/api/',
-        'http://moneydance.com/dev/apidoc/',
-        'http://www.slf4j.org/apidocs/',
+        'https://infinitekind.com/dev/apidoc/',
+        'https://www.slf4j.org/apidocs/',
         'https://commons.apache.org/proper/commons-configuration/apidocs/',
         'https://commons.apache.org/proper/commons-io/javadocs/api-2.6/',
         'https://commons.apache.org/proper/commons-lang/javadocs/api-3.7/',
         'https://commons.apache.org/proper/commons-text/javadocs/api-release/',
         'https://commons.apache.org/proper/commons-logging/javadocs/api-release/'
     ]
-    options.footer = '<a href="https://github.com/my-flow/importlist" target="_blank">Import List on GitHub</a>'
 }

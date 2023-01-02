@@ -116,7 +116,7 @@ subprojects {
     spotbugsMain {
         reports {
             html {
-                enabled = true
+                required = true
             }
         }
     }

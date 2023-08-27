@@ -1,5 +1,5 @@
 dependencies {
-    api('com.google.dagger:dagger:2.44.2')
+    api('com.google.dagger:dagger:2.47')
     annotationProcessor('com.google.dagger:dagger-compiler:2.44.2')
     api('org.apache.commons:commons-lang3:3.12.0')
     api('org.apache.commons:commons-configuration2:2.3')

@@ -10,7 +10,7 @@ dependencies {
     api('org.checkerframework:checker:3.37.0')
     api('com.github.spotbugs:spotbugs:4.7.3')
 
-    spotbugsPlugins 'com.mebigfatguy.sb-contrib:sb-contrib:7.4.7'
+    spotbugsPlugins 'com.mebigfatguy.sb-contrib:sb-contrib:7.6.0'
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'
 }
 

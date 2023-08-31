@@ -1,6 +1,6 @@
 dependencies {
     api project(':core')
-    annotationProcessor "com.google.dagger:dagger-compiler:2.44.2"
+    annotationProcessor "com.google.dagger:dagger-compiler:2.48"
 
     runtimeOnly('org.slf4j:slf4j-simple:2.0.7')
 

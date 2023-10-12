@@ -8,7 +8,7 @@ dependencies {
     api('org.slf4j:slf4j-api:2.0.9')
     api('org.slf4j:slf4j-nop:2.0.9')
     api('org.checkerframework:checker:3.39.0')
-    api('com.github.spotbugs:spotbugs:4.7.3')
+    api('com.github.spotbugs:spotbugs:4.8.0')
 
     spotbugsPlugins 'com.mebigfatguy.sb-contrib:sb-contrib:7.6.0'
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'

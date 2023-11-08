@@ -107,7 +107,7 @@ subprojects {
     }
 
     spotbugs {
-        toolVersion = "4.8.0"
+        toolVersion = "4.8.1"
         effort = "max"
         reportLevel = "medium"
         excludeFilter = file("$rootDir/config/spotbugs-exclude.xml")

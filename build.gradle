@@ -1,6 +1,8 @@
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 
+import com.github.spotbugs.snom.Effort
+
 import org.apache.commons.configuration2.FileBasedConfiguration
 import org.apache.commons.configuration2.PropertiesConfiguration
 import proguard.gradle.ProGuardTask
@@ -16,7 +18,7 @@ buildscript {
         classpath 'gradle.plugin.com.github.johnrengelman:shadow:7.1.2'
         classpath 'org.apache.commons:commons-configuration2:2.10.1'
         classpath 'com.guardsquare:proguard-gradle:7.5.0'
-        classpath 'com.github.spotbugs.snom:spotbugs-gradle-plugin:5.2.5'
+        classpath 'com.github.spotbugs.snom:spotbugs-gradle-plugin:6.0.15'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.5.0.2730'
     }
 }
@@ -108,8 +110,7 @@ subprojects {
 
     spotbugs {
         toolVersion = "4.8.5"
-        effort = "max"
-        reportLevel = "medium"
+        effort = Effort.valueOf('MAX')
         excludeFilter = file("$rootDir/config/spotbugs-exclude.xml")
     }
 

@@ -15,7 +15,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'gradle.plugin.com.github.johnrengelman:shadow:7.1.2'
+        classpath 'gradle.plugin.com.github.johnrengelman:shadow:8.0.0'
         classpath 'org.apache.commons:commons-configuration2:2.3'
         classpath 'com.guardsquare:proguard-gradle:7.5.0'
         classpath 'com.github.spotbugs.snom:spotbugs-gradle-plugin:6.0.15'
@@ -41,7 +41,8 @@ subprojects {
         privkeyid = '99'
         privkeyfile = "$rootDir/config/priv_key"
         pubkeyfile = "$rootDir/config/pub_key"
-        mxtfile = "${project.buildDir}/${project.distsDirName}/${rootProject.name}-${project.name}-v${getConfigValueForKey("module_build")}.mxt"
+        mxtfile = project.layout.buildDirectory.dir("${rootProject.name}-${project.name}-v${getConfigValueForKey("module_build")}.mxt")
+        outjar = project.layout.buildDirectory.dir("proguard-${rootProject.name}-v${getConfigValueForKey("module_build")}.jar")
     }
 
     repositories {
@@ -88,14 +89,17 @@ subprojects {
         relocate 'org.apache.commons.configuration2', 'com.moneydance.modules.features.importlist.org.apache.commons.configuration2'
     }
 
-    task proguard(type: ProGuardTask, dependsOn: 'shadowJar') {
-        injars  shadowJar.archivePath
-        outjars "${project.buildDir}/${project.distsDirName}/proguard-${rootProject.name}.jar"
+    tasks.register('proguard', ProGuardTask) {
+        dependsOn 'shadowJar'
+        injars  shadowJar.archiveFile.get().asFile
+        outjars outjar.get().asFile
         configuration 'config/proguard.cfg'
     }
 
-    proguard.doLast {
-        new File("${project.buildDir}/${project.distsDirName}/proguard-${rootProject.name}.jar").renameTo mxtfile as String
+    tasks.named('proguard').configure {
+        doLast {
+            outjar.get().asFile.renameTo(file(mxtfile))
+        }
     }
 
     checkstyle {

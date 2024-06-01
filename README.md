@@ -21,7 +21,7 @@ repository.
 
 ## Running the extension
 After the build process has succeeded, the resulting MXT files are located in
-`target2015/build/distributions`.
+`target2015/build`.
 
 These MXT files can be added to Moneydance.
 

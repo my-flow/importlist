@@ -1,7 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "ignoreTests": true,
   "baseBranches": ["develop"],
+  "ignoreDeps": ["org.apache.commons:commons-configuration2"],
+  "ignoreTests": true,
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],

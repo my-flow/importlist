@@ -24,9 +24,9 @@ task sign(type: JavaExec) {
     standardInput = System.in
     classpath = files("$rootDir/lib/extadmin-2015.jar", "$rootDir/lib/moneydance-2015.7-1358.jar")
     mainClass = 'com.moneydance.admin.KeyAdmin'
-    args 'signextjar', privkeyfile, privkeyid, rootProject.name, mxtfile
+    args 'signextjar', privkeyfile, privkeyid, rootProject.name, file(mxtfile)
 }
 
 sign.doLast {
-    new File("$projectDir/s-importlist.mxt").renameTo mxtfile as String
+    new File("$projectDir/s-importlist.mxt").renameTo(file(mxtfile))
 }

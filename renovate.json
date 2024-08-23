@@ -1,7 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "baseBranches": ["develop"],
-  "ignoreDeps": ["org.apache.commons:commons-configuration2"],
   "ignoreTests": true,
   "packageRules": [
     {

@@ -66,7 +66,8 @@ public final class StubContextFactory {
                 null,
                 new StreamTable(),
                 null,
-                null);
+                null,
+                true);
     }
 
     @Nullable public StubContext getContext() {

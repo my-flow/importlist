@@ -7,7 +7,7 @@ dependencies {
     api('commons-io:commons-io:2.17.0')
     api('org.slf4j:slf4j-api:2.0.16')
     api('org.slf4j:slf4j-nop:2.0.16')
-    api('org.checkerframework:checker:3.48.1')
+    api('org.checkerframework:checker:3.48.2')
     api('com.github.spotbugs:spotbugs:4.8.6')
 
     spotbugsPlugins 'com.mebigfatguy.sb-contrib:sb-contrib:7.6.6'

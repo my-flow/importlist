@@ -9,9 +9,6 @@
 
     <rule ref="category/java/bestpractices.xml">
         <exclude name="AvoidPrintStackTrace"/>
-        <exclude name="JUnitAssertionsShouldIncludeMessage"/>
-        <exclude name="JUnitTestContainsTooManyAsserts"/>
-        <exclude name="JUnitTestsShouldIncludeAssert"/>
         <exclude name="LooseCoupling"/>
         <exclude name="ReplaceHashtableWithMap" />
     </rule>
@@ -19,7 +16,6 @@
     <rule ref="category/java/codestyle.xml">
         <exclude name="AtLeastOneConstructor" />
         <exclude name="CommentDefaultAccessModifier" />
-        <exclude name="DefaultPackage" />
         <exclude name="LocalVariableCouldBeFinal" />
         <exclude name="LongVariable" />
         <exclude name="OnlyOneReturn" />
@@ -42,7 +38,6 @@
     <rule ref="category/java/errorprone.xml" >
         <exclude name="AvoidDuplicateLiterals" />
         <exclude name="NonSerializableClass" />
-        <exclude name="DataflowAnomalyAnalysis" />
         <exclude name="UseProperClassLoader" />
     </rule>
 
@@ -55,6 +50,7 @@
     <rule ref="category/java/multithreading.xml">
         <exclude name="AvoidSynchronizedAtMethodLevel" />
         <exclude name="DoNotUseThreads" />
+        <exclude name="AvoidSynchronizedStatement" />
     </rule>
 
     <rule ref="category/java/performance.xml" />

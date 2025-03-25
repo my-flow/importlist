@@ -7,7 +7,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -39,7 +38,7 @@ final class HeaderRenderer extends DefaultTableCellRenderer {
         this.colorScheme.applyColorScheme(this, row);
         this.setBorder(new EmptyBorder(1, 1, 1, 1));
         this.setOpaque(false);
-        this.setHorizontalAlignment(SwingConstants.LEFT);
+        this.setHorizontalAlignment(LEFT);
         String label = null;
         if (value != null) {
             label = String.format("%s", value);

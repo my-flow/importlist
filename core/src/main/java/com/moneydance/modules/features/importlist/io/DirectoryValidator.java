@@ -27,11 +27,7 @@ public final class DirectoryValidator implements IOFileFilter {
     }
 
     boolean isValidDirectory(final File file) {
-        if (file == null) {
-            return false;
-        }
-
-        return this.accept(file);
+        return file != null && this.accept(file);
     }
 
     @Override

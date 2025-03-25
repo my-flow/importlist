@@ -113,7 +113,7 @@ subprojects {
     }
 
     spotbugs {
-        toolVersion = "4.9.1"
+        toolVersion = "4.9.3"
         effort = Effort.valueOf('MAX')
         excludeFilter = file("$rootDir/config/spotbugs-exclude.xml")
     }

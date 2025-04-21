@@ -7,13 +7,13 @@ dependencies {
     api('com.google.dagger:dagger:2.51.1')
     annotationProcessor "com.google.dagger:dagger-compiler:2.53.1"
 
-    runtimeOnly('org.slf4j:slf4j-simple:2.0.16')
+    runtimeOnly('org.slf4j:slf4j-simple:2.0.17')
     runtimeOnly('org.syncloud:dropbox-client:1.5.3');
 
     testImplementation('junit:junit:4.13.2')
     testImplementation('org.hamcrest:hamcrest-junit:2.0.0.0')
 
-    testRuntimeOnly('org.slf4j:slf4j-simple:2.0.16')
+    testRuntimeOnly('org.slf4j:slf4j-simple:2.0.17')
 }
 
 test {

@@ -34,7 +34,7 @@ subprojects {
     apply plugin: 'org.sonarqube'
 
     tasks.withType(JavaCompile) {
-        options.release = 8
+        options.release = 11
     }
 
     ext {
@@ -113,7 +113,7 @@ subprojects {
     }
 
     spotbugs {
-        toolVersion = "4.8.6"
+        toolVersion = "4.9.1"
         effort = Effort.valueOf('MAX')
         excludeFilter = file("$rootDir/config/spotbugs-exclude.xml")
     }

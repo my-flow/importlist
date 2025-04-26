@@ -2,7 +2,9 @@
     <Match>
         <Or>
             <Class name="~.*Factory"/>
+            <Class name="~.*_Factory"/>
             <Class name="~.*Dagger.*Component.*"/>
+            <Class name="~.*_MembersInjector"/>
         </Or>
     </Match>
     <Match>

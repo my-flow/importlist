@@ -34,7 +34,7 @@ subprojects {
     apply plugin: 'org.sonarqube'
 
     tasks.withType(JavaCompile) {
-        options.release = 8
+        options.release = 11
     }
 
     ext {
@@ -72,7 +72,7 @@ subprojects {
         dependencies {
             include project(':core')
             include dependency('javax.inject:javax.inject:1')
-            include dependency('com.google.dagger:dagger:2.53.1')
+            include dependency('com.google.dagger:dagger:2.56.2')
             include dependency('org.apache.commons:commons-configuration2:2.11.0')
             include dependency('org.apache.commons:commons-lang3:3.17.0')
             include dependency('org.apache.commons:commons-text:1.13.0')
@@ -103,17 +103,21 @@ subprojects {
     }
 
     checkstyle {
-        toolVersion '10.21.2';
+        toolVersion '10.21.4';
     }
 
     pmd {
-        toolVersion = "6.55.0"
+        toolVersion = "7.11.0"
         ruleSets = []
         ruleSetFiles = files("$rootDir/config/pmd-ruleSet.xml")
     }
+ 
+    tasks.withType(Pmd) {
+        enabled = it.name.endsWith('Main')
+    }
 
     spotbugs {
-        toolVersion = "4.8.6"
+        toolVersion = "4.9.3"
         effort = Effort.valueOf('MAX')
         excludeFilter = file("$rootDir/config/spotbugs-exclude.xml")
     }

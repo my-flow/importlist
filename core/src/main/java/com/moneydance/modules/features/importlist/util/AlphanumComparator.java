@@ -30,12 +30,6 @@ public enum AlphanumComparator implements Comparator<String> {
      */
     private static final int DIGIT_UPPER_BOUND = 57;
 
-    /**
-     * Restrictive constructor.
-     */
-    AlphanumComparator() {
-        // Prevents this class from being instantiated from the outside.
-    }
 
     /**
      * @param character The character

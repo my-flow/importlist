@@ -273,7 +273,7 @@ public final class PreferencesImpl implements Preferences {
     @Override
     public Font getBodyFont() {
         final int fontIncrement = this.userPreferences.getIntSetting(UserPreferences.GUI_FONT_DIFF, 0);
-        return this.defaultSystemFont.deriveFont(this.defaultSystemFont.getSize2D() + (float) fontIncrement);
+        return this.defaultSystemFont.deriveFont(this.defaultSystemFont.getSize2D() + fontIncrement);
     }
 
     @Override

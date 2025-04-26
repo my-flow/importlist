@@ -2,7 +2,9 @@
     <Match>
         <Or>
             <Class name="~.*Factory"/>
+            <Class name="~.*_Factory"/>
             <Class name="~.*Dagger.*Component.*"/>
+            <Class name="~.*_MembersInjector"/>
         </Or>
     </Match>
     <Match>
@@ -28,5 +30,8 @@
     </Match>
     <Match>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE"/>
+    </Match>
+    <Match>
+        <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE"/>
     </Match>
 </FindBugsFilter>

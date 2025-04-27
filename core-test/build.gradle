@@ -12,6 +12,10 @@ dependencies {
 
 test {
     jacocoTestReport {
+        dependsOn test
+        dependsOn project(':core').tasks.compileJava
+        dependsOn project(':core').tasks.processResources
+
         sourceDirectories.from = files(project(':core').sourceSets.main.allSource.srcDirs)
         classDirectories.from =  files(project(':core').sourceSets.main.output)
 

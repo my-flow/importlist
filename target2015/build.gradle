@@ -4,12 +4,20 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:2.56.2"
 }
 
-assemble.dependsOn shadowJar
-build.dependsOn shadowJar
-shadowJar.finalizedBy proguard
+tasks.named('assemble').configure {
+    dependsOn tasks.named('shadowJar')
+}
+
+tasks.named('build').configure {
+    dependsOn tasks.named('shadowJar')
+}
+
+tasks.named('shadowJar').configure {
+    finalizedBy tasks.named('proguard')
+}
 
 task genKeys(type: JavaExec) {
-    description 'Generates a passphrase-protected key pair.'
+    description = 'Generates a passphrase-protected key pair.'
     standardInput = System.in
     classpath = files("$rootDir/lib/extadmin-2015.jar", "$rootDir/lib/moneydance-2020.2-1929.jar")
     mainClass = 'com.moneydance.admin.KeyAdmin'
@@ -17,7 +25,7 @@ task genKeys(type: JavaExec) {
 }
 
 task sign(type: JavaExec) {
-    description 'Signs an MXT file with a private key that must already exist.'
+    description = 'Signs an MXT file with a private key that must already exist.'
     onlyIf {
         new File(privkeyfile as String).exists()
     }

@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.presentation;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
 import com.moneydance.modules.features.importlist.table.ColorScheme;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
 import com.moneydance.modules.features.importlist.util.Preferences;
@@ -72,9 +72,9 @@ public final class AggregationTableFactory extends AbstractTableFactory {
         final JTable table = this.getTable();
         final Settings settings = this.getSettings();
 
-        table.setBackground(Helper.INSTANCE.getPreferences().getBackground());
+        table.setBackground(ServiceLocator.getPreferences().getBackground());
 
-        int bodyRowHeight = Helper.INSTANCE.getPreferences().getBodyRowHeight();
+        int bodyRowHeight = ServiceLocator.getPreferences().getBodyRowHeight();
         int tableHeightOffset = settings.getTableHeightOffset();
 
         table.setRowHeight(
@@ -87,12 +87,12 @@ public final class AggregationTableFactory extends AbstractTableFactory {
                         + tableHeightOffset));
         table.setPreferredSize(
                 new Dimension(
-                        Helper.INSTANCE.getPreferences().getPreferredTableWidth(),
+                        ServiceLocator.getPreferences().getPreferredTableWidth(),
                         bodyRowHeight
                         + tableHeightOffset));
         table.setMaximumSize(
                 new Dimension(
-                        Helper.INSTANCE.getPreferences().getMaximumTableWidth(),
+                        ServiceLocator.getPreferences().getMaximumTableWidth(),
                         bodyRowHeight
                         + tableHeightOffset));
 

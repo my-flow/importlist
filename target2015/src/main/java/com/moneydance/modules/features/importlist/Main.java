@@ -4,6 +4,7 @@ import com.moneydance.apps.md.controller.FeatureModule;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.modules.features.importlist.bootstrap.MainHelper;
 import com.moneydance.modules.features.importlist.controller.ViewControllerImpl;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
 
 import java.awt.Image;
 import java.util.Observable;
@@ -61,7 +62,7 @@ public final class Main extends FeatureModule implements Observer {
     @Override
     public void update(final Observable observable, final Object updateAll) {
         this.targetModule.setContext(this.getContext());
-        this.mainHelper.update(this.targetComponent);
+        ServiceLocator.notifyObservers(updateAll);
     }
 
     @Override

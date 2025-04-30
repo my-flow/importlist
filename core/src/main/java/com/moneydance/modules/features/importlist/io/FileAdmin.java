@@ -1,6 +1,6 @@
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
 
 import java.io.File;
 import java.util.Collections;
@@ -74,7 +74,7 @@ public final class FileAdmin extends Observable implements Observer {
                 return;
             }
             LOG.warning(() -> String.format("Could not open directory %s", baseDirectory.getAbsolutePath()));
-            final String errorMessage = Helper.INSTANCE.getLocalizable().
+            final String errorMessage = ServiceLocator.getLocalizable().
                     getErrorMessageBaseDirectory(baseDirectory.getName());
             final JLabel errorLabel = new JLabel(errorMessage);
             errorLabel.setLabelFor(null);

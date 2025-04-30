@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.bootstrap;
 
-import com.moneydance.modules.features.importlist.DaggerTargetTestComponent;
 import com.moneydance.modules.features.importlist.TargetTestComponent;
+import com.moneydance.modules.features.importlist.test.HelperUtils;
 
 import java.util.Observable;
 
@@ -20,7 +20,7 @@ public final class MainHelperTest {
 
     @Before
     public void setUp() {
-        this.testComponent = DaggerTargetTestComponent.builder().build();
+        this.testComponent = HelperUtils.createTestComponent();
         this.mainHelper = this.testComponent.mainHelper();
         this.mainHelper.init(this.testComponent, (final Observable o, final Object arg) -> {
             // ignore
@@ -54,7 +54,7 @@ public final class MainHelperTest {
 
     @Test
     public void testUpdate() {
-        this.mainHelper.update(null);
+        this.mainHelper.update(this.testComponent);
     }
 
     @Test

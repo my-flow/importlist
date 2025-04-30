@@ -1,6 +1,6 @@
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.io.File;
@@ -38,7 +38,7 @@ final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
     @SuppressWarnings("nullness")
     void chooseBaseDirectory() {
         final JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle(Helper.INSTANCE.getLocalizable().getDirectoryChooserTitle());
+        fileChooser.setDialogTitle(ServiceLocator.getLocalizable().getDirectoryChooserTitle());
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         // disable the "All files" option.
         fileChooser.setAcceptAllFileFilterUsed(false);

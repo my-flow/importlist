@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.presentation;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
 import com.moneydance.modules.features.importlist.table.ColorScheme;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
 import com.moneydance.modules.features.importlist.util.Localizable;
@@ -108,8 +108,8 @@ public final class BaseTableFactory extends AbstractTableFactory {
     @Override
     public JScrollPane getComponent() {
         final Settings settings = this.getSettings();
-        final Preferences prefs = Helper.INSTANCE.getPreferences();
-        final Localizable localizable = Helper.INSTANCE.getLocalizable();
+        final Preferences prefs = ServiceLocator.getPreferences();
+        final Localizable localizable = ServiceLocator.getLocalizable();
 
         final JTable table = this.getTable();
         table.setRowHeight(prefs.getBodyRowHeight());

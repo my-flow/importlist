@@ -26,9 +26,4 @@ public final class FactoryModule {
             throw new IllegalStateException(e.getMessage(), e);
         }
     }
-
-    @Provides
-    Localizable provideLocalizable(final Settings settings, final Preferences prefs) {
-        return new Localizable(settings, prefs.getLocale());
-    }
 }

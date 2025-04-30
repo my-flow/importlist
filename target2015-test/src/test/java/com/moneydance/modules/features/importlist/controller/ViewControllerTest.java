@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.controller;
 
-import com.moneydance.modules.features.importlist.DaggerTargetTestComponent;
 import com.moneydance.modules.features.importlist.TargetTestComponent;
+import com.moneydance.modules.features.importlist.test.HelperUtils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,7 @@ public final class ViewControllerTest {
 
     @Before
     public void setUp() {
-        final TargetTestComponent testComponent = DaggerTargetTestComponent.builder().build();
+        final TargetTestComponent testComponent = HelperUtils.createTestComponent();
         this.viewController = (ViewControllerImpl) testComponent.viewController();
     }
 

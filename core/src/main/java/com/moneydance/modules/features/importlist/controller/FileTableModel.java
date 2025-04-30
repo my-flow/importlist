@@ -1,7 +1,8 @@
 package com.moneydance.modules.features.importlist.controller;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.io.FileContainer;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
+import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
@@ -71,11 +72,16 @@ public final class FileTableModel extends AbstractTableModel {
         if (this.settings.getDescModified().equals(columnName)) {
             return this.fileContainer.getLastModifiedTime(row);
         }
+
+        final Localizable localizable = ServiceLocator.getLocalizable();
+        if (localizable == null) {
+            return "";
+        }
         if (this.settings.getDescImport().equals(columnName)) {
-            return Helper.INSTANCE.getLocalizable().getLabelImportOneButton();
+            return localizable.getLabelImportOneButton();
         }
         if (this.settings.getDescDelete().equals(columnName)) {
-            return Helper.INSTANCE.getLocalizable().getLabelDeleteOneButton();
+            return localizable.getLabelDeleteOneButton();
         }
         throw new IllegalArgumentException(String.format(
                 "Could not find value for row %d, column %d", row, column));

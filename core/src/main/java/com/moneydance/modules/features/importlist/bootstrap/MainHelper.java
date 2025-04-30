@@ -2,6 +2,7 @@ package com.moneydance.modules.features.importlist.bootstrap;
 
 import com.moneydance.modules.features.importlist.CoreComponent;
 import com.moneydance.modules.features.importlist.controller.ViewController;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
 import com.moneydance.modules.features.importlist.util.Preferences;
 import com.moneydance.modules.features.importlist.util.Settings;
 
@@ -28,17 +29,17 @@ public final class MainHelper {
 
     MainHelper(final Settings argSettings) {
         super();
-        Helper.loadLoggerConfiguration(argSettings);
+        ServiceLocator.loadLoggerConfiguration(argSettings);
         LOG.info("Initializing extension in Moneydance's application context.");
         this.settings = argSettings;
     }
 
     public void init(final CoreComponent argCoreComponent, final Observer argObserver) {
-        Helper.INSTANCE.init(argCoreComponent);
-        Helper.INSTANCE.addObserver(argObserver);
+        ServiceLocator.initialize(argCoreComponent);
+        ServiceLocator.addObserver(argObserver);
 
         this.prefs = argCoreComponent.preferences();
-        this.viewController = Helper.INSTANCE.getViewController();
+        this.viewController = ServiceLocator.getViewController();
 
         if (this.prefs.isFirstRun()) {
             this.prefs.setFirstRun(false);
@@ -47,8 +48,7 @@ public final class MainHelper {
 
         // register this module to be invoked via the application toolbar
         LOG.config("Registering toolbar feature");
-        Helper.INSTANCE.getContext().registerFeature(this.settings.getChooseBaseDirSuffix(), this.getName());
-
+        ServiceLocator.getContext().registerFeature(this.settings.getChooseBaseDirSuffix(), this.getName());
     }
 
     public String getName() {
@@ -66,7 +66,7 @@ public final class MainHelper {
     }
 
     public void update(final CoreComponent coreComponent) {
-        Helper.INSTANCE.init(coreComponent);
+        ServiceLocator.initialize(coreComponent);
     }
 
     public void unload() {

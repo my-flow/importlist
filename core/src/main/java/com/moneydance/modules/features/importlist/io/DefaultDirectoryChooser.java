@@ -1,6 +1,6 @@
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.io.File;
@@ -8,8 +8,6 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.swing.JFileChooser;
 
 import org.apache.commons.io.FileUtils;
@@ -20,7 +18,6 @@ import org.apache.commons.io.FileUtils;
  *
  * @author Florian J. Breunig
  */
-@Singleton
 final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
 
     /**
@@ -29,7 +26,6 @@ final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
     private static final Logger LOG =
             Logger.getLogger(DefaultDirectoryChooser.class.getName());
 
-    @Inject
     DefaultDirectoryChooser(final Preferences prefs) {
         super(prefs);
     }
@@ -38,7 +34,7 @@ final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
     @SuppressWarnings("nullness")
     void chooseBaseDirectory() {
         final JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle(Helper.INSTANCE.getLocalizable().getDirectoryChooserTitle());
+        fileChooser.setDialogTitle(ServiceLocator.getLocalizable().getDirectoryChooserTitle());
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         // disable the "All files" option.
         fileChooser.setAcceptAllFileFilterUsed(false);

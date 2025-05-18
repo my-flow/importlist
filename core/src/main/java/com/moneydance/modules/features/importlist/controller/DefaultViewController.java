@@ -11,8 +11,8 @@ import com.moneydance.modules.features.importlist.presentation.SplitPaneFactory;
 import com.moneydance.modules.features.importlist.table.AbstractEditor;
 import com.moneydance.modules.features.importlist.table.ColorScheme;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
+import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -39,7 +39,7 @@ abstract class DefaultViewController implements ViewController {
     private final BaseTableFactory baseTableFactory;
     private final AbstractTableModel baseTableModel;
     private final AbstractTableModel aggrTableModel;
-    private final Settings settings;
+    private final ISettings settings;
     private final Preferences prefs;
     private boolean dirty;
 
@@ -49,7 +49,7 @@ abstract class DefaultViewController implements ViewController {
             final AbstractTableModel argAggrTableModel,
             final ColorScheme evenColorScheme,
             final ColorScheme oddColorScheme,
-            final Settings argSettings,
+            final ISettings argSettings,
             final Preferences argPrefs) {
 
         this.fileAdmin = argFileAdmin;

@@ -1,6 +1,7 @@
 package com.moneydance.modules.features.importlist.io;
 
 import com.moneydance.modules.features.importlist.bootstrap.Helper;
+import com.moneydance.modules.features.importlist.util.Localizable;
 
 import java.io.File;
 import java.util.Collections;
@@ -11,9 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -27,7 +25,6 @@ import org.apache.commons.io.monitor.FileAlterationObserver;
  *
  * @author Florian J. Breunig
  */
-@Singleton
 public final class FileAdmin extends Observable implements Observer {
 
     /**
@@ -35,23 +32,48 @@ public final class FileAdmin extends Observable implements Observer {
      */
     private static final Logger LOG = Logger.getLogger(FileAdmin.class.getName());
 
-    @Inject AbstractDirectoryChooser directoryChooser;
-    @Inject DirectoryValidator directoryValidator;
-    @Inject FileAlterationMonitor monitor;
-    @Inject FileContainer fileContainer;
-    @Inject @Named("import all") FileOperation importAllOperation;
-    @Inject @Named("import one") FileOperation importOneOperation;
-    @Inject @Named("delete all") FileOperation deleteAllOperation;
-    @Inject @Named("delete one") FileOperation deleteOneOperation;
-    @Inject @Named("readable files") IOFileFilter readableFileFilter;
+    private final AbstractDirectoryChooser directoryChooser;
+    private final DirectoryValidator directoryValidator;
+    private final FileAlterationMonitor monitor;
+    private final FileContainer fileContainer;
+    private final FileOperation importAllOperation;
+    private final FileOperation importOneOperation;
+    private final FileOperation deleteAllOperation;
+    private final FileOperation deleteOneOperation;
+    private final IOFileFilter readableFileFilter;
 
     private final TransactionFileListener listener;
     @Nullable private FileAlterationObserver observer;
     private boolean isMonitorRunning;
 
-    @Inject
-    public FileAdmin() {
+    public FileAdmin(
+            final IOFileFilter readableFilter,
+            final com.moneydance.modules.features.importlist.controller.Context context,
+            final com.moneydance.modules.features.importlist.util.ISettings settings,
+            final com.moneydance.modules.features.importlist.util.Preferences prefs) {
         super();
+        this.readableFileFilter = readableFilter;
+
+        // Initialize dependencies
+        this.directoryChooser = new DefaultDirectoryChooser(prefs);
+        this.directoryValidator = new DirectoryValidator();
+        this.monitor = new FileAlterationMonitor(settings.getMonitorInterval());
+        this.fileContainer = new FileContainer(readableFilter);
+
+        // Create file operations with explicit dependency handling
+        Localizable localizable = Helper.INSTANCE.getLocalizable();
+        if (localizable == null) {
+            // Use provided parameters directly if Helper is not fully initialized
+            localizable = new Localizable(settings, prefs.getLocale());
+        }
+
+        FileOperation deleteOne = new DeleteOneOperation(settings, localizable);
+        this.deleteOneOperation = deleteOne;
+        this.deleteAllOperation = new DeleteAllOperation(deleteOne, settings, localizable);
+
+        FileOperation importOne = new ImportOneOperation(context, readableFilter, settings);
+        this.importOneOperation = importOne;
+        this.importAllOperation = new ImportAllOperation(importOne);
         this.listener = new TransactionFileListener();
         this.listener.addObserver(this);
     }
@@ -74,8 +96,16 @@ public final class FileAdmin extends Observable implements Observer {
                 return;
             }
             LOG.warning(() -> String.format("Could not open directory %s", baseDirectory.getAbsolutePath()));
-            final String errorMessage = Helper.INSTANCE.getLocalizable().
-                    getErrorMessageBaseDirectory(baseDirectory.getName());
+
+            Localizable localizable = Helper.INSTANCE.getLocalizable();
+            String errorMessage;
+
+            if (localizable != null) {
+                errorMessage = localizable.getErrorMessageBaseDirectory(baseDirectory.getName());
+            } else {
+                // Fallback error message if localizable is not available
+                errorMessage = "Could not open directory: " + baseDirectory.getName();
+            }
             final JLabel errorLabel = new JLabel(errorMessage);
             errorLabel.setLabelFor(null);
             JOptionPane.showMessageDialog(

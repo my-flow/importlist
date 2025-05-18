@@ -1,10 +1,10 @@
 package com.moneydance.modules.features.importlist.presentation;
 
-import com.moneydance.modules.features.importlist.DaggerTargetTestComponent;
 import com.moneydance.modules.features.importlist.TargetTestComponent;
 import com.moneydance.modules.features.importlist.controller.FileTableModel;
+import com.moneydance.modules.features.importlist.test.HelperUtils;
+import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +22,14 @@ import org.junit.Test;
  */
 public final class TableListenerTest {
 
-    private Settings settings;
+    private ISettings settings;
     private Preferences prefs;
     private JTable table;
     private TableListener tableListener;
 
     @Before
     public void setUp() {
-        final TargetTestComponent testComponent = DaggerTargetTestComponent.builder().build();
+        final TargetTestComponent testComponent = HelperUtils.createTestComponent();
         this.settings = testComponent.settings();
         this.prefs = testComponent.preferences();
         this.table = new JTable(new FileTableModel(testComponent.fileContainer(), this.settings, this.prefs));

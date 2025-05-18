@@ -14,12 +14,12 @@ import javax.swing.table.TableRowSorter;
  *
  * @author Florian J. Breunig
  */
-final class FileTableRowSorter extends TableRowSorter<TableModel> {
+public final class FileTableRowSorter extends TableRowSorter<TableModel> {
 
     private final String descName;
     private final String descModified;
 
-    FileTableRowSorter(final TableModel argTableModel, final String argDescName, final String argDescModified) {
+    public FileTableRowSorter(final TableModel argTableModel, final String argDescName, final String argDescModified) {
         super(argTableModel);
         this.descName = argDescName;
         this.descModified = argDescModified;

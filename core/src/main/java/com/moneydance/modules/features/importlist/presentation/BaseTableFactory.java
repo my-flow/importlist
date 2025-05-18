@@ -4,9 +4,9 @@ import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.table.ColorScheme;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
+import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public final class BaseTableFactory extends AbstractTableFactory {
             final FileAdmin argFileAdmin,
             final ColorScheme evenColorScheme,
             final ColorScheme oddColorScheme,
-            final Settings argSettings,
+            final ISettings argSettings,
             final Preferences argPrefs) {
         super(argTableModel, argSettings);
         this.tableModel = argTableModel;
@@ -107,7 +107,7 @@ public final class BaseTableFactory extends AbstractTableFactory {
 
     @Override
     public JScrollPane getComponent() {
-        final Settings settings = this.getSettings();
+        final ISettings settings = this.getSettings();
         final Preferences prefs = Helper.INSTANCE.getPreferences();
         final Localizable localizable = Helper.INSTANCE.getLocalizable();
 

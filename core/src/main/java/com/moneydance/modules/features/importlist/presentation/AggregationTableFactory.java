@@ -4,8 +4,8 @@ import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.table.ColorScheme;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
+import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.awt.Dimension;
 
@@ -23,7 +23,7 @@ public final class AggregationTableFactory extends AbstractTableFactory {
             final FileAdmin argFileAdmin,
             final ColorScheme evenColorScheme,
             final ColorScheme oddColorScheme,
-            final Settings argSettings,
+            final ISettings argSettings,
             final Preferences argPrefs) {
         super(argTableModel, argSettings);
 
@@ -70,31 +70,28 @@ public final class AggregationTableFactory extends AbstractTableFactory {
     @Override
     public JTable getComponent() {
         final JTable table = this.getTable();
-        final Settings settings = this.getSettings();
+        final ISettings settings = this.getSettings();
+        final Preferences preferences = Helper.INSTANCE.getPreferences();
 
-        table.setBackground(Helper.INSTANCE.getPreferences().getBackground());
+        table.setBackground(preferences.getBackground());
 
-        int bodyRowHeight = Helper.INSTANCE.getPreferences().getBodyRowHeight();
+        int bodyRowHeight = preferences.getBodyRowHeight();
         int tableHeightOffset = settings.getTableHeightOffset();
+        int rowHeightTotal = bodyRowHeight + tableHeightOffset;
 
-        table.setRowHeight(
-                bodyRowHeight
-                + tableHeightOffset);
+        table.setRowHeight(rowHeightTotal);
         table.setMinimumSize(
                 new Dimension(
                         settings.getMinimumTableWidth(),
-                        bodyRowHeight
-                        + tableHeightOffset));
+                        rowHeightTotal));
         table.setPreferredSize(
                 new Dimension(
-                        Helper.INSTANCE.getPreferences().getPreferredTableWidth(),
-                        bodyRowHeight
-                        + tableHeightOffset));
+                        preferences.getPreferredTableWidth(),
+                        rowHeightTotal));
         table.setMaximumSize(
                 new Dimension(
-                        Helper.INSTANCE.getPreferences().getMaximumTableWidth(),
-                        bodyRowHeight
-                        + tableHeightOffset));
+                        preferences.getMaximumTableWidth(),
+                        rowHeightTotal));
 
         return table;
     }

@@ -7,11 +7,11 @@ import java.util.List;
 /**
  * @author Florian J. Breunig
  */
-final class ImportAllOperation implements FileOperation {
+public final class ImportAllOperation implements FileOperation {
 
     private final FileOperation importOneOperation;
 
-    ImportAllOperation(final FileOperation argImportOneOperation) {
+    public ImportAllOperation(final FileOperation argImportOneOperation) {
         super();
         this.importOneOperation = argImportOneOperation;
     }

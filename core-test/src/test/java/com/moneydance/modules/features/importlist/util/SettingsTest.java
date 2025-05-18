@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.util;
 
 import com.moneydance.modules.features.importlist.CoreTestComponent;
-import com.moneydance.modules.features.importlist.DaggerCoreTestComponent;
+import com.moneydance.modules.features.importlist.TestComponentFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,11 +15,11 @@ import static org.junit.Assert.assertTrue;
  */
 public final class SettingsTest {
 
-    private Settings settings;
+    private ISettings settings;
 
     @Before
     public void setUp() {
-        final CoreTestComponent testComponent = DaggerCoreTestComponent.builder().build();
+        final CoreTestComponent testComponent = TestComponentFactory.createTestComponent();
 
         this.settings = testComponent.settings();
     }

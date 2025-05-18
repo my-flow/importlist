@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.presentation;
 
 import com.moneydance.modules.features.importlist.bootstrap.Helper;
-import com.moneydance.modules.features.importlist.util.Settings;
+import com.moneydance.modules.features.importlist.util.ISettings;
 
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
@@ -15,11 +15,11 @@ abstract class AbstractTableFactory implements ComponentFactory {
 
     private final JTable table;
     private final TableColumnModel columnModel;
-    private final Settings settings;
+    private final ISettings settings;
 
     AbstractTableFactory(
             final TableModel argTableModel,
-            final Settings argSettings) {
+            final ISettings argSettings) {
         this.table = new JTable(argTableModel);
         this.table.setOpaque(false);
         this.table.setShowGrid(false);
@@ -49,7 +49,7 @@ abstract class AbstractTableFactory implements ComponentFactory {
         return column;
     }
 
-    protected final Settings getSettings() {
+    protected final ISettings getSettings() {
         return this.settings;
     }
 }

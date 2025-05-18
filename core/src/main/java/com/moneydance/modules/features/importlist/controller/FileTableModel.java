@@ -2,9 +2,9 @@ package com.moneydance.modules.features.importlist.controller;
 
 import com.moneydance.modules.features.importlist.io.FileContainer;
 import com.moneydance.modules.features.importlist.service.ServiceLocator;
+import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Localizable;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.io.Serializable;
 
@@ -24,12 +24,12 @@ public final class FileTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 1L;
 
     private final FileContainer fileContainer;
-    private final Settings settings;
+    private final ISettings settings;
     private final Preferences prefs;
 
     public FileTableModel(
             final FileContainer argFileContainer,
-            final Settings argSettings,
+            final ISettings argSettings,
             final Preferences argPrefs) {
         super();
         this.fileContainer = argFileContainer;

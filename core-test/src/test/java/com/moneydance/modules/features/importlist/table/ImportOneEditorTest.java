@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.table;
 
 import com.moneydance.modules.features.importlist.CoreTestComponent;
-import com.moneydance.modules.features.importlist.DaggerCoreTestComponent;
+import com.moneydance.modules.features.importlist.TestComponentFactory;
 
 import java.awt.event.ActionListener;
 
@@ -19,7 +19,7 @@ public final class ImportOneEditorTest {
 
     @Before
     public void setUp() {
-        final CoreTestComponent testComponent = DaggerCoreTestComponent.builder().build();
+        final CoreTestComponent testComponent = TestComponentFactory.createTestComponent();
 
         this.importOneEditor = testComponent.importOneEditor();
     }

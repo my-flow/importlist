@@ -7,8 +7,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -24,9 +22,7 @@ final class ButtonRenderer implements TableCellRenderer {
 
     private final ColorScheme colorScheme;
 
-    @Inject
-    ButtonRenderer(
-            @Named("odd color scheme") final ColorScheme argColorSchemeHelper) {
+    ButtonRenderer(final ColorScheme argColorSchemeHelper) {
         super();
         this.colorScheme = argColorSchemeHelper;
     }

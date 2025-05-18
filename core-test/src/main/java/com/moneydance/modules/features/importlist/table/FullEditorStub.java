@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.table;
 
 import com.moneydance.modules.features.importlist.io.FileAdmin;
-import com.moneydance.modules.features.importlist.util.Settings;
+import com.moneydance.modules.features.importlist.util.ISettings;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +16,7 @@ final class FullEditorStub extends AbstractEditor {
     FullEditorStub(
             final FileAdmin fileAdmin,
             final ButtonRenderer buttonRenderer,
-            final Settings settings) {
+            final ISettings settings) {
         super(fileAdmin, buttonRenderer, settings.getKeyboardShortcutImport());
     }
 

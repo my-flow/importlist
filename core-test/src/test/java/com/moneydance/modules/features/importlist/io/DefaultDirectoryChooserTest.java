@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.io;
 
 import com.moneydance.modules.features.importlist.CoreTestComponent;
-import com.moneydance.modules.features.importlist.DaggerCoreTestComponent;
+import com.moneydance.modules.features.importlist.TestComponentFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,7 @@ public final class DefaultDirectoryChooserTest {
 
     @Before
     public void setUp() {
-        final CoreTestComponent testComponent = DaggerCoreTestComponent.builder().build();
+        final CoreTestComponent testComponent = TestComponentFactory.createTestComponent();
         this.directoryChooser = new DefaultDirectoryChooser(testComponent.preferences());
     }
 

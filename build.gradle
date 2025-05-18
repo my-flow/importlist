@@ -71,8 +71,6 @@ subprojects {
 
         dependencies {
             include project(':core')
-            include dependency('javax.inject:javax.inject:1')
-            include dependency('com.google.dagger:dagger:2.56.2')
             include dependency('org.apache.commons:commons-configuration2:2.12.0')
             include dependency('org.apache.commons:commons-lang3:3.17.0')
             include dependency('org.apache.commons:commons-text:1.13.1')
@@ -80,9 +78,6 @@ subprojects {
             include dependency('org.slf4j:slf4j-api:2.0.17')
             include dependency('org.slf4j:slf4j-nop:2.0.17')
         }
-
-        relocate 'dagger', 'com.moneydance.modules.features.importlist.dagger'
-        relocate 'javax.inject', 'com.moneydance.modules.features.importlist.javax.inject'
         relocate 'org.apache.commons.io', 'com.moneydance.modules.features.importlist.org.apache.commons.io'
         relocate 'org.apache.commons.lang3', 'com.moneydance.modules.features.importlist.org.apache.commons.lang3'
         relocate 'org.apache.commons.text', 'com.moneydance.modules.features.importlist.org.apache.commons.text'
@@ -107,11 +102,12 @@ subprojects {
     }
 
     pmd {
+        consoleOutput = true
         toolVersion = "7.11.0"
         ruleSets = []
         ruleSetFiles = files("$rootDir/config/pmd-ruleSet.xml")
     }
- 
+
     tasks.withType(Pmd) {
         enabled = it.name.endsWith('Main')
     }
@@ -120,14 +116,6 @@ subprojects {
         toolVersion = "4.9.3"
         effort = Effort.valueOf('MAX')
         excludeFilter = file("$rootDir/config/spotbugs-exclude.xml")
-    }
-
-    spotbugsMain {
-        reports {
-            html {
-                required = true
-            }
-        }
     }
 
     jacoco {

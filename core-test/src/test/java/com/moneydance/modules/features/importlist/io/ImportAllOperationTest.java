@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.io;
 
 import com.moneydance.modules.features.importlist.CoreTestComponent;
-import com.moneydance.modules.features.importlist.DaggerCoreTestComponent;
+import com.moneydance.modules.features.importlist.TestComponentFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public final class ImportAllOperationTest {
 
     @Before
     public void setUp() {
-        final CoreTestComponent testComponent = DaggerCoreTestComponent.builder().build();
+        final CoreTestComponent testComponent = TestComponentFactory.createTestComponent();
         this.fileOperation = testComponent.importAllOperation();
 
         this.files = new ArrayList<>();

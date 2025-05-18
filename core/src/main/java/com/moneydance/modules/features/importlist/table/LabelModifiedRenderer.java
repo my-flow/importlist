@@ -5,8 +5,6 @@ import com.moneydance.modules.features.importlist.datetime.DateFormatter;
 import java.awt.Component;
 import java.util.Date;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -21,11 +19,10 @@ public final class LabelModifiedRenderer extends DefaultTableCellRenderer {
     private DateFormatter dateFormatter;
     private DateFormatter timeFormatter;
 
-    @Inject
     LabelModifiedRenderer(
-            @Named("odd color scheme") final ColorScheme argColorScheme,
-            @Named("date") final DateFormatter argDateFormatter,
-            @Named("time") final DateFormatter argTimeFormatter,
+            final ColorScheme argColorScheme,
+            final DateFormatter argDateFormatter,
+            final DateFormatter argTimeFormatter,
             final String argIndentationPrefix) {
         super();
         this.colorScheme = argColorScheme;

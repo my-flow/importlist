@@ -3,8 +3,8 @@ package com.moneydance.modules.features.importlist.bootstrap;
 import com.moneydance.modules.features.importlist.CoreComponent;
 import com.moneydance.modules.features.importlist.controller.ViewController;
 import com.moneydance.modules.features.importlist.service.ServiceLocator;
+import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.awt.Image;
 import java.util.Observer;
@@ -23,11 +23,11 @@ public final class MainHelper {
      */
     private static final Logger LOG = Logger.getLogger(MainHelper.class.getName());
 
-    private final Settings settings;
+    private final ISettings settings;
     private Preferences prefs;
     private ViewController viewController;
 
-    MainHelper(final Settings argSettings) {
+    public MainHelper(final ISettings argSettings) {
         super();
         ServiceLocator.loadLoggerConfiguration(argSettings);
         LOG.info("Initializing extension in Moneydance's application context.");

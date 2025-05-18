@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.util;
 
-import com.moneydance.modules.features.importlist.DaggerTargetTestComponent;
 import com.moneydance.modules.features.importlist.TargetTestComponent;
+import com.moneydance.modules.features.importlist.test.HelperUtils;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +27,7 @@ public final class PreferencesTest {
 
     @Before
     public void setUp() {
-        final TargetTestComponent testComponent = DaggerTargetTestComponent.builder().build();
+        final TargetTestComponent testComponent = HelperUtils.createTestComponent();
         this.prefs = testComponent.preferences();
     }
 

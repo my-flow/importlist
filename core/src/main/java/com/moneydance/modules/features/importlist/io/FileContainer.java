@@ -8,8 +8,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -29,8 +27,7 @@ public final class FileContainer extends AbstractList<File> {
     private final List<Long> lastModifiedTimes;
     private final IOFileFilter fileFilter;
 
-    @Inject
-    FileContainer(@Named("readable files") final IOFileFilter argFileFilter) {
+    public FileContainer(final IOFileFilter argFileFilter) {
         this(
             new ArrayList<>(),
             new ArrayList<>(),

@@ -1,16 +1,23 @@
 package com.moneydance.modules.features.importlist.util;
 
-import dagger.Module;
-import dagger.Provides;
-
 /**
+ * Mock module for utilities used in tests.
+ * This class provides factory methods for mocked utilities.
+ *
  * @author Florian J. Breunig
  */
-@Module
 public final class MockModule {
 
-    @Provides
-    Preferences providePreferences() {
+    private MockModule() {
+        // Prevents instantiation
+    }
+
+    /**
+     * Creates and returns a mock preferences instance.
+     *
+     * @return a new PreferencesMock instance
+     */
+    public static Preferences providePreferences() {
         return new PreferencesMock();
     }
 }

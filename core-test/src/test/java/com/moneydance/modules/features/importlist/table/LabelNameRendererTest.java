@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.table;
 
 import com.moneydance.modules.features.importlist.CoreTestComponent;
-import com.moneydance.modules.features.importlist.DaggerCoreTestComponent;
+import com.moneydance.modules.features.importlist.TestComponentFactory;
 
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
@@ -20,7 +20,7 @@ public final class LabelNameRendererTest {
 
     @Before
     public void setUp() {
-        final CoreTestComponent testComponent = DaggerCoreTestComponent.builder().build();
+        final CoreTestComponent testComponent = TestComponentFactory.createTestComponent();
 
         this.labelNameRenderer = testComponent.labelNameRenderer();
     }

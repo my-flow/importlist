@@ -2,7 +2,7 @@ package com.moneydance.modules.features.importlist.table;
 
 import com.moneydance.modules.features.importlist.datetime.DateFormatter;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
-import com.moneydance.modules.features.importlist.util.Settings;
+import com.moneydance.modules.features.importlist.util.ISettings;
 
 import java.awt.Color;
 
@@ -35,7 +35,7 @@ public final class ColumnFactory {
             final DateFormatter argTimeFormatter,
             final ColorScheme argEvenColorSchemeHelper,
             final ColorScheme argOddColorSchemeHelper,
-            final Settings argSettings) {
+            final ISettings argSettings) {
 
         this.evenColorScheme = argEvenColorSchemeHelper;
         this.oddColorScheme = argOddColorSchemeHelper;

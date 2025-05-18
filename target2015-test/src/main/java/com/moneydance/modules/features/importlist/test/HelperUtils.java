@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.test;
 
 import com.moneydance.modules.features.importlist.CoreComponent;
-import com.moneydance.modules.features.importlist.DaggerTargetTestComponent;
+import com.moneydance.modules.features.importlist.StandardTargetTestComponent;
 import com.moneydance.modules.features.importlist.TargetTestComponent;
 import com.moneydance.modules.features.importlist.service.ServiceLocator;
 import com.moneydance.modules.features.importlist.util.Localizable;
@@ -43,9 +43,23 @@ public final class HelperUtils {
      * @return A new test component
      */
     public static TargetTestComponent createTestComponent() {
-        final TargetTestComponent component = DaggerTargetTestComponent.builder().build();
-        initializeServiceLocator(component);
-        return component;
+        try {
+            LOG.log(Level.INFO, "Starting to create StandardTargetTestComponent...");
+            final TargetTestComponent component = new StandardTargetTestComponent();
+            LOG.log(Level.INFO, "Successfully created StandardTargetTestComponent");
+            initializeServiceLocator(component);
+            LOG.log(Level.INFO, "Successfully initialized ServiceLocator");
+            return component;
+        } catch (IllegalStateException e) {
+            LOG.log(Level.SEVERE, "Failed to create StandardTargetTestComponent", e);
+            if (LOG.isLoggable(Level.SEVERE)) {
+                LOG.log(Level.SEVERE, "Root cause: ", e.getCause());
+            }
+            throw e; // Re-throw the exception after logging
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Unexpected error creating StandardTargetTestComponent", e);
+            throw new IllegalStateException("Failed to create test component", e);
+        }
     }
 
     /**
@@ -54,22 +68,35 @@ public final class HelperUtils {
      * @param component The component to use for initialization
      */
     public static void initializeServiceLocator(final CoreComponent component) {
-        ServiceLocator.initialize(component);
+        try {
+            LOG.log(Level.INFO, "Resetting ServiceLocator before initialization");
+            ServiceLocator.reset(); // Reset ServiceLocator first to avoid conflicts
+            LOG.log(Level.INFO, "Initializing ServiceLocator with component");
+            ServiceLocator.initialize(component);
+            LOG.log(Level.INFO, "ServiceLocator initialized successfully");
 
-        // Ensure localizable is available
-        if (ServiceLocator.getLocalizable() == null) {
-            // If we can't get localizable from ServiceLocator,
-            // tests depending on it will fail
-            try {
-                final Localizable localizable = component.localizable();
-                if (localizable != null) {
-                    // Re-initialize to ensure it's set
-                    ServiceLocator.initialize(component);
+            // Ensure localizable is available
+            if (ServiceLocator.getLocalizable() == null) {
+                LOG.log(Level.INFO, "Localizable not set, trying to get from component");
+                // If we can't get localizable from ServiceLocator,
+                // tests depending on it will fail
+                try {
+                    final Localizable localizable = component.localizable();
+                    if (localizable != null) {
+                        LOG.log(Level.INFO, "Setting Localizable in ServiceLocator");
+                        // Set the localizable directly
+                        ServiceLocator.setLocalizable(localizable);
+                    } else {
+                        LOG.log(Level.WARNING, "Component.localizable() returned null");
+                    }
+                } catch (Exception e) {
+                    // Log the exception but continue
+                    LOG.log(Level.WARNING, "Failed to initialize localizable", e);
                 }
-            } catch (Exception e) {
-                // Log the exception but continue
-                LOG.log(Level.FINE, "Failed to initialize localizable", e);
             }
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Failed to initialize ServiceLocator", e);
+            throw new IllegalStateException("Failed to initialize ServiceLocator", e);
         }
     }
 }

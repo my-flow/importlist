@@ -1,13 +1,5 @@
 <FindBugsFilter>
     <Match>
-        <Or>
-            <Class name="~.*Factory"/>
-            <Class name="~.*_Factory"/>
-            <Class name="~.*Dagger.*Component.*"/>
-            <Class name="~.*_MembersInjector"/>
-        </Or>
-    </Match>
-    <Match>
         <Bug pattern="EI_EXPOSE_REP"/>
     </Match>
     <Match>

@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.io;
 
+import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Localizable;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.awt.Image;
 import java.io.File;
@@ -20,7 +20,7 @@ import org.apache.commons.io.FileUtils;
 /**
  * @author Florian J. Breunig
  */
-final class DeleteOneOperation implements FileOperation {
+public final class DeleteOneOperation implements FileOperation {
 
     /**
      * Static initialization of class-dependent logger.
@@ -28,11 +28,11 @@ final class DeleteOneOperation implements FileOperation {
     private static final Logger LOG =
             Logger.getLogger(DeleteOneOperation.class.getName());
 
-    private final Settings settings;
+    private final ISettings settings;
     private final Localizable localizable;
 
-    DeleteOneOperation(
-            final Settings argSettings,
+    public DeleteOneOperation(
+            final ISettings argSettings,
             final Localizable argLocalizable) {
         this.settings = argSettings;
         this.localizable = argLocalizable;

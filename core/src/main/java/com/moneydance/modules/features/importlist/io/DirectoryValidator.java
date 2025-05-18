@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
-
 import org.apache.commons.io.filefilter.CanReadFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -21,7 +19,6 @@ public final class DirectoryValidator implements IOFileFilter {
     private static final Logger LOG =
             Logger.getLogger(DirectoryValidator.class.getName());
 
-    @Inject
     DirectoryValidator() {
         super();
     }

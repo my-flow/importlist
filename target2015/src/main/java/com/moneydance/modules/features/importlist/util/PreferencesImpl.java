@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.UIManager;
@@ -37,7 +36,7 @@ import javax.swing.border.Border;
  */
 public final class PreferencesImpl implements Preferences {
 
-    private final Settings settings;
+    private final ISettings settings;
     private final UserPreferences userPreferences;
     private final StreamTable columnOrderDefault;
     private final StreamTable sortOrderDefault;
@@ -48,8 +47,7 @@ public final class PreferencesImpl implements Preferences {
     private final MDColors colors;
     private final Font defaultSystemFont;
 
-    @Inject
-    public PreferencesImpl(final Settings argSettings, final Main main) {
+    public PreferencesImpl(final ISettings argSettings, final Main main) {
         this.settings = argSettings;
         this.userPreferences = main.getPreferences();
         this.columnWidths = new StreamTable();

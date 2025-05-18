@@ -4,8 +4,8 @@ import com.infinitekind.moneydance.model.AccountBook;
 import com.moneydance.apps.md.view.HomePageView;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.table.ColorScheme;
+import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 import javax.swing.JComponent;
 import javax.swing.table.AbstractTableModel;
@@ -23,7 +23,7 @@ public final class ViewControllerImpl extends DefaultViewController implements H
             final AbstractTableModel aggrTableModel,
             final ColorScheme evenColorScheme,
             final ColorScheme oddColorScheme,
-            final Settings settings,
+            final ISettings settings,
             final Preferences prefs) {
         super(fileAdmin,
                 baseTableModel,

@@ -2,19 +2,14 @@ package com.moneydance.modules.features.importlist;
 
 import com.moneydance.modules.features.importlist.io.FileContainer;
 
-import javax.inject.Singleton;
-
-import dagger.Component;
-
 /**
+ * Target test component interface that extends TargetComponent
+ * to provide additional testing functionality.
+ *
  * @author Florian J. Breunig
  */
-@Component(modules = {
-    CoreModule.class,
-    TargetTestModule.class,
-})
-@Singleton
 public interface TargetTestComponent extends TargetComponent {
 
+    @Override
     FileContainer fileContainer();
 }

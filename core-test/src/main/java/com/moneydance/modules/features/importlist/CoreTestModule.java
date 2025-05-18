@@ -1,15 +1,23 @@
 package com.moneydance.modules.features.importlist;
 
-import dagger.Module;
-
 /**
+ * This module provides static methods to create test components.
+ * It used to be a Dagger module, now converted to use ServiceLocator instead.
+ *
  * @author Florian J. Breunig
  */
-@Module(includes = {
-    com.moneydance.modules.features.importlist.controller.MockModule.class,
-    com.moneydance.modules.features.importlist.datetime.MockModule.class,
-    com.moneydance.modules.features.importlist.table.MockModule.class,
-    com.moneydance.modules.features.importlist.util.MockModule.class
-})
 public final class CoreTestModule {
+
+    private CoreTestModule() {
+        // Prevents instantiation
+    }
+
+    /**
+     * Creates a new StandardCoreTestComponent instance.
+     *
+     * @return A new CoreTestComponent instance for testing
+     */
+    public static CoreTestComponent provideCoreTestComponent() {
+        return new StandardCoreTestComponent();
+    }
 }

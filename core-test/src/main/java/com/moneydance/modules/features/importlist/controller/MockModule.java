@@ -1,24 +1,33 @@
 package com.moneydance.modules.features.importlist.controller;
 
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
-
 /**
+ * Mock module for controller related components used in tests.
+ * This class provides factory methods for mocked controllers.
+ *
  * @author Florian J. Breunig
  */
-@Module
 public final class MockModule {
 
-    @Provides
-    Context provideContext() {
+    private MockModule() {
+        // Prevents instantiation
+    }
+
+    /**
+     * Creates and returns a mock context.
+     *
+     * @return a new ContextMock instance
+     */
+    public static Context provideContext() {
         return new ContextMock();
     }
 
-    @Provides
-    @Singleton
-    ViewController provideViewController() {
+    /**
+     * This method is not implemented for test environment.
+     *
+     * @return Never returns as this throws an exception
+     * @throws IllegalStateException always thrown as this is not implemented for tests
+     */
+    public static ViewController provideViewController() {
         throw new IllegalStateException("Cannot provide ViewController instance in core-test project");
     }
 }

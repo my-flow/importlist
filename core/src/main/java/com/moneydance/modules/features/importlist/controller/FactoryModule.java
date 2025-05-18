@@ -1,34 +1,31 @@
 package com.moneydance.modules.features.importlist.controller;
 
 import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
 
-import javax.inject.Named;
 import javax.swing.table.AbstractTableModel;
 
-import dagger.Module;
-import dagger.Provides;
-
 /**
+ * Utility class for creating table models.
+ *
  * @author Florian J. Breunig
  */
-@Module
 public final class FactoryModule {
 
-    @Provides
-    @Named("base")
-    AbstractTableModel provideBaseTableModel(
+    private FactoryModule() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static AbstractTableModel createBaseTableModel(
             final FileAdmin fileAdmin,
-            final Settings settings,
+            final ISettings settings,
             final Preferences prefs) {
         return new FileTableModel(fileAdmin.getFileContainer(), settings, prefs);
     }
 
-    @Provides
-    @Named("aggregation")
-    AbstractTableModel provideAggregationTableModel(
-            final Settings settings,
+    public static AbstractTableModel createAggregationTableModel(
+            final ISettings settings,
             final Preferences prefs) {
         return new AggregationTableModel(settings, prefs);
     }

@@ -1,7 +1,6 @@
 dependencies {
     api project(':core')
     api(':moneydance-2020.2-1929:')
-    annotationProcessor "com.google.dagger:dagger-compiler:2.56.2"
 }
 
 tasks.named('assemble').configure {

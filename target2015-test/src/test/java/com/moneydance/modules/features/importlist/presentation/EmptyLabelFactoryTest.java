@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.presentation;
 
-import com.moneydance.modules.features.importlist.DaggerTargetTestComponent;
 import com.moneydance.modules.features.importlist.TargetTestComponent;
+import com.moneydance.modules.features.importlist.test.HelperUtils;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 import org.junit.Before;
@@ -18,7 +18,7 @@ public final class EmptyLabelFactoryTest {
 
     @Before
     public void setUp() {
-        final TargetTestComponent testComponent = DaggerTargetTestComponent.builder().build();
+        final TargetTestComponent testComponent = HelperUtils.createTestComponent();
         final Preferences prefs = testComponent.preferences();
 
         this.emptyLabelFactory = new EmptyLabelFactory(

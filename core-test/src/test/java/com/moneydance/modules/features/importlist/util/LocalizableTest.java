@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.util;
 
 import com.moneydance.modules.features.importlist.CoreTestComponent;
-import com.moneydance.modules.features.importlist.DaggerCoreTestComponent;
+import com.moneydance.modules.features.importlist.TestComponentFactory;
 
 import java.util.Locale;
 
@@ -19,7 +19,7 @@ public final class LocalizableTest {
 
     @Before
     public void setUp() {
-        final CoreTestComponent testFactory = DaggerCoreTestComponent.builder().build();
+        final CoreTestComponent testFactory = TestComponentFactory.createTestComponent();
         this.localizable = new Localizable(testFactory.settings(), Locale.US);
     }
 

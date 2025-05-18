@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.io;
 
 import com.moneydance.modules.features.importlist.controller.Context;
-import com.moneydance.modules.features.importlist.util.Settings;
+import com.moneydance.modules.features.importlist.util.ISettings;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -14,16 +14,16 @@ import org.apache.commons.text.StringSubstitutor;
 /**
  * @author Florian J. Breunig
  */
-final class ImportOneOperation implements FileOperation {
+public final class ImportOneOperation implements FileOperation {
 
     private final Context context;
     private final FileFilter transactionFileFilter;
-    private final Settings settings;
+    private final ISettings settings;
 
-    ImportOneOperation(
+    public ImportOneOperation(
             final Context argContext,
             final FileFilter argTransactionFileFilter,
-            final Settings argSettings) {
+            final ISettings argSettings) {
         this.context = argContext;
         this.transactionFileFilter = argTransactionFileFilter;
         this.settings = argSettings;

@@ -8,8 +8,6 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.swing.JFileChooser;
 
 import org.apache.commons.io.FileUtils;
@@ -20,7 +18,6 @@ import org.apache.commons.io.FileUtils;
  *
  * @author Florian J. Breunig
  */
-@Singleton
 final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
 
     /**
@@ -29,7 +26,6 @@ final class DefaultDirectoryChooser extends AbstractDirectoryChooser {
     private static final Logger LOG =
             Logger.getLogger(DefaultDirectoryChooser.class.getName());
 
-    @Inject
     DefaultDirectoryChooser(final Preferences prefs) {
         super(prefs);
     }

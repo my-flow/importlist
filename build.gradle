@@ -98,7 +98,7 @@ subprojects {
     }
 
     checkstyle {
-        toolVersion = '10.21.4'
+        toolVersion = '10.25.0'
     }
 
     pmd {

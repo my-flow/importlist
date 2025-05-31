@@ -157,7 +157,8 @@ public final class FileAdmin extends Observable implements Observer {
         try {
             this.monitor.start();
             this.isMonitorRunning = true;
-        } catch (Exception e) {
+        // FileAlterationMonitor.start() declares throws Exception (library requirement)
+        } catch (Exception e) { // NOPMD - AvoidCatchingGenericException - library method declares Exception
             final String message = e.getMessage();
             if (message != null) {
                 LOG.log(Level.WARNING, message, e);
@@ -177,7 +178,14 @@ public final class FileAdmin extends Observable implements Observer {
         try {
             this.monitor.stop(0);
             this.isMonitorRunning = false;
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
+            final String message = e.getMessage();
+            if (message != null) {
+                LOG.log(Level.WARNING, message, e);
+            }
+            Thread.currentThread().interrupt();
+        // FileAlterationMonitor.stop() declares throws Exception (library requirement)
+        } catch (Exception e) { // NOPMD - AvoidCatchingGenericException - library method declares Exception
             final String message = e.getMessage();
             if (message != null) {
                 LOG.log(Level.WARNING, message, e);

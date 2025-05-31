@@ -56,7 +56,8 @@ public final class HelperUtils {
                 LOG.log(Level.SEVERE, "Root cause: ", e.getCause());
             }
             throw e; // Re-throw the exception after logging
-        } catch (Exception e) {
+        // Catch broad exception in test setup to ensure robust error handling
+        } catch (RuntimeException e) { // NOPMD - AvoidCatchingGenericException - test infrastructure
             LOG.log(Level.SEVERE, "Unexpected error creating StandardTargetTestComponent", e);
             throw new IllegalStateException("Failed to create test component", e);
         }
@@ -89,12 +90,14 @@ public final class HelperUtils {
                     } else {
                         LOG.log(Level.WARNING, "Component.localizable() returned null");
                     }
-                } catch (Exception e) {
+                // Catch broad exception in test setup to continue gracefully
+                } catch (RuntimeException e) { // NOPMD - AvoidCatchingGenericException - test infrastructure
                     // Log the exception but continue
                     LOG.log(Level.WARNING, "Failed to initialize localizable", e);
                 }
             }
-        } catch (Exception e) {
+        // Catch broad exception in test setup to ensure robust error handling
+        } catch (RuntimeException e) { // NOPMD - AvoidCatchingGenericException - test infrastructure
             LOG.log(Level.SEVERE, "Failed to initialize ServiceLocator", e);
             throw new IllegalStateException("Failed to initialize ServiceLocator", e);
         }

@@ -49,10 +49,8 @@ public final class StandardCoreTestComponent implements CoreTestComponent {
     private final MockAbstractEditor deleteOneEditorInstance;
     private final MockAbstractEditor deleteAllEditorInstance;
 
-    /**
-     * Static initializer that resets the ServiceLocator state
-     * before any instance is created.
-     */
+    // Static initializer that resets the ServiceLocator state
+    // before any instance is created.
     static {
         resetServiceLocator();
     }
@@ -89,7 +87,8 @@ public final class StandardCoreTestComponent implements CoreTestComponent {
             this.initializeHelperWithErrorHandling();
             // Verify initialization
             this.verifyServicesNotNull();
-        } catch (Exception exception) {
+        // Catch broad exception in test infrastructure to ensure robust error handling
+        } catch (RuntimeException exception) { // NOPMD - AvoidCatchingGenericException - test infrastructure
             this.logSevere("Error initializing StandardCoreTestComponent: " + exception.getMessage(), exception);
             throw new IllegalStateException("Failed to initialize StandardCoreTestComponent", exception);
         }
@@ -113,7 +112,8 @@ public final class StandardCoreTestComponent implements CoreTestComponent {
     private void initializeHelperWithErrorHandling() {
         try {
             Helper.INSTANCE.init(this);
-        } catch (Exception exception) {
+        // Catch broad exception in test infrastructure to ensure robust error handling
+        } catch (RuntimeException exception) { // NOPMD - AvoidCatchingGenericException - test infrastructure
             this.logWarning("Error initializing Helper: " + exception.getMessage(), exception);
         }
 
@@ -187,7 +187,8 @@ public final class StandardCoreTestComponent implements CoreTestComponent {
 
             // Note: We're not resetting the Observable field which is private and final,
             // but that shouldn't affect test isolation since we're clearing all observers
-        } catch (Exception exception) {
+        // Catch broad exception in test cleanup to ensure robust error handling
+        } catch (RuntimeException exception) { // NOPMD - AvoidCatchingGenericException - test cleanup
             java.util.logging.Logger logger = java.util.logging.Logger.getLogger(
                 StandardCoreTestComponent.class.getName());
             if (logger.isLoggable(java.util.logging.Level.WARNING)) {

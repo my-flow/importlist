@@ -36,7 +36,7 @@ public class StandardTargetTestComponent implements TargetTestComponent {
     private final AbstractTableModel aggregationTableModelInstance;
 
     @SuppressWarnings({"PMD.ExceptionAsFlowControl", "PMD.NcssCount", "PMD.CognitiveComplexity",
-        "PMD.CyclomaticComplexity", "PMD.GuardLogStatement", "PMD.AvoidDeeplyNestedIfStmts"})
+        "PMD.CyclomaticComplexity", "PMD.AvoidDeeplyNestedIfStmts"})
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
             value = "CT_CONSTRUCTOR_THROW",
             justification = "Constructor safely handles exceptions to prevent finalizer attacks")
@@ -87,7 +87,8 @@ public class StandardTargetTestComponent implements TargetTestComponent {
                 logger.info("Initializing Helper.INSTANCE");
                 Helper.INSTANCE.init(this);
                 logger.info("Helper initialization complete");
-            } catch (Exception initEx) {
+            // Catch broad exception in test infrastructure to ensure robust error handling
+            } catch (RuntimeException initEx) { // NOPMD - AvoidCatchingGenericException - test infrastructure
                 if (logger.isLoggable(java.util.logging.Level.SEVERE)) {
                     logger.severe("Failed to initialize ServiceLocator or Helper: " + initEx.getMessage());
                     logger.severe("Exception type: " + initEx.getClass().getName());
@@ -100,7 +101,8 @@ public class StandardTargetTestComponent implements TargetTestComponent {
             if (logger.isLoggable(java.util.logging.Level.INFO)) {
                 logger.info("StandardTargetTestComponent initialization completed successfully");
             }
-        } catch (Exception e) {
+        // Catch broad exception in test infrastructure to ensure robust error handling
+        } catch (RuntimeException e) { // NOPMD - AvoidCatchingGenericException - test infrastructure
             // Log error before exposing partially constructed object
             java.util.logging.Logger logger = java.util.logging.Logger.getLogger(
                     StandardTargetTestComponent.class.getName());
@@ -163,7 +165,7 @@ public class StandardTargetTestComponent implements TargetTestComponent {
      * @return The loaded Settings object
      * @throws IllegalStateException If settings cannot be loaded from either path
      */
-    @SuppressWarnings({"PMD.CognitiveComplexity", "PMD.CyclomaticComplexity", "PMD.GuardLogStatement"})
+    @SuppressWarnings({"PMD.CognitiveComplexity", "PMD.CyclomaticComplexity"})
     private Settings loadSettings(final java.util.logging.Logger logger) {
         // First try to load from relative path
         try {
@@ -175,12 +177,13 @@ public class StandardTargetTestComponent implements TargetTestComponent {
                 logger.info("Successfully loaded settings.properties");
             }
             return tempSettings;
-        } catch (Exception e) {
+        } catch (java.io.IOException | org.apache.commons.configuration2.ex.ConfigurationException
+                | IllegalArgumentException e) {
             // Log the exception
             if (logger.isLoggable(java.util.logging.Level.SEVERE)) {
                 logger.severe("Error loading settings: " + e.getMessage());
                 logger.severe("Exception type: " + e.getClass().getName());
-                if (e.getCause() != null) {
+                if (e.getCause() != null && logger.isLoggable(java.util.logging.Level.SEVERE)) {
                     logger.severe("Caused by: " + e.getCause().getMessage());
                 }
             }
@@ -196,12 +199,13 @@ public class StandardTargetTestComponent implements TargetTestComponent {
                 logger.info("Successfully loaded settings with absolute path");
             }
             return tempSettings;
-        } catch (Exception e2) {
+        } catch (java.io.IOException | org.apache.commons.configuration2.ex.ConfigurationException
+                | IllegalArgumentException e2) {
             // Log and rethrow if both attempts fail
             if (logger.isLoggable(java.util.logging.Level.SEVERE)) {
                 logger.severe("Error loading settings with alternative path: " + e2.getMessage());
                 logger.severe("Exception type: " + e2.getClass().getName());
-                if (e2.getCause() != null) {
+                if (e2.getCause() != null && logger.isLoggable(java.util.logging.Level.SEVERE)) {
                     logger.severe("Caused by: " + e2.getCause().getMessage());
                 }
             }

@@ -50,7 +50,8 @@ public final class StubContext extends Main {
             if (!this.isInitialized()) {
                 this.initializeApp();
             }
-        } catch (Error | Exception e) {
+        // initializeApp() declares throws Exception (library method)
+        } catch (Exception e) { // NOPMD - AvoidCatchingGenericException - library method declares Exception
             final String message = e.getMessage();
             if (message != null) {
                 LOG.log(Level.SEVERE, message, e);

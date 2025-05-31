@@ -1,12 +1,13 @@
 package com.moneydance.modules.features.importlist.datetime;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * @author Florian J. Breunig
  */
+@FunctionalInterface
 public interface DateFormatter {
 
-    String format(Date date);
+    String format(Instant instant);
 
 }

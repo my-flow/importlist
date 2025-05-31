@@ -48,7 +48,8 @@ public final class StubContextFactory {
                             accountBook,
                             Account.AccountType.BANK,
                             accountBook.getRootAccount()));
-        } catch (Exception e) {
+        // Catch broad exception in test setup to ensure robust error handling
+        } catch (RuntimeException e) { // NOPMD - AvoidCatchingGenericException - test infrastructure
             final String message = e.getMessage();
             if (message != null) {
                 LOG.log(Level.WARNING, message, e);

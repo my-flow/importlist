@@ -22,7 +22,6 @@ import com.moneydance.modules.features.importlist.util.PreferencesImpl;
 import java.awt.Image;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Logger;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -35,11 +34,6 @@ import org.apache.commons.io.filefilter.IOFileFilter;
  */
 @SuppressWarnings("nullness")
 public final class Main extends FeatureModule implements Observer {
-
-    /**
-     * Static initialization of class-dependent logger.
-     */
-    private static final Logger LOG = Logger.getLogger(Main.class.getName());
 
     private final TargetComponent targetComponent;
     private final MainHelper mainHelper;

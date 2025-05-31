@@ -1,6 +1,7 @@
 package com.moneydance.modules.features.importlist.datetime;
 
 import java.text.DateFormat;
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -15,7 +16,7 @@ public final class TimeFormatterImpl implements DateFormatter {
     }
 
     @Override
-    public String format(final Date date) {
-        return this.timeFormatter.format(date);
+    public String format(final Instant instant) {
+        return this.timeFormatter.format(Date.from(instant));
     }
 }

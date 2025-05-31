@@ -81,13 +81,35 @@ public enum AlphanumComparator implements Comparator<String> {
     }
 
     /**
+     * Compares two numeric chunks character by character.
+     * @param thisChunk The first chunk to compare.
+     * @param thatChunk The second chunk to compare.
+     * @return A negative integer, zero, or a positive integer as the first
+     * chunk is less than, equal to, or greater than the second.
+     */
+    private static int compareNumericChunks(final String thisChunk, final String thatChunk) {
+        final int thisChunkLength = thisChunk.length();
+        int result = thisChunkLength - thatChunk.length();
+        // If equal, the first different number counts
+        if (result != 0) {
+            return result;
+        }
+        for (int i = 0; i < thisChunkLength; i++) {
+            result = thisChunk.charAt(i) - thatChunk.charAt(i);
+            if (result != 0) {
+                return result;
+            }
+        }
+        return 0;
+    }
+
+    /**
      * @param string1 The first string to be compared.
      * @param string2 The second string to be compared.
      * @return A negative integer, zero, or a positive integer as the first
      * argument is less than, equal to, or greater than the second.
      */
     @Override
-    @SuppressWarnings("PMD.CognitiveComplexity")
     public int compare(final String string1, final String string2) {
         int thisMarker = 0;
         int thatMarker = 0;
@@ -105,18 +127,7 @@ public enum AlphanumComparator implements Comparator<String> {
             int result;
             if (isDigit(thisChunk.charAt(0))
                     && isDigit(thatChunk.charAt(0))) {
-                // Simple chunk comparison by length.
-                final int thisChunkLength = thisChunk.length();
-                result = thisChunkLength - thatChunk.length();
-                // If equal, the first different number counts
-                if (result == 0) {
-                    for (int i = 0; i < thisChunkLength; i++) {
-                        result = thisChunk.charAt(i) - thatChunk.charAt(i);
-                        if (result != 0) {
-                            return result;
-                        }
-                    }
-                }
+                result = compareNumericChunks(thisChunk, thatChunk);
             } else {
                 result = thisChunk.compareTo(thatChunk);
             }

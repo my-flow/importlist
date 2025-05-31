@@ -1,6 +1,6 @@
 package com.moneydance.modules.features.importlist.datetime;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * @author Florian J. Breunig
@@ -8,7 +8,7 @@ import java.util.Date;
 public final class TimeFormatterMock implements DateFormatter {
 
     @Override
-    public String format(final Date date) {
+    public String format(final Instant instant) {
         return "";
     }
 }

@@ -2,6 +2,7 @@ package com.moneydance.modules.features.importlist.datetime;
 
 import com.infinitekind.util.CustomDateFormat;
 
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -16,7 +17,7 @@ public final class DateFormatterImpl implements DateFormatter {
     }
 
     @Override
-    public String format(final Date date) {
-        return this.customDateFormatter.format(date);
+    public String format(final Instant instant) {
+        return this.customDateFormatter.format(Date.from(instant));
     }
 }

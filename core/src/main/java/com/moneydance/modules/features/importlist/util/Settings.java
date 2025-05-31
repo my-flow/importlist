@@ -433,7 +433,7 @@ public final class Settings implements ISettings {
             if (file.exists() && file.canRead()) {
                 return ImageIO.read(file);
             }
-        } catch (Exception e) {
+        } catch (SecurityException | IllegalArgumentException e) {
             // Log the exception to help with debugging
             java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Settings.class.getName());
             if (logger.isLoggable(java.util.logging.Level.WARNING)) {

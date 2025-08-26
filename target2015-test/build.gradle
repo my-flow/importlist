@@ -4,8 +4,8 @@ dependencies {
     api project(':target2015')
     api('com.dropbox.core:dropbox-core-sdk:7.0.0')
     api('org.freeplane.bulenkov:darcula:2021.7')
-    api('com.google.dagger:dagger:2.57')
-    annotationProcessor "com.google.dagger:dagger-compiler:2.57"
+    api('com.google.dagger:dagger:2.57.1')
+    annotationProcessor "com.google.dagger:dagger-compiler:2.57.1"
 
     runtimeOnly('org.slf4j:slf4j-simple:2.0.17')
     runtimeOnly('org.syncloud:dropbox-client:1.5.3');

@@ -133,7 +133,7 @@ public final class StandardCoreTestComponent implements CoreTestComponent {
             logger.warning(message);
         }
         if (exception != null) {
-            exception.printStackTrace();
+            logger.log(java.util.logging.Level.WARNING, message, exception);
         }
     }
 
@@ -146,7 +146,7 @@ public final class StandardCoreTestComponent implements CoreTestComponent {
             logger.severe(message);
         }
         if (exception != null) {
-            exception.printStackTrace();
+            logger.log(java.util.logging.Level.SEVERE, message, exception);
         }
     }
 

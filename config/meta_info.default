@@ -1,7 +1,7 @@
 {
   "vendor" = "${VENDOR}"
   "module_build" = "${MODULE_BUILD}"
-  "minbuild" = "1000"
+  "minbuild" = "5064"
   "vendor.url" = "https://www.my-flow.com/importlist/"
   "module_name" = "Import List"
   "desc" = "Import List monitors a folder and displays its transaction files in Moneydance's homepage view where you can easily click to import or delete them."

@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Run static analysis: `./gradlew pmdMain`
 
 ## Code Style Guidelines
-- Java 11 compatibility (release = 11)
+- Java 21 compatibility (release = 21)
 - Line length: max 120 characters
 - Use explicit imports (no star imports)
 - Import order: com.*, java.*, javax.*, other

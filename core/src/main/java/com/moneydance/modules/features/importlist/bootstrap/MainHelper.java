@@ -24,7 +24,6 @@ public final class MainHelper {
     private static final Logger LOG = Logger.getLogger(MainHelper.class.getName());
 
     private final ISettings settings;
-    private Preferences prefs;
     private ViewController viewController;
 
     public MainHelper(final ISettings argSettings) {
@@ -38,11 +37,11 @@ public final class MainHelper {
         ServiceLocator.initialize(argCoreComponent);
         ServiceLocator.addObserver(argObserver);
 
-        this.prefs = argCoreComponent.preferences();
+        final Preferences prefs = argCoreComponent.preferences();
         this.viewController = ServiceLocator.getViewController();
 
-        if (this.prefs.isFirstRun()) {
-            this.prefs.setFirstRun(false);
+        if (prefs.isFirstRun()) {
+            prefs.setFirstRun(false);
             LOG.config("Install");
         }
 
@@ -73,7 +72,6 @@ public final class MainHelper {
         LOG.info("Unloading extension."); //$NON-NLS-1$
         this.viewController.setActive(false);
         this.cleanup();
-        this.prefs.setAllWritablePreferencesToNull();
     }
 
     public void cleanup() {

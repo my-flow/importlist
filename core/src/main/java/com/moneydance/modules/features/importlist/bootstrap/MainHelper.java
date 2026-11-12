@@ -1,12 +1,14 @@
 package com.moneydance.modules.features.importlist.bootstrap;
 
 import com.moneydance.modules.features.importlist.CoreComponent;
+import com.moneydance.modules.features.importlist.controller.Context;
 import com.moneydance.modules.features.importlist.controller.ViewController;
 import com.moneydance.modules.features.importlist.service.ServiceLocator;
 import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.awt.Image;
+import java.util.Objects;
 import java.util.Observer;
 import java.util.logging.Logger;
 
@@ -48,7 +50,8 @@ public final class MainHelper {
 
         // register this module to be invoked via the application toolbar
         LOG.config("Registering toolbar feature");
-        ServiceLocator.getContext().registerFeature(this.settings.getChooseBaseDirSuffix(), this.getName());
+        final Context context = Objects.requireNonNull(ServiceLocator.getContext(), "Context must be initialized");
+        context.registerFeature(this.settings.getChooseBaseDirSuffix(), this.getName());
     }
 
     public String getName() {

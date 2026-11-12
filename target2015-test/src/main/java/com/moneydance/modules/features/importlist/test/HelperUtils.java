@@ -6,6 +6,7 @@ import com.moneydance.modules.features.importlist.TargetTestComponent;
 import com.moneydance.modules.features.importlist.service.ServiceLocator;
 import com.moneydance.modules.features.importlist.util.Localizable;
 
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,6 +70,7 @@ public final class HelperUtils {
      * @param component The component to use for initialization
      */
     public static void initializeServiceLocator(final CoreComponent component) {
+        Objects.requireNonNull(component, "Component must not be null");
         try {
             LOG.log(Level.INFO, "Resetting ServiceLocator before initialization");
             ServiceLocator.reset(); // Reset ServiceLocator first to avoid conflicts

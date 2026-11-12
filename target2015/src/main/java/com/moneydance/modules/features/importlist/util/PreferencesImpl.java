@@ -118,6 +118,22 @@ public final class PreferencesImpl implements Preferences {
     }
 
     @Override
+    public Optional<File> getMoneydanceImportDirectory() {
+        final String value = this.userPreferences.getSetting(UserPreferences.IMPORT_DIR, null);
+        if (value == null) {
+            return Optional.empty();
+        }
+        File directory = new File(value);
+        if (!directory.isDirectory()) {
+            directory = directory.getParentFile();
+        }
+        if (directory == null || !directory.exists()) {
+            return Optional.empty();
+        }
+        return Optional.of(directory);
+    }
+
+    @Override
     public void setColumnWidths(
             final int column,
             final int columnWidth) {

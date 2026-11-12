@@ -79,6 +79,11 @@ public final class PreferencesMock implements Preferences {
     }
 
     @Override
+    public Optional<File> getMoneydanceImportDirectory() {
+        return Optional.empty();
+    }
+
+    @Override
     public void setColumnWidths(
             final int column,
             final int columnWidth) {

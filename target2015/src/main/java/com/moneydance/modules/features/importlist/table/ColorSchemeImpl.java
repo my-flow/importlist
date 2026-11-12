@@ -26,7 +26,6 @@ public final class ColorSchemeImpl implements ColorScheme {
     @Override
     public void applyColorScheme(final Component component, final int row) {
         component.setForeground(this.color);
-        component.setBackground(this.color);
     }
 
     @Override

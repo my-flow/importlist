@@ -49,13 +49,13 @@ final class ButtonRenderer implements TableCellRenderer {
         this.colorScheme.applyColorScheme(button, row);
         Border border = BorderFactory.createEtchedBorder(
                 EtchedBorder.LOWERED,
-                button.getBackground().brighter(),
-                button.getBackground().darker());
+                button.getForeground().brighter(),
+                button.getForeground().darker());
         if (row % 2 == 0) {
             border = BorderFactory.createEtchedBorder(
                     EtchedBorder.RAISED,
-                    button.getBackground().darker(),
-                    button.getBackground().brighter());
+                    button.getForeground().darker(),
+                    button.getForeground().brighter());
         }
         button.setBorder(border);
 

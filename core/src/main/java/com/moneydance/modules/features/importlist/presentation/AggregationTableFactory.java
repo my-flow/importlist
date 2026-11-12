@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.presentation;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
 import com.moneydance.modules.features.importlist.table.ColorScheme;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
 import com.moneydance.modules.features.importlist.util.ISettings;
@@ -71,7 +71,7 @@ public final class AggregationTableFactory extends AbstractTableFactory {
     public JTable getComponent() {
         final JTable table = this.getTable();
         final ISettings settings = this.getSettings();
-        final Preferences preferences = Helper.INSTANCE.getPreferences();
+        final Preferences preferences = ServiceLocator.getPreferences();
 
         table.setBackground(preferences.getBackground());
 

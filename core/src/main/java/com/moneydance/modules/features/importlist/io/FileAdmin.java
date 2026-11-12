@@ -1,6 +1,6 @@
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
 import com.moneydance.modules.features.importlist.util.Localizable;
 
 import java.io.File;
@@ -61,9 +61,9 @@ public final class FileAdmin extends Observable implements Observer {
         this.fileContainer = new FileContainer(readableFilter);
 
         // Create file operations with explicit dependency handling
-        Localizable localizable = Helper.INSTANCE.getLocalizable();
+        Localizable localizable = ServiceLocator.getLocalizable();
         if (localizable == null) {
-            // Use provided parameters directly if Helper is not fully initialized
+            // Use provided parameters directly if ServiceLocator has no localizable yet
             localizable = new Localizable(settings, prefs.getLocale());
         }
 
@@ -97,7 +97,7 @@ public final class FileAdmin extends Observable implements Observer {
             }
             LOG.warning(() -> String.format("Could not open directory %s", baseDirectory.getAbsolutePath()));
 
-            Localizable localizable = Helper.INSTANCE.getLocalizable();
+            Localizable localizable = ServiceLocator.getLocalizable();
             String errorMessage;
 
             if (localizable != null) {

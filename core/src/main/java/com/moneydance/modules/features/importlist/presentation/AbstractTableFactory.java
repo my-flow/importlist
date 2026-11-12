@@ -1,6 +1,6 @@
 package com.moneydance.modules.features.importlist.presentation;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
 import com.moneydance.modules.features.importlist.util.ISettings;
 
 import javax.swing.JTable;
@@ -45,7 +45,7 @@ abstract class AbstractTableFactory implements ComponentFactory {
         int colNo = this.columnModel.getColumnIndex(description);
         column.setIdentifier(description);
         column.setMinWidth(this.settings.getMinColumnWidth());
-        column.setPreferredWidth(Helper.INSTANCE.getPreferences().getColumnWidths(colNo));
+        column.setPreferredWidth(ServiceLocator.getPreferences().getColumnWidths(colNo));
         return column;
     }
 

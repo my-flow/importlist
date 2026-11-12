@@ -1,6 +1,6 @@
 package com.moneydance.modules.features.importlist.table;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.awt.Component;
@@ -51,7 +51,7 @@ final class HeaderRenderer extends DefaultTableCellRenderer {
                 row,
                 column);
 
-        final Preferences prefs = Helper.INSTANCE.getPreferences();
+        final Preferences prefs = ServiceLocator.getPreferences();
 
         this.setFont(prefs.getHeaderFont());
         this.setForeground(prefs.getHeaderForeground());

@@ -1,8 +1,8 @@
 {
   "vendor" = "Florian J. Breunig"
   "module_build" = "16"
-  "minbuild" = "1000"
-  "vendor.url" = "https://www.my-flow.com/importlist/"
+  "minbuild" = "5064"
+  "vendor.url" = "https://github.com/my-flow/importlist"
   "module_name" = "Import List"
   "desc" = "Import List monitors a folder and displays its transaction files in Moneydance's homepage view where you can easily click to import or delete them."
 }

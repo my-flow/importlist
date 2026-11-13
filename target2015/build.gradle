@@ -1,6 +1,6 @@
 dependencies {
     api project(':core')
-    api(':moneydance-2020.2-1929:')
+    api(':moneydance-2023.3-5064:')
 }
 
 tasks.named('assemble').configure {
@@ -18,7 +18,7 @@ tasks.named('shadowJar').configure {
 task genKeys(type: JavaExec) {
     description = 'Generates a passphrase-protected key pair.'
     standardInput = System.in
-    classpath = files("$rootDir/lib/extadmin-2015.jar", "$rootDir/lib/moneydance-2020.2-1929.jar")
+    classpath = files("$rootDir/lib/extadmin-2015.jar", "$rootDir/lib/moneydance-2023.3-5064.jar")
     mainClass = 'com.moneydance.admin.KeyAdmin'
     args 'genkey', privkeyfile, pubkeyfile
 }
@@ -29,7 +29,7 @@ task sign(type: JavaExec) {
         new File(privkeyfile as String).exists()
     }
     standardInput = System.in
-    classpath = files("$rootDir/lib/extadmin-2015.jar", "$rootDir/lib/moneydance-2020.2-1929.jar")
+    classpath = files("$rootDir/lib/extadmin-2015.jar", "$rootDir/lib/moneydance-2023.3-5064.jar")
     mainClass = 'com.moneydance.admin.KeyAdmin'
     args 'signextjar', privkeyfile, privkeyid, rootProject.name, file(mxtfile)
 }

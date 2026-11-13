@@ -7,6 +7,7 @@ and this project does *not* adhere to Semantic Versioning.
 ## [Unreleased]
 ### Fixed
 - Column order not saved after moving a column in Moneydance 2023.3 (5064) ([#215]).
+- Blank Import and Delete buttons without labels when using the "Flat Dark" theme or other FlatLaf-based themes ([#209]).
 
 ## [v16] - 2022-05-12
 ### Fixed
@@ -130,6 +131,7 @@ and this project does *not* adhere to Semantic Versioning.
 - Compatibility with Java 1.3 and later versions.
 
 [#215]: https://github.com/my-flow/importlist/issues/215
+[#209]: https://github.com/my-flow/importlist/issues/209
 [#11]: https://github.com/my-flow/importlist/issues/11
 [#10]: https://github.com/my-flow/importlist/issues/10
 [#7]: https://github.com/my-flow/importlist/issues/7

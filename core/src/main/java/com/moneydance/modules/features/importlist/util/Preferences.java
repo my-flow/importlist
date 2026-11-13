@@ -35,6 +35,8 @@ public interface Preferences {
 
     void setBaseDirectory(@Nullable File baseDirectory);
 
+    Optional<File> getMoneydanceImportDirectory();
+
     void setColumnWidths(int column, int columnWidth);
 
     int getColumnWidths(int column);

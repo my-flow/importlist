@@ -30,6 +30,8 @@ public final class PreferencesMock implements Preferences {
     private RowSorter.SortKey sortKey;
     private final DateFormatter dateFormatter;
     private final DateFormatter timeFormatter;
+    private Optional<File> baseDirectory;
+    private Optional<File> moneydanceImportDirectory;
 
     public PreferencesMock() {
         this.columnNames = new HashMap<>();
@@ -40,6 +42,18 @@ public final class PreferencesMock implements Preferences {
         this.sortKey = new RowSorter.SortKey(0, SortOrder.ASCENDING);
         this.dateFormatter = new DateFormatterMock();
         this.timeFormatter = new TimeFormatterMock();
+        this.baseDirectory = createTempDirectory();
+        this.moneydanceImportDirectory = Optional.empty();
+    }
+
+    private static Optional<File> createTempDirectory() {
+        try {
+            final File file = File.createTempFile("prefix", null);
+            file.deleteOnExit();
+            return Optional.ofNullable(file.getParentFile());
+        } catch (IOException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -64,18 +78,21 @@ public final class PreferencesMock implements Preferences {
 
     @Override
     public Optional<File> getBaseDirectory() {
-        try {
-            final File file = File.createTempFile("prefix", null);
-            file.deleteOnExit();
-            return Optional.of(file.getParentFile());
-        } catch (IOException e) {
-            return Optional.empty();
-        }
+        return this.baseDirectory;
     }
 
     @Override
-    public void setBaseDirectory(@Nullable final File baseDirectory) {
-        // empty
+    public void setBaseDirectory(@Nullable final File argBaseDirectory) {
+        this.baseDirectory = Optional.ofNullable(argBaseDirectory);
+    }
+
+    @Override
+    public Optional<File> getMoneydanceImportDirectory() {
+        return this.moneydanceImportDirectory;
+    }
+
+    public void setMoneydanceImportDirectory(@Nullable final File argMoneydanceImportDirectory) {
+        this.moneydanceImportDirectory = Optional.ofNullable(argMoneydanceImportDirectory);
     }
 
     @Override

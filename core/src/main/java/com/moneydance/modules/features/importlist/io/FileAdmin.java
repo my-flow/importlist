@@ -55,7 +55,7 @@ public final class FileAdmin extends Observable implements Observer {
         this.readableFileFilter = readableFilter;
 
         // Initialize dependencies
-        this.directoryChooser = new DefaultDirectoryChooser(prefs);
+        this.directoryChooser = new DefaultDirectoryChooser(prefs, context);
         this.directoryValidator = new DirectoryValidator();
         this.monitor = new FileAlterationMonitor(settings.getMonitorInterval());
         this.fileContainer = new FileContainer(readableFilter);

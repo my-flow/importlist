@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project does *not* adhere to Semantic Versioning.
 
 ## [Unreleased]
+### Changed
+- Directory chooser on macOS to the native macOS dialog ([#212]).
+- Directory chooser to start in Moneydance's import directory when no base directory is set ([#212]).
+
 ### Fixed
 - Column order not saved after moving a column in Moneydance 2023.3 (5064) ([#215]).
 - Blank Import and Delete buttons without labels when using the "Flat Dark" theme or other FlatLaf-based themes ([#209]).
@@ -131,6 +135,7 @@ and this project does *not* adhere to Semantic Versioning.
 - Compatibility with Java 1.3 and later versions.
 
 [#215]: https://github.com/my-flow/importlist/issues/215
+[#212]: https://github.com/my-flow/importlist/issues/212
 [#209]: https://github.com/my-flow/importlist/issues/209
 [#11]: https://github.com/my-flow/importlist/issues/11
 [#10]: https://github.com/my-flow/importlist/issues/10

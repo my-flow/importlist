@@ -36,6 +36,7 @@ import javax.swing.border.Border;
 public final class PreferencesImpl implements Preferences {
 
     private final ISettings settings;
+    private final Main main;
     private final UserPreferences userPreferences;
     private final StreamTable columnOrderDefault;
     private final StreamTable sortOrderDefault;
@@ -43,12 +44,11 @@ public final class PreferencesImpl implements Preferences {
     private final DateFormatter dateFormatter;
     private final DateFormatter timeFormatter;
     @Nullable private StreamTable columnOrder;
-    private final MDColors colors;
-    private final Font defaultSystemFont;
 
-    public PreferencesImpl(final ISettings argSettings, final Main main) {
+    public PreferencesImpl(final ISettings argSettings, final Main argMain) {
         this.settings = argSettings;
-        this.userPreferences = main.getPreferences();
+        this.main = argMain;
+        this.userPreferences = argMain.getPreferences();
         this.columnWidths = new StreamTable();
         this.columnOrderDefault = new StreamTable();
         this.columnOrderDefault.put("0", this.settings.getDescName());
@@ -59,8 +59,6 @@ public final class PreferencesImpl implements Preferences {
         this.sortOrderDefault.put("0", SortOrder.ASCENDING.toString());
         this.dateFormatter = new DateFormatterImpl(this.userPreferences.getShortDateFormatter());
         this.timeFormatter = new TimeFormatterImpl(DateFormat.getTimeInstance());
-        this.colors = ((MoneydanceGUI) main.getUI()).getColors();
-        this.defaultSystemFont = ((MoneydanceGUI) main.getUI()).getFonts().defaultSystemFont;
     }
 
     @Override
@@ -114,6 +112,22 @@ public final class PreferencesImpl implements Preferences {
             value = baseDirectory.getAbsolutePath();
         }
         this.userPreferences.setSetting("importlist.import_dir", value);
+    }
+
+    @Override
+    public Optional<File> getMoneydanceImportDirectory() {
+        final String value = this.userPreferences.getSetting(UserPreferences.IMPORT_DIR, null);
+        if (value == null) {
+            return Optional.empty();
+        }
+        File directory = new File(value);
+        if (!directory.isDirectory()) {
+            directory = directory.getParentFile();
+        }
+        if (directory == null || !directory.exists()) {
+            return Optional.empty();
+        }
+        return Optional.of(directory);
     }
 
     @Override
@@ -232,7 +246,8 @@ public final class PreferencesImpl implements Preferences {
 
     @Override
     public Color getForeground() {
-        Color foreground = this.colors.homePageFG;
+        final MDColors colors = ((MoneydanceGUI) this.main.getUI()).getColors();
+        Color foreground = colors.homePageFG;
         if (foreground == null) {
             int foregroundValue = this.userPreferences.getIntSetting(
                     UserPreferences.GUI_HOMEPG_FG,
@@ -272,7 +287,8 @@ public final class PreferencesImpl implements Preferences {
     @Override
     public Font getBodyFont() {
         final int fontIncrement = this.userPreferences.getIntSetting(UserPreferences.GUI_FONT_DIFF, 0);
-        return this.defaultSystemFont.deriveFont(this.defaultSystemFont.getSize2D() + fontIncrement);
+        final Font defaultSystemFont = ((MoneydanceGUI) this.main.getUI()).getFonts().defaultSystemFont;
+        return defaultSystemFont.deriveFont(defaultSystemFont.getSize2D() + fontIncrement);
     }
 
     @Override

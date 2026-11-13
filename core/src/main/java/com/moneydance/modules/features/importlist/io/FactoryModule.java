@@ -23,8 +23,10 @@ public final class FactoryModule {
         // Private constructor to prevent instantiation
     }
 
-    public static AbstractDirectoryChooser createDirectoryChooser(final Preferences prefs) {
-        return new DefaultDirectoryChooser(prefs);
+    public static AbstractDirectoryChooser createDirectoryChooser(
+            final Preferences prefs,
+            final Context context) {
+        return new DefaultDirectoryChooser(prefs, context);
     }
 
     public static FileAlterationMonitor createMonitor(final ISettings settings) {

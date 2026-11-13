@@ -15,7 +15,6 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
 import java.text.DateFormat;
-import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -142,7 +141,9 @@ public final class PreferencesImpl implements Preferences {
         StreamTable streamTable = null;
         if (map != null) {
             streamTable = new StreamTable();
-            streamTable.merge(new Hashtable<>(map));
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                streamTable.put(entry.getKey(), entry.getValue());
+            }
         }
         this.userPreferences.setSetting(
                 "importlist.column_order",

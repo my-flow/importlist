@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project does *not* adhere to Semantic Versioning.
 
+## [Unreleased]
+### Fixed
+- Column order not saved after moving a column in Moneydance 2023.3 (5064) ([#215]).
+
 ## [v16] - 2022-05-12
 ### Fixed
 - Crash in Moneydance 2022.3 (4060) on Windows ([#11]).
@@ -125,6 +129,7 @@ and this project does *not* adhere to Semantic Versioning.
 - Compatibility with Moneydance 2010.
 - Compatibility with Java 1.3 and later versions.
 
+[#215]: https://github.com/my-flow/importlist/issues/215
 [#11]: https://github.com/my-flow/importlist/issues/11
 [#10]: https://github.com/my-flow/importlist/issues/10
 [#7]: https://github.com/my-flow/importlist/issues/7

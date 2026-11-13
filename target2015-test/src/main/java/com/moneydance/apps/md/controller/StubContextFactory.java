@@ -3,7 +3,7 @@ package com.moneydance.apps.md.controller;
 import com.infinitekind.moneydance.model.Account;
 import com.infinitekind.moneydance.model.AccountBook;
 import com.infinitekind.moneydance.model.AccountHelper;
-import com.moneydance.util.StreamTable;
+import com.infinitekind.util.StreamTable;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

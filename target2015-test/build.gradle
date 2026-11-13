@@ -13,6 +13,7 @@ dependencies {
     testImplementation('junit:junit:4.13.2')
     testImplementation('org.hamcrest:hamcrest-junit:2.0.0.0')
 
+    testRuntimeOnly('com.formdev:flatlaf:3.8')
     testRuntimeOnly('org.slf4j:slf4j-simple:2.0.20')
 }
 

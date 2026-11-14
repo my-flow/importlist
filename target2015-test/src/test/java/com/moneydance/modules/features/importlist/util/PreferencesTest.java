@@ -33,7 +33,9 @@ public final class PreferencesTest {
 
     @Test
     public void testSetAllWritablePreferencesToNull() {
+        this.prefs.setFirstRun(false);
         this.prefs.setAllWritablePreferencesToNull();
+        assertThat(this.prefs.isFirstRun(), is(true));
     }
 
     @Test
@@ -47,7 +49,7 @@ public final class PreferencesTest {
 
     @Test
     public void testIsFirstRun() {
-        this.prefs.isFirstRun();
+        assertThat(this.prefs.isFirstRun(), is(true));
     }
 
     @Test

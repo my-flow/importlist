@@ -61,10 +61,20 @@ public final class StubContextFactory {
 
     @SuppressWarnings("nullness")
     public void init() {
+        this.init(null);
+    }
+
+    /**
+     * Sets up the feature module in the stub context.
+     *
+     * @param moduleId The ID the feature module is set up with.
+     */
+    @SuppressWarnings("nullness")
+    public void init(@Nullable final String moduleId) {
         LOG.info("Setting up stub context");
         this.featureModule.setup(
                 this.context,
-                null,
+                moduleId,
                 new StreamTable(),
                 null,
                 null,

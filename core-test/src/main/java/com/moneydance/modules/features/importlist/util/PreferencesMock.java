@@ -25,7 +25,7 @@ import javax.swing.border.EmptyBorder;
  */
 public final class PreferencesMock implements Preferences {
 
-    private boolean firstRun;
+    private boolean firstRun = true;
     private final Map<Integer, String> columnNames;
     private RowSorter.SortKey sortKey;
     private final DateFormatter dateFormatter;
@@ -58,7 +58,9 @@ public final class PreferencesMock implements Preferences {
 
     @Override
     public void setAllWritablePreferencesToNull() {
-        // empty
+        this.firstRun = true;
+        this.baseDirectory = Optional.empty();
+        this.sortKey = new RowSorter.SortKey(0, SortOrder.ASCENDING);
     }
 
     @Override

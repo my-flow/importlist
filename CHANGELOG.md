@@ -10,6 +10,7 @@ and this project does *not* adhere to Semantic Versioning.
 - Directory chooser to start in Moneydance's import directory when no base directory is set ([#212]).
 
 ### Fixed
+- Settings (base directory, column widths, column order and sort order) lost when updating the extension ([#213]).
 - Column order not saved after moving a column in Moneydance 2023.3 (5064) ([#215]).
 - Blank Import and Delete buttons without labels when using the "Flat Dark" theme or other FlatLaf-based themes ([#209]).
 
@@ -135,6 +136,7 @@ and this project does *not* adhere to Semantic Versioning.
 - Compatibility with Java 1.3 and later versions.
 
 [#215]: https://github.com/my-flow/importlist/issues/215
+[#213]: https://github.com/my-flow/importlist/issues/213
 [#212]: https://github.com/my-flow/importlist/issues/212
 [#209]: https://github.com/my-flow/importlist/issues/209
 [#11]: https://github.com/my-flow/importlist/issues/11

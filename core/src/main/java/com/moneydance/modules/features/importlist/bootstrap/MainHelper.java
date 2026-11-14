@@ -72,11 +72,26 @@ public final class MainHelper {
         ServiceLocator.initialize(coreComponent);
     }
 
+    /**
+     * Moneydance unloads the extension both when it updates and when it
+     * uninstalls the extension. The user's settings are kept on an update
+     * and cleared after an uninstall.
+     */
     public void unload() {
         LOG.info("Unloading extension."); //$NON-NLS-1$
         this.viewController.setActive(false);
         this.cleanup();
-        this.prefs.setAllWritablePreferencesToNull();
+        final Preferences preferences = this.prefs;
+        final Context context = Objects.requireNonNull(ServiceLocator.getContext(), "Context must be initialized");
+        // Moneydance calls unload() before it removes the module id, so check
+        // once it has finished, and save, as it has already saved by then
+        context.invokeAfterModuleOperation(() -> {
+            if (!context.isModuleInstalled()) {
+                LOG.info("Clearing settings after uninstall."); //$NON-NLS-1$
+                preferences.setAllWritablePreferencesToNull();
+                context.savePreferences();
+            }
+        });
     }
 
     public void cleanup() {

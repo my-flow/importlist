@@ -128,6 +128,25 @@ public final class StubContext extends Main {
                 module));
     }
 
+    /**
+     * Lists a module as installed, as Moneydance does when it installs one.
+     *
+     * @param moduleId The ID of the module.
+     */
+    public void addModule(final String moduleId) {
+        this.getPreferences().addModule(moduleId, false);
+    }
+
+    /**
+     * Removes a module from the installed ones, as Moneydance does when it
+     * uninstalls one.
+     *
+     * @param moduleId The ID of the module.
+     */
+    public void removeModule(final String moduleId) {
+        this.getPreferences().removeModule(moduleId);
+    }
+
     @Override
     public UserPreferences getPreferences() {
         if (this.userPreferences == null) {

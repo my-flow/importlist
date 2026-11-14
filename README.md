@@ -21,17 +21,17 @@ repository.
 
 ## Running the extension
 After the build process has succeeded, the resulting MXT files are located in
-`target2015/build`.
+`target2023/build`.
 
 These MXT files can be added to Moneydance.
 
 ## Project structure
 The project consists of the following main projects:
-- `target2015` contains source code specific to Moneydance 2015 and later.
+- `target2023` contains source code specific to Moneydance 2023 and later.
 - `core` contains common source code.
 
 Support projects provide test infrastructure and test cases:
-- `target2015-test` contains tests of the *target2015* project.
+- `target2023-test` contains tests of the *target2023* project.
 - `core-test` contains tests of the *core* project.
 
 ## Documentation

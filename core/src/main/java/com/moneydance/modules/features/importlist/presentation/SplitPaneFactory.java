@@ -1,6 +1,6 @@
 package com.moneydance.modules.features.importlist.presentation;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
 
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
@@ -27,7 +27,7 @@ public final class SplitPaneFactory implements ComponentFactory {
         this.splitPane.setDividerSize(0);
         this.splitPane.setContinuousLayout(true);
         this.splitPane.setOpaque(false);
-        this.splitPane.setBorder(Helper.INSTANCE.getPreferences().getHomePageBorder());
+        this.splitPane.setBorder(ServiceLocator.getPreferences().getHomePageBorder());
     }
 
     @Override

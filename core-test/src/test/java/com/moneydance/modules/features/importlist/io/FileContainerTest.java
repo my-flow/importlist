@@ -1,8 +1,7 @@
 package com.moneydance.modules.features.importlist.io;
 
 import com.moneydance.modules.features.importlist.CoreTestComponent;
-import com.moneydance.modules.features.importlist.CoreTestModule;
-import com.moneydance.modules.features.importlist.DaggerCoreTestComponent;
+import com.moneydance.modules.features.importlist.TestComponentFactory;
 
 import java.io.File;
 
@@ -23,8 +22,7 @@ public class FileContainerTest {
 
     @Before
     public void setUp() {
-        final CoreTestModule testModule = new CoreTestModule();
-        final CoreTestComponent testComponent = DaggerCoreTestComponent.builder().coreTestModule(testModule).build();
+        final CoreTestComponent testComponent = TestComponentFactory.createTestComponent();
         this.fileContainer = testComponent.fileContainer();
         final File basedir = new File(String.format("%s%s%s%s%s",
                 "src", File.separator,

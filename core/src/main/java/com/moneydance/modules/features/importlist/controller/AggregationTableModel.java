@@ -1,10 +1,9 @@
 package com.moneydance.modules.features.importlist.controller;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
+import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
 
-import javax.inject.Inject;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -18,11 +17,10 @@ import javax.swing.table.AbstractTableModel;
 public final class AggregationTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 1L;
-    private final Settings settings;
+    private final ISettings settings;
     private final Preferences prefs;
 
-    @Inject
-    AggregationTableModel(final Settings argSettings, final Preferences argPrefs) {
+    public AggregationTableModel(final ISettings argSettings, final Preferences argPrefs) {
         super();
         this.settings = argSettings;
         this.prefs = argPrefs;
@@ -44,10 +42,10 @@ public final class AggregationTableModel extends AbstractTableModel {
             return null;
         }
         if (this.settings.getDescImport().equals(columnName)) {
-            return Helper.INSTANCE.getLocalizable().getLabelImportAllButton();
+            return ServiceLocator.getLocalizable().getLabelImportAllButton();
         }
         if (this.settings.getDescDelete().equals(columnName)) {
-            return Helper.INSTANCE.getLocalizable().getLabelDeleteAllButton();
+            return ServiceLocator.getLocalizable().getLabelDeleteAllButton();
         }
         throw new IllegalArgumentException(String.format(
                 "Could not find value for row %d, column %d", row, column));

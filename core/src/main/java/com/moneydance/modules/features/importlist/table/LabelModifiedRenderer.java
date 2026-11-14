@@ -3,10 +3,8 @@ package com.moneydance.modules.features.importlist.table;
 import com.moneydance.modules.features.importlist.datetime.DateFormatter;
 
 import java.awt.Component;
-import java.util.Date;
+import java.time.Instant;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -21,11 +19,10 @@ public final class LabelModifiedRenderer extends DefaultTableCellRenderer {
     private DateFormatter dateFormatter;
     private DateFormatter timeFormatter;
 
-    @Inject
     LabelModifiedRenderer(
-            @Named("odd color scheme") final ColorScheme argColorScheme,
-            @Named("date") final DateFormatter argDateFormatter,
-            @Named("time") final DateFormatter argTimeFormatter,
+            final ColorScheme argColorScheme,
+            final DateFormatter argDateFormatter,
+            final DateFormatter argTimeFormatter,
             final String argIndentationPrefix) {
         super();
         this.colorScheme = argColorScheme;
@@ -48,11 +45,11 @@ public final class LabelModifiedRenderer extends DefaultTableCellRenderer {
         this.colorScheme.applyColorScheme(this, row);
         String label = null;
         if (value instanceof Long) {
-            final Date fileDate = new Date((Long) value);
+            final Instant fileInstant = Instant.ofEpochMilli((Long) value);
             label = String.format("%s%s %s",
                     this.indentationPrefix,
-                    this.dateFormatter.format(fileDate),
-                    this.timeFormatter.format(fileDate));
+                    this.dateFormatter.format(fileInstant),
+                    this.timeFormatter.format(fileInstant));
         }
 
         super.getTableCellRendererComponent(

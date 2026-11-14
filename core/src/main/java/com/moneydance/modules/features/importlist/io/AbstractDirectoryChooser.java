@@ -3,8 +3,7 @@ package com.moneydance.modules.features.importlist.io;
 import com.moneydance.modules.features.importlist.util.Preferences;
 
 import java.io.File;
-
-import java8.util.Optional;
+import java.util.Optional;
 
 /**
  * This abstract class provides the functionality to choose, access, and reset

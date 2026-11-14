@@ -1,6 +1,8 @@
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 
+import com.github.spotbugs.snom.Effort
+
 import org.apache.commons.configuration2.FileBasedConfiguration
 import org.apache.commons.configuration2.PropertiesConfiguration
 import proguard.gradle.ProGuardTask
@@ -9,38 +11,38 @@ buildscript {
     repositories {
         mavenCentral()
         maven {
-            url "https://plugins.gradle.org/m2/"
+            url = uri("https://plugins.gradle.org/m2/")
         }
     }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
-        classpath 'org.apache.commons:commons-configuration2:2.3'
-        classpath 'net.sf.proguard:proguard-gradle:6.2.2'
-        classpath 'me.tatarka:gradle-retrolambda:3.7.1'
-        classpath 'gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.7.1'
-        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
+        classpath 'com.gradleup.shadow:shadow-gradle-plugin:9.6.1'
+        classpath 'org.apache.commons:commons-configuration2:2.15.1'
+        classpath 'com.guardsquare:proguard-gradle:7.10.0'
+        classpath 'com.github.spotbugs.snom:spotbugs-gradle-plugin:6.5.13'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:7.5.0.8588'
     }
 }
 
 subprojects {
     apply plugin: 'java-library'
-    apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'com.gradleup.shadow'
     apply plugin: 'checkstyle'
     apply plugin: 'pmd'
     apply plugin: 'idea'
     apply plugin: 'com.github.spotbugs'
     apply plugin: 'jacoco'
-    apply plugin: 'me.tatarka.retrolambda'
     apply plugin: 'org.sonarqube'
 
-
-    sourceCompatibility = 1.8
+    tasks.withType(JavaCompile) {
+        options.release = 21
+    }
 
     ext {
         privkeyid = '99'
         privkeyfile = "$rootDir/config/priv_key"
         pubkeyfile = "$rootDir/config/pub_key"
-        mxtfile = "${project.buildDir}/${project.distsDirName}/${rootProject.name}-${project.name}-v${getConfigValueForKey("module_build")}.mxt"
+        mxtfile = project.layout.buildDirectory.dir("${rootProject.name}-${project.name}-v${getConfigValueForKey("module_build")}.mxt")
+        outjar = project.layout.buildDirectory.dir("proguard-${rootProject.name}-v${getConfigValueForKey("module_build")}.jar")
     }
 
     repositories {
@@ -61,7 +63,7 @@ subprojects {
         }
     }
 
-    shadowJar {
+    tasks.named('shadowJar').configure {
         archiveBaseName.set(rootProject.name)
         from 'NOTICE'
         from 'LICENSE'
@@ -69,69 +71,61 @@ subprojects {
 
         dependencies {
             include project(':core')
-            include dependency('javax.inject:javax.inject:1')
-            include dependency('com.google.dagger:dagger:2.41')
-            include dependency('net.sourceforge.streamsupport:streamsupport:1.7.4')
-            include dependency('org.apache.commons:commons-configuration2:2.3')
-            include dependency('org.apache.commons:commons-lang3:3.12.0')
-            include dependency('org.apache.commons:commons-text:1.9')
-            include dependency('commons-io:commons-io:2.11.0')
-            include dependency('org.slf4j:slf4j-api:1.7.36')
-            include dependency('org.slf4j:slf4j-nop:1.7.36')
+            include dependency('org.apache.commons:commons-configuration2:2.15.1')
+            include dependency('org.apache.commons:commons-lang3:3.21.0')
+            include dependency('org.apache.commons:commons-text:1.15.0')
+            include dependency('commons-io:commons-io:2.22.0')
+            include dependency('org.slf4j:slf4j-api:2.0.20')
+            include dependency('org.slf4j:slf4j-nop:2.0.20')
         }
-
-        relocate 'dagger', 'com.moneydance.modules.features.importlist.dagger'
-        relocate 'java8', 'com.moneydance.modules.features.importlist.java8'
-        relocate 'javax.inject', 'com.moneydance.modules.features.importlist.javax.inject'
         relocate 'org.apache.commons.io', 'com.moneydance.modules.features.importlist.org.apache.commons.io'
         relocate 'org.apache.commons.lang3', 'com.moneydance.modules.features.importlist.org.apache.commons.lang3'
         relocate 'org.apache.commons.text', 'com.moneydance.modules.features.importlist.org.apache.commons.text'
         relocate 'org.apache.commons.configuration2', 'com.moneydance.modules.features.importlist.org.apache.commons.configuration2'
     }
 
-    task proguard(type: ProGuardTask, dependsOn: 'shadowJar') {
-        injars  shadowJar.archivePath
-        outjars "${project.buildDir}/${project.distsDirName}/proguard-${rootProject.name}.jar"
+    tasks.register('proguard', ProGuardTask) {
+        dependsOn 'shadowJar'
+        injars  shadowJar.archiveFile.get().asFile
+        outjars outjar.get().asFile
         configuration 'config/proguard.cfg'
     }
 
-    proguard.doLast {
-        new File("${project.buildDir}/${project.distsDirName}/proguard-${rootProject.name}.jar").renameTo mxtfile as String
+    tasks.named('proguard').configure {
+        doLast {
+            outjar.get().asFile.renameTo(file(mxtfile))
+        }
     }
 
     checkstyle {
-        toolVersion '10.2';
+        toolVersion = '10.25.0'
     }
 
     pmd {
-        toolVersion = "6.45.0"
+        consoleOutput = true
+        toolVersion = "7.19.0"
         ruleSets = []
         ruleSetFiles = files("$rootDir/config/pmd-ruleSet.xml")
     }
 
+    tasks.withType(Pmd) {
+        enabled = it.name.endsWith('Main')
+    }
+
     spotbugs {
-        toolVersion = "4.7.0"
-        effort = "max"
-        reportLevel = "medium"
+        toolVersion = "4.9.3"
+        effort = Effort.valueOf('MAX')
         excludeFilter = file("$rootDir/config/spotbugs-exclude.xml")
     }
 
-    spotbugsMain {
-        reports {
-            html {
-                enabled = true
-            }
-        }
-    }
-
     jacoco {
-        toolVersion = "0.8.8"
+        toolVersion = "0.8.13"
     }
 
-    sonarqube {
+    sonar {
         properties {
             property "sonar.host.url", "https://sonarcloud.io"
-            property "sonar.organization", "${rootProject.name}"
+            property "sonar.organization", "my-flow"
         }
     }
 }

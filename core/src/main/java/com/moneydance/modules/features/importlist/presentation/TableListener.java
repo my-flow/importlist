@@ -5,6 +5,7 @@ import com.moneydance.modules.features.importlist.util.Preferences;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 import javax.swing.JTable;
 import javax.swing.RowSorter;
@@ -14,8 +15,6 @@ import javax.swing.event.RowSorterEvent;
 import javax.swing.event.RowSorterListener;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
-
-import java8.util.stream.IntStreams;
 
 /**
  * This <code>EventListener</code> is notified upon rearrangement, resorting,
@@ -71,7 +70,7 @@ final class TableListener implements TableColumnModelListener, RowSorterListener
 
     private void saveColumnOrder() {
         Map<String, String> map = new ConcurrentHashMap<>(this.table.getColumnCount());
-        IntStreams.range(0, this.table.getColumnCount()).forEach(column ->
+        IntStream.range(0, this.table.getColumnCount()).forEach(column ->
             map.put(
                 Integer.toString(column),
                 this.table.getColumnName(column))
@@ -80,7 +79,7 @@ final class TableListener implements TableColumnModelListener, RowSorterListener
     }
 
     private void saveColumnWidths() {
-        IntStreams.range(0, this.table.getColumnCount()).forEach(column -> {
+        IntStream.range(0, this.table.getColumnCount()).forEach(column -> {
             final String columnName = this.table.getColumnName(column);
             this.prefs.setColumnWidths(
                     column,

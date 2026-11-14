@@ -1,6 +1,5 @@
 package com.moneydance.modules.features.importlist.controller;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
 import com.moneydance.modules.features.importlist.io.FileAdmin;
 import com.moneydance.modules.features.importlist.presentation.AggregationTableFactory;
 import com.moneydance.modules.features.importlist.presentation.BaseTableFactory;
@@ -8,11 +7,12 @@ import com.moneydance.modules.features.importlist.presentation.ComponentFactory;
 import com.moneydance.modules.features.importlist.presentation.DirectoryChooserButtonFactory;
 import com.moneydance.modules.features.importlist.presentation.EmptyLabelFactory;
 import com.moneydance.modules.features.importlist.presentation.SplitPaneFactory;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
 import com.moneydance.modules.features.importlist.table.AbstractEditor;
 import com.moneydance.modules.features.importlist.table.ColorScheme;
 import com.moneydance.modules.features.importlist.table.ColumnFactory;
+import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -39,7 +39,7 @@ abstract class DefaultViewController implements ViewController {
     private final BaseTableFactory baseTableFactory;
     private final AbstractTableModel baseTableModel;
     private final AbstractTableModel aggrTableModel;
-    private final Settings settings;
+    private final ISettings settings;
     private final Preferences prefs;
     private boolean dirty;
 
@@ -49,7 +49,7 @@ abstract class DefaultViewController implements ViewController {
             final AbstractTableModel argAggrTableModel,
             final ColorScheme evenColorScheme,
             final ColorScheme oddColorScheme,
-            final Settings argSettings,
+            final ISettings argSettings,
             final Preferences argPrefs) {
 
         this.fileAdmin = argFileAdmin;
@@ -96,9 +96,6 @@ abstract class DefaultViewController implements ViewController {
         if (this.viewport == null || !this.viewport.isVisible()) {
             return;
         }
-
-        Helper.INSTANCE.setChanged();
-        Helper.INSTANCE.notifyObservers(Boolean.TRUE);
 
         this.fileAdmin.checkValidBaseDirectory();
 
@@ -218,7 +215,7 @@ abstract class DefaultViewController implements ViewController {
                 new DirectoryChooserButtonFactory(
                         String.format(
                                 "<html><u>%s</u></html>",
-                                Helper.INSTANCE.getLocalizable().getDirectoryChooserTitle()
+                                ServiceLocator.getLocalizable().getDirectoryChooserTitle()
                         ),
                         new ChooseBaseDirectoryActionListener(),
                         this.prefs.getHomePageBorder(),
@@ -243,7 +240,7 @@ abstract class DefaultViewController implements ViewController {
 
     private void showLabelEmptyList() {
         EmptyLabelFactory emptyLabelFactory = new EmptyLabelFactory(
-                Helper.INSTANCE.getLocalizable().getEmptyMessage(
+                ServiceLocator.getLocalizable().getEmptyMessage(
                         this.fileAdmin.getBaseDirectory().orElseThrow(AssertionError::new).getAbsolutePath()
                 ),
                 this.prefs.getHomePageBorder(),

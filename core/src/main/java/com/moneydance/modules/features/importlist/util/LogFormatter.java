@@ -2,7 +2,7 @@ package com.moneydance.modules.features.importlist.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Date;
+import java.time.Instant;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
@@ -26,7 +26,7 @@ public final class LogFormatter extends Formatter {
     public String format(final LogRecord record) {
         final StringBuilder stringBuilder = new StringBuilder(7);
 
-        stringBuilder.append(new Date(record.getMillis())).
+        stringBuilder.append(Instant.ofEpochMilli(record.getMillis())).
                 append(' ').
                 append(record.getLevel().getLocalizedName()).
                 append(": ").

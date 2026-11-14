@@ -1,22 +1,19 @@
 package com.moneydance.modules.features.importlist.bootstrap;
 
-import com.moneydance.modules.features.importlist.util.Settings;
-
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
-
+import com.moneydance.modules.features.importlist.util.ISettings;
 
 /**
+ * Utility class for creating MainHelper instances.
+ *
  * @author Florian J. Breunig
  */
-@Module
 public final class FactoryModule {
 
-    @Provides
-    @Singleton
-    MainHelper provideMainHelper(final Settings settings) {
+    private FactoryModule() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static MainHelper createMainHelper(final ISettings settings) {
         return new MainHelper(settings);
     }
 }

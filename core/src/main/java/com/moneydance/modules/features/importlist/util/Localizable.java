@@ -16,10 +16,10 @@ import org.apache.commons.text.WordUtils;
  */
 public final class Localizable {
 
-    private final Settings settings;
+    private final ISettings settings;
     private final ResourceBundle resourceBundle;
 
-    public Localizable(final Settings argSettings, final Locale locale) {
+    public Localizable(final ISettings argSettings, final Locale locale) {
         this.settings = argSettings;
         this.resourceBundle = ResourceBundle.getBundle(
                 this.settings.getLocalizableResource(),

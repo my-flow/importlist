@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project does *not* adhere to Semantic Versioning.
 
+## [v17] - 2026-11-14
+### Changed
+- Directory chooser on macOS to the native macOS dialog ([#212]).
+- Directory chooser to start in Moneydance's import directory when no base directory is set ([#212]).
+
+### Fixed
+- Settings (base directory, column widths, column order and sort order) lost when updating the extension ([#213]).
+- Column order not saved after moving a column in Moneydance 2023.3 (5064) ([#215]).
+- Blank Import and Delete buttons without labels when using the "Flat Dark" theme or other FlatLaf-based themes ([#209]).
+
 ## [v16] - 2022-05-12
 ### Fixed
 - Crash in Moneydance 2022.3 (4060) on Windows ([#11]).
@@ -125,6 +135,10 @@ and this project does *not* adhere to Semantic Versioning.
 - Compatibility with Moneydance 2010.
 - Compatibility with Java 1.3 and later versions.
 
+[#215]: https://github.com/my-flow/importlist/issues/215
+[#213]: https://github.com/my-flow/importlist/issues/213
+[#212]: https://github.com/my-flow/importlist/issues/212
+[#209]: https://github.com/my-flow/importlist/issues/209
 [#11]: https://github.com/my-flow/importlist/issues/11
 [#10]: https://github.com/my-flow/importlist/issues/10
 [#7]: https://github.com/my-flow/importlist/issues/7
@@ -132,20 +146,20 @@ and this project does *not* adhere to Semantic Versioning.
 [#3]: https://github.com/my-flow/importlist/issues/3
 [#1]: https://github.com/my-flow/importlist/issues/1
 
-[Unreleased]: https://github.com/my-flow/importlist/compare/v16...HEAD
-[v16]: https://github.com/my-flow/importlist/compare/v15...v16
-[v15]: https://github.com/my-flow/importlist/compare/v14...v15
-[v14]: https://github.com/my-flow/importlist/compare/v13...v14
-[v13]: https://github.com/my-flow/importlist/compare/v12...v13
-[v12]: https://github.com/my-flow/importlist/compare/v11...v12
-[v11]: https://github.com/my-flow/importlist/compare/v10...v11
-[v10]: https://github.com/my-flow/importlist/compare/v9...v10
-[v9]: https://github.com/my-flow/importlist/compare/v8...v9
-[v8]: https://github.com/my-flow/importlist/compare/v7...v8
-[v7]: https://github.com/my-flow/importlist/compare/v6...v7
-[v6]: https://github.com/my-flow/importlist/compare/v5...v6
-[v5]: https://github.com/my-flow/importlist/compare/v4...v5
-[v4]: https://github.com/my-flow/importlist/compare/v3...v4
-[v3]: https://github.com/my-flow/importlist/compare/v2...v3
-[v2]: https://github.com/my-flow/importlist/compare/v1...v2
 [v1]: https://github.com/my-flow/importlist/commits/v1
+[v2]: https://github.com/my-flow/importlist/compare/v1...v2
+[v3]: https://github.com/my-flow/importlist/compare/v2...v3
+[v4]: https://github.com/my-flow/importlist/compare/v3...v4
+[v5]: https://github.com/my-flow/importlist/compare/v4...v5
+[v6]: https://github.com/my-flow/importlist/compare/v5...v6
+[v7]: https://github.com/my-flow/importlist/compare/v6...v7
+[v8]: https://github.com/my-flow/importlist/compare/v7...v8
+[v9]: https://github.com/my-flow/importlist/compare/v8...v9
+[v10]: https://github.com/my-flow/importlist/compare/v9...v10
+[v11]: https://github.com/my-flow/importlist/compare/v10...v11
+[v12]: https://github.com/my-flow/importlist/compare/v11...v12
+[v13]: https://github.com/my-flow/importlist/compare/v12...v13
+[v14]: https://github.com/my-flow/importlist/compare/v13...v14
+[v15]: https://github.com/my-flow/importlist/compare/v14...v15
+[v16]: https://github.com/my-flow/importlist/compare/v15...v16
+[v17]: https://github.com/my-flow/importlist/compare/v16...v17

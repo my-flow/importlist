@@ -1,22 +1,20 @@
 package com.moneydance.modules.features.importlist.io;
 
-import com.moneydance.modules.features.importlist.bootstrap.Helper;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
+import com.moneydance.modules.features.importlist.util.Localizable;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import java8.util.Optional;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
@@ -27,7 +25,6 @@ import org.apache.commons.io.monitor.FileAlterationObserver;
  *
  * @author Florian J. Breunig
  */
-@Singleton
 public final class FileAdmin extends Observable implements Observer {
 
     /**
@@ -35,23 +32,48 @@ public final class FileAdmin extends Observable implements Observer {
      */
     private static final Logger LOG = Logger.getLogger(FileAdmin.class.getName());
 
-    @Inject AbstractDirectoryChooser directoryChooser;
-    @Inject DirectoryValidator directoryValidator;
-    @Inject FileAlterationMonitor monitor;
-    @Inject FileContainer fileContainer;
-    @Inject @Named("import all") FileOperation importAllOperation;
-    @Inject @Named("import one") FileOperation importOneOperation;
-    @Inject @Named("delete all") FileOperation deleteAllOperation;
-    @Inject @Named("delete one") FileOperation deleteOneOperation;
-    @Inject @Named("readable files") IOFileFilter readableFileFilter;
+    private final AbstractDirectoryChooser directoryChooser;
+    private final DirectoryValidator directoryValidator;
+    private final FileAlterationMonitor monitor;
+    private final FileContainer fileContainer;
+    private final FileOperation importAllOperation;
+    private final FileOperation importOneOperation;
+    private final FileOperation deleteAllOperation;
+    private final FileOperation deleteOneOperation;
+    private final IOFileFilter readableFileFilter;
 
     private final TransactionFileListener listener;
     @Nullable private FileAlterationObserver observer;
     private boolean isMonitorRunning;
 
-    @Inject
-    public FileAdmin() {
+    public FileAdmin(
+            final IOFileFilter readableFilter,
+            final com.moneydance.modules.features.importlist.controller.Context context,
+            final com.moneydance.modules.features.importlist.util.ISettings settings,
+            final com.moneydance.modules.features.importlist.util.Preferences prefs) {
         super();
+        this.readableFileFilter = readableFilter;
+
+        // Initialize dependencies
+        this.directoryChooser = new DefaultDirectoryChooser(prefs, context);
+        this.directoryValidator = new DirectoryValidator();
+        this.monitor = new FileAlterationMonitor(settings.getMonitorInterval());
+        this.fileContainer = new FileContainer(readableFilter);
+
+        // Create file operations with explicit dependency handling
+        Localizable localizable = ServiceLocator.getLocalizable();
+        if (localizable == null) {
+            // Use provided parameters directly if ServiceLocator has no localizable yet
+            localizable = new Localizable(settings, prefs.getLocale());
+        }
+
+        FileOperation deleteOne = new DeleteOneOperation(settings, localizable);
+        this.deleteOneOperation = deleteOne;
+        this.deleteAllOperation = new DeleteAllOperation(deleteOne, settings, localizable);
+
+        FileOperation importOne = new ImportOneOperation(context, readableFilter, settings);
+        this.importOneOperation = importOne;
+        this.importAllOperation = new ImportAllOperation(importOne);
         this.listener = new TransactionFileListener();
         this.listener.addObserver(this);
     }
@@ -74,8 +96,16 @@ public final class FileAdmin extends Observable implements Observer {
                 return;
             }
             LOG.warning(() -> String.format("Could not open directory %s", baseDirectory.getAbsolutePath()));
-            final String errorMessage = Helper.INSTANCE.getLocalizable().
-                    getErrorMessageBaseDirectory(baseDirectory.getName());
+
+            Localizable localizable = ServiceLocator.getLocalizable();
+            String errorMessage;
+
+            if (localizable != null) {
+                errorMessage = localizable.getErrorMessageBaseDirectory(baseDirectory.getName());
+            } else {
+                // Fallback error message if localizable is not available
+                errorMessage = "Could not open directory: " + baseDirectory.getName();
+            }
             final JLabel errorLabel = new JLabel(errorMessage);
             errorLabel.setLabelFor(null);
             JOptionPane.showMessageDialog(
@@ -127,7 +157,8 @@ public final class FileAdmin extends Observable implements Observer {
         try {
             this.monitor.start();
             this.isMonitorRunning = true;
-        } catch (Exception e) {
+        // FileAlterationMonitor.start() declares throws Exception (library requirement)
+        } catch (Exception e) { // NOPMD - AvoidCatchingGenericException - library method declares Exception
             final String message = e.getMessage();
             if (message != null) {
                 LOG.log(Level.WARNING, message, e);
@@ -147,7 +178,14 @@ public final class FileAdmin extends Observable implements Observer {
         try {
             this.monitor.stop(0);
             this.isMonitorRunning = false;
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
+            final String message = e.getMessage();
+            if (message != null) {
+                LOG.log(Level.WARNING, message, e);
+            }
+            Thread.currentThread().interrupt();
+        // FileAlterationMonitor.stop() declares throws Exception (library requirement)
+        } catch (Exception e) { // NOPMD - AvoidCatchingGenericException - library method declares Exception
             final String message = e.getMessage();
             if (message != null) {
                 LOG.log(Level.WARNING, message, e);
@@ -195,11 +233,12 @@ public final class FileAdmin extends Observable implements Observer {
     }
 
     private void setFileMonitorToCurrentImportDir() {
-        if (!this.getBaseDirectory().isPresent()) {
+        final Optional<File> baseDirectory = this.getBaseDirectory();
+        if (!baseDirectory.isPresent()) {
             return;
         }
         this.observer = new FileAlterationObserver(
-                this.getBaseDirectory().get(),
+                baseDirectory.get(),
                 this.readableFileFilter,
                 IOCase.SYSTEM);
         this.observer.addListener(this.listener);

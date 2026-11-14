@@ -1,11 +1,14 @@
 package com.moneydance.modules.features.importlist.bootstrap;
 
 import com.moneydance.modules.features.importlist.CoreComponent;
+import com.moneydance.modules.features.importlist.controller.Context;
 import com.moneydance.modules.features.importlist.controller.ViewController;
+import com.moneydance.modules.features.importlist.service.ServiceLocator;
+import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Preferences;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.awt.Image;
+import java.util.Objects;
 import java.util.Observer;
 import java.util.logging.Logger;
 
@@ -22,23 +25,23 @@ public final class MainHelper {
      */
     private static final Logger LOG = Logger.getLogger(MainHelper.class.getName());
 
-    private final Settings settings;
+    private final ISettings settings;
     private Preferences prefs;
     private ViewController viewController;
 
-    MainHelper(final Settings argSettings) {
+    public MainHelper(final ISettings argSettings) {
         super();
-        Helper.loadLoggerConfiguration(argSettings);
+        ServiceLocator.loadLoggerConfiguration(argSettings);
         LOG.info("Initializing extension in Moneydance's application context.");
         this.settings = argSettings;
     }
 
     public void init(final CoreComponent argCoreComponent, final Observer argObserver) {
-        Helper.INSTANCE.init(argCoreComponent);
-        Helper.INSTANCE.addObserver(argObserver);
+        ServiceLocator.initialize(argCoreComponent);
+        ServiceLocator.addObserver(argObserver);
 
         this.prefs = argCoreComponent.preferences();
-        this.viewController = Helper.INSTANCE.getViewController();
+        this.viewController = ServiceLocator.getViewController();
 
         if (this.prefs.isFirstRun()) {
             this.prefs.setFirstRun(false);
@@ -47,8 +50,8 @@ public final class MainHelper {
 
         // register this module to be invoked via the application toolbar
         LOG.config("Registering toolbar feature");
-        Helper.INSTANCE.getContext().registerFeature(this.settings.getChooseBaseDirSuffix(), this.getName());
-
+        final Context context = Objects.requireNonNull(ServiceLocator.getContext(), "Context must be initialized");
+        context.registerFeature(this.settings.getChooseBaseDirSuffix(), this.getName());
     }
 
     public String getName() {
@@ -66,14 +69,29 @@ public final class MainHelper {
     }
 
     public void update(final CoreComponent coreComponent) {
-        Helper.INSTANCE.init(coreComponent);
+        ServiceLocator.initialize(coreComponent);
     }
 
+    /**
+     * Moneydance unloads the extension both when it updates and when it
+     * uninstalls the extension. The user's settings are kept on an update
+     * and cleared after an uninstall.
+     */
     public void unload() {
         LOG.info("Unloading extension."); //$NON-NLS-1$
         this.viewController.setActive(false);
         this.cleanup();
-        this.prefs.setAllWritablePreferencesToNull();
+        final Preferences preferences = this.prefs;
+        final Context context = Objects.requireNonNull(ServiceLocator.getContext(), "Context must be initialized");
+        // Moneydance calls unload() before it removes the module id, so check
+        // once it has finished, and save, as it has already saved by then
+        context.invokeAfterModuleOperation(() -> {
+            if (!context.isModuleInstalled()) {
+                LOG.info("Clearing settings after uninstall."); //$NON-NLS-1$
+                preferences.setAllWritablePreferencesToNull();
+                context.savePreferences();
+            }
+        });
     }
 
     public void cleanup() {

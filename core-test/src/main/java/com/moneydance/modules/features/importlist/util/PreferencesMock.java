@@ -1,40 +1,76 @@
 package com.moneydance.modules.features.importlist.util;
 
 import com.moneydance.modules.features.importlist.datetime.DateFormatter;
+import com.moneydance.modules.features.importlist.datetime.DateFormatterMock;
+import com.moneydance.modules.features.importlist.datetime.TimeFormatterMock;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-
-import java8.util.Optional;
 
 /**
  * @author Florian J. Breunig
  */
 public final class PreferencesMock implements Preferences {
 
-    @Override
-    public void setAllWritablePreferencesToNull() {
-        // empty
+    private boolean firstRun = true;
+    private final Map<Integer, String> columnNames;
+    private RowSorter.SortKey sortKey;
+    private final DateFormatter dateFormatter;
+    private final DateFormatter timeFormatter;
+    private Optional<File> baseDirectory;
+    private Optional<File> moneydanceImportDirectory;
+
+    public PreferencesMock() {
+        this.columnNames = new HashMap<>();
+        this.columnNames.put(0, "Name");
+        this.columnNames.put(1, "Date Modified");
+        this.columnNames.put(2, "Import");
+        this.columnNames.put(3, "Delete");
+        this.sortKey = new RowSorter.SortKey(0, SortOrder.ASCENDING);
+        this.dateFormatter = new DateFormatterMock();
+        this.timeFormatter = new TimeFormatterMock();
+        this.baseDirectory = createTempDirectory();
+        this.moneydanceImportDirectory = Optional.empty();
+    }
+
+    private static Optional<File> createTempDirectory() {
+        try {
+            final File file = File.createTempFile("prefix", null);
+            file.deleteOnExit();
+            return Optional.ofNullable(file.getParentFile());
+        } catch (IOException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
-    public void setFirstRun(final boolean firstRun) {
-        // empty
+    public void setAllWritablePreferencesToNull() {
+        this.firstRun = true;
+        this.baseDirectory = Optional.empty();
+        this.sortKey = new RowSorter.SortKey(0, SortOrder.ASCENDING);
+    }
+
+    @Override
+    public void setFirstRun(final boolean argFirstRun) {
+        this.firstRun = argFirstRun;
     }
 
     @Override
     public boolean isFirstRun() {
-        return false;
+        return this.firstRun;
     }
 
     @Override
@@ -44,18 +80,21 @@ public final class PreferencesMock implements Preferences {
 
     @Override
     public Optional<File> getBaseDirectory() {
-        try {
-            final File file = File.createTempFile("prefix", null);
-            file.deleteOnExit();
-            return Optional.of(file.getParentFile());
-        } catch (IOException e) {
-            return Optional.empty();
-        }
+        return this.baseDirectory;
     }
 
     @Override
-    public void setBaseDirectory(@Nullable final File baseDirectory) {
-        // empty
+    public void setBaseDirectory(@Nullable final File argBaseDirectory) {
+        this.baseDirectory = Optional.ofNullable(argBaseDirectory);
+    }
+
+    @Override
+    public Optional<File> getMoneydanceImportDirectory() {
+        return this.moneydanceImportDirectory;
+    }
+
+    public void setMoneydanceImportDirectory(@Nullable final File argMoneydanceImportDirectory) {
+        this.moneydanceImportDirectory = Optional.ofNullable(argMoneydanceImportDirectory);
     }
 
     @Override
@@ -77,32 +116,32 @@ public final class PreferencesMock implements Preferences {
 
     @Override
     public String getColumnName(final int column) {
-        return "column name";
+        return this.columnNames.getOrDefault(column, null);
     }
 
     @Override
-    public void setSortKey(final RowSorter.SortKey sortKey) {
-        // empty
+    public void setSortKey(final RowSorter.SortKey argSortKey) {
+        this.sortKey = argSortKey;
     }
 
     @Override
     public RowSorter.SortKey getSortKey() {
-        return null;
+        return this.sortKey;
     }
 
     @Override
     public int getColumnCount() {
-        return 0;
+        return 4;
     }
 
     @Override
     public DateFormatter getDateFormatter() {
-        return null;
+        return this.dateFormatter;
     }
 
     @Override
     public DateFormatter getTimeFormatter() {
-        return null;
+        return this.timeFormatter;
     }
 
     @Override
@@ -112,7 +151,7 @@ public final class PreferencesMock implements Preferences {
 
     @Override
     public int getPreferredTableWidth() {
-        return 0;
+        return 100;
     }
 
     @Override
@@ -157,16 +196,16 @@ public final class PreferencesMock implements Preferences {
 
     @Override
     public Font getBodyFont() {
-        return null;
+        return UIManager.getFont("Label.font");
     }
 
     @Override
     public int getHeaderRowHeight() {
-        return 0;
+        return 20;
     }
 
     @Override
     public int getBodyRowHeight() {
-        return 0;
+        return 20;
     }
 }

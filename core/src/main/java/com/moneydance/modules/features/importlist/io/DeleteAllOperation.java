@@ -1,7 +1,7 @@
 package com.moneydance.modules.features.importlist.io;
 
+import com.moneydance.modules.features.importlist.util.ISettings;
 import com.moneydance.modules.features.importlist.util.Localizable;
-import com.moneydance.modules.features.importlist.util.Settings;
 
 import java.awt.Image;
 import java.io.File;
@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.inject.Named;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -18,7 +17,7 @@ import javax.swing.JOptionPane;
 /**
  * @author Florian J. Breunig
  */
-final class DeleteAllOperation implements FileOperation {
+public final class DeleteAllOperation implements FileOperation {
 
     /**
      * Static initialization of class-dependent logger.
@@ -27,12 +26,12 @@ final class DeleteAllOperation implements FileOperation {
             Logger.getLogger(DeleteAllOperation.class.getName());
 
     private final FileOperation deleteOneOperation;
-    private final Settings settings;
+    private final ISettings settings;
     private final Localizable localizable;
 
-    DeleteAllOperation(
-            @Named("delete one") final FileOperation argDeleteOneOperation,
-            final Settings argSettings,
+    public DeleteAllOperation(
+            final FileOperation argDeleteOneOperation,
+            final ISettings argSettings,
             final Localizable argLocalizable) {
         this.deleteOneOperation = argDeleteOneOperation;
         this.settings = argSettings;

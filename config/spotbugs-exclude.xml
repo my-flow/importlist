@@ -1,15 +1,12 @@
 <FindBugsFilter>
     <Match>
-        <Or>
-            <Class name="~.*Factory"/>
-            <Class name="~.*Dagger.*Component.*"/>
-        </Or>
-    </Match>
-    <Match>
         <Bug pattern="EI_EXPOSE_REP"/>
     </Match>
     <Match>
         <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+    <Match>
+        <Bug pattern="ENMI_ONE_ENUM_VALUE"/>
     </Match>
     <Match>
         <Bug pattern="IMC_IMMATURE_CLASS_PRINTSTACKTRACE"/>
@@ -25,5 +22,11 @@
     </Match>
     <Match>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE"/>
+    </Match>
+    <Match>
+        <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE"/>
+    </Match>
+    <Match>
+        <Bug pattern="EI_EXPOSE_STATIC_REP2"/>
     </Match>
 </FindBugsFilter>

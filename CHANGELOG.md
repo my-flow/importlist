@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project does *not* adhere to Semantic Versioning.
 
-## [Unreleased]
+## [v17] - 2026-11-14
 ### Changed
 - Directory chooser on macOS to the native macOS dialog ([#212]).
 - Directory chooser to start in Moneydance's import directory when no base directory is set ([#212]).
@@ -162,3 +162,4 @@ and this project does *not* adhere to Semantic Versioning.
 [v14]: https://github.com/my-flow/importlist/compare/v13...v14
 [v15]: https://github.com/my-flow/importlist/compare/v14...v15
 [v16]: https://github.com/my-flow/importlist/compare/v15...v16
+[v17]: https://github.com/my-flow/importlist/compare/v16...v17
